@@ -1,723 +1,671 @@
-/*******************************************************
-System J Tools 
-********************************************************
-Name:SJ_functions
-Created By:CaptainHansode
-WEB:www.sakaiden.com
-E-Mail:sakaiden@live.jp
-*******************************************************/
+/**
+ * -----------------------------------------------------------------------------
+ *
+ *  SJ Tools
+ *
+ * -----------------------------------------------------------------------------
+ * @license MIT
+ * @author CaptainHansode åŠè¢–èˆ¹é•·
+ * @web http://www.sakaiden.com/
+ * @email sakaiden@live.jp
+ * @git https://github.com/CaptainHansode/SJTools
+ *
+ * TODO:å‰Šé™¤äºˆå®š
+ *
+ */
 
---////////////////////////////////////////////////
---\‘¢‘Ì’è‹`
---\‘¢‘Ì‚ÍƒJƒ“ƒ}‚Å‹æØ‚é–I
---////////////////////////////////////////////////
+/**
+ * æ§‹é€ ä½“å®šç¾©
+ * æ§‹é€ ä½“ã¯ã‚«ãƒ³ãƒã§åŒºåˆ‡ã‚‹äº‹ï¼
+ */
 struct sj_functions
---struct sjtools_basefunctions
---struct sjtools_functions
 (
-	--////////////////////////////////////////////////
-	--ƒAƒoƒEƒg
-	--////////////////////////////////////////////////
-	fn sjtools_about_Fn=
-		(
-			try(
-			--ƒƒOƒtƒ@ƒCƒ‹‚ğw’è
-			logFile = (openFile ((getDir #scripts) + "\SJTools\SJTools_Log.ms"));
-			--w’è‚Ì•¶š—ñ‚Ü‚Å“Ç‚İ‚Ş
-			messageBox((readDelimitedString logFile "//")) title:"About";
-			)catch();
-		),--end about
-		
-	--////////////////////////////////////////////////
-	--Œ¾ŒêØ‚è‘Ö‚¦
-	--////////////////////////////////////////////////
-	fn sjtools_changeLanguage_Fn=
-		(
-			if ((getINISetting ((getDir #scripts) + "\SJTools\SJTools.ini") "SJTools" "Language") != "JP") then
-			(
-				--“ú–{Œê‚Ö
-				if (queryBox("SJTools‚ÌŒ¾Œê‚ğ“ú–{Œê‚ÖØ‚è‘Ö‚¦‚Ü‚·‚©?\n\nDo you switch the language to Japanese?\n") title:"Check") do
-					(
-					setINISetting ((getDir #scripts) + "\SJTools\SJTools.ini") "SJTools" "Language" "JP";
-					
-					--ƒc[ƒ‹–¼‚ğ‘S‚Ä•ÏX
-					setINISetting ((getDir #scripts) + "\SJTools\SJTools.ini") "SJToolsToolName" "SJPBakeToolName" "‚Ò[‚×‚¢‚­";
-					setINISetting ((getDir #scripts) + "\SJTools\SJTools.ini") "SJToolsToolName" "SJRenamerToolName" "‚è‚Ë[‚Ü[";
-					setINISetting ((getDir #scripts) + "\SJTools\SJTools.ini") "SJToolsToolName" "SJSparkToolName" "‚·‚Ï[‚­‚ñ";
-					setINISetting ((getDir #scripts) + "\SJTools\SJTools.ini") "SJToolsToolName" "SJBioSkinPlusToolName" "‚Î‚¢‚«‚ñ+";
-					setINISetting ((getDir #scripts) + "\SJTools\SJTools.ini") "SJToolsToolName" "SJTimeMachineToolName" "‚½‚¢‚Ş‚Ü‚µ‚ñ";
-					setINISetting ((getDir #scripts) + "\SJTools\SJTools.ini") "SJToolsToolName" "SJSelectorToolName" "‚¹‚ê‚­‚É‚á[";
-					setINISetting ((getDir #scripts) + "\SJTools\SJTools.ini") "SJToolsToolName" "SJSelectorRigToolName" "‚¹‚ê‚­‚É‚á[‚Í‚è‚¯[‚ñ";
-					setINISetting ((getDir #scripts) + "\SJTools\SJTools.ini") "SJToolsToolName" "SJAdjusterToolName" "‚ ‚¶‚á‚·‚½[";
-					setINISetting ((getDir #scripts) + "\SJTools\SJTools.ini") "SJToolsToolName" "SJPoserToolName" "‚Û[‚¿‚á‚ñ";
-					setINISetting ((getDir #scripts) + "\SJTools\SJTools.ini") "SJToolsToolName" "SJHiderToolName" "‚Í‚¢‚¾[";
-					setINISetting ((getDir #scripts) + "\SJTools\SJTools.ini") "SJToolsToolName" "SJRollerToolName" "‚ë[‚ç[";
-					setINISetting ((getDir #scripts) + "\SJTools\SJTools.ini") "SJToolsToolName" "SJBipFitterToolName" "‚Ñ‚Á‚Õ‚Ó‚¡‚Á‚½[";
-					
-					setINISetting ((getDir #scripts) + "\SJTools\SJTools.ini") "SJToolsToolName" "SJSceneSlicerToolName" "‚µ[‚ñ‚·‚ç‚¢‚¿‚á‚ñ";
-					setINISetting ((getDir #scripts) + "\SJTools\SJTools.ini") "SJToolsToolName" "SJLayerLayerToolName" "‚ê‚¢‚â[‚ê‚¢‚â‚Ÿ`";
-					setINISetting ((getDir #scripts) + "\SJTools\SJTools.ini") "SJToolsToolName" "SJAnimKeyPreviewToolName" "‚ ‚É‚«[";
-					setINISetting ((getDir #scripts) + "\SJTools\SJTools.ini") "SJToolsToolName" "SJKeyMachineToolName" "‚«[‚Ü‚µ‚ñ";
-					setINISetting ((getDir #scripts) + "\SJTools\SJTools.ini") "SJToolsToolName" "SJMultiPRSToolName" "‚Ü‚é‚¿‚É‚á[";
-					
-					--Ä“Ç‚İ‚İ
-					--ƒ}ƒNƒ‚Ìœ‹
-					--2011-2012
-					deleteFile ("$ui\macroscripts\SJTools.mcr");
-					--2013-
-					deleteFile ("$max\Macroscripts\SJTools.mcr");
-					
-					--ƒ}ƒNƒ‚ÌƒRƒs[
-					--2011-2012
-					copyFile "$max\Scripts\SJTools\SJTools_jp.mcr" "$ui\macroscripts\SJTools.mcr";
-					--2013-
-					copyFile "$max\Scripts\SJTools\SJTools_jp.mcr" "$max\MacroScripts\SJTools.mcr";
-					
-					--2011-2012
-					try(macros.load("$ui\macroscripts\\"))catch();
-					--2013-
-					--try(macros.load((getDir #maxroot) + "\Macroscripts\\"))catch();
-					try(macros.load("$max\Macroscripts\\"))catch();
-					
-					--‚¨’m‚ç‚¹
-					messageBox("Ø‚è‘Ö‚¦‚ªI‚í‚è‚Ü‚µ‚½\nƒc[ƒ‹‚ğÄ‹N“®‚µ‚Ä‚­‚¾‚³‚¢\n\nComplete\nPlease Reboot this tool.\n") title:"Complete";
-					);--if end
-			)else
-			(
-				--‰pŒê‚Ö
-				if (queryBox("SJTools‚ÌŒ¾Œê‚ğ‰pŒê‚ÖØ‚è‘Ö‚¦‚Ü‚·‚©?\n\nDo you switch the language to English?\n") title:"Check") do
-					(
-					setINISetting ((getDir #scripts) + "\SJTools\SJTools.ini") "SJTools" "Language" "EN";
-					
-					--ƒc[ƒ‹–¼‚ğ‘S‚Ä•ÏX
-					setINISetting ((getDir #scripts) + "\SJTools\SJTools.ini") "SJToolsToolName" "SJPBakeToolName" "SJ PBake";
-					setINISetting ((getDir #scripts) + "\SJTools\SJTools.ini") "SJToolsToolName" "SJRenamerToolName" "SJ Renamer";
-					setINISetting ((getDir #scripts) + "\SJTools\SJTools.ini") "SJToolsToolName" "SJSparkToolName" "SJ Spark";
-					setINISetting ((getDir #scripts) + "\SJTools\SJTools.ini") "SJToolsToolName" "SJBioSkinPlusToolName" "SJ Bio Skin +";
-					setINISetting ((getDir #scripts) + "\SJTools\SJTools.ini") "SJToolsToolName" "SJTimeMachineToolName" "SJ Time Machine";
-					setINISetting ((getDir #scripts) + "\SJTools\SJTools.ini") "SJToolsToolName" "SJSelectorToolName" "SJ Selector";
-					setINISetting ((getDir #scripts) + "\SJTools\SJTools.ini") "SJToolsToolName" "SJSelectorRigToolName" "SJ Selector Hurricane";
-					setINISetting ((getDir #scripts) + "\SJTools\SJTools.ini") "SJToolsToolName" "SJAdjusterToolName" "SJ Adjuster";
-					setINISetting ((getDir #scripts) + "\SJTools\SJTools.ini") "SJToolsToolName" "SJPoserToolName" "SJ Poser";
-					setINISetting ((getDir #scripts) + "\SJTools\SJTools.ini") "SJToolsToolName" "SJHiderToolName" "SJ Hider";
-					setINISetting ((getDir #scripts) + "\SJTools\SJTools.ini") "SJToolsToolName" "SJRollerToolName" "SJ Roller";
-					setINISetting ((getDir #scripts) + "\SJTools\SJTools.ini") "SJToolsToolName" "SJBipFitterToolName" "SJ Bip Fitter";
-					
-					setINISetting ((getDir #scripts) + "\SJTools\SJTools.ini") "SJToolsToolName" "SJSceneSlicerToolName" "SJ Scene Slicer";
-					setINISetting ((getDir #scripts) + "\SJTools\SJTools.ini") "SJToolsToolName" "SJLayerLayerToolName" "SJ Layer Layer";
-					setINISetting ((getDir #scripts) + "\SJTools\SJTools.ini") "SJToolsToolName" "SJAnimKeyPreviewToolName" "SJ Anim Key Preview";
-					setINISetting ((getDir #scripts) + "\SJTools\SJTools.ini") "SJToolsToolName" "SJKeyMachineToolName" "SJ Key Mathine";
-					setINISetting ((getDir #scripts) + "\SJTools\SJTools.ini") "SJToolsToolName" "SJMultiPRSToolName" "SJ MultiRPS";
-					
-					--Ä“Ç‚İ‚İ
-					--ƒ}ƒNƒ‚Ìœ‹
-					--2011-2012
-					deleteFile ("$ui\macroscripts\SJTools.mcr");
-					--2013-
-					deleteFile ("$max\Macroscripts\SJTools.mcr");
-					
-					--ƒ}ƒNƒ‚ÌƒRƒs[
-					--2011-2012
-					copyFile "$max\Scripts\SJTools\SJTools_en.mcr" "$ui\macroscripts\SJTools.mcr";
-					--2013-
-					copyFile "$max\Scripts\SJTools\SJTools_en.mcr" "$max\MacroScripts\SJTools.mcr";
-					
-					--2011-2012
-					try(macros.load("$ui\macroscripts\\"))catch();
-					--2013-
-					try(macros.load("$max\Macroscripts\\"))catch();
-					
-					--‚¨’m‚ç‚¹
-					messageBox("Ø‚è‘Ö‚¦‚ªI‚í‚è‚Ü‚µ‚½\nƒc[ƒ‹‚ğÄ‹N“®‚µ‚Ä‚­‚¾‚³‚¢\n\nComplete\nPlease Reboot this tool.\n") title:"Complete";
-					);--if end
-			);--if end
+    --////////////////////////////////////////////////
+    --ã‚¢ãƒã‚¦ãƒˆ
+    fn sjtools_about_Fn =
+    (
+        try (
+            --ãƒ­ã‚°ãƒ•ã‚¡ã‚¤ãƒ«ã‚’æŒ‡å®š
+            logFile = (openFile ((getDir #scripts) + "\SJTools\SJTools_Log.ms"));
+            --æŒ‡å®šã®æ–‡å­—åˆ—ã¾ã§èª­ã¿è¾¼ã‚€
+            messageBox((readDelimitedString logFile "//")) title:"About";
+        ) catch ();
+    ),
 
-			return true;
-		),--end about
-		
-	--////////////////////////////////////////////////
-	--ƒAƒCƒRƒ“
-	--////////////////////////////////////////////////
-	fn sjtools_changeIcon_Fn=
-		(
-			if ((getINISetting ((getDir #scripts) + "\SJTools\SJTools.ini") "SJTools" "Icon") != "Standard") then
-			(
-				--’ÊíƒAƒCƒRƒ“
-				if (queryBox("ƒKƒDƒKƒDIƒKƒDƒKƒDƒKƒ@``?\n(ƒAƒCƒRƒ“‚ğŒ³‚É–ß‚µ‚Ü‚·‚©?)\n\nGow gow! gow gow gow?\n(Change to Standard Icon?)\n") title:"Check") do
-					(
-					setINISetting ((getDir #scripts) + "\SJTools\SJTools.ini") "SJTools" "Icon" "Standard";
-					
-				/************************************
-				max2010 - 2012
-				*************************************/
-				deleteFile "$ui\Icons\SJTools_Icon01_16i.bmp";
-				deleteFile "$ui\Icons\SJTools_Icon01_24i.bmp";
-				deleteFile "$ui\Icons\SJTools_Icon02_16i.bmp";
-				deleteFile "$ui\Icons\SJTools_Icon02_24i.bmp";
-				
-				/************************************
-				max2013
-				*************************************/
-				deleteFile ("$max\UI_ln\Icons\SJTools_Icon01_16i.bmp");
-				deleteFile ("$max\UI_ln\Icons\SJTools_Icon01_24i.bmp");
-				deleteFile ("$max\UI_ln\Icons\SJTools_Icon02_16i.bmp");
-				deleteFile ("$max\UI_ln\Icons\SJTools_Icon02_24i.bmp");
-				--Dark—p
-				deleteFile ("$max\UI_ln\IconsDark\SJTools_Icon01_16i.bmp");
-				deleteFile ("$max\UI_ln\IconsDark\SJTools_Icon01_24i.bmp");
-				deleteFile ("$max\UI_ln\IconsDark\SJTools_Icon02_16i.bmp");
-				deleteFile ("$max\UI_ln\IconsDark\SJTools_Icon02_24i.bmp");
-				
-				/************************************
-				max2011-2012
-				*************************************/				
-				dir = getDir #maxroot;
-				copyFile "$max\scripts\SJTools\Images\SJTools_Icon01_16i.bmp" (dir + "ui\icons\SJTools_Icon01_16i.bmp");
-				copyFile "$max\scripts\SJTools\Images\SJTools_Icon02_16i.bmp" (dir + "ui\icons\SJTools_Icon02_16i.bmp");
-				copyFile "$max\scripts\SJTools\Images\SJTools_Icon01_24i.bmp" (dir + "ui\icons\SJTools_Icon01_24i.bmp");
-				copyFile "$max\scripts\SJTools\Images\SJTools_Icon02_24i.bmp" (dir + "ui\icons\SJTools_Icon02_24i.bmp");
-				/************************************
-				max2013
-				*************************************/
-				--ƒ}ƒNƒ
-				dir = getDir #maxroot;
-				--ƒAƒCƒRƒ“
-				copyFile "$max\scripts\SJTools\Images\SJTools_Icon01_16i.bmp" (dir + "\UI_ln\Icons\SJTools_Icon01_16i.bmp");
-				copyFile "$max\scripts\SJTools\Images\SJTools_Icon02_16i.bmp" (dir + "\UI_ln\Icons\SJTools_Icon02_16i.bmp");
-				copyFile "$max\scripts\SJTools\Images\SJTools_Icon01_24i.bmp" (dir + "\UI_ln\Icons\SJTools_Icon01_24i.bmp");
-				copyFile "$max\scripts\SJTools\Images\SJTools_Icon02_24i.bmp" (dir + "\UI_ln\Icons\SJTools_Icon02_24i.bmp");
-				--Dark—p
-				copyFile "$max\scripts\SJTools\Images\SJTools_Icon01_16i.bmp" (dir + "\UI_ln\IconsDark\SJTools_Icon01_16i.bmp");
-				copyFile "$max\scripts\SJTools\Images\SJTools_Icon02_16i.bmp" (dir + "\UI_ln\IconsDark\SJTools_Icon02_16i.bmp");
-				copyFile "$max\scripts\SJTools\Images\SJTools_Icon01_24i.bmp" (dir + "\UI_ln\IconsDark\SJTools_Icon01_24i.bmp");
-				copyFile "$max\scripts\SJTools\Images\SJTools_Icon02_24i.bmp" (dir + "\UI_ln\IconsDark\SJTools_Icon02_24i.bmp");
-				
-				--ƒAƒCƒRƒ“‚ğÄ“Ç‚İ‚İ
-				colorman.reInitIcons();
-				
-					);--if end
-			)else
-			(
-				--’ÊíƒAƒCƒRƒ“
-				if (queryBox("ƒKƒDƒKƒDƒKƒDƒD?ƒEƒKƒ@``?\n(ƒAƒCƒRƒ“‚ğƒwƒ“‚È‚Ì‚É•Ï‚¦‚Ü‚·‚©?)\n\nGow gow gowww! Uga?\n(Change to Animal Icon?)\n") title:"Check") do
-					(
-					setINISetting ((getDir #scripts) + "\SJTools\SJTools.ini") "SJTools" "Icon" "Animal";
-					
-				/************************************
-				max2010 - 2012
-				*************************************/
-				deleteFile "$ui\Icons\SJTools_Icon01_16i.bmp";
-				deleteFile "$ui\Icons\SJTools_Icon01_24i.bmp";
-				deleteFile "$ui\Icons\SJTools_Icon02_16i.bmp";
-				deleteFile "$ui\Icons\SJTools_Icon02_24i.bmp";
-				
-				/************************************
-				max2013
-				*************************************/
-				deleteFile ("$max\UI_ln\Icons\SJTools_Icon01_16i.bmp");
-				deleteFile ("$max\UI_ln\Icons\SJTools_Icon01_24i.bmp");
-				deleteFile ("$max\UI_ln\Icons\SJTools_Icon02_16i.bmp");
-				deleteFile ("$max\UI_ln\Icons\SJTools_Icon02_24i.bmp");
-				--Dark—p
-				deleteFile ("$max\UI_ln\IconsDark\SJTools_Icon01_16i.bmp");
-				deleteFile ("$max\UI_ln\IconsDark\SJTools_Icon01_24i.bmp");
-				deleteFile ("$max\UI_ln\IconsDark\SJTools_Icon02_16i.bmp");
-				deleteFile ("$max\UI_ln\IconsDark\SJTools_Icon02_24i.bmp");
-				
-				
-				/************************************
-				max2011-2012
-				*************************************/				
-				dir = getDir #maxroot;
-				copyFile "$max\scripts\SJTools\Images\SJTools_Icon01_16i_Aml.bmp" (dir + "ui\icons\SJTools_Icon01_16i.bmp");
-				copyFile "$max\scripts\SJTools\Images\SJTools_Icon02_16i_Aml.bmp" (dir + "ui\icons\SJTools_Icon02_16i.bmp");
-				copyFile "$max\scripts\SJTools\Images\SJTools_Icon01_24i_Aml.bmp" (dir + "ui\icons\SJTools_Icon01_24i.bmp");
-				copyFile "$max\scripts\SJTools\Images\SJTools_Icon02_24i_Aml.bmp" (dir + "ui\icons\SJTools_Icon02_24i.bmp");
-				/************************************
-				max2013
-				*************************************/
-				--ƒ}ƒNƒ
-				dir = getDir #maxroot;
-				--ƒAƒCƒRƒ“
-				copyFile "$max\scripts\SJTools\Images\SJTools_Icon01_16i_Aml.bmp" (dir + "\UI_ln\Icons\SJTools_Icon01_16i.bmp");
-				copyFile "$max\scripts\SJTools\Images\SJTools_Icon02_16i_Aml.bmp" (dir + "\UI_ln\Icons\SJTools_Icon02_16i.bmp");
-				copyFile "$max\scripts\SJTools\Images\SJTools_Icon01_24i_Aml.bmp" (dir + "\UI_ln\Icons\SJTools_Icon01_24i.bmp");
-				copyFile "$max\scripts\SJTools\Images\SJTools_Icon02_24i_Aml.bmp" (dir + "\UI_ln\Icons\SJTools_Icon02_24i.bmp");
-				--Dark—p
-				copyFile "$max\scripts\SJTools\Images\SJTools_Icon01_16i_Aml.bmp" (dir + "\UI_ln\IconsDark\SJTools_Icon01_16i.bmp");
-				copyFile "$max\scripts\SJTools\Images\SJTools_Icon02_16i_Aml.bmp" (dir + "\UI_ln\IconsDark\SJTools_Icon02_16i.bmp");
-				copyFile "$max\scripts\SJTools\Images\SJTools_Icon01_24i_Aml.bmp" (dir + "\UI_ln\IconsDark\SJTools_Icon01_24i.bmp");
-				copyFile "$max\scripts\SJTools\Images\SJTools_Icon02_24i_Aml.bmp" (dir + "\UI_ln\IconsDark\SJTools_Icon02_24i.bmp");
-				
-				--ƒAƒCƒRƒ“‚ğÄ“Ç‚İ‚İ
-				colorman.reInitIcons();
-					
-					);--if end
-			);--if end
+    --////////////////////////////////////////////////
+    --è¨€èªåˆ‡ã‚Šæ›¿ãˆ
+    fn sjtools_changeLanguage_Fn =
+    (
+        if ((getINISetting ((getDir #scripts) + "\SJTools\SJTools.ini") "SJTools" "Language") != "JP") then
+        (
+            --æ—¥æœ¬èªã¸
+            if (queryBox("SJToolsã®è¨€èªã‚’æ—¥æœ¬èªã¸åˆ‡ã‚Šæ›¿ãˆã¾ã™ã‹?\n\nDo you switch the language to Japanese?\n") title:"Check") do
+            (
+                setINISetting ((getDir #scripts) + "\SJTools\SJTools.ini") "SJTools" "Language" "JP";
 
-			return true;
-		),--end about
+                --ãƒ„ãƒ¼ãƒ«åã‚’å…¨ã¦å¤‰æ›´
+                setINISetting ((getDir #scripts) + "\SJTools\SJTools.ini") "SJToolsToolName" "SJPBakeToolName" "ã´ãƒ¼ã¹ã„ã";
+                setINISetting ((getDir #scripts) + "\SJTools\SJTools.ini") "SJToolsToolName" "SJRenamerToolName" "ã‚Šã­ãƒ¼ã¾ãƒ¼";
+                setINISetting ((getDir #scripts) + "\SJTools\SJTools.ini") "SJToolsToolName" "SJSparkToolName" "ã™ã±ãƒ¼ãã‚“";
+                setINISetting ((getDir #scripts) + "\SJTools\SJTools.ini") "SJToolsToolName" "SJBioSkinPlusToolName" "ã°ã„ãã‚“+";
+                setINISetting ((getDir #scripts) + "\SJTools\SJTools.ini") "SJToolsToolName" "SJTimeMachineToolName" "ãŸã„ã‚€ã¾ã—ã‚“";
+                setINISetting ((getDir #scripts) + "\SJTools\SJTools.ini") "SJToolsToolName" "SJSelectorToolName" "ã›ã‚Œãã«ã‚ƒãƒ¼";
+                setINISetting ((getDir #scripts) + "\SJTools\SJTools.ini") "SJToolsToolName" "SJSelectorRigToolName" "ã›ã‚Œãã«ã‚ƒãƒ¼ã¯ã‚Šã‘ãƒ¼ã‚“";
+                setINISetting ((getDir #scripts) + "\SJTools\SJTools.ini") "SJToolsToolName" "SJAdjusterToolName" "ã‚ã˜ã‚ƒã™ãŸãƒ¼";
+                setINISetting ((getDir #scripts) + "\SJTools\SJTools.ini") "SJToolsToolName" "SJPoserToolName" "ã½ãƒ¼ã¡ã‚ƒã‚“";
+                setINISetting ((getDir #scripts) + "\SJTools\SJTools.ini") "SJToolsToolName" "SJHiderToolName" "ã¯ã„ã ãƒ¼";
+                setINISetting ((getDir #scripts) + "\SJTools\SJTools.ini") "SJToolsToolName" "SJRollerToolName" "ã‚ãƒ¼ã‚‰ãƒ¼";
+                setINISetting ((getDir #scripts) + "\SJTools\SJTools.ini") "SJToolsToolName" "SJBipFitterToolName" "ã³ã£ã·ãµãƒã£ãŸãƒ¼";
+
+                setINISetting ((getDir #scripts) + "\SJTools\SJTools.ini") "SJToolsToolName" "SJSceneSlicerToolName" "ã—ãƒ¼ã‚“ã™ã‚‰ã„ã¡ã‚ƒã‚“";
+                setINISetting ((getDir #scripts) + "\SJTools\SJTools.ini") "SJToolsToolName" "SJLayerLayerToolName" "ã‚Œã„ã‚„ãƒ¼ã‚Œã„ã‚„ãï½";
+                setINISetting ((getDir #scripts) + "\SJTools\SJTools.ini") "SJToolsToolName" "SJAnimKeyPreviewToolName" "ã‚ã«ããƒ¼";
+                setINISetting ((getDir #scripts) + "\SJTools\SJTools.ini") "SJToolsToolName" "SJKeyMachineToolName" "ããƒ¼ã¾ã—ã‚“";
+                setINISetting ((getDir #scripts) + "\SJTools\SJTools.ini") "SJToolsToolName" "SJMultiPRSToolName" "ã¾ã‚‹ã¡ã«ã‚ƒãƒ¼";
+
+                --å†èª­ã¿è¾¼ã¿
+                --ãƒã‚¯ãƒ­ã®é™¤å»
+                --2011-2012
+                deleteFile ("$ui\macroscripts\SJTools.mcr");
+                --2013-
+                deleteFile ("$max\Macroscripts\SJTools.mcr");
+
+                --ãƒã‚¯ãƒ­ã®ã‚³ãƒ”ãƒ¼
+                --2011-2012
+                copyFile "$max\Scripts\SJTools\SJTools_jp.mcr" "$ui\macroscripts\SJTools.mcr";
+                --2013-
+                copyFile "$max\Scripts\SJTools\SJTools_jp.mcr" "$max\MacroScripts\SJTools.mcr";
+
+                --2011-2012
+                try(macros.load("$ui\macroscripts\\"))catch();
+                --2013-
+                --try(macros.load((getDir #maxroot) + "\Macroscripts\\"))catch();
+                try(macros.load("$max\Macroscripts\\"))catch();
+
+                --ãŠçŸ¥ã‚‰ã›
+                messageBox("åˆ‡ã‚Šæ›¿ãˆãŒçµ‚ã‚ã‚Šã¾ã—ãŸ\nãƒ„ãƒ¼ãƒ«ã‚’å†èµ·å‹•ã—ã¦ãã ã•ã„\n\nComplete\nPlease Reboot this tool.\n") title:"Complete";
+            )
+        ) else (
+            --è‹±èªã¸
+            if (queryBox("SJToolsã®è¨€èªã‚’è‹±èªã¸åˆ‡ã‚Šæ›¿ãˆã¾ã™ã‹?\n\nDo you switch the language to English?\n") title:"Check") do
+            (
+                setINISetting ((getDir #scripts) + "\SJTools\SJTools.ini") "SJTools" "Language" "EN";
+
+                --ãƒ„ãƒ¼ãƒ«åã‚’å…¨ã¦å¤‰æ›´
+                setINISetting ((getDir #scripts) + "\SJTools\SJTools.ini") "SJToolsToolName" "SJPBakeToolName" "SJ PBake";
+                setINISetting ((getDir #scripts) + "\SJTools\SJTools.ini") "SJToolsToolName" "SJRenamerToolName" "SJ Renamer";
+                setINISetting ((getDir #scripts) + "\SJTools\SJTools.ini") "SJToolsToolName" "SJSparkToolName" "SJ Spark";
+                setINISetting ((getDir #scripts) + "\SJTools\SJTools.ini") "SJToolsToolName" "SJBioSkinPlusToolName" "SJ Bio Skin +";
+                setINISetting ((getDir #scripts) + "\SJTools\SJTools.ini") "SJToolsToolName" "SJTimeMachineToolName" "SJ Time Machine";
+                setINISetting ((getDir #scripts) + "\SJTools\SJTools.ini") "SJToolsToolName" "SJSelectorToolName" "SJ Selector";
+                setINISetting ((getDir #scripts) + "\SJTools\SJTools.ini") "SJToolsToolName" "SJSelectorRigToolName" "SJ Selector Hurricane";
+                setINISetting ((getDir #scripts) + "\SJTools\SJTools.ini") "SJToolsToolName" "SJAdjusterToolName" "SJ Adjuster";
+                setINISetting ((getDir #scripts) + "\SJTools\SJTools.ini") "SJToolsToolName" "SJPoserToolName" "SJ Poser";
+                setINISetting ((getDir #scripts) + "\SJTools\SJTools.ini") "SJToolsToolName" "SJHiderToolName" "SJ Hider";
+                setINISetting ((getDir #scripts) + "\SJTools\SJTools.ini") "SJToolsToolName" "SJRollerToolName" "SJ Roller";
+                setINISetting ((getDir #scripts) + "\SJTools\SJTools.ini") "SJToolsToolName" "SJBipFitterToolName" "SJ Bip Fitter";
+
+                setINISetting ((getDir #scripts) + "\SJTools\SJTools.ini") "SJToolsToolName" "SJSceneSlicerToolName" "SJ Scene Slicer";
+                setINISetting ((getDir #scripts) + "\SJTools\SJTools.ini") "SJToolsToolName" "SJLayerLayerToolName" "SJ Layer Layer";
+                setINISetting ((getDir #scripts) + "\SJTools\SJTools.ini") "SJToolsToolName" "SJAnimKeyPreviewToolName" "SJ Anim Key Preview";
+                setINISetting ((getDir #scripts) + "\SJTools\SJTools.ini") "SJToolsToolName" "SJKeyMachineToolName" "SJ Key Mathine";
+                setINISetting ((getDir #scripts) + "\SJTools\SJTools.ini") "SJToolsToolName" "SJMultiPRSToolName" "SJ MultiRPS";
+
+                --å†èª­ã¿è¾¼ã¿
+                --ãƒã‚¯ãƒ­ã®é™¤å»
+                --2011-2012
+                deleteFile ("$ui\macroscripts\SJTools.mcr");
+                --2013-
+                deleteFile ("$max\Macroscripts\SJTools.mcr");
+
+                --ãƒã‚¯ãƒ­ã®ã‚³ãƒ”ãƒ¼
+                --2011-2012
+                copyFile "$max\Scripts\SJTools\SJTools_en.mcr" "$ui\macroscripts\SJTools.mcr";
+                --2013-
+                copyFile "$max\Scripts\SJTools\SJTools_en.mcr" "$max\MacroScripts\SJTools.mcr";
+
+                --2011-2012
+                try(macros.load("$ui\macroscripts\\"))catch();
+                --2013-
+                try(macros.load("$max\Macroscripts\\"))catch();
+
+                --ãŠçŸ¥ã‚‰ã›
+                messageBox("åˆ‡ã‚Šæ›¿ãˆãŒçµ‚ã‚ã‚Šã¾ã—ãŸ\nãƒ„ãƒ¼ãƒ«ã‚’å†èµ·å‹•ã—ã¦ãã ã•ã„\n\nComplete\nPlease Reboot this tool.\n") title:"Complete";
+            )
+        )
+        return true;
+    ),
+
+    --////////////////////////////////////////////////
+    --ã‚¢ã‚¤ã‚³ãƒ³
+    fn sjtools_changeIcon_Fn=
+    (
+        if ((getINISetting ((getDir #scripts) + "\SJTools\SJTools.ini") "SJTools" "Icon") != "Standard") then
+        (
+            --é€šå¸¸ã‚¢ã‚¤ã‚³ãƒ³
+            if (queryBox("ã‚¬ã‚¥ã‚¬ã‚¥ï¼ã‚¬ã‚¥ã‚¬ã‚¥ã‚¬ã‚¡ï½ï½?\n(ã‚¢ã‚¤ã‚³ãƒ³ã‚’å…ƒã«æˆ»ã—ã¾ã™ã‹?)\n\nGow gow! gow gow gow?\n(Change to Standard Icon?)\n") title:"Check") do
+            (
+                setINISetting ((getDir #scripts) + "\SJTools\SJTools.ini") "SJTools" "Icon" "Standard";
+
+                /************************************
+                max2010 - 2012
+                *************************************/
+                deleteFile "$ui\Icons\SJTools_Icon01_16i.bmp";
+                deleteFile "$ui\Icons\SJTools_Icon01_24i.bmp";
+                deleteFile "$ui\Icons\SJTools_Icon02_16i.bmp";
+                deleteFile "$ui\Icons\SJTools_Icon02_24i.bmp";
+
+                /************************************
+                max2013
+                *************************************/
+                deleteFile ("$max\UI_ln\Icons\SJTools_Icon01_16i.bmp");
+                deleteFile ("$max\UI_ln\Icons\SJTools_Icon01_24i.bmp");
+                deleteFile ("$max\UI_ln\Icons\SJTools_Icon02_16i.bmp");
+                deleteFile ("$max\UI_ln\Icons\SJTools_Icon02_24i.bmp");
+                --Darkç”¨
+                deleteFile ("$max\UI_ln\IconsDark\SJTools_Icon01_16i.bmp");
+                deleteFile ("$max\UI_ln\IconsDark\SJTools_Icon01_24i.bmp");
+                deleteFile ("$max\UI_ln\IconsDark\SJTools_Icon02_16i.bmp");
+                deleteFile ("$max\UI_ln\IconsDark\SJTools_Icon02_24i.bmp");
+
+                /************************************
+                max2011-2012
+                *************************************/
+                dir = getDir #maxroot;
+                copyFile "$max\scripts\SJTools\Images\SJTools_Icon01_16i.bmp" (dir + "ui\icons\SJTools_Icon01_16i.bmp");
+                copyFile "$max\scripts\SJTools\Images\SJTools_Icon02_16i.bmp" (dir + "ui\icons\SJTools_Icon02_16i.bmp");
+                copyFile "$max\scripts\SJTools\Images\SJTools_Icon01_24i.bmp" (dir + "ui\icons\SJTools_Icon01_24i.bmp");
+                copyFile "$max\scripts\SJTools\Images\SJTools_Icon02_24i.bmp" (dir + "ui\icons\SJTools_Icon02_24i.bmp");
+                /************************************
+                max2013
+                *************************************/
+                --ãƒã‚¯ãƒ­
+                dir = getDir #maxroot;
+                --ã‚¢ã‚¤ã‚³ãƒ³
+                copyFile "$max\scripts\SJTools\Images\SJTools_Icon01_16i.bmp" (dir + "\UI_ln\Icons\SJTools_Icon01_16i.bmp");
+                copyFile "$max\scripts\SJTools\Images\SJTools_Icon02_16i.bmp" (dir + "\UI_ln\Icons\SJTools_Icon02_16i.bmp");
+                copyFile "$max\scripts\SJTools\Images\SJTools_Icon01_24i.bmp" (dir + "\UI_ln\Icons\SJTools_Icon01_24i.bmp");
+                copyFile "$max\scripts\SJTools\Images\SJTools_Icon02_24i.bmp" (dir + "\UI_ln\Icons\SJTools_Icon02_24i.bmp");
+                --Darkç”¨
+                copyFile "$max\scripts\SJTools\Images\SJTools_Icon01_16i.bmp" (dir + "\UI_ln\IconsDark\SJTools_Icon01_16i.bmp");
+                copyFile "$max\scripts\SJTools\Images\SJTools_Icon02_16i.bmp" (dir + "\UI_ln\IconsDark\SJTools_Icon02_16i.bmp");
+                copyFile "$max\scripts\SJTools\Images\SJTools_Icon01_24i.bmp" (dir + "\UI_ln\IconsDark\SJTools_Icon01_24i.bmp");
+                copyFile "$max\scripts\SJTools\Images\SJTools_Icon02_24i.bmp" (dir + "\UI_ln\IconsDark\SJTools_Icon02_24i.bmp");
+
+                --ã‚¢ã‚¤ã‚³ãƒ³ã‚’å†èª­ã¿è¾¼ã¿
+                colorman.reInitIcons();
+
+            )
+        ) else (
+            --é€šå¸¸ã‚¢ã‚¤ã‚³ãƒ³
+            if (queryBox("ã‚¬ã‚¥ã‚¬ã‚¥ã‚¬ã‚¥ã‚¥?ã‚¦ã‚¬ã‚¡ï½ï½?\n(ã‚¢ã‚¤ã‚³ãƒ³ã‚’ãƒ˜ãƒ³ãªã®ã«å¤‰ãˆã¾ã™ã‹?)\n\nGow gow gowww! Uga?\n(Change to Animal Icon?)\n") title:"Check") do
+            (
+                setINISetting ((getDir #scripts) + "\SJTools\SJTools.ini") "SJTools" "Icon" "Animal";
+
+                /************************************
+                max2010 - 2012
+                *************************************/
+                deleteFile "$ui\Icons\SJTools_Icon01_16i.bmp";
+                deleteFile "$ui\Icons\SJTools_Icon01_24i.bmp";
+                deleteFile "$ui\Icons\SJTools_Icon02_16i.bmp";
+                deleteFile "$ui\Icons\SJTools_Icon02_24i.bmp";
+
+                /************************************
+                max2013
+                *************************************/
+                deleteFile ("$max\UI_ln\Icons\SJTools_Icon01_16i.bmp");
+                deleteFile ("$max\UI_ln\Icons\SJTools_Icon01_24i.bmp");
+                deleteFile ("$max\UI_ln\Icons\SJTools_Icon02_16i.bmp");
+                deleteFile ("$max\UI_ln\Icons\SJTools_Icon02_24i.bmp");
+                --Darkç”¨
+                deleteFile ("$max\UI_ln\IconsDark\SJTools_Icon01_16i.bmp");
+                deleteFile ("$max\UI_ln\IconsDark\SJTools_Icon01_24i.bmp");
+                deleteFile ("$max\UI_ln\IconsDark\SJTools_Icon02_16i.bmp");
+                deleteFile ("$max\UI_ln\IconsDark\SJTools_Icon02_24i.bmp");
 
 
-	--////////////////////////////////////////////////
-	--ƒvƒƒOƒŒƒXƒo[
-	--////////////////////////////////////////////////
-	fn sj_progressBar_Fn =
-	(
-		global sj_progressBar_rol
-		try (destroydialog sj_progressBar_rol) catch()
-		rollout sj_progressBar_rol "" width:416 height:56
-		(
-		progressBar progbar "" pos:[8,8] width:400 height:24 color:(color 30 10 190)
-		label processInfo "" pos:[8,36] width:400 height:16
-		)--rollout selset_rol
-		CreateDialog sj_progressBar_rol style:#(/*#style_border, #style_titlebar, #style_sysmenu, #style_resizing,*/ #style_toolwindow, #style_minimizebox) --pos:[50,50]
-	),--fn end
-	
-	--////////////////////////////////////////////////
-	--hide
-	--////////////////////////////////////////////////
-	fn sj_SetHide_Fn nodes state =
-	(
-		for i in nodes do
-		(
-			hide i.node
-		)--for end
-		
-		if state then
-		(
-			for i in nodes do
-			(
-			unhide i.node
-			)--for end
-		)--if end
-	),--fn end
-	
-	--////////////////////////////////////////////////
-	--freeze
-	--////////////////////////////////////////////////
-	fn sj_SetFreeze_Fn nodes state =
-	(
-		for i in nodes do
-		(
-			freeze i.node
-		)--for end
-		
-		if state then
-		(
-			for i in nodes do
-			(
-			unfreeze i.node
-			)--for end
-		)--if end
-	),--fn end
+                /************************************
+                max2011-2012
+                *************************************/
+                dir = getDir #maxroot;
+                copyFile "$max\scripts\SJTools\Images\SJTools_Icon01_16i_Aml.bmp" (dir + "ui\icons\SJTools_Icon01_16i.bmp");
+                copyFile "$max\scripts\SJTools\Images\SJTools_Icon02_16i_Aml.bmp" (dir + "ui\icons\SJTools_Icon02_16i.bmp");
+                copyFile "$max\scripts\SJTools\Images\SJTools_Icon01_24i_Aml.bmp" (dir + "ui\icons\SJTools_Icon01_24i.bmp");
+                copyFile "$max\scripts\SJTools\Images\SJTools_Icon02_24i_Aml.bmp" (dir + "ui\icons\SJTools_Icon02_24i.bmp");
+                /************************************
+                max2013
+                *************************************/
+                --ãƒã‚¯ãƒ­
+                dir = getDir #maxroot;
+                --ã‚¢ã‚¤ã‚³ãƒ³
+                copyFile "$max\scripts\SJTools\Images\SJTools_Icon01_16i_Aml.bmp" (dir + "\UI_ln\Icons\SJTools_Icon01_16i.bmp");
+                copyFile "$max\scripts\SJTools\Images\SJTools_Icon02_16i_Aml.bmp" (dir + "\UI_ln\Icons\SJTools_Icon02_16i.bmp");
+                copyFile "$max\scripts\SJTools\Images\SJTools_Icon01_24i_Aml.bmp" (dir + "\UI_ln\Icons\SJTools_Icon01_24i.bmp");
+                copyFile "$max\scripts\SJTools\Images\SJTools_Icon02_24i_Aml.bmp" (dir + "\UI_ln\Icons\SJTools_Icon02_24i.bmp");
+                --Darkç”¨
+                copyFile "$max\scripts\SJTools\Images\SJTools_Icon01_16i_Aml.bmp" (dir + "\UI_ln\IconsDark\SJTools_Icon01_16i.bmp");
+                copyFile "$max\scripts\SJTools\Images\SJTools_Icon02_16i_Aml.bmp" (dir + "\UI_ln\IconsDark\SJTools_Icon02_16i.bmp");
+                copyFile "$max\scripts\SJTools\Images\SJTools_Icon01_24i_Aml.bmp" (dir + "\UI_ln\IconsDark\SJTools_Icon01_24i.bmp");
+                copyFile "$max\scripts\SJTools\Images\SJTools_Icon02_24i_Aml.bmp" (dir + "\UI_ln\IconsDark\SJTools_Icon02_24i.bmp");
 
-	--////////////////////////////////////////////////
-	--showFrozenInGray
-	--////////////////////////////////////////////////
-	fn sj_SetFrozenGray_Fn nodes =
-	(
-		for i in nodes do
-		(
-			i.node.showFrozenInGray = off
-		)--for end
-	),--fn end
+                --ã‚¢ã‚¤ã‚³ãƒ³ã‚’å†èª­ã¿è¾¼ã¿
+                colorman.reInitIcons();
+            )
+        )
+        return true;
+    ),
 
-	--////////////////////////////////////////////////
-	--select
-	--////////////////////////////////////////////////
-	fn sj_SelectNodes_Fn nodes =
-	(
-		for i in nodes do
-		(
-			selectMore i.node
-		)--for end
-	),--fn end
-	
-	--////////////////////////////////////////////////
-	--ƒIƒuƒWƒFƒNƒg‚ğ‘I‘ğ‚µ‚Ä‚¢‚é‚Ì‚©??
-	--////////////////////////////////////////////////
-	fn sj_SelectCheck_Fn =
-	(
-		if (selection.count != 0) then
-		(
-			return true;
-		)
-		else
-		(
-			--ƒIƒuƒWƒFƒNƒg‚ª–³‚¢ê‡Àso—ˆ‚È‚¢ŒÌA‘I‘ğŒãÀs‚ğ‘£‚·
-			messageBox("ƒIƒuƒWƒFƒNƒg‚ª‘I‘ğ‚³‚ê‚Ä‚¢‚Ü‚¹‚ñ\n‚È‚É‚©ƒIƒuƒWƒFƒNƒg‚ğ‘I‘ğ‚µ‚ÄÀs‚­‚¾‚³‚¢\n ")title:"ƒƒbƒZ[ƒW";
-			return false;
-		);--if end
-	),--fn end
-	
-	/*////////////////////////////////////////////////
-	--SJ_selectbranch_Fn
-	--w’è‚ÌƒIƒuƒWƒFƒNƒgˆÈ‰º‚Ì\‘¢‚ğ‘I‘ğ‚·‚é
-	--ˆø” obj‚Í’Pˆê‚ÌƒIƒuƒWƒFƒNƒg‚Ì‚İ
-	--pram 0:‚Í\‘¢‚·‚×‚Ä 1:‘I‘ğˆÈ‰º
-	--•Ô‚è’lobjectBranch ‰ñû‚µ‚½\‘¢ƒIƒuƒWƒFƒNƒg‘S‚Ä
-	////////////////////////////////////////////////*/
-	fn sj_selectBranch_Fn obj pram =
-	(
---VE\‘¢‚ğ‘S•”‘I‘ğ‚·‚é
-	with redraw off
-	(--Ä•`‰æ‹Ö~
-	--ŠK‘w\‘¢‚ğ‘S‚Äæ“¾
-	--•Ï”‚ğ€”õ
-	Local objRoot = obj,
-	objectBranch = #();--‰ñû‚µ‚½q‹Ÿ
-	--obj = undefined;
-	checkObj = undefined;--ƒ`ƒFƒbƒN‚·‚éƒIƒuƒWƒFƒNƒg
-	checkChildren = #();--ƒ`ƒFƒbƒN‚·‚éƒIƒuƒWƒFƒNƒg‚Ì”z—ñ
-		
-	--ˆê‚Â‚Å‚à‘I‘ğ‚µ‚Ä‚¢‚é‚©H
-	if (obj != undefined) do
-		(
-			
-		--\‘¢‚ğ‘S‘Ì‚ğ‘I‘ğ‚·‚é‚È‚ç‚Î
-		if (pram != 1) do
-		(
-			--‘I‘ğ‚µ‚½‚à‚Ì‚ÌŠK‘w‚ğ‚³‚©‚Ì‚Ú‚èAeƒIƒuƒWƒFƒNƒg‚ª–³‚­‚È‚Á‚½‚ç‰ñû
-			while objRoot.parent != undefined do
-			(
-				objRoot = objRoot.parent
-			)--while end
-		);--if end
-		
-		--”z—ñ‚ÉŠi”[
-		append objectBranch objRoot
-		
-		--q‹Ÿ‚Ì”‚ğ“ü‚ê‚é
-		numChild = objRoot.children.count;
-		--‰Šú‰ñû
-		for i =1 to objRoot.children.count do
-		(
-			--2‚Â‚É‰ñû
-			append checkChildren objRoot.children[i];
-			append objectBranch objRoot.children[i];
-		);--for end
-		
-		--0‚É‚È‚é‚Ü‚ÅŒJ‚è•Ô‚·
-		while numChild != 0 do
-		(
-			--deleteItem checkChildren 1;
-			checkObj = checkChildren[numChild];
-			
-			--ƒ`ƒFƒbƒN—p”z—ñ‚©‚ç‚Ì‚¨‚µ‚è‚©‚çíœ
-			deleteItem checkChildren numChild;
-			numChild -= 1;			
-			
-			--q‚Í‚ ‚é‚©H
-			if (checkObj.children.count != 0) then
-			(
-				--print "—L‚è";
-				numChild += checkObj.children.count;--ƒJƒEƒ“ƒgƒAƒbƒv
-				for i =1 to checkObj.children.count do
-				(
-					append checkChildren checkObj.children[i];
-					append objectBranch checkObj.children[i];
-				);--for end
-			)else
-			(
-				--q‚ªŒ©‚Â‚©‚ç‚È‚¯‚ê‚Î
-				--print "–³‚µ"
-			);--if end
-			--checkObj += objRoot.children[numChild];
-		);
 
-		--ÅŒã‚É‘I‘ğ
-		--select objectBranch;
-		--print "‘I‘ğI—¹";
-	);--if end
-	
-		--”z—ñ‚ğ‘S‚Äreturn
-		return objectBranch;
-	);--with redraw end
-	
-	),--fn end
-	
-	
-	--////////////////////////////////////////////////
-	--”z—ñ“à‚ÌƒIƒuƒWƒFƒNƒg‚ğ–¼‘O‚Åƒ\[ƒg‚·‚é
-	--////////////////////////////////////////////////
-	fn sj_nameStringSort_Fn s1 s2 =
-	(
-		--–¼‘O‚Ì•¶š—ñ‚ğ”äŠr‚µ‚½Œ‹‰Ê‚ğ‘ã“ü
-		local a = (stricmp s1.name s2.name);
-		--”äŠrŒ‹‰Ê‚©‚çd•ª‚¯‚ğs‚¤
-		case of
-			(
-			(a < 0.): -1
-			(a > 0.): 1
-			default: 0
-			);--case end
-	),--fn end	
-	
-	/*////////////////////////////////////////////////
-	--SJ_sortByBranch
-	--”z—ñ“à—e‚ğeq‡‚Éƒ\[ƒg‚µ‚È‚¨‚·
-	--ˆø”‚Í’²‚×‚éƒIƒuƒWƒFƒNƒg”z—ñ
-	--•Ô‚è’l •À‚×’¼‚µ‚½”z—ñ
-	////////////////////////////////////////////////*/
-	fn sj_sortByBranch_Fn objArray =
-	(
-		--ŠK‘w\‘¢‚ğ‘S‚Äæ“¾
-		Local myObjAll = #(), delIndex = undefined;
-			--Local selObj = for i in selection collect i;
-		Local selObj = objArray;
-		Local objLevel = 1;
-		Local myObj = #();--ì‹Æ—pAŒ“ÅŒã‚É•Ô‚·”z—ñ
-		--////////////////////////////////////////////////
-		--”z—ñ‚ğ€”õ
-		--////////////////////////////////////////////////
-		for i = 1 to 256 do
-		(
-			append myObjAll #();
-		);--for end
-		--ƒvƒƒOƒŒƒXƒo[
-		sj_functions.sj_progressBar_Fn()
-		--////////////////////////////////////////////////
-		--ŠK‘wƒŒƒxƒ‹‚ğ•]‰¿
-		--////////////////////////////////////////////////
-		--ƒvƒƒOƒŒƒXˆ—
-		Local progCountAll = selObj.count;
-		Local progCount = 1;
-		
-		for i in selObj do
-		(
-			sj_progressBar_rol.processInfo.caption =  "\‘¢‚ğ•]‰¿‚µ‚Ä‚¢‚Ü‚·   " + (floor(((100.0/progCountAll) * progCount))as String) + "%";
-			sj_progressBar_rol.progbar.value = ((100.0/progCountAll) * progCount);
-			progCount += 1;
-			
-			myObj = #();
-			objLevel = 1;
-			obj = i;
-			--e‚ª–³‚­‚È‚é‚Ü‚Å‰½‰ñ‚©‚©‚Á‚½‚©H=ŠK‘wƒŒƒxƒ‹
-			while obj.parent != undefined do
-			(
-				obj = obj.parent
-				objLevel += 1;
-			)--while end
-			append myObjAll[objLevel] i;
-		);--for end
-		--////////////////////////////////////////////////
-		--”z—ñ“à‚ğ–¼‘O‚Åƒ\[ƒg
-		--////////////////////////////////////////////////
-		progCountAll = myObjAll.count;
-		progCount = 1;
-		for i in myObjAll do
-		(
-			sj_progressBar_rol.processInfo.caption =  "ƒŠƒXƒg‚ğƒ\[ƒg‚µ‚Ä‚¢‚Ü‚·   " + (floor(((100.0/progCountAll) * progCount))as String) + "%";
-			sj_progressBar_rol.progbar.value = ((100.0/progCountAll) * progCount);
-			progCount += 1;
-			if i.count != 0 then
-			(
-				--ˆê‚ÂˆÈã‚Å‚ ‚ê‚Î–¼‘O‚Å”z—ñ‚ğƒ\[ƒg--‚Ü‚½–¼‘O‚ğ”äŠr‚µ‚È‚ª‚ç”z—ñ“à‚ğƒ\[ƒg‚·‚é
-				if (i.count > 1) do qsort i sj_functions.sj_nameStringSort_Fn;
-			)
-		);--for end
-		--////////////////////////////////////////////////
-		--‚Ğ‚Æ‚Â‚Ì”z—ñ‚É‚Ü‚Æ‚ß‚é
-		--////////////////////////////////////////////////
-		myObj=#();
-		--”z—ñ‚ª0‚Å–³‚¯‚ê‚Î
-		for i in myObjAll do if (i.count != 0) do join myObj i;
-		try(destroydialog sj_progressBar_rol)catch();
-		return myObj;
+    --////////////////////////////////////////////////
+    --ãƒ—ãƒ­ã‚°ãƒ¬ã‚¹ãƒãƒ¼
+    fn sj_progressBar_Fn =
+    (
+        global sj_progressBar_rol
+        try (destroydialog sj_progressBar_rol) catch ();
+        rollout sj_progressBar_rol "" width:416 height:56
+        (
+            progressBar progbar "" pos:[8,8] width:400 height:24 color:(color 30 10 190);
+            label processInfo "" pos:[8,36] width:400 height:16;
+        )
+        CreateDialog sj_progressBar_rol style:#(/*#style_border, #style_titlebar, #style_sysmenu, #style_resizing,*/ #style_toolwindow, #style_minimizebox) --pos:[50,50]
+    ),
 
-	),--fn end
+    --////////////////////////////////////////////////
+    --hide
+    fn sj_SetHide_Fn nodes state =
+    (
+        for i in nodes do
+        (
+            hide i.node
+        )
 
-	/*////////////////////////////////////////////////
-	--SJ_searchSimilarStrings
-	--—‚½–¼‘O‚ğ’²‚×‚é
-	--ˆø”‚Í’²‚×‚é•¶š—ñA‘ÎÛ‚Ì•¶š—ñA•]‰¿ƒŒƒxƒ‹A‡‚ÉAstring array value
-	--”»’èƒŒƒxƒ‹‚Í10`0A10‚Å‚Í100“_‚Ì‚İA0“_‚Í‚Ù‚Ú‚·‚×‚Ä‚ğ‘—‚è•Ô‚·
-	--•Ô‚è’l ’²‚×ã‚°‚½•¶š—ñ‚·‚×‚Ä
-	////////////////////////////////////////////////*/
-	fn sj_searchSimilarStrings_Fn tagStr srchList judgLevel =
-	(
-			/*•¶š‚Ì‘g‚İ‡‚í‚¹‚ÍAÅ‘å‚ª•¶š”
-			Å¬‚Í1•¶š
-			—×‚ ‚Á‚½•¶š‚Ì‘g‚İ‡‚í‚¹‚Í
-			—á‚¦‚ÎA4•¶š‚Ìê‡
-			Å‘å‚Ì4•¶š‚Íˆê‚ÂA	ˆê•¶š‚É•ª‰ğ‚·‚é‚Æ4‚Â‚ ‚é
-			3•¶š‚Ì‘g‚İ‡‚í‚¹‚Í2‚Â
-			2•¶š‚Ì‘g‚İ‡‚í‚¹‚Í3‚Â
-			Å‘å=•¶š”
-			Å‘å-iÅ‘å-1j=Å‘å‚ÆÅ¬‚Ì‚ ‚¢‚¾‚Ì‘g‚İ‡‚í‚¹”
-			Å¬=1•¶š
-			*/
-			--ƒeƒXƒg—p
-			--tagStr = "abcdefg";
-			--srchList = #("abasdcdefadsfwe","343as","4","cab","abcdefg","tyui","bac");
-			
-		Local resultList = #();--Œ‹‰Ê‚Ì”z—ñ
-		Local scoreList = #(#(),#(),#(),#(),#(),#(),#(),#(),#(),#(),#());--“_”‡‚ÉŒ‹‰Ê‚ğ‰ñû‚·‚éA‰E‚©‚ç100-0“_‚Ì10‹æ‰æ
-		--”z—ñ‚ÌƒCƒ“ƒfƒbƒNƒX’lA1:100A2:90A3:80A4:70A5:60A6:50A7:40A8:30A9:20A10:10A11:0
-		Local strHit = 0;--ˆê’v‚µ‚½‚©‚¸
-			Local i = tagStr.count;
-			Local u = 0;--˜A‘±•¶š‚Ì•ª‰ğ‰ñ”
-			Local j = 1;--•¶š‚Ì‡¬‰ñ”AÅ¬‚Í1‚©‚ç
-			Local compStr = "";--‡¬•¶š
-			Local analysisTagStr = #();--’²‚×ã‚°‚é•¶š—ñ‚Ì‘g‚İ‡‚í‚¹
-			
-			--•¶š‚ÌÅ‘å”•ªŒJ‚è•Ô‚·
-			while i > 0 do
-			(
-				--‡¬‰ñ”‚ğİ’è
-				u = j;
-				while u > 0 do
-				(
-					--ˆê’U•¶š‚ğ‰Šú‰»
-					compStr = "";
-					
-					--K•¶š–Ú‚©‚çi•¶š”•ª‚Ì•¶š—ñ‚ğ‡¬
-					--
-					for k = u to (u+(i-1)) do
-					(
-						compStr += tagStr[k];
-					);--for end
-					append analysisTagStr compStr;
-					u -= 1;
-				);--while end
-				
-				--ƒJƒEƒ“ƒg‚ğˆê‚ÂˆÚ“®‚·‚é
-				i -= 1;
-				j += 1;
-			);--while end
-			
-			--print analysisTagStr;
-			--print analysisTagStr.count;
-			
-			--ƒvƒƒOƒŒƒXƒo[
-			sj_functions.sj_progressBar_Fn()
-			sj_progressBar_rol.processInfo.caption = "‚µ‚Î‚ç‚­‚¨‘Ò‚¿‚­‚¾‚³‚¢"
-			Local progCount = 1;
-			
-			for k in srchList do
-			(
-				--ƒJƒEƒ“ƒg‚ğ0
-				strHit = 0;
-				--Ši”[‚µ‚½•¶š—ñ‚ª‚Ç‚ê‚­‚ç‚¢‚ ‚é‚©”äŠr‚·‚é
-				for i in analysisTagStr do
-				(
-					--•¶š—ñ‚ª‚ ‚ê‚Î
-					if ((findString k i) != undefined) do strHit += 1;
-				);--for end
-				
-				--‚Ç‚ê‚¾‚¯ˆê’v‚µ‚½‚©•]‰¿‚·‚é
-				--ƒƒU‚Æ¬”“_‚ğ‚©‚¯‚ÄŒvZ‚·‚é
-				strHit = (((strHit*1.0) / ((analysisTagStr.count)*1.0)) * 100);
-				
-				--‘S‚Äˆê’v‚µ‚Ä‚¢‚éê‡‚ÍA•¶š”‚ğÅŒã‚É”äŠr
-				--1•¶š2“_‚ÅŒ¸“_‚·‚éA‚Â‚Ü‚è50•¶šˆÈã‚Ì•¶š—ñ‚ÍŒŸõ‘ÎÛŠO
-				--abs‚Åâ‘Î’l‰»
-				tempVal = (abs(tagStr.count - k.count)) * 2;
-				--Œ¸“_
-				strHit = strHit - tempVal;
-				
-				--“_”‡‚ÉU‚è•ª‚¯			
-				--”z—ñ‚ÌƒCƒ“ƒfƒbƒNƒX’lA1:100A2:90A3:80A4:70A5:60A6:50A7:40A8:30A9:20A10:10A11:0
-				--100“_ˆÈã
-				if (strHit >= 100) then (append scoreList[1] k)
-				else if (strHit >= 90) then (append scoreList[2] k)
-				else if (strHit >= 80) then (append scoreList[3] k)
-				else if (strHit >= 70) then (append scoreList[4] k)
-				else if (strHit >= 60) then (append scoreList[5] k)
-				else if (strHit >= 50) then (append scoreList[6] k)
-				else if (strHit >= 40) then (append scoreList[7] k)
-				else if (strHit >= 30) then (append scoreList[8] k)					
-				else if (strHit >= 20) then (append scoreList[9] k)
-				else if (strHit >= 10) then (append scoreList[10] k)
-				else if (strHit >= 0) then (append scoreList[11] k);
-				
-				--ƒvƒƒOƒŒƒX‚ğXV
-				sj_progressBar_rol.progbar.value = ((100.00/srchList.count) * progCount)
-				progCount += 1;
-					
-			);--for end
-			
-				--Še”z—ñ‚ğƒ\[ƒg
-				sort scoreList[1];
-				sort scoreList[2];
-				sort scoreList[3];
-				sort scoreList[4];
-				sort scoreList[5];
-				sort scoreList[6];
-				sort scoreList[7];
-				sort scoreList[8];
-				sort scoreList[9];
-				sort scoreList[10];
-				sort scoreList[11];
-			
-			--ƒŠƒUƒ‹ƒg‚É‰ñûA‚½‚¾‚µA‰ñû‚·‚é‚©‚ÍƒWƒƒƒbƒWƒŒƒxƒ‹‚ÉˆË‘¶
-			if (scoreList[1].count != 0) and (judgLevel <= 10) do join resultList scoreList[1];
-			if (scoreList[2].count != 0) and (judgLevel <= 9) do join resultList scoreList[2];
-			if (scoreList[3].count != 0) and (judgLevel <= 8) do join resultList scoreList[3];
-			if (scoreList[4].count != 0) and (judgLevel <= 7) do join resultList scoreList[4];
-			if (scoreList[5].count != 0) and (judgLevel <= 6) do join resultList scoreList[5];
-			if (scoreList[6].count != 0) and (judgLevel <= 5) do join resultList scoreList[6];
-			if (scoreList[7].count != 0) and (judgLevel <= 4) do join resultList scoreList[7];
-			if (scoreList[8].count != 0) and (judgLevel <= 3) do join resultList scoreList[8];
-			if (scoreList[9].count != 0) and (judgLevel <= 2) do join resultList scoreList[9];
-			if (scoreList[10].count != 0) and (judgLevel <= 1) do join resultList scoreList[10];
-			if (scoreList[11].count != 0) and (judgLevel <= 0) do join resultList scoreList[11];
-			
-			--print resultList;
-		--ƒvƒƒOƒŒƒXI—¹
-		try(destroydialog sj_progressBar_rol)catch();
-		--ƒŠƒ^[ƒ“‚µ‚ÄI—¹
-		return resultList;
-	),--fn end
-	
-	/*////////////////////////////////////////////////
-	--SJ_checkObjByName
-	--w’è‚Ì–¼‘O‚ÌƒIƒuƒWƒFƒNƒg‚ÍƒV[ƒ““à‚É‚ ‚é‚©H
-	--ˆø”‚Í’²‚×‚éƒIƒuƒWƒFƒNƒg–¼
-	--•Ô‚è’l true / false
-	////////////////////////////////////////////////*/
-	fn sj_checkObjByName_Fn objName =
-	(
-		--ƒIƒuƒWƒFƒNƒg‚ğŠm•Û--‘å•¶š¬•¶š”»’è‚ ‚è
-		 getNodeTemp = (getNodeByName i exact:false ignoreCase:false all:true);
-		 --ã‚ÌgetNodeByname‚Í”z—ñ‚ª•Ô‚³‚ê‚é‚Ì‚Å’ˆÓI
-		 
-		--ƒIƒuƒWƒFƒNƒg‚Í‚ ‚é‚©?”z—ñ‚Ì”‚ª0‚È‚ç‚Î
-		if (getNodeTemp.count == 0) then
-		(
-		messageBox("ˆÈ‰º‚ÌƒIƒuƒWƒFƒNƒg‚ªƒV[ƒ“ã‚É‚ ‚è‚Ü‚¹‚ñ\n" + i) title:"ƒGƒ‰[";
-		return false;
-		);--if end
-		
-			--“¯‚¶–¼‘O‚ÌƒIƒuƒWƒFƒNƒg‚ª‚ ‚é‚©?
-			if (getNodeTemp.count >= 2) do doubleNameCheck = true;
-		
-			--bip‚©‚Ç‚¤‚©Šm”F
-			--‘O‚Ìƒ„ƒcif ((sj_pbake_rol.pbTypeRb.state == 1) or (sj_pbake_rol.pbTypeRb.state == 3)) then
-			if (sj_pbake_rol.pbTypeRb.state == 3) then
-			(
-				tempObj = getNodeByName i;
-				if ((classOf tempObj) == Biped_Object) or ((classOf tempObj.controller) == BipSlave_Control) then
-				(
-				--messageBox("PBake‚ÆPlot‚ÍBiped‚É‘Î‰‚µ‚Ä‚¢‚Ü‚¹‚ñB\n" + i) title:"ƒGƒ‰[";
-				messageBox("Plot‚ÍBiped‚É‘Î‰‚µ‚Ä‚¢‚Ü‚¹‚ñB\n" + i) title:"ƒGƒ‰[";
-				return false;
-				);--if end
-			/*
-			try(
-			biped.getNode (getNodeByName i) 1;
-			)catch();
-			*/
-			);--if end
-	),--fn end
+        if state then
+        (
+            for i in nodes do
+            (
+                unhide i.node
+            )
+        )
+    ),
 
-	--////////////////////////////////////////////////
-	--ƒtƒ@ƒ“ƒNƒVƒ‡ƒ“ƒGƒ“ƒhAƒJƒ“ƒ}‹æØ‚è‚ğƒ~ƒX‚µ‚È‚¢‚æ‚¤‚É
-	--////////////////////////////////////////////////
-	fn sj_fnEnd_Fn =
-	(
-		return print"fnEnd";
-	);--fn end
-	
+    --////////////////////////////////////////////////
+    --freeze
+    fn sj_SetFreeze_Fn nodes state =
+    (
+        for i in nodes do
+        (
+            freeze i.node
+        )
+
+        if state then
+        (
+            for i in nodes do
+            (
+            unfreeze i.node
+            )
+        )
+    ),
+
+    --////////////////////////////////////////////////
+    --showFrozenInGray
+    fn sj_SetFrozenGray_Fn nodes =
+    (
+        for i in nodes do
+        (
+            i.node.showFrozenInGray = off
+        )
+    ),
+
+    --////////////////////////////////////////////////
+    --select
+    fn sj_SelectNodes_Fn nodes =
+    (
+        for i in nodes do
+        (
+            selectMore i.node
+        )
+    ),
+
+    --////////////////////////////////////////////////
+    --ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’é¸æŠã—ã¦ã„ã‚‹ã®ã‹??
+    fn sj_SelectCheck_Fn =
+    (
+        if (selection.count != 0) then
+        (
+            return true;
+        ) else (
+            --ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆãŒç„¡ã„å ´åˆå®Ÿè¡Œå‡ºæ¥ãªã„æ•…ã€é¸æŠå¾Œå®Ÿè¡Œã‚’ä¿ƒã™
+            messageBox("ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆãŒé¸æŠã•ã‚Œã¦ã„ã¾ã›ã‚“\nãªã«ã‹ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’é¸æŠã—ã¦å®Ÿè¡Œãã ã•ã„\n ")title:"ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸";
+            return false;
+        )
+    ),
+
+    /**
+     * SJ_selectbranch_Fn
+     * æŒ‡å®šã®ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆä»¥ä¸‹ã®æ§‹é€ ã‚’é¸æŠã™ã‚‹
+     */
+    fn sj_selectBranch_Fn obj pram =
+    (
+        --æ–°ãƒ»æ§‹é€ ã‚’å…¨éƒ¨é¸æŠã™ã‚‹
+        with redraw off
+        (
+            local objRoot = obj;
+            local objectBranch = #();--å›åã—ãŸå­ä¾›
+            checkObj = undefined;--ãƒã‚§ãƒƒã‚¯ã™ã‚‹ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
+            checkChildren = #();--ãƒã‚§ãƒƒã‚¯ã™ã‚‹ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã®é…åˆ—
+            --ä¸€ã¤ã§ã‚‚é¸æŠã—ã¦ã„ã‚‹ã‹ï¼Ÿ
+            if (obj != undefined) do
+            (
+                --æ§‹é€ ã‚’å…¨ä½“ã‚’é¸æŠã™ã‚‹ãªã‚‰ã°
+                if (pram != 1) do
+                (
+                    --é¸æŠã—ãŸã‚‚ã®ã®éšå±¤ã‚’ã•ã‹ã®ã¼ã‚Šã€è¦ªã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆãŒç„¡ããªã£ãŸã‚‰å›å
+                    while objRoot.parent != undefined do
+                    (
+                        objRoot = objRoot.parent;
+                    )
+                )
+                --é…åˆ—ã«æ ¼ç´
+                append objectBranch objRoot;
+
+                --å­ä¾›ã®æ•°ã‚’å…¥ã‚Œã‚‹
+                numChild = objRoot.children.count;
+                --åˆæœŸå›å
+                for i =1 to objRoot.children.count do
+                (
+                    --2ã¤ã«å›å
+                    append checkChildren objRoot.children[i];
+                    append objectBranch objRoot.children[i];
+                )
+
+                --0ã«ãªã‚‹ã¾ã§ç¹°ã‚Šè¿”ã™
+                while numChild != 0 do
+                (
+                    checkObj = checkChildren[numChild];
+
+                    --ãƒã‚§ãƒƒã‚¯ç”¨é…åˆ—ã‹ã‚‰ã®ãŠã—ã‚Šã‹ã‚‰å‰Šé™¤
+                    deleteItem checkChildren numChild;
+                    numChild -= 1;
+
+                    --å­ã¯ã‚ã‚‹ã‹ï¼Ÿ
+                    if (checkObj.children.count != 0) then
+                    (
+                        --print "æœ‰ã‚Š";
+                        numChild += checkObj.children.count;--ã‚«ã‚¦ãƒ³ãƒˆã‚¢ãƒƒãƒ—
+                        for i =1 to checkObj.children.count do
+                        (
+                            append checkChildren checkObj.children[i];
+                            append objectBranch checkObj.children[i];
+                        )
+                    ) else (
+                        --print "ç„¡ã—"
+                    )
+                )
+            )
+            return objectBranch;
+        )
+
+    ),
+
+    --////////////////////////////////////////////////
+    --é…åˆ—å†…ã®ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’åå‰ã§ã‚½ãƒ¼ãƒˆã™ã‚‹
+    fn sj_nameStringSort_Fn s1 s2 =
+    (
+        --åå‰ã®æ–‡å­—åˆ—ã‚’æ¯”è¼ƒã—ãŸçµæœã‚’ä»£å…¥
+        local a = (stricmp s1.name s2.name);
+        --æ¯”è¼ƒçµæœã‹ã‚‰ä»•åˆ†ã‘ã‚’è¡Œã†
+        case of
+        (
+            (a < 0.): -1
+            (a > 0.): 1
+            default: 0
+        )
+    ),
+
+    /**
+     * SJ_sortByBranch
+     * é…åˆ—å†…å®¹ã‚’è¦ªå­é †ã«ã‚½ãƒ¼ãƒˆã—ãªãŠã™
+     * å¼•æ•°ã¯èª¿ã¹ã‚‹ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆé…åˆ—
+     * è¿”ã‚Šå€¤ ä¸¦ã¹ç›´ã—ãŸé…åˆ—
+     */
+    fn sj_sortByBranch_Fn objArray =
+    (
+        --éšå±¤æ§‹é€ ã‚’å…¨ã¦å–å¾—
+        local myObjAll = #(), delIndex = undefined;
+            --local selObj = for i in selection collect i;
+        local selObj = objArray;
+        local objLevel = 1;
+        local myObj = #();--ä½œæ¥­ç”¨ã€å…¼æœ€å¾Œã«è¿”ã™é…åˆ—
+        --////////////////////////////////////////////////
+        --é…åˆ—ã‚’æº–å‚™
+        --////////////////////////////////////////////////
+        for i = 1 to 256 do
+        (
+            append myObjAll #();
+        )
+        --ãƒ—ãƒ­ã‚°ãƒ¬ã‚¹ãƒãƒ¼
+        sj_functions.sj_progressBar_Fn();
+
+        --////////////////////////////////////////////////
+        --éšå±¤ãƒ¬ãƒ™ãƒ«ã‚’è©•ä¾¡
+        local progCountAll = selObj.count;
+        local progCount = 1;
+
+        for i in selObj do
+        (
+            sj_progressBar_rol.processInfo.caption =  "æ§‹é€ ã‚’è©•ä¾¡ã—ã¦ã„ã¾ã™   " + (floor(((100.0/progCountAll) * progCount))as String) + "%";
+            sj_progressBar_rol.progbar.value = ((100.0/progCountAll) * progCount);
+            progCount += 1;
+
+            myObj = #();
+            objLevel = 1;
+            obj = i;
+            --è¦ªãŒç„¡ããªã‚‹ã¾ã§ä½•å›ã‹ã‹ã£ãŸã‹ï¼Ÿ=éšå±¤ãƒ¬ãƒ™ãƒ«
+            while obj.parent != undefined do
+            (
+                obj = obj.parent
+                objLevel += 1;
+            )
+            append myObjAll[objLevel] i;
+        )
+
+        --////////////////////////////////////////////////
+        --é…åˆ—å†…ã‚’åå‰ã§ã‚½ãƒ¼ãƒˆ
+        progCountAll = myObjAll.count;
+        progCount = 1;
+        for i in myObjAll do
+        (
+            sj_progressBar_rol.processInfo.caption =  "ãƒªã‚¹ãƒˆã‚’ã‚½ãƒ¼ãƒˆã—ã¦ã„ã¾ã™   " + (floor(((100.0/progCountAll) * progCount))as String) + "%";
+            sj_progressBar_rol.progbar.value = ((100.0/progCountAll) * progCount);
+            progCount += 1;
+            if i.count != 0 then
+            (
+                --ä¸€ã¤ä»¥ä¸Šã§ã‚ã‚Œã°åå‰ã§é…åˆ—ã‚’ã‚½ãƒ¼ãƒˆ--ã¾ãŸåå‰ã‚’æ¯”è¼ƒã—ãªãŒã‚‰é…åˆ—å†…ã‚’ã‚½ãƒ¼ãƒˆã™ã‚‹
+                if (i.count > 1) do qsort i sj_functions.sj_nameStringSort_Fn;
+            )
+        )
+        --////////////////////////////////////////////////
+        --ã²ã¨ã¤ã®é…åˆ—ã«ã¾ã¨ã‚ã‚‹
+        myObj=#();
+        --é…åˆ—ãŒ0ã§ç„¡ã‘ã‚Œã°
+        for i in myObjAll do if (i.count != 0) do join myObj i;
+        try (destroydialog sj_progressBar_rol) catch ();
+        return myObj;
+    ),
+
+    /**
+     * SJ_searchSimilarStrings
+     * ä¼¼ãŸåå‰ã‚’èª¿ã¹ã‚‹
+     * å¼•æ•°ã¯èª¿ã¹ã‚‹æ–‡å­—åˆ—ã€å¯¾è±¡ã®æ–‡å­—åˆ—ã€è©•ä¾¡ãƒ¬ãƒ™ãƒ«ã€é †ã«ã€string array value
+     * åˆ¤å®šãƒ¬ãƒ™ãƒ«ã¯10ï½0ã€10ã§ã¯100ç‚¹ã®ã¿ã€0ç‚¹ã¯ã»ã¼ã™ã¹ã¦ã‚’é€ã‚Šè¿”ã™
+     * è¿”ã‚Šå€¤ èª¿ã¹ä¸Šã’ãŸæ–‡å­—åˆ—ã™ã¹ã¦
+     */
+    fn sj_searchSimilarStrings_Fn tagStr srchList judgLevel =
+    (
+        /*æ–‡å­—ã®çµ„ã¿åˆã‚ã›ã¯ã€æœ€å¤§ãŒæ–‡å­—æ•°
+        æœ€å°ã¯1æ–‡å­—
+        éš£ã‚ã£ãŸæ–‡å­—ã®çµ„ã¿åˆã‚ã›ã¯
+        ä¾‹ãˆã°ã€4æ–‡å­—ã®å ´åˆ
+        æœ€å¤§ã®4æ–‡å­—ã¯ä¸€ã¤ã€	ä¸€æ–‡å­—ã«åˆ†è§£ã™ã‚‹ã¨4ã¤ã‚ã‚‹
+        3æ–‡å­—ã®çµ„ã¿åˆã‚ã›ã¯2ã¤
+        2æ–‡å­—ã®çµ„ã¿åˆã‚ã›ã¯3ã¤
+        æœ€å¤§=æ–‡å­—æ•°
+        æœ€å¤§-ï¼ˆæœ€å¤§-1ï¼‰=æœ€å¤§ã¨æœ€å°ã®ã‚ã„ã ã®çµ„ã¿åˆã‚ã›æ•°
+        æœ€å°=1æ–‡å­—
+        */
+        --ãƒ†ã‚¹ãƒˆç”¨
+        --tagStr = "abcdefg";
+        --srchList = #("abasdcdefadsfwe","343as","4","cab","abcdefg","tyui","bac");
+
+        local resultList = #();--çµæœã®é…åˆ—
+        local scoreList = #(#(),#(),#(),#(),#(),#(),#(),#(),#(),#(),#());--ç‚¹æ•°é †ã«çµæœã‚’å›åã™ã‚‹ã€å³ã‹ã‚‰100-0ç‚¹ã®10åŒºç”»
+
+        --é…åˆ—ã®ã‚¤ãƒ³ãƒ‡ãƒƒã‚¯ã‚¹å€¤ã€1:100ã€2:90ã€3:80ã€4:70ã€5:60ã€6:50ã€7:40ã€8:30ã€9:20ã€10:10ã€11:0
+        local strHit = 0;--ä¸€è‡´ã—ãŸã‹ãš
+        local i = tagStr.count;
+        local u = 0;--é€£ç¶šæ–‡å­—ã®åˆ†è§£å›æ•°
+        local j = 1;--æ–‡å­—ã®åˆæˆå›æ•°ã€æœ€å°ã¯1ã‹ã‚‰
+        local compStr = "";--åˆæˆæ–‡å­—
+        local analysisTagStr = #();--èª¿ã¹ä¸Šã’ã‚‹æ–‡å­—åˆ—ã®çµ„ã¿åˆã‚ã›
+
+        --æ–‡å­—ã®æœ€å¤§æ•°åˆ†ç¹°ã‚Šè¿”ã™
+        while i > 0 do
+        (
+            --åˆæˆå›æ•°ã‚’è¨­å®š
+            u = j;
+            while u > 0 do
+            (
+                --ä¸€æ—¦æ–‡å­—ã‚’åˆæœŸåŒ–
+                compStr = "";
+
+                --Kæ–‡å­—ç›®ã‹ã‚‰iæ–‡å­—æ•°åˆ†ã®æ–‡å­—åˆ—ã‚’åˆæˆ
+                for k = u to (u+(i-1)) do
+                (
+                    compStr += tagStr[k];
+                )
+                append analysisTagStr compStr;
+                u -= 1;
+            )
+            --ã‚«ã‚¦ãƒ³ãƒˆã‚’ä¸€ã¤ç§»å‹•ã™ã‚‹
+            i -= 1;
+            j += 1;
+        )
+
+        --ãƒ—ãƒ­ã‚°ãƒ¬ã‚¹ãƒãƒ¼
+        sj_functions.sj_progressBar_Fn()
+        sj_progressBar_rol.processInfo.caption = "ã—ã°ã‚‰ããŠå¾…ã¡ãã ã•ã„"
+        local progCount = 1;
+        for k in srchList do
+        (
+            --ã‚«ã‚¦ãƒ³ãƒˆã‚’0
+            strHit = 0;
+            --æ ¼ç´ã—ãŸæ–‡å­—åˆ—ãŒã©ã‚Œãã‚‰ã„ã‚ã‚‹ã‹æ¯”è¼ƒã™ã‚‹
+            for i in analysisTagStr do
+            (
+                --æ–‡å­—åˆ—ãŒã‚ã‚Œã°
+                if ((findString k i) != undefined) do strHit += 1;
+            )
+
+            --ã©ã‚Œã ã‘ä¸€è‡´ã—ãŸã‹è©•ä¾¡ã™ã‚‹
+            --ãƒ¯ã‚¶ã¨å°æ•°ç‚¹ã‚’ã‹ã‘ã¦è¨ˆç®—ã™ã‚‹
+            strHit = (((strHit*1.0) / ((analysisTagStr.count)*1.0)) * 100);
+
+            --å…¨ã¦ä¸€è‡´ã—ã¦ã„ã‚‹å ´åˆã¯ã€æ–‡å­—æ•°ã‚’æœ€å¾Œã«æ¯”è¼ƒ
+            --1æ–‡å­—2ç‚¹ã§æ¸›ç‚¹ã™ã‚‹ã€ã¤ã¾ã‚Š50æ–‡å­—ä»¥ä¸Šã®æ–‡å­—åˆ—ã¯æ¤œç´¢å¯¾è±¡å¤–
+            --absã§çµ¶å¯¾å€¤åŒ–
+            tempVal = (abs(tagStr.count - k.count)) * 2;
+            --æ¸›ç‚¹
+            strHit = strHit - tempVal;
+
+            --ç‚¹æ•°é †ã«æŒ¯ã‚Šåˆ†ã‘
+            --é…åˆ—ã®ã‚¤ãƒ³ãƒ‡ãƒƒã‚¯ã‚¹å€¤ã€1:100ã€2:90ã€3:80ã€4:70ã€5:60ã€6:50ã€7:40ã€8:30ã€9:20ã€10:10ã€11:0
+            --100ç‚¹ä»¥ä¸Š
+            if (strHit >= 100) then (append scoreList[1] k)
+            else if (strHit >= 90) then (append scoreList[2] k)
+            else if (strHit >= 80) then (append scoreList[3] k)
+            else if (strHit >= 70) then (append scoreList[4] k)
+            else if (strHit >= 60) then (append scoreList[5] k)
+            else if (strHit >= 50) then (append scoreList[6] k)
+            else if (strHit >= 40) then (append scoreList[7] k)
+            else if (strHit >= 30) then (append scoreList[8] k)
+            else if (strHit >= 20) then (append scoreList[9] k)
+            else if (strHit >= 10) then (append scoreList[10] k)
+            else if (strHit >= 0) then (append scoreList[11] k);
+
+            --ãƒ—ãƒ­ã‚°ãƒ¬ã‚¹ã‚’æ›´æ–°
+            sj_progressBar_rol.progbar.value = ((100.00/srchList.count) * progCount)
+            progCount += 1;
+        )
+
+        --å„é…åˆ—ã‚’ã‚½ãƒ¼ãƒˆ
+        sort scoreList[1];
+        sort scoreList[2];
+        sort scoreList[3];
+        sort scoreList[4];
+        sort scoreList[5];
+        sort scoreList[6];
+        sort scoreList[7];
+        sort scoreList[8];
+        sort scoreList[9];
+        sort scoreList[10];
+        sort scoreList[11];
+
+        --ãƒªã‚¶ãƒ«ãƒˆã«å›åã€ãŸã ã—ã€å›åã™ã‚‹ã‹ã¯ã‚¸ãƒ£ãƒƒã‚¸ãƒ¬ãƒ™ãƒ«ã«ä¾å­˜
+        if (scoreList[1].count != 0) and (judgLevel <= 10) do join resultList scoreList[1];
+        if (scoreList[2].count != 0) and (judgLevel <= 9) do join resultList scoreList[2];
+        if (scoreList[3].count != 0) and (judgLevel <= 8) do join resultList scoreList[3];
+        if (scoreList[4].count != 0) and (judgLevel <= 7) do join resultList scoreList[4];
+        if (scoreList[5].count != 0) and (judgLevel <= 6) do join resultList scoreList[5];
+        if (scoreList[6].count != 0) and (judgLevel <= 5) do join resultList scoreList[6];
+        if (scoreList[7].count != 0) and (judgLevel <= 4) do join resultList scoreList[7];
+        if (scoreList[8].count != 0) and (judgLevel <= 3) do join resultList scoreList[8];
+        if (scoreList[9].count != 0) and (judgLevel <= 2) do join resultList scoreList[9];
+        if (scoreList[10].count != 0) and (judgLevel <= 1) do join resultList scoreList[10];
+        if (scoreList[11].count != 0) and (judgLevel <= 0) do join resultList scoreList[11];
+
+        --ãƒ—ãƒ­ã‚°ãƒ¬ã‚¹çµ‚äº†
+        try (destroydialog sj_progressBar_rol) catch ();
+        return resultList;
+    ),
+
+    /**
+     * SJ_checkObjByName
+     * æŒ‡å®šã®åå‰ã®ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã¯ã‚·ãƒ¼ãƒ³å†…ã«ã‚ã‚‹ã‹ï¼Ÿ
+     * å¼•æ•°ã¯èª¿ã¹ã‚‹ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆå
+     * è¿”ã‚Šå€¤ true / false
+     */
+    fn sj_checkObjByName_Fn objName =
+    (
+        --ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’ç¢ºä¿--å¤§æ–‡å­—å°æ–‡å­—åˆ¤å®šã‚ã‚Š
+         getNodeTemp = (getNodeByName i exact:false ignoreCase:false all:true);
+         --ä¸Šã®getNodeBynameã¯é…åˆ—ãŒè¿”ã•ã‚Œã‚‹ã®ã§æ³¨æ„ï¼
+
+        --ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã¯ã‚ã‚‹ã‹?é…åˆ—ã®æ•°ãŒ0ãªã‚‰ã°
+        if (getNodeTemp.count == 0) then
+        (
+            messageBox("ä»¥ä¸‹ã®ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆãŒã‚·ãƒ¼ãƒ³ä¸Šã«ã‚ã‚Šã¾ã›ã‚“\n" + i) title:"ã‚¨ãƒ©ãƒ¼";
+            return false;
+        )
+
+        --åŒã˜åå‰ã®ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆãŒã‚ã‚‹ã‹?
+        if (getNodeTemp.count >= 2) do doubleNameCheck = true;
+
+        --bipã‹ã©ã†ã‹ç¢ºèª
+        --å‰ã®ãƒ¤ãƒ„if ((sj_pbake_rol.pbTypeRb.state == 1) or (sj_pbake_rol.pbTypeRb.state == 3)) then
+        if (sj_pbake_rol.pbTypeRb.state == 3) then
+        (
+            tempObj = getNodeByName i;
+            if ((classOf tempObj) == Biped_Object) or ((classOf tempObj.controller) == BipSlave_Control) then
+            (
+                messageBox("Plotã¯Bipedã«å¯¾å¿œã—ã¦ã„ã¾ã›ã‚“ã€‚\n" + i) title:"ã‚¨ãƒ©ãƒ¼";
+                return false;
+            )
+        )
+    ),
+
+    --ãƒ•ã‚¡ãƒ³ã‚¯ã‚·ãƒ§ãƒ³ã‚¨ãƒ³ãƒ‰ã€ã‚«ãƒ³ãƒåŒºåˆ‡ã‚Šã‚’ãƒŸã‚¹ã—ãªã„ã‚ˆã†ã«
+    fn sj_fnEnd_Fn =
+    (
+        return print"fnEnd";
+    )
 )

@@ -4,7 +4,6 @@
  *  SJ Tools
  *
  * -----------------------------------------------------------------------------
- * (c) Copyright 2017 sakaiden and Captain Hansode. All rights reserved.
  * @license MIT
  * @author CaptainHansode 半袖船長
  * @web http://www.sakaiden.com/
@@ -21,11 +20,23 @@
 /**-----------------------------------------------------------------------------
  * global
  */
-global sjRenamerRol;
+global SJRenamerRol;
 global sjRnmResult = #();
 
+/**-----------------------------------------------------------------------------
+ * Rollouts削除
+ */
+try(cui.FloatDialogBar SJRenamerRol)catch();
+try(cui.unRegisterDialogBar SJRenamerRol)catch();
+try(closeRolloutFloater SJRenamerRol)catch();
+try(destroydialog SJRenamerRol)catch();
+try(closeRolloutFloater sjRenamerResultRol)catch();
+try(destroydialog sjRenamerResultRol)catch();
+
+--include "$scripts/SJTools/lib/progresBar.ms";
+
+
 --基本言語ファイル
---Local language = getINISetting ((getDir #scripts) + "\SJTools\SJTools.ini") "SJTools" "Language";
 local language = "JP";
 
 --Version
@@ -37,63 +48,25 @@ local allOj = #(), hitText = undefined, hitCount = 0, k = 0, NumStr = "", NameSt
 local searchType = true
 
 /**-----------------------------------------------------------------------------
- * Rollouts削除
- */
-try(cui.FloatDialogBar sjRenamerRol)catch();
-try(cui.unRegisterDialogBar sjRenamerRol)catch();
-try(closeRolloutFloater sjRenamerRol)catch();
-try(destroydialog sjRenamerRol)catch();
-try(closeRolloutFloater sjRenamerResultRol)catch();
-try(destroydialog sjRenamerResultRol)catch();
---try(destroydialog sj_progressBar_rol)catch();
-
-/**-----------------------------------------------------------------------------
  * メニュー
  */
-if (language == "JP") then
+rcMenu renamerMenuBar
 (
-    rcMenu renamerMenuBar
+    subMenu "ヘルプ"
     (
-        subMenu "ヘルプ"
-        (
-            menuItem helpMi "ヘルプ";
-            menuItem aboutMi "About";
-            menuItem emailMi "E-Mail";
-            seperator sepChangeLang;
-            menuItem ChangeLangMi "言語変更(Change Language)";
-        )
-        --アクション
-        on helpMi picked do shellLaunch "http://www.sakaiden.com/?page_id=5880" "";
-        on aboutMi picked do sj_functions.sjtools_about_Fn();
-        on emailMi picked do shellLaunch "mailTo:sakaiden@live.jp" "";
-        on ChangeLangMi	picked do sj_functions.sjtools_changeLanguage_Fn();
-        on poserMenuBar update do
-        (
-        )
+        menuItem helpMi "ヘルプ";
+        menuItem emailMi "E-Mail";
+        seperator sepChangeLang;
+        --menuItem ChangeLangMi "言語変更(Change Language)";
     )
-) else (
-    --////////////////////////////////////////////////
-    --英語
-    rcMenu renamerMenuBar
+    --アクション
+    on helpMi picked do shellLaunch "http://www.sakaiden.com/?page_id=5880" "";
+    on emailMi picked do shellLaunch "mailTo:sakaiden@live.jp" "";
+    on poserMenuBar update do
     (
-        subMenu "Help"
-        (
-            menuItem helpMi "Help";
-            menuItem aboutMi "About";
-            menuItem emailMi "E-Mail";
-            seperator sepChangeLang;
-            menuItem ChangeLangMi "言語変更(Change Language)";
-        )
-        --アクション
-        on helpMi picked do shellLaunch "http://www.sakaiden.com/?page_id=5880" "";
-        on aboutMi picked do sj_functions.sjtools_about_Fn();
-        on emailMi picked do shellLaunch "mailTo:sakaiden@live.jp" "";
-        on ChangeLangMi	picked do sj_functions.sjtools_changeLanguage_Fn();
-        on poserMenuBar update do
-        (
-        )
     )
 )
+
 
 /**-----------------------------------------------------------------------------
  * 検索結果
@@ -111,48 +84,40 @@ fn newName_Fn =
     suspendEditing();
     with redraw off
     (
-        --sj_functions.sj_progressBar_Fn();
-        ----sj_progressBar_rol.processInfo.caption = "しばらくお待ちください";
-
-        if sjRenamerRol.newNameEdt.text != "" then
-        (NameStr = sjRenamerRol.newNameEdt.text) else (NameStr = "Empty");
+        if SJRenamerRol.newNameEdt.text != "" then
+        (NameStr = SJRenamerRol.newNameEdt.text) else (NameStr = "Empty");
 
         --数の設定
         NumStr = "";
         k = 0;
-        digitNum = sjRenamerRol.newNameSpn3.value;
+        digitNum = SJRenamerRol.newNameSpn3.value;
 
-        if sjRenamerRol.withNumberChk.checked then
+        if SJRenamerRol.withNumberChk.checked then
         (
             --一度代入
-            NumStr = (sjRenamerRol.newNameSpn1.value as String);
+            NumStr = (SJRenamerRol.newNameSpn1.value as String);
 
             for i in selection do
             (
                 --数字文字列を合成
-                NumStr = ((sjRenamerRol.newNameSpn1.value + (k*sjRenamerRol.newNameSpn2.value)) as String);
+                NumStr = ((SJRenamerRol.newNameSpn1.value + (k*SJRenamerRol.newNameSpn2.value)) as String);
 
                 --桁は足りているか?
                 while ( NumStr.count < digitNum) do NumStr = ("0" + NumStr);
 
                 --名前を合成
-                if sjRenamerRol.addNumberChk.checked then
+                if SJRenamerRol.addNumberChk.checked then
                 (i.name = i.name + NumStr) else (i.name = NameStr + NumStr);
 
-                --プログレス
-                --sj_progressBar_rol.progbar.value = ((100.00/selection.count) * k);
                 k += 1;
             )
-
         ) else (
             for i in selection do
             (
                 i.name = NameStr;
-                --sj_progressBar_rol.progbar.value = ((100.00/selection.count) * k);
                 k += 1;
             )
         )
-        --try(destroydialog sj_progressBar_rol)catch();
     )
     resumeEditing();
 )
@@ -165,30 +130,24 @@ fn replaceName_Fn =
     suspendEditing();
     with redraw off
     (
-        --sj_functions.sj_progressBar_Fn();
-        --sj_progressBar_rol.processInfo.caption = "しばらくお待ちください";
         hitText = undefined
-        if sjRenamerRol.beforeEdt.text != "" then
+        if SJRenamerRol.beforeEdt.text != "" then
         (
             k = 1;
             --sから始まり選択の数だけ！（このときにsという変数が宣言されています）
             for i in selection do
             (
                 --aに選択オブジェクトから文字列を探す
-                hitText = findString i.name sjRenamerRol.beforeEdt.text;
+                hitText = findString i.name SJRenamerRol.beforeEdt.text;
                 --文字が見つかったら！（検索結果undefindでなければ）
                 if hitText != undefined then
                 (
-                    i.name = replace i.name hitText sjRenamerRol.beforeEdt.text.count sjRenamerRol.afterEdt.text	--hitText文字目からxx文字数までを置き換えます
+                    i.name = replace i.name hitText SJRenamerRol.beforeEdt.text.count SJRenamerRol.afterEdt.text	--hitText文字目からxx文字数までを置き換えます
                 )
-                --sj_progressBar_rol.progbar.value = ((100.00/selection.count) * k)
                 k += 1;
             )
-            --sj_progressBar_rol.progbar.value = 0
-            --try(destroydialog sj_progressBar_rol)catch();
         ) else (
-            --try(destroydialog sj_progressBar_rol)catch();
-            messageBox("検索文字列が空です!")
+            messageBox("検索文字列が空です!");
         )
     )
     resumeEditing()--再びアクティブに
@@ -202,24 +161,18 @@ fn prefixName_Fn =
     suspendEditing();--サスペンドモード
     with redraw off
     (
-        --sj_functions.sj_progressBar_Fn();
-        --sj_progressBar_rol.processInfo.caption = "しばらくお待ちください";
-        if sjRenamerRol.multiNameEdt.text != "" then	--文字列が空かどうか？
+        if SJRenamerRol.multiNameEdt.text != "" then	--文字列が空かどうか？
         (
             for i=1 to selection.count do
             (
                 --文字を置き換えます
-                selection[i].name = sjRenamerRol.multiNameEdt.text + selection[i].name;
-                --sj_progressBar_rol.progbar.value = ((100.00/selection.count) * i);
+                selection[i].name = SJRenamerRol.multiNameEdt.text + selection[i].name;
             )
-            --sj_progressBar_rol.progbar.value = 0
-            --try(destroydialog sj_progressBar_rol)catch();
         ) else (
-            --try(destroydialog sj_progressBar_rol)catch();
-            messageBox("検索文字列が空です!")
+            messageBox("検索文字列が空です!");
         )
     )
-    resumeEditing()--再びアクティブに
+    resumeEditing();
 )
 
 /**-----------------------------------------------------------------------------
@@ -229,25 +182,18 @@ fn suffixName_Fn =
 (
     suspendEditing();--サスペンドモード
     with redraw off
-    (--再描画禁止
-
-        --sj_functions.sj_progressBar_Fn();
-        --sj_progressBar_rol.processInfo.caption = "しばらくお待ちください";
-        if sjRenamerRol.multiNameEdt.text != "" then
+    (
+        if SJRenamerRol.multiNameEdt.text != "" then
         (
             for i=1 to selection.count do --sから始まり選択の数だけ！（このときにsという変数が宣言されています）
             (
-                selection[i].name = selection[i].name + sjRenamerRol.multiNameEdt.text	--文字を置き換えます
-                --sj_progressBar_rol.progbar.value = ((100.00/selection.count) * i)
+                selection[i].name = selection[i].name + SJRenamerRol.multiNameEdt.text	--文字を置き換えます
             )
-            --sj_progressBar_rol.progbar.value = 0
-            --try(destroydialog sj_progressBar_rol)catch();
         ) else (
-            --try(destroydialog sj_progressBar_rol)catch();
             messageBox("検索文字列が空です!");
         )
     )
-    resumeEditing();--再びアクティブに
+    resumeEditing();
 )
 
 /**-----------------------------------------------------------------------------
@@ -257,31 +203,23 @@ fn nPrefixName_Fn =
 (
     suspendEditing()--サスペンドモード
     with redraw off
-    (--再描画禁止
-
-        --sj_functions.sj_progressBar_Fn();
-        --sj_progressBar_rol.processInfo.caption = "しばらくお待ちください";
-        if sjRenamerRol.multiNameEdt.text != "" then	--文字列が空かどうか？
+    (
+        if SJRenamerRol.multiNameEdt.text != "" then	--文字列が空かどうか？
         (
             k = selection.count;
             j = 0;
             errorCount = 0;
-            nNum = sjRenamerRol.nNumberSpn.value;
+            nNum = SJRenamerRol.nNumberSpn.value;
             for i in selection do
             (
                 --先頭からn番目までの文字を格納
                 tempStrA = substring i.name 1 nNum;--1～指定数まで
                 tempStrB = substring i.name (nNum+1) -1;--指定数から最後まで
-                i.name = tempStrA + sjRenamerRol.multiNameEdt.text + tempStrB;--文字列を合成
-                --sj_progressBar_rol.progbar.value = ((100.00/k) * j);
+                i.name = tempStrA + SJRenamerRol.multiNameEdt.text + tempStrB;--文字列を合成
                 j += 1;
             )
-            --sj_progressBar_rol.progbar.value = 0
-
-            --try(destroydialog sj_progressBar_rol)catch();
         ) else (
-            --try(destroydialog sj_progressBar_rol)catch();
-            messageBox("検索文字列が空です!")
+            messageBox("検索文字列が空です!");
         )
         if (errorCount != 0) then (messageBox("いくつかの名前の変更に失敗しています"));
     )
@@ -295,37 +233,29 @@ fn nSuffixName_Fn =
 (
     suspendEditing()--サスペンドモード
     with redraw off
-    (--再描画禁止
-
-        --sj_functions.sj_progressBar_Fn();
-        --sj_progressBar_rol.processInfo.caption = "しばらくお待ちください";
-        if sjRenamerRol.multiNameEdt.text != "" then	--文字列が空かどうか？
+    (
+        if SJRenamerRol.multiNameEdt.text != "" then	--文字列が空かどうか？
         (
             k = selection.count;
             j = 0;
             errorCount = 0;
-            nNum = sjRenamerRol.nNumberSpn.value;
+            nNum = SJRenamerRol.nNumberSpn.value;
             for i in selection do
             (
                 --指定文字数を超えていたら
                 if (i.name.count < nNum) then
                 (
                     --名前以上の数値が設定されていたら、先頭に追加するだけでよい
-                    i.name = sjRenamerRol.multiNameEdt.text + i.name;
+                    i.name = SJRenamerRol.multiNameEdt.text + i.name;
                 ) else (
                     --先頭からn番目までの文字を格納
                     tempStrA = substring i.name 1 (i.name.count - nNum);--1文字目から～指定文字まで
                     tempStrB = substring i.name (i.name.count - nNum+1) -1;--指定数から～最後まで
-                    i.name = tempStrA + sjRenamerRol.multiNameEdt.text + tempStrB;--文字列を合成
-                    --sj_progressBar_rol.progbar.value = ((100.00/k) * j);
+                    i.name = tempStrA + SJRenamerRol.multiNameEdt.text + tempStrB;--文字列を合成
                     j += 1;
                 )
             )
-            --sj_progressBar_rol.progbar.value = 0
-
-            --try(destroydialog sj_progressBar_rol)catch();
         ) else (
-            --try(destroydialog sj_progressBar_rol)catch();
             messageBox("検索文字列が空です!");
         )
         if (errorCount != 0) then (messageBox("いくつかの名前の変更に失敗しています"))
@@ -341,26 +271,20 @@ fn deleteName_Fn =
     suspendEditing()--サスペンドモード
     with redraw off --再描画禁止
     (
-        --sj_functions.sj_progressBar_Fn();
-        --sj_progressBar_rol.processInfo.caption = "しばらくお待ちください";
         hitText = undefined;
-        if sjRenamerRol.multiNameEdt.text != "" then
+        if SJRenamerRol.multiNameEdt.text != "" then
         (
             for i=1 to selection.count do
             (
                 --aに選択オブジェクトから文字列を探します
-                hitText = findString selection[i].name sjRenamerRol.multiNameEdt.text;
+                hitText = findString selection[i].name SJRenamerRol.multiNameEdt.text;
                 if hitText != undefined then	--文字が見つかったら！（検索結果undefindでなければ）
                 (
                     --文字を置き換えます
-                    selection[i].name = replace selection[i].name hitText sjRenamerRol.multiNameEdt.text.count "";
+                    selection[i].name = replace selection[i].name hitText SJRenamerRol.multiNameEdt.text.count "";
                 )
-                --sj_progressBar_rol.progbar.value = ((100.00/selection.count) * i);
             )
-            --sj_progressBar_rol.progbar.value = 0;
-            --try(destroydialog sj_progressBar_rol)catch();
         ) else (
-            --try(destroydialog sj_progressBar_rol)catch();
             messageBox("検索文字列が空です!")
         )
 
@@ -376,26 +300,18 @@ fn searchName_Fn =
     suspendEditing()--サスペンドモード
     with redraw off
     (
-        --sj_functions.sj_progressBar_Fn()
-        --sj_progressBar_rol.processInfo.caption = "しばらくお待ちください"
-
         try (destroydialog sjRenamerResultRol) catch();
         sjRnmResult = #()
 
-        if sjRenamerRol.searchNameEdt.text != "" then
+        if SJRenamerRol.searchNameEdt.text != "" then
         (
             allOj = for i in objects collect i --オブジェクトの数だけオブジェクト内容を収集
             k = 1;
             for i in allOj do
             (
-                if (findString (i.name as String) sjRenamerRol.searchNameEdt.text) != undefined do append sjRnmResult i
-                --sj_progressBar_rol.progbar.value = ((100.00/allOj.count) * k)
+                if (findString (i.name as String) SJRenamerRol.searchNameEdt.text) != undefined do append sjRnmResult i
                 k += 1;
             )
-
-            --sj_progressBar_rol.progbar.value = 0
-            --try(destroydialog sj_progressBar_rol)catch()
-
             if sjRnmResult.count != 0 then
             (
                 hitSelList_Fn();
@@ -404,12 +320,141 @@ fn searchName_Fn =
             )
 
         ) else (
-            --try(destroydialog sj_progressBar_rol)catch();
-            messageBox("検索文字列が空です!")
+            messageBox("検索文字列が空です!");
         )
     )
-    resumeEditing()--再びアクティブに
+    resumeEditing();
 )
+
+
+/**-----------------------------------------------------------------------------
+ * SJ_searchSimilarStrings
+ * 似た名前を調べる
+ * 引数は調べる文字列、対象の文字列、評価レベル、順に、string array value
+ * 判定レベルは10～0、10では100点のみ、0点はほぼすべてを送り返す
+ * 返り値 調べ上げた文字列すべて
+ */
+fn sj_searchSimilarStrings_Fn tagStr srchList judgLevel =
+(
+    /*文字の組み合わせは、最大が文字数
+    最小は1文字
+    隣あった文字の組み合わせは
+    例えば、4文字の場合
+    最大の4文字は一つ、	一文字に分解すると4つある
+    3文字の組み合わせは2つ
+    2文字の組み合わせは3つ
+    最大=文字数
+    最大-（最大-1）=最大と最小のあいだの組み合わせ数
+    最小=1文字
+    */
+    --テスト用
+    --tagStr = "abcdefg";
+    --srchList = #("abasdcdefadsfwe","343as","4","cab","abcdefg","tyui","bac");
+
+    local resultList = #();--結果の配列
+    local scoreList = #(#(),#(),#(),#(),#(),#(),#(),#(),#(),#(),#());--点数順に結果を回収する、右から100-0点の10区画
+
+    --配列のインデックス値、1:100、2:90、3:80、4:70、5:60、6:50、7:40、8:30、9:20、10:10、11:0
+    local strHit = 0;--一致したかず
+    local i = tagStr.count;
+    local u = 0;--連続文字の分解回数
+    local j = 1;--文字の合成回数、最小は1から
+    local compStr = "";--合成文字
+    local analysisTagStr = #();--調べ上げる文字列の組み合わせ
+
+    --文字の最大数分繰り返す
+    while i > 0 do
+    (
+        --合成回数を設定
+        u = j;
+        while u > 0 do
+        (
+            --一旦文字を初期化
+            compStr = "";
+
+            --K文字目からi文字数分の文字列を合成
+            for k = u to (u+(i-1)) do
+            (
+                compStr += tagStr[k];
+            )
+            append analysisTagStr compStr;
+            u -= 1;
+        )
+        --カウントを一つ移動する
+        i -= 1;
+        j += 1;
+    )
+
+    local progCount = 1;
+    for k in srchList do
+    (
+        --カウントを0
+        strHit = 0;
+        --格納した文字列がどれくらいあるか比較する
+        for i in analysisTagStr do
+        (
+            --文字列があれば
+            if ((findString k i) != undefined) do strHit += 1;
+        )
+
+        --どれだけ一致したか評価する
+        --ワザと小数点をかけて計算する
+        strHit = (((strHit*1.0) / ((analysisTagStr.count)*1.0)) * 100);
+
+        --全て一致している場合は、文字数を最後に比較
+        --1文字2点で減点する、つまり50文字以上の文字列は検索対象外
+        --absで絶対値化
+        tempVal = (abs(tagStr.count - k.count)) * 2;
+        --減点
+        strHit = strHit - tempVal;
+
+        --点数順に振り分け
+        --配列のインデックス値、1:100、2:90、3:80、4:70、5:60、6:50、7:40、8:30、9:20、10:10、11:0
+        --100点以上
+        if (strHit >= 100) then (append scoreList[1] k)
+        else if (strHit >= 90) then (append scoreList[2] k)
+        else if (strHit >= 80) then (append scoreList[3] k)
+        else if (strHit >= 70) then (append scoreList[4] k)
+        else if (strHit >= 60) then (append scoreList[5] k)
+        else if (strHit >= 50) then (append scoreList[6] k)
+        else if (strHit >= 40) then (append scoreList[7] k)
+        else if (strHit >= 30) then (append scoreList[8] k)
+        else if (strHit >= 20) then (append scoreList[9] k)
+        else if (strHit >= 10) then (append scoreList[10] k)
+        else if (strHit >= 0) then (append scoreList[11] k);
+
+        progCount += 1;
+    )
+
+    --各配列をソート
+    sort scoreList[1];
+    sort scoreList[2];
+    sort scoreList[3];
+    sort scoreList[4];
+    sort scoreList[5];
+    sort scoreList[6];
+    sort scoreList[7];
+    sort scoreList[8];
+    sort scoreList[9];
+    sort scoreList[10];
+    sort scoreList[11];
+
+    --リザルトに回収、ただし、回収するかはジャッジレベルに依存
+    if (scoreList[1].count != 0) and (judgLevel <= 10) do join resultList scoreList[1];
+    if (scoreList[2].count != 0) and (judgLevel <= 9) do join resultList scoreList[2];
+    if (scoreList[3].count != 0) and (judgLevel <= 8) do join resultList scoreList[3];
+    if (scoreList[4].count != 0) and (judgLevel <= 7) do join resultList scoreList[4];
+    if (scoreList[5].count != 0) and (judgLevel <= 6) do join resultList scoreList[5];
+    if (scoreList[6].count != 0) and (judgLevel <= 5) do join resultList scoreList[6];
+    if (scoreList[7].count != 0) and (judgLevel <= 4) do join resultList scoreList[7];
+    if (scoreList[8].count != 0) and (judgLevel <= 3) do join resultList scoreList[8];
+    if (scoreList[9].count != 0) and (judgLevel <= 2) do join resultList scoreList[9];
+    if (scoreList[10].count != 0) and (judgLevel <= 1) do join resultList scoreList[10];
+    if (scoreList[11].count != 0) and (judgLevel <= 0) do join resultList scoreList[11];
+
+    return resultList;
+)
+
 
 /**-----------------------------------------------------------------------------
  * 近い名前
@@ -422,8 +467,9 @@ fn similarSearchBt_Fn =
 
     try (destroydialog sjRenamerResultRol) catch();
     allOj = for i in objects collect i.name --オブジェクトの数だけオブジェクト内容を収集
+
     --判定レベル2で実行
-    resultList = sj_functions.sj_searchSimilarStrings_Fn sjRenamerRol.searchNameEdt.text allOj 3;
+    resultList = sj_searchSimilarStrings_Fn SJRenamerRol.searchNameEdt.text allOj 3;
 
     --かぶっているものを排除
     resultList = makeUniqueArray resultList;
@@ -454,16 +500,10 @@ fn similarSearchBt_Fn =
  */
 fn doubleNameName_Fn =
 (
-    suspendEditing();--サスペンドモード
-    --再描画禁止
+    try (destroydialog sjRenamerResultRol) catch();
+    suspendEditing();
     with redraw off
     (
-
-        --sj_functions.sj_progressBar_Fn()
-        --sj_progressBar_rol.processInfo.caption = "しばらくお待ちください"
-
-        try (destroydialog sjRenamerResultRol) catch();
-
         allOj = for i in objects collect i --オブジェクトの数だけオブジェクト内容を収集
         sjRnmResult = #()
         hitCount = 0
@@ -476,21 +516,17 @@ fn doubleNameName_Fn =
                 if (matchPattern i.name pattern:u.name ignoreCase:SearchType) == true do hitCount += 1;
             )
             if hitCount > 1 do append sjRnmResult i; --カウントが2以上だったら
-            --sj_progressBar_rol.progbar.value = ((100.00/allOj.count) * k);
             k += 1;
         )
 
-        --sj_progressBar_rol.progbar.value = 0;
-        --try(destroydialog sj_progressBar_rol)catch();
-
         if sjRnmResult.count != 0 then
         (
-            hitSelList_Fn()
+            hitSelList_Fn();
         ) else (
             messageBox("見つかりませんでした") title:"検索結果";
         )
     )
-    resumeEditing()--再びアクティブに
+    resumeEditing();
 )
 
 /**-----------------------------------------------------------------------------
@@ -498,47 +534,47 @@ fn doubleNameName_Fn =
  */
 fn initialize_Fn = (
     local iniPath = ((getDir #scripts) + "\SJTools\SJRenamer\SJRenamer.ini");
-    sjRenamerRol.newNameEdt.text = (getINISetting iniPath "SJRenamer" "LastKeyWordNews");
-    sjRenamerRol.beforeEdt.text = (getINISetting iniPath "SJRenamer" "LastKeyWordReplaceA");
-    sjRenamerRol.afterEdt.text = (getINISetting iniPath "SJRenamer" "LastKeyWordReplaceB");
-    sjRenamerRol.multiNameEdt.text = (getINISetting iniPath "SJRenamer" "LastKeyWordAdd");
-    sjRenamerRol.searchNameEdt.text = (getINISetting iniPath "SJRenamer" "LastKeyWordSearch");
-    sjRenamerRol.newNameSpn1.value = execute(getINISetting iniPath "SJRenamer" "BaseNumber");
-    sjRenamerRol.newNameSpn2.value = execute(getINISetting iniPath "SJRenamer" "Steps");
-    sjRenamerRol.newNameSpn3.value = execute(getINISetting iniPath "SJRenamer" "Digit");
-    sjRenamerRol.nNumberSpn.value = execute(getINISetting iniPath "SJRenamer" "nNumber");
+    SJRenamerRol.newNameEdt.text = (getINISetting iniPath "SJRenamer" "LastKeyWordNews");
+    SJRenamerRol.beforeEdt.text = (getINISetting iniPath "SJRenamer" "LastKeyWordReplaceA");
+    SJRenamerRol.afterEdt.text = (getINISetting iniPath "SJRenamer" "LastKeyWordReplaceB");
+    SJRenamerRol.multiNameEdt.text = (getINISetting iniPath "SJRenamer" "LastKeyWordAdd");
+    SJRenamerRol.searchNameEdt.text = (getINISetting iniPath "SJRenamer" "LastKeyWordSearch");
+    SJRenamerRol.newNameSpn1.value = execute(getINISetting iniPath "SJRenamer" "BaseNumber");
+    SJRenamerRol.newNameSpn2.value = execute(getINISetting iniPath "SJRenamer" "Steps");
+    SJRenamerRol.newNameSpn3.value = execute(getINISetting iniPath "SJRenamer" "Digit");
+    SJRenamerRol.nNumberSpn.value = execute(getINISetting iniPath "SJRenamer" "nNumber");
 
-    sjRenamerRol.withNumberChk.checked = execute(getINISetting iniPath "SJRenamer" "Numbering");
-    sjRenamerRol.addNumberChk.checked = execute(getINISetting iniPath "SJRenamer" "OnlyNumbering");
+    SJRenamerRol.withNumberChk.checked = execute(getINISetting iniPath "SJRenamer" "Numbering");
+    SJRenamerRol.addNumberChk.checked = execute(getINISetting iniPath "SJRenamer" "OnlyNumbering");
 
     --uiを設定
-    if (sjRenamerRol.withNumberChk.checked) then
+    if (SJRenamerRol.withNumberChk.checked) then
     (
-        sjRenamerRol.baseNoLbl.enabled  = true;
-        sjRenamerRol.stepLbl.enabled  = true;
-        sjRenamerRol.digitLbl.enabled  = true;
-        sjRenamerRol.newNameSpn1.enabled  = true;
-        sjRenamerRol.newNameSpn2.enabled  = true;
-        sjRenamerRol.newNameSpn3.enabled  = true;
-        sjRenamerRol.addNumberChk.enabled = true;
+        SJRenamerRol.baseNoLbl.enabled  = true;
+        SJRenamerRol.stepLbl.enabled  = true;
+        SJRenamerRol.digitLbl.enabled  = true;
+        SJRenamerRol.newNameSpn1.enabled  = true;
+        SJRenamerRol.newNameSpn2.enabled  = true;
+        SJRenamerRol.newNameSpn3.enabled  = true;
+        SJRenamerRol.addNumberChk.enabled = true;
     ) else (
-        sjRenamerRol.baseNoLbl.enabled  = false;
-        sjRenamerRol.stepLbl.enabled  = false;
-        sjRenamerRol.digitLbl.enabled  = false;
-        sjRenamerRol.newNameSpn1.enabled  = false;
-        sjRenamerRol.newNameSpn2.enabled  = false;
-        sjRenamerRol.newNameSpn3.enabled  = false;
-        sjRenamerRol.addNumberChk.enabled = false;
+        SJRenamerRol.baseNoLbl.enabled  = false;
+        SJRenamerRol.stepLbl.enabled  = false;
+        SJRenamerRol.digitLbl.enabled  = false;
+        SJRenamerRol.newNameSpn1.enabled  = false;
+        SJRenamerRol.newNameSpn2.enabled  = false;
+        SJRenamerRol.newNameSpn3.enabled  = false;
+        SJRenamerRol.addNumberChk.enabled = false;
     )
 
     --uiを設定
-    if (sjRenamerRol.addNumberChk.checked) then
+    if (SJRenamerRol.addNumberChk.checked) then
     (
-        sjRenamerRol.basenameLbl.enabled = false;
-        sjRenamerRol.newNameEdt.enabled = false;
+        SJRenamerRol.basenameLbl.enabled = false;
+        SJRenamerRol.newNameEdt.enabled = false;
     ) else (
-        sjRenamerRol.basenameLbl.enabled = true;
-        sjRenamerRol.newNameEdt.enabled = true;
+        SJRenamerRol.basenameLbl.enabled = true;
+        SJRenamerRol.newNameEdt.enabled = true;
     )
 )
 
@@ -547,24 +583,24 @@ fn initialize_Fn = (
  */
 fn saveIni_Fn = (
     local iniPath = ((getDir #scripts) + "\SJTools\SJRenamer\SJRenamer.ini");
-    (setINISetting iniPath "SJRenamer" "LastKeyWordNews" sjRenamerRol.newNameEdt.text);
-    (setINISetting iniPath "SJRenamer" "LastKeyWordReplaceA" sjRenamerRol.beforeEdt.text);
-    (setINISetting iniPath "SJRenamer" "LastKeyWordReplaceB" sjRenamerRol.afterEdt.text);
-    (setINISetting iniPath "SJRenamer" "LastKeyWordAdd" sjRenamerRol.multiNameEdt.text);
-    (setINISetting iniPath "SJRenamer" "LastKeyWordSearch" sjRenamerRol.searchNameEdt.text);
-    (setINISetting iniPath "SJRenamer" "BaseNumber" ((sjRenamerRol.newNameSpn1.value) as String));
-    (setINISetting iniPath "SJRenamer" "Steps" ((sjRenamerRol.newNameSpn2.value) as String));
-    (setINISetting iniPath "SJRenamer" "Digit" ((sjRenamerRol.newNameSpn3.value) as String));
-    (setINISetting iniPath "SJRenamer" "nNumber" ((sjRenamerRol.nNumberSpn.value) as String));
+    (setINISetting iniPath "SJRenamer" "LastKeyWordNews" SJRenamerRol.newNameEdt.text);
+    (setINISetting iniPath "SJRenamer" "LastKeyWordReplaceA" SJRenamerRol.beforeEdt.text);
+    (setINISetting iniPath "SJRenamer" "LastKeyWordReplaceB" SJRenamerRol.afterEdt.text);
+    (setINISetting iniPath "SJRenamer" "LastKeyWordAdd" SJRenamerRol.multiNameEdt.text);
+    (setINISetting iniPath "SJRenamer" "LastKeyWordSearch" SJRenamerRol.searchNameEdt.text);
+    (setINISetting iniPath "SJRenamer" "BaseNumber" ((SJRenamerRol.newNameSpn1.value) as String));
+    (setINISetting iniPath "SJRenamer" "Steps" ((SJRenamerRol.newNameSpn2.value) as String));
+    (setINISetting iniPath "SJRenamer" "Digit" ((SJRenamerRol.newNameSpn3.value) as String));
+    (setINISetting iniPath "SJRenamer" "nNumber" ((SJRenamerRol.nNumberSpn.value) as String));
 
-    (setINISetting iniPath "SJRenamer" "Numbering" ((sjRenamerRol.withNumberChk.checked) as String));
-    (setINISetting iniPath "SJRenamer" "OnlyNumbering" ((sjRenamerRol.addNumberChk.checked) as String));
+    (setINISetting iniPath "SJRenamer" "Numbering" ((SJRenamerRol.withNumberChk.checked) as String));
+    (setINISetting iniPath "SJRenamer" "OnlyNumbering" ((SJRenamerRol.addNumberChk.checked) as String));
 )
 
 /**----------------------------------------------------------------------------------------------------------------------------------------------------------
  * メイン Rollout
  */
-rollout sjRenamerRol nameAndVersion width:200 height:676;
+rollout SJRenamerRol nameAndVersion width:200 height:676;
 (
     GroupBox grp1 "新規" pos:[8,8] width:184 height:188
     label basenameLbl "基本の名前" pos:[16,28] width:164 height:16
@@ -667,30 +703,30 @@ rollout sjRenamerRol nameAndVersion width:200 height:676;
     on newNameSpn1 changed val do saveIni_Fn();
     on nNumberSpn changed  val do saveIni_Fn();
 
-    on sjRenamerRol resized val do
+    on SJRenamerRol resized val do
     (
         width = 200;
         height = 676;
-        if ((sjRenamerRol.width <= width) and (sjRenamerRol.height <= height)) then
+        if ((SJRenamerRol.width <= width) and (SJRenamerRol.height <= height)) then
         (
             return false;
         )
         textWidth = val[1] - 32;
         grpWidth = val[1] - 16;
-        sjRenamerRol.height = height;
-        sjRenamerRol.beforeEdt.width = textWidth;
-        sjRenamerRol.afterEdt.width = textWidth;
-        sjRenamerRol.newNameEdt.width = textWidth;
-        sjRenamerRol.multiNameEdt.width = textWidth;
-        sjRenamerRol.searchNameEdt.width = textWidth;
-        sjRenamerRol.grp1.width = grpWidth;
-        sjRenamerRol.grp2.width = grpWidth;
-        sjRenamerRol.grp3.width = grpWidth;
-        sjRenamerRol.grp4.width = grpWidth;
+        SJRenamerRol.height = height;
+        SJRenamerRol.beforeEdt.width = textWidth;
+        SJRenamerRol.afterEdt.width = textWidth;
+        SJRenamerRol.newNameEdt.width = textWidth;
+        SJRenamerRol.multiNameEdt.width = textWidth;
+        SJRenamerRol.searchNameEdt.width = textWidth;
+        SJRenamerRol.grp1.width = grpWidth;
+        SJRenamerRol.grp2.width = grpWidth;
+        SJRenamerRol.grp3.width = grpWidth;
+        SJRenamerRol.grp4.width = grpWidth;
     )
 
-    on sjRenamerRol open do initialize_Fn();
-    on sjRenamerRol moved val do
+    on SJRenamerRol open do initialize_Fn();
+    on SJRenamerRol moved val do
     (
         local iniPath = ((getDir #scripts) + "\SJTools\SJRenamer\SJRenamer.ini");
         (setINISetting iniPath "SJRenamer" "rolPosX" (val[1] as String));
@@ -704,6 +740,6 @@ rollout sjRenamerRol nameAndVersion width:200 height:676;
 local iniPath = ((getDir #scripts) + "\SJTools\SJRenamer\SJRenamer.ini");
 local posX = execute(getINISetting iniPath "SJRenamer" "rolPosX");
 local posY = execute(getINISetting iniPath "SJRenamer" "rolPosY");
-CreateDialog sjRenamerRol pos:[posX, posY] menu:renamerMenuBar style:#(#style_border, /*#style_titlebar,*/#style_toolwindow, #style_sysmenu, #style_resizing, #style_minimizebox) menu:CanvasMenu
+CreateDialog SJRenamerRol pos:[posX, posY] menu:renamerMenuBar style:#(#style_border, #style_toolwindow, #style_sysmenu, #style_resizing, #style_minimizebox) menu:CanvasMenu;
 
 )
