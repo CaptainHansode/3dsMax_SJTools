@@ -1,0 +1,9 @@
+name "SJTools"
+description "SJ Tools http://www.sakaiden.com/?page_id=1031" 
+
+extract to "$temp\SJTools_temp"
+
+drop install.ms
+run install.ms
+
+clear temp on MAX exit
