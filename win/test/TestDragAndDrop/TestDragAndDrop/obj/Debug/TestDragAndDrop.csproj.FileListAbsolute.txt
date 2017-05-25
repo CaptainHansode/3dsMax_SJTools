@@ -1,0 +1,9 @@
+F:\Project_SJTools\SJTools\win\test\TestDragAndDrop\TestDragAndDrop\TestDragAndDrop\bin\Debug\TestDragAndDrop.exe.config
+F:\Project_SJTools\SJTools\win\test\TestDragAndDrop\TestDragAndDrop\TestDragAndDrop\bin\Debug\TestDragAndDrop.exe
+F:\Project_SJTools\SJTools\win\test\TestDragAndDrop\TestDragAndDrop\TestDragAndDrop\bin\Debug\TestDragAndDrop.pdb
+F:\Project_SJTools\SJTools\win\test\TestDragAndDrop\TestDragAndDrop\TestDragAndDrop\obj\Debug\TestDragAndDrop.csprojResolveAssemblyReference.cache
+F:\Project_SJTools\SJTools\win\test\TestDragAndDrop\TestDragAndDrop\TestDragAndDrop\obj\Debug\TestDragAndDrop.Form1.resources
+F:\Project_SJTools\SJTools\win\test\TestDragAndDrop\TestDragAndDrop\TestDragAndDrop\obj\Debug\TestDragAndDrop.Properties.Resources.resources
+F:\Project_SJTools\SJTools\win\test\TestDragAndDrop\TestDragAndDrop\TestDragAndDrop\obj\Debug\TestDragAndDrop.csproj.GenerateResource.Cache
+F:\Project_SJTools\SJTools\win\test\TestDragAndDrop\TestDragAndDrop\TestDragAndDrop\obj\Debug\TestDragAndDrop.exe
+F:\Project_SJTools\SJTools\win\test\TestDragAndDrop\TestDragAndDrop\TestDragAndDrop\obj\Debug\TestDragAndDrop.pdb
