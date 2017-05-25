@@ -1,207 +1,212 @@
-/*******************************************************
-System J Tools 
-********************************************************
-Name:SJ_Spark_ObjectsLinker.ms
-Created By:CaptainHansode
-WEB:www.sakaiden.com
-E-Mail:sakaiden@live.jp
-*******************************************************/
-	group "Objects Linker"
-	(
-		button nearGetTagBt "‘ÎÛ“o˜^" width:160 hight:20
-		button nearTagClearBt "ƒNƒŠƒA" width:160 hight:20
-		button doppelLinkerBt "ƒhƒbƒyƒ‹ƒŠƒ“ƒJ[" width:160 hight:20
-		button nearSearchTagBt "ˆê”Ô‹ß‚­‚ÌƒIƒuƒWƒFƒNƒg‚ÉƒŠƒ“ƒN" width:160 hight:20
-		button nearSearchTagCPBt "‹ß‚ÉˆÊ’uƒRƒ“ƒXƒgƒŒƒCƒ“ƒg" width:160 hight:20
-		checkbox posOffsetOLChk "ƒIƒtƒZƒbƒg" align:#left
-		button nearSearchTagCRBt "‹ß‚É‰ñ“]ƒRƒ“ƒXƒgƒŒƒCƒ“ƒg" width:160 hight:20
-		checkbox rotOffsetOLChk "ƒIƒtƒZƒbƒg" align:#left
-	)
+/**
+ * -----------------------------------------------------------------------------
+ *
+ * SJ Tools
+ *
+ * -----------------------------------------------------------------------------
+ * @license MIT
+ * @author CaptainHansode åŠè¢–èˆ¹é•·
+ * @web http://www.sakaiden.com/
+ * @email sakaiden@live.jp
+ * @github https://github.com/CaptainHansode/SJTools
+ *
+ */
+group "Objects Linker"
+(
+    button nearGetTagBt "å¯¾è±¡ç™»éŒ²" width:160 hight:20
+    button nearTagClearBt "ã‚¯ãƒªã‚¢" width:160 hight:20
+    button doppelLinkerBt "ãƒ‰ãƒƒãƒšãƒ«ãƒªãƒ³ã‚«ãƒ¼" width:160 hight:20
+    button nearSearchTagBt "ä¸€ç•ªè¿‘ãã®ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã«ãƒªãƒ³ã‚¯" width:160 hight:20
+    button nearSearchTagCPBt "è¿‘ã«ä½ç½®ã‚³ãƒ³ã‚¹ãƒˆãƒ¬ã‚¤ãƒ³ãƒˆ" width:160 hight:20
+    checkbox posOffsetOLChk "ã‚ªãƒ•ã‚»ãƒƒãƒˆ" align:#left
+    button nearSearchTagCRBt "è¿‘ã«å›è»¢ã‚³ãƒ³ã‚¹ãƒˆãƒ¬ã‚¤ãƒ³ãƒˆ" width:160 hight:20
+    checkbox rotOffsetOLChk "ã‚ªãƒ•ã‚»ãƒƒãƒˆ" align:#left
+)
 --////////////////////////////////////////////////
---Šm•Û
+--ç¢ºä¿
 --////////////////////////////////////////////////
-	on nearGetTagBt pressed do
-	(
-		NearSearchTagObj = for i in selection collect i;
-		nearGetTagBt.caption = "“o˜^Ï‚İ";
-	);--end
-	on nearTagClearBt pressed do
-	(
-		NearSearchTagObj = #();
-		nearGetTagBt.caption = "‘ÎÛ“o˜^";
-	)
+on nearGetTagBt pressed do
+(
+    NearSearchTagObj = for i in selection collect i;
+    nearGetTagBt.caption = "ç™»éŒ²æ¸ˆã¿";
+);--end
+on nearTagClearBt pressed do
+(
+    NearSearchTagObj = #();
+    nearGetTagBt.caption = "å¯¾è±¡ç™»éŒ²";
+)
 --////////////////////////////////////////////////
 --doppelLinker
 --////////////////////////////////////////////////
-	on doppelLinkerBt pressed do
-	(
-		Local dopObj, myObj = undifined;
-	
-	if selection.count != 0 then
-	(
-	if NearSearchTagObj != undefined then
-	(
-		for i in selection do
-		(
-			if i.parent != undefined then
-			(
-				dopObj = i.parent;
-				i.parent = undefined;
-				--ÄÚ‘±
-				for k in NearSearchTagObj do
-				(
-					if k.name == dopObj.name then
-					(
-						if dopObj.inode.handle != k.inode.handle then i.parent = k;
-					)--if end
-				);--for end
-			);--if end
-		);--for end
-	);--if end
-	);--if end
-	);--end
+on doppelLinkerBt pressed do
+(
+    Local dopObj, myObj = undifined;
+
+if selection.count != 0 then
+(
+if NearSearchTagObj != undefined then
+(
+    for i in selection do
+    (
+        if i.parent != undefined then
+        (
+            dopObj = i.parent;
+            i.parent = undefined;
+            --å†æ¥ç¶š
+            for k in NearSearchTagObj do
+            (
+                if k.name == dopObj.name then
+                (
+                    if dopObj.inode.handle != k.inode.handle then i.parent = k;
+                )--if end
+            );--for end
+        );--if end
+    );--for end
+);--if end
+);--if end
+);--end
 
 --////////////////////////////////////////////////
---Às
+--å®Ÿè¡Œ
 --////////////////////////////////////////////////
-	on nearSearchTagBt pressed do
-	(
-	Local distanceA, distanceB, myObj = undifined;
-	Local baseObj = selection[1];
-	
-	if NearSearchTagObj != undefined then
-	(
+on nearSearchTagBt pressed do
+(
+Local distanceA, distanceB, myObj = undifined;
+Local baseObj = selection[1];
 
-	for k in selection do
-	(
-	 baseObj = k;
-	 
-		distanceA = distance baseObj NearSearchTagObj[1];
-		myObj = NearSearchTagObj[1];
+if NearSearchTagObj != undefined then
+(
 
-		--2ˆÚs‹——£‚ª‹ß‚¯‚ê‚Î“ü‚ê‘Ö‚¦
-		for i = 2 to nearSearchTagObj.count do
-		(
-			distanceB = distance baseObj NearSearchTagObj[i];
-			
-			if distanceA > distanceB then
-			(
-				distanceA = distanceB;
-				myObj = NearSearchTagObj[i];
-			);--if end
+for k in selection do
+(
+    baseObj = k;
 
-		);--for end
+    distanceA = distance baseObj NearSearchTagObj[1];
+    myObj = NearSearchTagObj[1];
 
-		try(baseObj.parent = myObj)catch();
+    --2ç§»è¡Œè·é›¢ãŒè¿‘ã‘ã‚Œã°å…¥ã‚Œæ›¿ãˆ
+    for i = 2 to nearSearchTagObj.count do
+    (
+        distanceB = distance baseObj NearSearchTagObj[i];
 
-	);--for end
+        if distanceA > distanceB then
+        (
+            distanceA = distanceB;
+            myObj = NearSearchTagObj[i];
+        );--if end
 
-	);--if end
-	
-	)--on end
-	
---////////////////////////////////////////////////
---ƒRƒ“ƒXƒgƒŒƒCƒ“ƒg
---////////////////////////////////////////////////
-	on nearSearchTagCPBt pressed do
-	(
-	suspendEditing()--ƒTƒXƒyƒ“ƒhƒ‚[ƒh
-	--max create mode--ƒNƒŠƒG[ƒgƒ‚[ƒh‚É•ÏX
-	with redraw off
-	(--Ä•`‰æ‹Ö~
-	
-	Local distanceA, distanceB, myObj = undifined;
-	Local baseObj = selection[1];
-	if NearSearchTagObj != undefined then
-	(
+    );--for end
 
-	for k in selection do
-	(
-	 baseObj = k;
-	 
-		distanceA = distance baseObj NearSearchTagObj[1];
-		myObj = NearSearchTagObj[1];
-		
-		--2ˆÚs‹——£‚ª‹ß‚¯‚ê‚Î“ü‚ê‘Ö‚¦
-		for i = 2 to nearSearchTagObj.count do
-		(
-			distanceB = distance baseObj NearSearchTagObj[i];
-			if distanceA > distanceB then
-			(
-				distanceA = distanceB;
-				myObj = NearSearchTagObj[i];
-			);--if end
-		);--for end
+    try(baseObj.parent = myObj)catch();
 
-		--ƒRƒ“ƒXƒgƒŒƒCƒ“ƒg‚ğÀs
-		try(
-			baseObj.pos.controller = Position_XYZ ()--ˆê’UƒŠƒZƒbƒg
-			baseObj.pos.controller = position_list ();
-			baseObj.pos.controller.enabled.controller = Position_Constraint ();
-			baseObj.pos.controller.active = 2;
-			baseObj.pos.controller.Position_Constraint.controller.appendTarget myObj 50.0
-			if posOffsetOLChk.checked then baseObj.pos.controller.Position_Constraint.controller.relative = on
-		)catch();
+);--for end
 
-	);--for end
+);--if end
 
-	);--if end
-	
-	
-	)--with redraw end	
-	resumeEditing()--Ä‚ÑƒAƒNƒeƒBƒu‚É
-	
-	)--on end
+)--on end
 
 --////////////////////////////////////////////////
---‰ñ“]ƒRƒ“ƒXƒgƒŒƒCƒ“ƒg
+--ã‚³ãƒ³ã‚¹ãƒˆãƒ¬ã‚¤ãƒ³ãƒˆ
 --////////////////////////////////////////////////
-	on nearSearchTagCRBt pressed do
-	(
-	suspendEditing()--ƒTƒXƒyƒ“ƒhƒ‚[ƒh
-	--max create mode--ƒNƒŠƒG[ƒgƒ‚[ƒh‚É•ÏX
-	with redraw off
-	(--Ä•`‰æ‹Ö~
-	
-	Local distanceA, distanceB, myObj = undifined;
-	Local baseObj = selection[1];
-	if NearSearchTagObj != undefined then
-	(
+on nearSearchTagCPBt pressed do
+(
+suspendEditing()--ã‚µã‚¹ãƒšãƒ³ãƒ‰ãƒ¢ãƒ¼ãƒ‰
+--max create mode--ã‚¯ãƒªã‚¨ãƒ¼ãƒˆãƒ¢ãƒ¼ãƒ‰ã«å¤‰æ›´
+with redraw off
+(--å†æç”»ç¦æ­¢
 
-	for k in selection do
-	(
-	 baseObj = k;
-	 
-		distanceA = distance baseObj NearSearchTagObj[1];
-		myObj = NearSearchTagObj[1];
-		
-		--2ˆÚs‹——£‚ª‹ß‚¯‚ê‚Î“ü‚ê‘Ö‚¦
-		for i = 2 to nearSearchTagObj.count do
-		(
-			distanceB = distance baseObj NearSearchTagObj[i];
-			if distanceA > distanceB then
-			(
-				distanceA = distanceB;
-				myObj = NearSearchTagObj[i];
-			);--if end
-		);--for end
+Local distanceA, distanceB, myObj = undifined;
+Local baseObj = selection[1];
+if NearSearchTagObj != undefined then
+(
 
-		--ƒRƒ“ƒXƒgƒŒƒCƒ“ƒg‚ğÀs
-		try(
-			baseObj.rotation.controller = Euler_XYZ ();--ˆê’UƒŠƒZƒbƒg
-			baseObj.rotation.controller = rotation_list ();
-			baseObj.rotation.controller.enabled.controller = Orientation_Constraint ();
-			baseObj.rotation.controller.active = 2;
-			baseObj.rotation.controller[2].controller.appendTarget myObj 50.0;
-			if rotOffsetOLChk.checked then baseObj.rotation.controller[2].controller.relative = on;
-		)catch();
+for k in selection do
+(
+    baseObj = k;
 
-	);--for end
+    distanceA = distance baseObj NearSearchTagObj[1];
+    myObj = NearSearchTagObj[1];
 
-	);--if end
-	
-	
-	)--with redraw end	
-	resumeEditing()--Ä‚ÑƒAƒNƒeƒBƒu‚É
-	
-	)--on end
+    --2ç§»è¡Œè·é›¢ãŒè¿‘ã‘ã‚Œã°å…¥ã‚Œæ›¿ãˆ
+    for i = 2 to nearSearchTagObj.count do
+    (
+        distanceB = distance baseObj NearSearchTagObj[i];
+        if distanceA > distanceB then
+        (
+            distanceA = distanceB;
+            myObj = NearSearchTagObj[i];
+        );--if end
+    );--for end
+
+    --ã‚³ãƒ³ã‚¹ãƒˆãƒ¬ã‚¤ãƒ³ãƒˆã‚’å®Ÿè¡Œ
+    try(
+        baseObj.pos.controller = Position_XYZ ()--ä¸€æ—¦ãƒªã‚»ãƒƒãƒˆ
+        baseObj.pos.controller = position_list ();
+        baseObj.pos.controller.enabled.controller = Position_Constraint ();
+        baseObj.pos.controller.active = 2;
+        baseObj.pos.controller.Position_Constraint.controller.appendTarget myObj 50.0
+        if posOffsetOLChk.checked then baseObj.pos.controller.Position_Constraint.controller.relative = on
+    )catch();
+
+);--for end
+
+);--if end
+
+
+)--with redraw end
+resumeEditing()--å†ã³ã‚¢ã‚¯ãƒ†ã‚£ãƒ–ã«
+
+)--on end
+
+--////////////////////////////////////////////////
+--å›è»¢ã‚³ãƒ³ã‚¹ãƒˆãƒ¬ã‚¤ãƒ³ãƒˆ
+--////////////////////////////////////////////////
+on nearSearchTagCRBt pressed do
+(
+suspendEditing()--ã‚µã‚¹ãƒšãƒ³ãƒ‰ãƒ¢ãƒ¼ãƒ‰
+--max create mode--ã‚¯ãƒªã‚¨ãƒ¼ãƒˆãƒ¢ãƒ¼ãƒ‰ã«å¤‰æ›´
+with redraw off
+(--å†æç”»ç¦æ­¢
+
+Local distanceA, distanceB, myObj = undifined;
+Local baseObj = selection[1];
+if NearSearchTagObj != undefined then
+(
+
+for k in selection do
+(
+    baseObj = k;
+
+    distanceA = distance baseObj NearSearchTagObj[1];
+    myObj = NearSearchTagObj[1];
+
+    --2ç§»è¡Œè·é›¢ãŒè¿‘ã‘ã‚Œã°å…¥ã‚Œæ›¿ãˆ
+    for i = 2 to nearSearchTagObj.count do
+    (
+        distanceB = distance baseObj NearSearchTagObj[i];
+        if distanceA > distanceB then
+        (
+            distanceA = distanceB;
+            myObj = NearSearchTagObj[i];
+        );--if end
+    );--for end
+
+    --ã‚³ãƒ³ã‚¹ãƒˆãƒ¬ã‚¤ãƒ³ãƒˆã‚’å®Ÿè¡Œ
+    try(
+        baseObj.rotation.controller = Euler_XYZ ();--ä¸€æ—¦ãƒªã‚»ãƒƒãƒˆ
+        baseObj.rotation.controller = rotation_list ();
+        baseObj.rotation.controller.enabled.controller = Orientation_Constraint ();
+        baseObj.rotation.controller.active = 2;
+        baseObj.rotation.controller[2].controller.appendTarget myObj 50.0;
+        if rotOffsetOLChk.checked then baseObj.rotation.controller[2].controller.relative = on;
+    )catch();
+
+);--for end
+
+);--if end
+
+
+)--with redraw end
+resumeEditing()--å†ã³ã‚¢ã‚¯ãƒ†ã‚£ãƒ–ã«
+
+)--on end

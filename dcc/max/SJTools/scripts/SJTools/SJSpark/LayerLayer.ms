@@ -1,282 +1,207 @@
-/*******************************************************
-System J Tools 
-********************************************************
-Name:SJ_Spark_LayerLaer.ms
-Created By:CaptainHansode
-WEB:www.sakaiden.com
-E-Mail:sakaiden@live.CaptainHansode
-*******************************************************/
-	group "ƒŒƒCƒ„[@ƒŒƒCƒ„["
-	(
-		button uselessLayerDeleteBt "–¢g—pƒŒƒCƒ„[íœ" width:160
-		
-		button allLayerDeleteBt "‘S‚Ä‚ÌƒŒƒCƒ„[‚ğíœ" width:160
-		
-		button layerDelByNameBt "–¼‘O‚ÅƒŒƒCƒ„[íœ" width:160
-		editText layerDelByNameTxt "" width:160 height:16 align:#center;
-		
-		button allLayerPfxBt "‘SƒŒƒCƒ„[‚ÉƒvƒŒƒtƒBƒbƒNƒX" width:160
-		editText allLayerPfxTxt "" width:160 height:16 align:#center;
-		button allLayerDlPxBt "‘SƒŒƒCƒ„[‘ÎÛ•¶š‚ğíœ" width:160
-		editText allLayerDlPxTxt "" width:160 height:16 align:#center;
-	);
+/**
+ * -----------------------------------------------------------------------------
+ *
+ * SJ Tools
+ *
+ * -----------------------------------------------------------------------------
+ * @license MIT
+ * @author CaptainHansode åŠè¢–èˆ¹é•·
+ * @web http://www.sakaiden.com/
+ * @email sakaiden@live.jp
+ * @github https://github.com/CaptainHansode/SJTools
+ *
+ */
+group "ãƒ¬ã‚¤ãƒ¤ãƒ¼ã€€ãƒ¬ã‚¤ãƒ¤ãƒ¼"
+(
+    button uselessLayerDeleteBt "æœªä½¿ç”¨ãƒ¬ã‚¤ãƒ¤ãƒ¼å‰Šé™¤" width:160;
+    button allLayerDeleteBt "å…¨ã¦ã®ãƒ¬ã‚¤ãƒ¤ãƒ¼ã‚’å‰Šé™¤" width:160;
+    button layerDelByNameBt "åå‰ã§ãƒ¬ã‚¤ãƒ¤ãƒ¼å‰Šé™¤" width:160;
+    editText layerDelByNameTxt "" width:160 height:16 align:#center;
+    button allLayerPfxBt "å…¨ãƒ¬ã‚¤ãƒ¤ãƒ¼ã«ãƒ—ãƒ¬ãƒ•ã‚£ãƒƒã‚¯ã‚¹" width:160
+    editText allLayerPfxTxt "" width:160 height:16 align:#center;
+    button allLayerDlPxBt "å…¨ãƒ¬ã‚¤ãƒ¤ãƒ¼å¯¾è±¡æ–‡å­—ã‚’å‰Šé™¤" width:160
+    editText allLayerDlPxTxt "" width:160 height:16 align:#center;
+)
 
------------------------------------------------------------------------------------------------------------
---–¢g—p‚ğíœ
------------------------------------------------------------------------------------------------------------
+--æœªä½¿ç”¨ã‚’å‰Šé™¤
 on uselessLayerDeleteBt pressed do
 (
+    local layerCount, layer, layerRT;
+    local tagLayer = #();
 
-	Local layerCount, layer, layerRT;
-	Local tagLayer = #();
-	
-	--ƒŒƒCƒ„[‚Ì”
-	layerCount = (layermanager.count - 1);
-	
-	--ƒŒƒCƒ„[“à‚ÉƒIƒuƒWƒFƒNƒg‚ª–³‚¢ƒŒƒCƒ„[‚Ì–¼‘O‚ğ‰ñû
-	for i = 1 to layerCount do
-	(
-		--ƒŒƒCƒ„[‚ğæ“¾
-		layer = layermanager.getlayer i;
-		--refs.dependents—p‚É“o˜^
-		layerRT = layer.layerAsRefTarg;
-		
-		--]‘®«‚ªƒJƒEƒ“ƒg3–¢–‚¾‚Á‚½ê‡‚É‚»‚Ì–¼‘O‚ğ‰ñû
-		if (refs.dependents layerRT).count < 3 then append tagLayer layer.name;
+    --ãƒ¬ã‚¤ãƒ¤ãƒ¼ã®æ•°
+    layerCount = (layermanager.count - 1);
+    --ãƒ¬ã‚¤ãƒ¤ãƒ¼å†…ã«ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆãŒç„¡ã„ãƒ¬ã‚¤ãƒ¤ãƒ¼ã®åå‰ã‚’å›å
+    for i = 1 to layerCount do
+    (
+        --ãƒ¬ã‚¤ãƒ¤ãƒ¼ã‚’å–å¾—
+        layer = layermanager.getlayer i;
+        --refs.dependentsç”¨ã«ç™»éŒ²
+        layerRT = layer.layerAsRefTarg;
 
-	);--for end
-	
-	--print tagLayer;
-	--‚¢‚´ƒŒƒCƒ„[íœ	
-	for i in tagLayer do layermanager.deleteLayerByName i
-	
-);
+        --å¾“å±æ€§ãŒã‚«ã‚¦ãƒ³ãƒˆ3æœªæº€ã ã£ãŸå ´åˆã«ãã®åå‰ã‚’å›å
+        if (refs.dependents layerRT).count < 3 then append tagLayer layer.name;
 
------------------------------------------------------------------------------------------------------------
---‘S•”íœ
------------------------------------------------------------------------------------------------------------
+    )
+    --ã„ã–ãƒ¬ã‚¤ãƒ¤ãƒ¼å‰Šé™¤
+    for i in tagLayer do layermanager.deleteLayerByName i
+)
+
+--å…¨éƒ¨å‰Šé™¤
 on allLayerDeleteBt pressed do
 (
+    local layerCount, layer, layerRT;
+    local tagLayer = #();
+    --ãƒ¬ã‚¤ãƒ¤ãƒ¼ã®æ•°
+    layerCount = (layermanager.count - 1);
+    --åŸºæœ¬ãƒ¬ã‚¤ãƒ¤ãƒ¼ã‚’ç¢ºä¿
+    layer = layermanager.getlayer 0;
+    --ã‚«ãƒ¬ãƒ³ãƒˆã«è¨­å®š
+    layer.current = true;
+    --å…¨ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’ãƒ¬ã‚¤ãƒ¤ãƒ¼0ç•ªã«ç§»å‹•
+    for i in objects do
+    (
+        --ãƒ¬ã‚¤ãƒ¤ãƒ¼ã«è¿½åŠ 
+        layer.addnode i;
+    )
+    --ãƒ¬ã‚¤ãƒ¤ãƒ¼å†…ã«ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆãŒç„¡ã„ãƒ¬ã‚¤ãƒ¤ãƒ¼ã®åå‰ã‚’å›å
+    for i = 1 to layerCount do
+    (
+        --ãƒ¬ã‚¤ãƒ¤ãƒ¼ã‚’å–å¾—
+        layer = layermanager.getlayer i;
+        append tagLayer layer.name;
+    )
+    for i in tagLayer do layermanager.deleteLayerByName i
+)
 
-	Local layerCount, layer, layerRT;
-	Local tagLayer = #();
-	
-	--ƒŒƒCƒ„[‚Ì”
-	layerCount = (layermanager.count - 1);
-	
-	
-	--Šî–{ƒŒƒCƒ„[‚ğŠm•Û
-	layer = layermanager.getlayer 0;
-	--ƒJƒŒƒ“ƒg‚Éİ’è
-	layer.current = true;	
-	
-	--‘SƒIƒuƒWƒFƒNƒg‚ğƒŒƒCƒ„[0”Ô‚ÉˆÚ“®
-	for i in objects do
-	(
-		--ƒŒƒCƒ„[‚É’Ç‰Á
-		layer.addnode i;
-	);--for end
-	
-	
-	--ƒŒƒCƒ„[“à‚ÉƒIƒuƒWƒFƒNƒg‚ª–³‚¢ƒŒƒCƒ„[‚Ì–¼‘O‚ğ‰ñû
-	for i = 1 to layerCount do
-	(
-		--ƒŒƒCƒ„[‚ğæ“¾
-		layer = layermanager.getlayer i;
-		append tagLayer layer.name;
-		
-		/*
-		--refs.dependents—p‚É“o˜^
-		layerRT = layer.layerAsRefTarg;
-		
-		--]‘®«‚ªƒJƒEƒ“ƒg3–¢–‚¾‚Á‚½ê‡‚É‚»‚Ì–¼‘O‚ğ‰ñû
-		if (refs.dependents layerRT).count < 3 then append tagLayer layer.name;
-		*/
-		
-	);--for end
-	
-	--print tagLayer;
-	--‚¢‚´ƒŒƒCƒ„[íœ	
-	for i in tagLayer do layermanager.deleteLayerByName i
-	
-);
------------------------------------------------------------------------------------------------------------
---–¼‘O‚ÅƒŒƒCƒ„[‚ğíœ
------------------------------------------------------------------------------------------------------------
+--åå‰ã§ãƒ¬ã‚¤ãƒ¤ãƒ¼ã‚’å‰Šé™¤
 on layerDelByNameBt pressed do
 (
-	if (layerDelByNameTxt.text != "") then
-	(
-	
-	--ƒvƒƒOƒŒƒX
-	sj_functions.sj_progressBar_Fn();
-	sj_progressBar_rol.processInfo.caption = "‚µ‚Î‚ç‚­‚¨‘Ò‚¿‚­‚¾‚³‚¢";
-	
-	clearSelection();
-	suspendEditing()--ƒTƒXƒyƒ“ƒhƒ‚[ƒh
-	max create mode--ƒNƒŠƒG[ƒgƒ‚[ƒh‚É•ÏX
-	with redraw off
-	(--Ä•`‰æ‹Ö~
-	
-	Local layerCount, layer, layerRT, layerRefs, hitText
-	Local tagLayer = #(), tagObj = undefined;
-	
-	--ƒŒƒCƒ„[‚Ì”
-	layerCount = (layermanager.count - 1);
-	
-	--////////////////////////////////////////////////
-	--ƒŒƒCƒ„[0‚ÌƒIƒuƒWƒFƒNƒg‚ğíœ
-	--////////////////////////////////////////////////
-	if (queryBox("0ƒŒƒCƒ„[‚ÌƒIƒuƒWƒFƒNƒg‚ğíœ‚µ‚Ü‚·‚©?")title:"ƒƒbƒZ[ƒW") then
-	(
-	layer = layermanager.getlayer 0;
-	layerRT = layer.layerAsRefTarg;
-	layerRefs = refs.dependents layerRT;
-	if layerRefs.count >= 3 then
-	(
-		--ƒŒƒCƒ„[‚ğQÆ‚µ‚Ä‚¢‚éƒIƒuƒWƒFƒNƒg‚ğ‰ñû
-		layer.nodes &tagObj;
-		delete tagObj;
-		/**********************
-		‚±‚ê‚Í]‘®‚ª‚ ‚é‚à‚Ì‘S‚Ä‚ğ‘I‘ğ‚µ‚Ä‚µ‚Ü‚¤
-		‚½‚Æ‚¦‚ÎAƒŒƒCƒ„[‚ªˆá‚¤‚ªƒRƒ“ƒXƒgƒŒƒCƒ“ƒg‚ÅŒ‹‚Î‚ê‚Ä‚¢‚éƒIƒuƒWƒFƒNƒg‚È‚Ç
-		--ƒIƒuƒWƒFƒNƒg‚ğíœ
-		for i = 1 to layerRefs.count do
-		(
-			--print i;
-			--print layerRefs[i];
-			--if (layerRefs[i] != ReferenceTarget:BaseLayer) or (layerRefs[i] != ReferenceTarget:Scene) then
-			--(append tagObj layerRefs[i]);
-			if isvalidnode layerRefs[i] then append tagObj layerRefs[i];
-		);--for end
-		***********************/
-	);--if end
-	);--if end
-	--////////////////////////////////////////////////
-	--‚±‚±‚Ü‚Å
-	--////////////////////////////////////////////////
-	
-	--‰Šú‰»
-	tagObj = undefined;
-	
-	--ƒŒƒCƒ„[“à‚ÉƒIƒuƒWƒFƒNƒg‚ª–³‚¢ƒŒƒCƒ„[‚Ì–¼‘O‚ğ‰ñû
-	for i = 1 to layerCount do
-	(
-		sj_progressBar_rol.progbar.value = ((100.0/layerCount) * i);
-	
-		--ƒŒƒCƒ„[‚ğæ“¾
-		layer = layermanager.getlayer i;
-		--refs.dependents—p‚É“o˜^
-		layerRT = layer.layerAsRefTarg;
-		--]‘®«‚ªƒJƒEƒ“ƒg3–¢–‚¾‚Á‚½ê‡‚É‚»‚Ì–¼‘O‚ğ‰ñû
-		if (refs.dependents layerRT).count < 3 then append tagLayer layer.name;
-		--ƒŒƒCƒ„[‚Ì–¼‘O‚©‚çŒ©‚Â‚¯‚Äíœ
-		hitText = findString layer.name layerDelByNameTxt.text;
-		--•¶š‚ªŒ©‚Â‚©‚Á‚½‚çIiŒŸõŒ‹‰Êundefind‚Å‚È‚¯‚ê‚Îj
-			if hitText != undefined then
-			(
-				append tagLayer layer.name;
-				layerRefs = refs.dependents layerRT;
-				
-				--////////////////////////////////////////////////
-				--ƒqƒbƒg‚µ‚½ƒŒƒCƒ„[‚ÌƒIƒuƒWƒFƒNƒg‚ğíœ
-				--////////////////////////////////////////////////
-				if (queryBox(layer.name + "  ‚ÍƒIƒuƒWƒFƒNƒg‚²‚Æíœ‚µ‚Ü‚·‚©?")title:"ƒƒbƒZ[ƒW") then
-				(
-				if layerRefs.count >= 3 then
-				(
-					layer.nodes &tagObj;
-					delete tagObj;
-					/**********************
-					‚±‚ê‚Í]‘®‚ª‚ ‚é‚à‚Ì‘S‚Ä‚ğ‘I‘ğ‚µ‚Ä‚µ‚Ü‚¤
-					‚½‚Æ‚¦‚ÎAƒŒƒCƒ„[‚ªˆá‚¤‚ªƒRƒ“ƒXƒgƒŒƒCƒ“ƒg‚ÅŒ‹‚Î‚ê‚Ä‚¢‚éƒIƒuƒWƒFƒNƒg‚È‚Ç
-					--ƒIƒuƒWƒFƒNƒg‚ğíœ
-					for i = 1 to layerRefs.count do
-					(
-						--print i;
-						--print layerRefs[i];
-						if isvalidnode layerRefs[i] then append tagObj layerRefs[i];
-					);--for end
-					***********************/
-				);--if end
-				);--if end
-				--////////////////////////////////////////////////
-				--‚±‚±‚Ü‚Å
-				--////////////////////////////////////////////////	
-			);--if end
-		tagObj = undefined;
-	);--for end
-	--‚¢‚´ƒŒƒCƒ„[íœ	
-	for i in tagLayer do try( layermanager.deleteLayerByName i )catch();
-	try(destroydialog sj_progressBar_rol)catch();
-	)--with redraw end	
-	resumeEditing()--Ä‚ÑƒAƒNƒeƒBƒu‚É
-	);--if end
-);
+    if (layerDelByNameTxt.text != "") then
+    (
 
------------------------------------------------------------------------------------------------------------
---‘S‚Ä‚ÌƒŒƒCƒ„[‚ÉƒvƒŒƒtƒBƒbƒNƒX
------------------------------------------------------------------------------------------------------------
+        clearSelection();
+        suspendEditing();--ã‚µã‚¹ãƒšãƒ³ãƒ‰ãƒ¢ãƒ¼ãƒ‰
+        max create mode--ã‚¯ãƒªã‚¨ãƒ¼ãƒˆãƒ¢ãƒ¼ãƒ‰ã«å¤‰æ›´
+        with redraw off
+        (
+
+            local layerCount, layer, layerRT, layerRefs, hitText
+            local tagLayer = #(), tagObj = undefined;
+
+            --ãƒ¬ã‚¤ãƒ¤ãƒ¼ã®æ•°
+            layerCount = (layermanager.count - 1);
+
+            --ãƒ¬ã‚¤ãƒ¤ãƒ¼0ã®ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’å‰Šé™¤
+            if (queryBox("0ãƒ¬ã‚¤ãƒ¤ãƒ¼ã®ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’å‰Šé™¤ã—ã¾ã™ã‹?")title:"ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸") then
+            (
+                layer = layermanager.getlayer 0;
+                layerRT = layer.layerAsRefTarg;
+                layerRefs = refs.dependents layerRT;
+                if layerRefs.count >= 3 then
+                (
+                    --ãƒ¬ã‚¤ãƒ¤ãƒ¼ã‚’å‚ç…§ã—ã¦ã„ã‚‹ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’å›å
+                    layer.nodes &tagObj;
+                    delete tagObj;
+                )
+            )
+
+            --åˆæœŸåŒ–
+            tagObj = undefined;
+
+            --ãƒ¬ã‚¤ãƒ¤ãƒ¼å†…ã«ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆãŒç„¡ã„ãƒ¬ã‚¤ãƒ¤ãƒ¼ã®åå‰ã‚’å›å
+            for i = 1 to layerCount do
+            (
+                --ãƒ¬ã‚¤ãƒ¤ãƒ¼ã‚’å–å¾—
+                layer = layermanager.getlayer i;
+                --refs.dependentsç”¨ã«ç™»éŒ²
+                layerRT = layer.layerAsRefTarg;
+                --å¾“å±æ€§ãŒã‚«ã‚¦ãƒ³ãƒˆ3æœªæº€ã ã£ãŸå ´åˆã«ãã®åå‰ã‚’å›å
+                if (refs.dependents layerRT).count < 3 then append tagLayer layer.name;
+                --ãƒ¬ã‚¤ãƒ¤ãƒ¼ã®åå‰ã‹ã‚‰è¦‹ã¤ã‘ã¦å‰Šé™¤
+                hitText = findString layer.name layerDelByNameTxt.text;
+                --æ–‡å­—ãŒè¦‹ã¤ã‹ã£ãŸã‚‰ï¼ï¼ˆæ¤œç´¢çµæœundefindã§ãªã‘ã‚Œã°ï¼‰
+                if hitText != undefined then
+                (
+                    append tagLayer layer.name;
+                    layerRefs = refs.dependents layerRT;
+
+                    --ãƒ’ãƒƒãƒˆã—ãŸãƒ¬ã‚¤ãƒ¤ãƒ¼ã®ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’å‰Šé™¤
+                    if (queryBox(layer.name + "  ã¯ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã”ã¨å‰Šé™¤ã—ã¾ã™ã‹?")title:"ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸") then
+                    (
+                        if layerRefs.count >= 3 then
+                        (
+                            layer.nodes &tagObj;
+                            delete tagObj;
+                        )
+                    )
+                )
+                tagObj = undefined;
+            )
+            --ã„ã–ãƒ¬ã‚¤ãƒ¤ãƒ¼å‰Šé™¤
+            for i in tagLayer do try( layermanager.deleteLayerByName i )catch();
+        )
+        resumeEditing()--å†ã³ã‚¢ã‚¯ãƒ†ã‚£ãƒ–ã«
+    )
+)
+
+--å…¨ã¦ã®ãƒ¬ã‚¤ãƒ¤ãƒ¼ã«ãƒ—ãƒ¬ãƒ•ã‚£ãƒƒã‚¯ã‚¹
 on allLayerPfxBt pressed do
 (
-	--ƒeƒLƒXƒg‚Í‚ ‚é‚©H
-	if (allLayerPfxTxt.text != "") then
-	(
+    --ãƒ†ã‚­ã‚¹ãƒˆã¯ã‚ã‚‹ã‹ï¼Ÿ
+    if (allLayerPfxTxt.text != "") then
+    (
 
-	Local layerCount, layer, layerRT;
-	Local tagLayer = #();
-	
-	--ƒŒƒCƒ„[‚Ì”
-	layerCount = (layermanager.count - 1);
-	
-	--ƒŒƒCƒ„[“à‚ÉƒIƒuƒWƒFƒNƒg‚ª–³‚¢ƒŒƒCƒ„[‚Ì–¼‘O‚ğ‰ñû
-	for i = 1 to layerCount do
-	(
-		--ƒŒƒCƒ„[‚ğæ“¾
-		layer = layermanager.getlayer i;
-		--ƒŒƒCƒ„[‚Ì–¼‘O‚ğ•Ï‚¦‚é
-		layer.setname (allLayerPfxTxt.text + layer.name);
+        local layerCount, layer, layerRT;
+        local tagLayer = #();
+        --ãƒ¬ã‚¤ãƒ¤ãƒ¼ã®æ•°
+        layerCount = (layermanager.count - 1);
 
-	);--for end
-	
-	)else(messageBox"ƒeƒLƒXƒg‚ª“ü—Í‚³‚ê‚Ä‚¢‚Ü‚¹‚ñ"title:"ƒGƒ‰[");--if end
-);
------------------------------------------------------------------------------------------------------------
---‘S‚Ä‚ÌƒŒƒCƒ„[‚ÌƒvƒŒƒtƒBƒbƒNƒX‚ğíœ
------------------------------------------------------------------------------------------------------------
+        --ãƒ¬ã‚¤ãƒ¤ãƒ¼å†…ã«ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆãŒç„¡ã„ãƒ¬ã‚¤ãƒ¤ãƒ¼ã®åå‰ã‚’å›å
+        for i = 1 to layerCount do
+        (
+            --ãƒ¬ã‚¤ãƒ¤ãƒ¼ã‚’å–å¾—
+            layer = layermanager.getlayer i;
+            --ãƒ¬ã‚¤ãƒ¤ãƒ¼ã®åå‰ã‚’å¤‰ãˆã‚‹
+            layer.setname (allLayerPfxTxt.text + layer.name);
+        )
+
+    )else(messageBox"ãƒ†ã‚­ã‚¹ãƒˆãŒå…¥åŠ›ã•ã‚Œã¦ã„ã¾ã›ã‚“"title:"ã‚¨ãƒ©ãƒ¼");--if end
+)
+
+--å…¨ã¦ã®ãƒ¬ã‚¤ãƒ¤ãƒ¼ã®ãƒ—ãƒ¬ãƒ•ã‚£ãƒƒã‚¯ã‚¹ã‚’å‰Šé™¤
 on allLayerDlPxBt pressed do
 (
-	--ƒeƒLƒXƒg‚Í‚ ‚é‚©H
-	if (allLayerDlPxTxt.text != "") then
-	(
+    --ãƒ†ã‚­ã‚¹ãƒˆã¯ã‚ã‚‹ã‹ï¼Ÿ
+    if (allLayerDlPxTxt.text != "") then
+    (
+        local layerCount, layer, layerRT, hitText, myText;
+        local tagLayer = #();
+        --ãƒ¬ã‚¤ãƒ¤ãƒ¼ã®æ•°
+        layerCount = (layermanager.count - 1);
+        --ãƒ¬ã‚¤ãƒ¤ãƒ¼å†…ã«ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆãŒç„¡ã„ãƒ¬ã‚¤ãƒ¤ãƒ¼ã®åå‰ã‚’å›å
+        for i = 1 to layerCount do
+        (
+            --ãƒ¬ã‚¤ãƒ¤ãƒ¼ã‚’å–å¾—
+            layer = layermanager.getlayer i;
+            --ãƒ¬ã‚¤ãƒ¤ãƒ¼ã®åå‰ã‹ã‚‰è¦‹ã¤ã‘ã¦å‰Šé™¤
+            hitText = findString layer.name allLayerDlPxTxt.text;
+            --æ–‡å­—ãŒè¦‹ã¤ã‹ã£ãŸã‚‰ï¼ï¼ˆæ¤œç´¢çµæœundefindã§ãªã‘ã‚Œã°ï¼‰
+            if hitText != undefined then
+            (
+                --æ–‡å­—åˆ—ã‚’ç©ºã«ã¯ã—ãªã„
+                if (layer.name.count != allLayerDlPxTxt.text.count) then
+                (
+                --æ–‡å­—æ•°åˆ†ã‚’ç©ºã®æ–‡å­—ã«æ–‡å­—ã‚’ç½®ãæ›ãˆã¾ã™
+                --<å¯¾è±¡ã®String> <é–‹å§‹æ–‡å­—ç•ªå·> <ç½®ãæ›ãˆã‚‹æ–‡å­—æ•°> <ç½®ãæ›ãˆã‚‹æ–‡å­—>
+                myText = replace layer.name hitText allLayerDlPxTxt.text.count "";
+                layer.setname myText;
+                )
+            )
+        )
 
-	Local layerCount, layer, layerRT, hitText, myText;
-	Local tagLayer = #();
-	
-	--ƒŒƒCƒ„[‚Ì”
-	layerCount = (layermanager.count - 1);
-	
-	--ƒŒƒCƒ„[“à‚ÉƒIƒuƒWƒFƒNƒg‚ª–³‚¢ƒŒƒCƒ„[‚Ì–¼‘O‚ğ‰ñû
-	for i = 1 to layerCount do
-	(
-		--ƒŒƒCƒ„[‚ğæ“¾
-		layer = layermanager.getlayer i;
-		--ƒŒƒCƒ„[‚Ì–¼‘O‚©‚çŒ©‚Â‚¯‚Äíœ
-		hitText = findString layer.name allLayerDlPxTxt.text;
-		--•¶š‚ªŒ©‚Â‚©‚Á‚½‚çIiŒŸõŒ‹‰Êundefind‚Å‚È‚¯‚ê‚Îj
-				if hitText != undefined then
-				(
-					--•¶š—ñ‚ğ‹ó‚É‚Í‚µ‚È‚¢
-					if (layer.name.count != allLayerDlPxTxt.text.count) then
-					(
-					--•¶š”•ª‚ğ‹ó‚Ì•¶š‚É•¶š‚ğ’u‚«Š·‚¦‚Ü‚·
-					--<‘ÎÛ‚ÌString> <ŠJn•¶š”Ô†> <’u‚«Š·‚¦‚é•¶š”> <’u‚«Š·‚¦‚é•¶š>
-					myText = replace layer.name hitText allLayerDlPxTxt.text.count "";
-					layer.setname myText;
-					);--if end
-				);--ifend
-	);--for end
-	
-	)else(messageBox"ƒeƒLƒXƒg‚ª“ü—Í‚³‚ê‚Ä‚¢‚Ü‚¹‚ñ"title:"ƒGƒ‰[");--if end
-);
+    ) else (
+        messageBox"ãƒ†ã‚­ã‚¹ãƒˆãŒå…¥åŠ›ã•ã‚Œã¦ã„ã¾ã›ã‚“"title:"ã‚¨ãƒ©ãƒ¼"
+    )
+)
 

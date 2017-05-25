@@ -1,139 +1,128 @@
-/*******************************************************
-System J Tools 
-********************************************************
-Name:SJ_Spark_SnapShotMaster
-Created By:CaptainHansode
-WEB:www.sakaiden.com
-E-Mail:sakaiden@live.jp
-*******************************************************/
-	group "ƒXƒiƒbƒvƒVƒ‡ƒbƒgƒ}ƒXƒ^["
-	(
-		button snapShotBt "ƒXƒiƒbƒvƒVƒ‡ƒbƒg!" width:160 hight:20
-		button helperShotBt "ƒ|ƒCƒ“ƒgƒXƒiƒbƒvƒVƒ‡ƒbƒg" width:160 hight:20
-		button selectShotBt "ƒZƒŒƒNƒgƒXƒiƒbƒvƒVƒ‡ƒbƒg" width:160 hight:20
-		button mirrorSnapShotBt "ƒ~ƒ‰[ƒŠƒ“ƒOƒXƒiƒbƒvƒVƒ‡ƒbƒg" width:160 hight:20
-		radiobuttons ssTypeRb "" width:160 enabled:true labels:#("ƒ|ƒCƒ“ƒg", "ƒIƒŠƒWƒiƒ‹") default:1 columns:2 align:#center
-		label sSMLbl "İ’è‚ÍYZ•½–Êƒ~ƒ‰[XƒtƒŠƒbƒv" width:160 align:#center
-		--checkbox sSTypePointCkb "ƒ|ƒCƒ“ƒg"
-		--checkbox sSTypeOriginalCkb "ƒIƒŠƒWƒiƒ‹"
-	)
---////////////////////////////////////////////////
+/**
+ * -----------------------------------------------------------------------------
+ *
+ * SJ Tools
+ *
+ * -----------------------------------------------------------------------------
+ * @license MIT
+ * @author CaptainHansode åŠè¢–èˆ¹é•·
+ * @web http://www.sakaiden.com/
+ * @email sakaiden@live.jp
+ * @github https://github.com/CaptainHansode/SJTools
+ *
+ */
+group "ã‚¹ãƒŠãƒƒãƒ—ã‚·ãƒ§ãƒƒãƒˆãƒã‚¹ã‚¿ãƒ¼"
+(
+    button snapShotBt "ã‚¹ãƒŠãƒƒãƒ—ã‚·ãƒ§ãƒƒãƒˆ!" width:160 hight:20
+    button helperShotBt "ãƒã‚¤ãƒ³ãƒˆã‚¹ãƒŠãƒƒãƒ—ã‚·ãƒ§ãƒƒãƒˆ" width:160 hight:20
+    button selectShotBt "ã‚»ãƒ¬ã‚¯ãƒˆã‚¹ãƒŠãƒƒãƒ—ã‚·ãƒ§ãƒƒãƒˆ" width:160 hight:20
+    button mirrorSnapShotBt "ãƒŸãƒ©ãƒ¼ãƒªãƒ³ã‚°ã‚¹ãƒŠãƒƒãƒ—ã‚·ãƒ§ãƒƒãƒˆ" width:160 hight:20
+    radiobuttons ssTypeRb "" width:160 enabled:true labels:#("ãƒã‚¤ãƒ³ãƒˆ", "ã‚ªãƒªã‚¸ãƒŠãƒ«") default:1 columns:2 align:#center
+    label sSMLbl "è¨­å®šã¯YZå¹³é¢ãƒŸãƒ©ãƒ¼Xãƒ•ãƒªãƒƒãƒ—" width:160 align:#center
+)
+
 --snapShotBt
---////////////////////////////////////////////////
-	on snapShotBt pressed do
-	(
-		Local allssObj = #();
-		if sj_functions.sj_SelectCheck_Fn() do
-		(
-			for i in selection do
-			(
-			ssObj = Undefined
-			ssObj = snapShot i
-			ssObj.name = i.name + "_SnapShot";
-			ssObj.parent = Undefined;
-			ssObj.wirecolor = i.wirecolor;
-			append allssObj ssObj;
-			)--for end
-			
-			clearSelection()
-			select allssObj;
-		)--if end
-	)--
-	
---////////////////////////////////////////////////
+on snapShotBt pressed do
+(
+    Local allssObj = #();
+    if sj_functions.sj_SelectCheck_Fn() do
+    (
+        for i in selection do
+        (
+            ssObj = Undefined
+            ssObj = snapShot i
+            ssObj.name = i.name + "_SnapShot";
+            ssObj.parent = Undefined;
+            ssObj.wirecolor = i.wirecolor;
+            append allssObj ssObj;
+        )
+        clearSelection()
+        select allssObj;
+    )
+)
+
 --helperShotBt
---////////////////////////////////////////////////
-	on helperShotBt pressed do
-	(
-		if sj_functions.sj_SelectCheck_Fn() do
-		(
-			
-		Local allssObj = #();
-		for i in selection do
-		(
-		Local obj = point pos:[0,0,0]
-		obj.transform = i.transform
-		obj.name = i.name+"_PointCopy"
-		obj.wirecolor = i.wirecolor
-		append allssObj obj;
-		);--for end
-			clearSelection()
-			select allssObj;
-		)--if end
-	);--end
+on helperShotBt pressed do
+(
+    if sj_functions.sj_SelectCheck_Fn() do
+    (
+        local allssObj = #();
+        for i in selection do
+        (
+            Local obj = point pos:[0,0,0]
+            obj.transform = i.transform
+            obj.name = i.name+"_PointCopy"
+            obj.wirecolor = i.wirecolor
+            append allssObj obj;
+        )
+        clearSelection()
+        select allssObj;
+    )
+)
 
-
---////////////////////////////////////////////////
 --selectShot
---////////////////////////////////////////////////
-	on selectShotBt pressed do
-	(
-		if sj_functions.sj_SelectCheck_Fn() do
-		(
-		Local obj = for i in selection collect i;
-		messageBox "ƒRƒs[æ‚Ì‘ÎÛ‚ÌƒIƒuƒWƒFƒNƒg‚ğ‘I‘ğ‚µ‚Ä‚­‚¾‚³‚¢" title:"ƒƒbƒZ[ƒW"
-		Local targetObj = PickObject count:1 select:true message:"ƒIƒuƒWƒFƒNƒg‚ğ‘I‘ğ‚µ‚Ä‚­‚¾‚³‚¢" ForceListenerFocus:False
-		
-		Local allssObj = #();
-		
-		if targetObj != undefined then
-		(
-		for i in obj do
-		(
-			copyTagObj = copy targetObj;
-			copyTagObj.pos.controller = Position_XYZ ();
-			copyTagObj.rotation.controller = Euler_XYZ ();
-			copyTagObj.scale.controller = ScaleXYZ ();
-			
-			copyTagObj.transform = i.transform;		
-			copyTagObj.name = i.name+"_SelectCopy";
-			append allssObj copyTagObj;
-		)--for end
-		)--if end
-			clearSelection()
-			select allssObj;
-		);--if end
-	);--end
+on selectShotBt pressed do
+(
+    if sj_functions.sj_SelectCheck_Fn() do
+    (
+        local obj = for i in selection collect i;
+        messageBox "ã‚³ãƒ”ãƒ¼å…ˆã®å¯¾è±¡ã®ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’é¸æŠã—ã¦ãã ã•ã„" title:"ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸"
+        local targetObj = PickObject count:1 select:true message:"ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’é¸æŠã—ã¦ãã ã•ã„" ForceListenerFocus:False
+        local allssObj = #();
 
---////////////////////////////////////////////////
+        if targetObj != undefined then
+        (
+            for i in obj do
+            (
+                copyTagObj = copy targetObj;
+                copyTagObj.pos.controller = Position_XYZ ();
+                copyTagObj.rotation.controller = Euler_XYZ ();
+                copyTagObj.scale.controller = ScaleXYZ ();
+
+                copyTagObj.transform = i.transform;
+                copyTagObj.name = i.name+"_SelectCopy";
+                append allssObj copyTagObj;
+            )
+        )
+        clearSelection()
+        select allssObj;
+    )
+)
+
 --Mirroring copy
---////////////////////////////////////////////////
-	on mirrorSnapShotBt pressed do
-	(
-		if sj_functions.sj_SelectCheck_Fn() do
-		(
-		Local allssObj = #();
-		
-		for i in selection do
-		(
-			case ssTypeRb.state of
-			(
-				1:(Local obj = Point pos:[0,0,0]);
-				2:(
-					Local obj = copy i;
-					obj.pos.controller = Position_XYZ ();
-					obj.rotation.controller = Euler_XYZ ();
-					obj.scale.controller = ScaleXYZ ();
-				);
-			)--case end
-		
-		obj.transform = i.transform;
-		obj.name = i.name + "_Mirror";
-		obj.parent = undefined;
-		obj.wirecolor = i.wirecolor;
-		append allssObj obj;
-		
-		obj.transform =
-		  (
-		  matrix3 \
-		   [obj.transform[1][1],-obj.transform[1][2],-obj.transform[1][3]]\
-		   [-obj.transform[2][1],obj.transform[2][2],obj.transform[2][3]]\
-		   [-obj.transform[3][1],obj.transform[3][2],obj.transform[3][3]]\
-		   [-obj.transform[4][1],obj.transform[4][2],obj.transform[4][3]]
-		  )
+on mirrorSnapShotBt pressed do
+(
+    if sj_functions.sj_SelectCheck_Fn() do
+    (
+        local allssObj = #();
 
-		);--for end
-			clearSelection()
-			select allssObj;
-		)--if end
-	);
+        for i in selection do
+        (
+            case ssTypeRb.state of
+            (
+                1:(Local obj = Point pos:[0,0,0]);
+                2:(
+                    Local obj = copy i;
+                    obj.pos.controller = Position_XYZ ();
+                    obj.rotation.controller = Euler_XYZ ();
+                    obj.scale.controller = ScaleXYZ ();
+                )
+            )
+            obj.transform = i.transform;
+            obj.name = i.name + "_Mirror";
+            obj.parent = undefined;
+            obj.wirecolor = i.wirecolor;
+            append allssObj obj;
+            obj.transform =
+            (
+                matrix3 \
+                [obj.transform[1][1],-obj.transform[1][2],-obj.transform[1][3]]\
+                [-obj.transform[2][1],obj.transform[2][2],obj.transform[2][3]]\
+                [-obj.transform[3][1],obj.transform[3][2],obj.transform[3][3]]\
+                [-obj.transform[4][1],obj.transform[4][2],obj.transform[4][3]]
+            )
+        )
+        clearSelection()
+        select allssObj;
+    )
+)

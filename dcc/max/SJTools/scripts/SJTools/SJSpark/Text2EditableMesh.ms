@@ -1,27 +1,32 @@
-/*******************************************************
-System J Tools 
-********************************************************
-Name:SJ_Spark_AllBeyondArrayCheck
-Created By:CaptainHansode
-WEB:www.sakaiden.com
-E-Mail:sakaiden@live.jp
-*******************************************************/
+/**
+ * -----------------------------------------------------------------------------
+ *
+ * SJ Tools
+ *
+ * -----------------------------------------------------------------------------
+ * @license MIT
+ * @author CaptainHansode ÂçäË¢ñËàπÈï∑
+ * @web http://www.sakaiden.com/
+ * @email sakaiden@live.jp
+ * @github https://github.com/CaptainHansode/SJTools
+ *
+ */
+group "Text to Editable Mesh"
+(
+    button t2EMeshBt "„ÉÜ„Ç≠„Çπ„Éà2„É°„ÉÉ„Ç∑„É•" width:160 hight:20
+)
 
-	group "Text to Editable Mesh"
-	(
-		button t2EMeshBt "ÉeÉLÉXÉg2ÉÅÉbÉVÉÖ" width:160 hight:20
-	)
-	
-	on t2EMeshBt pressed do
-	(
-		undo on(
-		for i in selection do
-		(
-			if classOf i.baseobject == text do
-			(
-				maxOps.CollapseNode i on
-				convertTo i TriMeshGeometry
-			);--if end
-		);--for end
-		);--undo end
-	);
+on t2EMeshBt pressed do
+(
+    undo on
+    (
+        for i in selection do
+        (
+            if classOf i.baseobject == text do
+            (
+                maxOps.CollapseNode i on
+                convertTo i TriMeshGeometry
+            )
+        )
+    )
+)

@@ -1,92 +1,83 @@
-/*******************************************************
-System J Tools 
-********************************************************
-Name:SJ_Spark_Zweihander.ms
-Created By:CaptainHansode
-WEB:www.sakaiden.com
-E-Mail:sakaiden@live.jp
-*******************************************************/
-	group "ŠÈˆÕƒeƒNƒXƒ`ƒƒƒpƒX’uŠ·"
-	(
-		button texPathChangeBt "ƒeƒNƒXƒ`ƒƒƒpƒX‚ğ’uŠ·" width:160
-		editText texPathChangeTxt "" width:160 height:16 align:#center;
-		button getTexPathBt "ƒpƒX‚ğæ“¾" width:160 align:#center;
-	)
+/**
+ * -----------------------------------------------------------------------------
+ *
+ * SJ Tools
+ *
+ * -----------------------------------------------------------------------------
+ * @license MIT
+ * @author CaptainHansode åŠè¢–èˆ¹é•·
+ * @web http://www.sakaiden.com/
+ * @email sakaiden@live.jp
+ * @github https://github.com/CaptainHansode/SJTools
+ *
+ */
+group "ç°¡æ˜“ãƒ†ã‚¯ã‚¹ãƒãƒ£ãƒ‘ã‚¹ç½®æ›"
+(
+    button texPathChangeBt "ãƒ†ã‚¯ã‚¹ãƒãƒ£ãƒ‘ã‚¹ã‚’ç½®æ›" width:160
+    editText texPathChangeTxt "" width:160 height:16 align:#center;
+    button getTexPathBt "ãƒ‘ã‚¹ã‚’å–å¾—" width:160 align:#center;
+)
 
------------------------------------------------------------------------------------------------------------
---–¢g—p‚ğíœ
------------------------------------------------------------------------------------------------------------
+--æœªä½¿ç”¨ã‚’å‰Šé™¤
 on getTexPathBt pressed do
 (
-	Local tempLoadFile = undefined;
-	tempLoadFile = getOpenFileName types:"ƒtƒ@ƒCƒ‹‚Í‰½‚Å‚à‚©‚Ü‚¢‚Ü‚¹‚ñ|*.*";
-	if (tempLoadFile != undefined) then texPathChangeTxt.text = getFilenamePath tempLoadFile;
-);--end
+    local tempLoadFile = undefined;
+    tempLoadFile = getOpenFileName types:"ãƒ•ã‚¡ã‚¤ãƒ«ã¯ä½•ã§ã‚‚ã‹ã¾ã„ã¾ã›ã‚“|*.*";
+    if (tempLoadFile != undefined) then texPathChangeTxt.text = getFilenamePath tempLoadFile;
+)
+
 on texPathChangeBt pressed do
 (
-	Local myBitMap = undefined, myFile = undefined, newPath = undefined, oldFile = undefined, oldPath = undefined;
-	--ƒV[ƒ“‚Ég‚í‚ê‚Ä‚¢‚éƒ}ƒeƒŠƒAƒ‹‚Í‚ ‚é‚©H
-	if (sceneMaterials.count == 0) then
-	(messageBox("ƒV[ƒ“‚Ég‚í‚ê‚Ä‚¢‚éƒ}ƒeƒŠƒAƒ‹‚ª‚ ‚è‚Ü‚¹‚ñ") title:"ƒƒbƒZ[ƒW";
-	)else(
+    local myBitMap = undefined, myFile = undefined, newPath = undefined, oldFile = undefined, oldPath = undefined;
+    --ã‚·ãƒ¼ãƒ³ã«ä½¿ã‚ã‚Œã¦ã„ã‚‹ãƒãƒ†ãƒªã‚¢ãƒ«ã¯ã‚ã‚‹ã‹ï¼Ÿ
+    if (sceneMaterials.count == 0) then
+    (
+        messageBox("ã‚·ãƒ¼ãƒ³ã«ä½¿ã‚ã‚Œã¦ã„ã‚‹ãƒãƒ†ãƒªã‚¢ãƒ«ãŒã‚ã‚Šã¾ã›ã‚“") title:"ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸";
+    ) else (
+        if (texPathChangeTxt.text == "") then
+        (
+            messageBox("ãƒ‘ã‚¹ãŒå…¥åŠ›ã•ã‚Œã¦ã„ã¾ã›ã‚“") title:"ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸";
+        ) else (
+            if (queryBox("ã“ã®ä½œæ¥­ã¯ã‚¢ãƒ³ãƒ‰ã‚¥ã§ãã¾ã›ã‚“\n\nã‚·ãƒ¼ãƒ³ã®ãƒãƒ†ãƒªã‚¢ãƒ«ã®ãƒ‘ã‚¹ã‚’ç½®æ›ã—ã¾ã™ã‹?")title:"ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸") then
+            (
+                /*************************************************
+                #ã“ã“ã®ãƒ•ã‚¡ã‚¤ãƒ«ãƒ‘ã‚¹ã‚’æ›¸ãæ›ãˆã‚‹â†“â†“
+                **************************************************/
+                --newPath = "D:\\FFFF\\";
+                newPath = texPathChangeTxt.text;
 
-		if (texPathChangeTxt.text == "") then
-		(messageBox("ƒpƒX‚ª“ü—Í‚³‚ê‚Ä‚¢‚Ü‚¹‚ñ") title:"ƒƒbƒZ[ƒW";
-		)else(
-		
-		if (queryBox("‚±‚Ìì‹Æ‚ÍƒAƒ“ƒhƒD‚Å‚«‚Ü‚¹‚ñ\n\nƒV[ƒ“‚Ìƒ}ƒeƒŠƒAƒ‹‚ÌƒpƒX‚ğ’uŠ·‚µ‚Ü‚·‚©?")title:"ƒƒbƒZ[ƒW") then
-		(
-		/*************************************************
-		#‚±‚±‚Ìƒtƒ@ƒCƒ‹ƒpƒX‚ğ‘‚«Š·‚¦‚é««		
-		**************************************************/
-		--newPath = "D:\\FFFF\\";
-		newPath = texPathChangeTxt.text;
-		
-		for i in sceneMaterials do
-		(
-			--////////////////////////////////////////////////
-			--diffuseMapƒ}ƒbƒv
-			--////////////////////////////////////////////////
-			try(
-			--print i.name
-			oldFile = i.diffuseMap.bitmap.fileName;
-			oldPath = getFilenamePath oldFile;
-			
-			--ƒpƒX‚ğ“ü‚ê‘Ö‚¦
-			--<‘ÎÛ‚ÌString> <ŠJn•¶š”Ô†> <’u‚«Š·‚¦‚é•¶š”> <’u‚«Š·‚¦‚é•¶š>
-			myFile = replace oldFile 1 oldPath.count newPath;
-			
-			--ƒrƒbƒgƒ}ƒbƒv‚ğæ“¾
-			myBitMap = openBitMap myFile;
-			
-			--‚±‚±‚Å“ü‚ê‘Ö‚¦‚é
-			i.diffuseMap.bitmap = myBitMap;
-			)catch();
-			
-			--////////////////////////////////////////////////
-			--opacityƒ}ƒbƒv
-			--////////////////////////////////////////////////
-			try(
-			--print i.name
-			oldFile = i.opacityMap.bitmap.fileName;
-			oldPath = getFilenamePath oldFile;
-			
-			--ƒpƒX‚ğ“ü‚ê‘Ö‚¦
-			--<‘ÎÛ‚ÌString> <ŠJn•¶š”Ô†> <’u‚«Š·‚¦‚é•¶š”> <’u‚«Š·‚¦‚é•¶š>
-			myFile = replace oldFile 1 oldPath.count newPath;
-			
-			--ƒrƒbƒgƒ}ƒbƒv‚ğæ“¾
-			myBitMap = openBitMap myFile;
-			
-			--‚±‚±‚Å“ü‚ê‘Ö‚¦‚é
-			i.opacityMap.bitmap = myBitMap;
-			)catch();
-		);--for end
-			
-		);--if end--“ü‚ê‘Ö‚¦‚Ì–â‚¢‡‚í‚¹IF
-		
-		);--if end
-		
-	);--if end
-);
+                for i in sceneMaterials do
+                (
+                    --diffuseMapãƒãƒƒãƒ—
+                    try(
+                        --print i.name
+                        oldFile = i.diffuseMap.bitmap.fileName;
+                        oldPath = getFilenamePath oldFile;
+                        --ãƒ‘ã‚¹ã‚’å…¥ã‚Œæ›¿ãˆ
+                        --<å¯¾è±¡ã®String> <é–‹å§‹æ–‡å­—ç•ªå·> <ç½®ãæ›ãˆã‚‹æ–‡å­—æ•°> <ç½®ãæ›ãˆã‚‹æ–‡å­—>
+                        myFile = replace oldFile 1 oldPath.count newPath;
+                        --ãƒ“ãƒƒãƒˆãƒãƒƒãƒ—ã‚’å–å¾—
+                        myBitMap = openBitMap myFile;
+                        --ã“ã“ã§å…¥ã‚Œæ›¿ãˆã‚‹
+                        i.diffuseMap.bitmap = myBitMap;
+                    ) catch ()
+
+                    --opacityãƒãƒƒãƒ—
+                    try(
+                        --print i.name
+                        oldFile = i.opacityMap.bitmap.fileName;
+                        oldPath = getFilenamePath oldFile;
+                        --ãƒ‘ã‚¹ã‚’å…¥ã‚Œæ›¿ãˆ
+                        --<å¯¾è±¡ã®String> <é–‹å§‹æ–‡å­—ç•ªå·> <ç½®ãæ›ãˆã‚‹æ–‡å­—æ•°> <ç½®ãæ›ãˆã‚‹æ–‡å­—>
+                        myFile = replace oldFile 1 oldPath.count newPath;
+                        --ãƒ“ãƒƒãƒˆãƒãƒƒãƒ—ã‚’å–å¾—
+                        myBitMap = openBitMap myFile;
+                        --ã“ã“ã§å…¥ã‚Œæ›¿ãˆã‚‹
+                        i.opacityMap.bitmap = myBitMap;
+                    )catch();
+                )
+            )
+        )
+    )
+)
 

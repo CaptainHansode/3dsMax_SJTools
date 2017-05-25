@@ -1,42 +1,40 @@
-/*******************************************************
-System J Tools 
-********************************************************
-Name:SJ_Spark_ParentButton
-Created By:CaptainHansode
-WEB:www.sakaiden.com
-E-Mail:sakaiden@live.jp
-*******************************************************/
-	group "Maya•—eŽq‚Ã‚¯ƒ{ƒ^ƒ“"
-	(
-		button setParentBt "ƒyƒAƒŒƒ“ƒg" width:160 hight:20
-		button cutParentBt "ƒJƒbƒg" width:160 hight:20
-		label parentButtonLbl "2”Ô–ÚˆÈ~‚Ì‘I‘ð•¨‚ðeŽq‚Ã‚¯" width:160 align:#center
-	)
---////////////////////////////////////////////////
---setParentBt
---////////////////////////////////////////////////
-	on setParentBt pressed do
-	(
-		if (selection.count > 1) do
-		(
+/**
+ * -----------------------------------------------------------------------------
+ *
+ * SJ Tools
+ *
+ * -----------------------------------------------------------------------------
+ * @license MIT
+ * @author CaptainHansode åŠè¢–èˆ¹é•·
+ * @web http://www.sakaiden.com/
+ * @email sakaiden@live.jp
+ * @github https://github.com/CaptainHansode/SJTools
+ *
+ */
+group "Mayaé¢¨è¦ªå­ã¥ã‘ãƒœã‚¿ãƒ³"
+(
+    button setParentBt "ãƒšã‚¢ãƒ¬ãƒ³ãƒˆ" width:160 hight:20
+    button cutParentBt "ã‚«ãƒƒãƒˆ" width:160 hight:20
+    label parentButtonLbl "2ç•ªç›®ä»¥é™ã®é¸æŠžç‰©ã‚’è¦ªå­ã¥ã‘" width:160 align:#center
+)
+on setParentBt pressed do
+(
+    if (selection.count > 1) do
+    (
+        for i=2 to selection.count do
+        (
+            try(selection[i].parent = selection[1])catch(print "Fail");
+        )
+    )
+)
 
-		for i=2 to selection.count do
-		(
-			try(selection[i].parent = selection[1])catch(print "Fail");
-		);
-		);--if end
-	)--
-	
---////////////////////////////////////////////////
---cutParentBt
---////////////////////////////////////////////////
-	on cutParentBt pressed do
-	(
-		if (selection.count != 0) do
-		(
-		for i in selection do
-		(
-			try(i.parent = undefined)catch();
-		);
-		);--if end
-	);--end
+on cutParentBt pressed do
+(
+    if (selection.count != 0) do
+    (
+        for i in selection do
+        (
+            try(i.parent = undefined)catch();
+        )
+    )
+)

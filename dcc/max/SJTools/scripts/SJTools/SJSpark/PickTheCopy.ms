@@ -1,71 +1,58 @@
-/*******************************************************
-System J Tools 
-********************************************************
-Name:SJ_Spark_PickTheCopy
-Created By:CaptainHansode
-WEB:www.sakaiden.com
-E-Mail:sakaiden@live.jp
-*******************************************************/
-	group "Pick The Copy"
-	(
-		button pickCopyBt "ƒsƒbƒNƒUƒRƒs[" width:160 hight:20
-		button selCopyBt "ƒZƒŒƒNƒgƒUƒRƒs[" width:160 hight:20
-	)
-	
-	/*
-	on pickCopyBt rightclick do
-	(
-	);--end
-	*/
-	
-	on pickCopyBt pressed do
-	(
-		
-		if selection.count != 0 then
-		(
-			
-			Local pickedObj = undefined;
-			messageBox "ƒRƒs[æ‚Ì‘ÎÛ‚ÌƒIƒuƒWƒFƒNƒg‚ğ‘I‘ğ‚µ‚Ä‚­‚¾‚³‚¢" title:"ƒƒbƒZ[ƒW"
-			pickedObj = PickObject count:1 select:false message:"ƒIƒuƒWƒFƒNƒg‚ğ‘I‘ğ‚µ‚Ä‚­‚¾‚³‚¢" ForceListenerFocus:true;
-		
-			try(
-			pickedObj.controller = copy selection[1].controller;
-				
-			--ŒÅ—L‚É‚·‚é
-			--obj.controller = prs (); 
-				
-			move pickedObj [0,0,0]; --ƒŠƒtƒŒƒbƒVƒ…—p@0‹——£ˆÚ“®
-			--ATSOps.Refresh()
-			
-			)catch();
-			
-			--obj.Transform.controller = selection[1].Transform.controller
-			--obj.Transform.controller = prs () --ŒÅ—L‚É‚·‚é
-		)
-		else
-		(
-		messageBox("ƒRƒs[Œ³‚ÌƒIƒuƒWƒFƒNƒg‚ğ‘I‚ñ‚Å‚­‚¾‚³‚¢") title:"ƒƒbƒZ[ƒW";
-		)--if end
-	);--on end
-	
-	on selCopyBt pressed do
-	(
-		if selection.count >= 2 then
-		(
-			try(
-			selection[2].controller = copy selection[1].controller;
-				
-				move selection[2] [0,0,0]; --ƒŠƒtƒŒƒbƒVƒ…—p@0‹——£ˆÚ“®
-				sliderTime = (currenttime + 1);
-				sliderTime = (currenttime - 1);
-				
-			--Ä•`‰æ
-			max views redraw;
-			
-			)catch();--try end
-		)
-		else
-		(
-		messageBox("Å‰‚ÉƒRƒs[Œ³A2”Ô–Ú‚ÉƒRƒs[æ‚ğ‘I‚ñ‚Å‚­‚¾‚³‚¢") title:"ƒƒbƒZ[ƒW";
-		)--if end
-	);--end
+/**
+ * -----------------------------------------------------------------------------
+ *
+ * SJ Tools
+ *
+ * -----------------------------------------------------------------------------
+ * @license MIT
+ * @author CaptainHansode åŠè¢–èˆ¹é•·
+ * @web http://www.sakaiden.com/
+ * @email sakaiden@live.jp
+ * @github https://github.com/CaptainHansode/SJTools
+ *
+ */
+group "Pick The Copy"
+(
+    button pickCopyBt "ãƒ”ãƒƒã‚¯ã‚¶ã‚³ãƒ”ãƒ¼" width:160 hight:20
+    button selCopyBt "ã‚»ãƒ¬ã‚¯ãƒˆã‚¶ã‚³ãƒ”ãƒ¼" width:160 hight:20
+)
+
+on pickCopyBt pressed do
+(
+    if selection.count != 0 then
+    (
+        local pickedObj = undefined;
+        messageBox "ã‚³ãƒ”ãƒ¼å…ˆã®ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’é¸æŠã—ã¦ãã ã•ã„" title:"ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸"
+        pickedObj = PickObject count:1 select:false message:"ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’é¸æŠã—ã¦ãã ã•ã„" ForceListenerFocus:true;
+
+        try(
+        pickedObj.controller = copy selection[1].controller;
+        move pickedObj [0,0,0]; --ãƒªãƒ•ãƒ¬ãƒƒã‚·ãƒ¥ç”¨ã€€0è·é›¢ç§»å‹•
+        )catch();
+    )
+    else
+    (
+        messageBox("ã‚³ãƒ”ãƒ¼å…ƒã®ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’é¸æŠã—ã¦ãã ã•ã„") title:"ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸";
+    )
+)
+
+on selCopyBt pressed do
+(
+    if selection.count >= 2 then
+    (
+        try(
+            selection[2].controller = copy selection[1].controller;
+            move selection[2] [0,0,0]; --ãƒªãƒ•ãƒ¬ãƒƒã‚·ãƒ¥ç”¨ã€€0è·é›¢ç§»å‹•
+            sliderTime = (currenttime + 1);
+            sliderTime = (currenttime - 1);
+
+        --å†æç”»
+        max views redraw;
+
+        )catch();
+    )
+    else
+    (
+        messageBox("æœ€åˆã«ã‚³ãƒ”ãƒ¼å…ƒã€2ç•ªç›®ã«ã‚³ãƒ”ãƒ¼å…ˆã‚’é¸ã‚“ã§ãã ã•ã„") title:"ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸";
+    )
+)

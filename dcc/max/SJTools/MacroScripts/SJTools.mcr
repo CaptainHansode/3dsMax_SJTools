@@ -8,7 +8,7 @@
  * @author CaptainHansode 半袖船長
  * @web http://www.sakaiden.com/
  * @email sakaiden@live.jp
- * @git https://github.com/CaptainHansode/SJTools
+ * @github https://github.com/CaptainHansode/SJTools
  *
  */
 

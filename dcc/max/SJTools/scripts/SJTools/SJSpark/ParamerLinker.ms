@@ -1,77 +1,82 @@
-/*******************************************************
-System J Tools 
-********************************************************
-Name:SJ_Spark_ParamerLinker.ms
-Created By:CaptainHansode
-WEB:www.sakaiden.com
-E-Mail:sakaiden@live.jp
-*******************************************************/
-	group "Parameter Linker"
-	(
-		button paramLinkerBt "ƒpƒ‰ƒ[ƒ^[ƒŠƒ“ƒJ[" width:160 hight:20
-		spinner paramLinkerSpn "" range:[1,54,1] type:#integer width:160 align:#center
-		radiobuttons paramLinkerRb "" width:160 enabled:true labels:#("Pos", "Rot","Sca") default:1 columns:3 align:#center
-	)
+/**
+ * -----------------------------------------------------------------------------
+ *
+ * SJ Tools
+ *
+ * -----------------------------------------------------------------------------
+ * @license MIT
+ * @author CaptainHansode åŠè¢–èˆ¹é•·
+ * @web http://www.sakaiden.com/
+ * @email sakaiden@live.jp
+ * @github https://github.com/CaptainHansode/SJTools
+ *
+ */
+group "Parameter Linker"
+(
+    button paramLinkerBt "ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿ãƒ¼ãƒªãƒ³ã‚«ãƒ¼" width:160 hight:20
+    spinner paramLinkerSpn "" range:[1,54,1] type:#integer width:160 align:#center
+    radiobuttons paramLinkerRb "" width:160 enabled:true labels:#("Pos", "Rot","Sca") default:1 columns:3 align:#center
+)
 
 --////////////////////////////////////////////////
---Šm•Û
+--ç¢ºä¿
 --////////////////////////////////////////////////
-	on paramLinkerBt pressed do
-	(
-		
-Local parameterLinkerStr1 = "
-ƒAƒgƒŠƒrƒ…[ƒg‚ª‚ ‚éƒIƒuƒWƒFƒNƒg‚ğ‘I‚ñ‚Å‚­‚¾‚³‚¢
+on paramLinkerBt pressed do
+(
 
-’ÊíAƒAƒgƒŠƒrƒ…[ƒgƒpƒ‰ƒ[ƒ^[‚ÍˆÈ‰º‚Ì‚æ‚¤‚ÈƒvƒƒpƒeƒB‚É‚È‚è‚Ü‚·
+    Local parameterLinkerStr1 = "
+ã‚¢ãƒˆãƒªãƒ“ãƒ¥ãƒ¼ãƒˆãŒã‚ã‚‹ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’é¸ã‚“ã§ãã ã•ã„
+
+é€šå¸¸ã€ã‚¢ãƒˆãƒªãƒ“ãƒ¥ãƒ¼ãƒˆãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿ãƒ¼ã¯ä»¥ä¸‹ã®ã‚ˆã†ãªãƒ—ãƒ­ãƒ‘ãƒ†ã‚£ã«ãªã‚Šã¾ã™
 $.modifiers[#SJ_Attribute_Holder].params.**.controller
-(**‚Íƒpƒ‰ƒ[ƒ^[–¼)
-ã‹L‚ÌˆÈŠO‚Ìƒpƒ‰ƒ[ƒ^‚É‚ÍƒŠƒ“ƒN‚Å‚«‚Ü‚¹‚ñ
-	
+(**ã¯ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿ãƒ¼å)
+ä¸Šè¨˜ã®ä»¥å¤–ã®ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿ã«ã¯ãƒªãƒ³ã‚¯ã§ãã¾ã›ã‚“
+
 "
 
-Local parameterLinkerStr2 = "
-‘ÎÛƒIƒuƒWƒFƒNƒg‚ğ‘I‘ğ‚µ‚Ä‚­‚¾‚³‚¢
-ƒpƒ‰ƒ[ƒ^[‚ÍƒxƒWƒGÀ”‚Å‚È‚¯‚ê‚Î‚È‚è‚Ü‚¹‚ñ
-‚»‚êˆÈŠO‚Ìƒpƒ‰ƒ[ƒ^[‚Í“\‚è•t‚¯‚ç‚ê‚Ü‚¹‚ñ
-	
+    Local parameterLinkerStr2 = "
+å¯¾è±¡ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’é¸æŠã—ã¦ãã ã•ã„
+ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿ãƒ¼ã¯ãƒ™ã‚¸ã‚¨å®Ÿæ•°ã§ãªã‘ã‚Œã°ãªã‚Šã¾ã›ã‚“
+ãã‚Œä»¥å¤–ã®ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿ãƒ¼ã¯è²¼ã‚Šä»˜ã‘ã‚‰ã‚Œã¾ã›ã‚“
+
 "
-		messageBox parameterLinkerStr1 title:"ƒpƒ‰ƒ[ƒ^[ƒIƒuƒWƒFƒNƒg‚ğ‘I‘ğ"
-		Local pLinkerA = PickObject count:1 select:true message:"ƒIƒuƒWƒFƒNƒg‚ğ‘I‘ğ‚µ‚Ä‚­‚¾‚³‚¢B" ForceListenerFocus:False
+    messageBox parameterLinkerStr1 title:"ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿ãƒ¼ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’é¸æŠ"
+    Local pLinkerA = PickObject count:1 select:true message:"ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’é¸æŠã—ã¦ãã ã•ã„ã€‚" ForceListenerFocus:False
 
-		messageBox parameterLinkerStr2 title:"‘ÎÛƒIƒuƒWƒFƒNƒg‚ğ‘I‘ğ"
-		Local pLinkerB = PickObject count:1 select:true message:"ƒIƒuƒWƒFƒNƒg‚ğ‘I‘ğ‚µ‚Ä‚­‚¾‚³‚¢B" Rubberband:selection[1].pos rubberBandColor:white ForceListenerFocus:False
+    messageBox parameterLinkerStr2 title:"å¯¾è±¡ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’é¸æŠ"
+    Local pLinkerB = PickObject count:1 select:true message:"ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’é¸æŠã—ã¦ãã ã•ã„ã€‚" Rubberband:selection[1].pos rubberBandColor:white ForceListenerFocus:False
 
-		Local pLinkerTagX = undefined, pLinkerTagY = undefined, pLinkerTagZ = undefined;
+    Local pLinkerTagX = undefined, pLinkerTagY = undefined, pLinkerTagZ = undefined;
 
-		case paramLinkerRb.state of
-		(
-			1:(
-				pLinkerTagX = "$"+ pLinkerA.name +".modifiers[#SJ_Attribute_Holder].params.X" + (paramLinkerSpn.value as String) + ".controller"
-				pLinkerTagY = "$"+ pLinkerA.name +".modifiers[#SJ_Attribute_Holder].params.Y" + (paramLinkerSpn.value as String) + ".controller"
-				pLinkerTagZ = "$"+ pLinkerA.name +".modifiers[#SJ_Attribute_Holder].params.Z" + (paramLinkerSpn.value as String) + ".controller"
-					try(pLinkerB.pos.controller.X_Position.controller = execute(pLinkerTagX))catch(messageBox"X‚Ì“\‚è•t‚¯‚É¸”s‚µ‚Ü‚µ‚½");
-					try(pLinkerB.pos.controller.Y_Position.controller = execute(pLinkerTagY))catch(messageBox"Y‚Ì“\‚è•t‚¯‚É¸”s‚µ‚Ü‚µ‚½");
-					try(pLinkerB.pos.controller.Z_Position.controller = execute(pLinkerTagZ))catch(messageBox"Z‚Ì“\‚è•t‚¯‚É¸”s‚µ‚Ü‚µ‚½");
-			)--1end
-			2:(
-				pLinkerTagX = "$"+ pLinkerA.name +".modifiers[#SJ_Attribute_Holder].params.X" + (paramLinkerSpn.value as String) + ".controller"
-				pLinkerTagY = "$"+ pLinkerA.name +".modifiers[#SJ_Attribute_Holder].params.Y" + (paramLinkerSpn.value as String) + ".controller"
-				pLinkerTagZ = "$"+ pLinkerA.name +".modifiers[#SJ_Attribute_Holder].params.Z" + (paramLinkerSpn.value as String) + ".controller"
-					try(pLinkerB.rotation.controller.X_Rotation.controller = execute(pLinkerTagX))catch(messageBox"X‚Ì“\‚è•t‚¯‚É¸”s‚µ‚Ü‚µ‚½");
-					try(pLinkerB.rotation.controller.Y_Rotation.controller = execute(pLinkerTagY))catch(messageBox"Y‚Ì“\‚è•t‚¯‚É¸”s‚µ‚Ü‚µ‚½");
-					try(pLinkerB.rotation.controller.Z_Rotation.controller = execute(pLinkerTagZ))catch(messageBox"Z‚Ì“\‚è•t‚¯‚É¸”s‚µ‚Ü‚µ‚½");
-			)--2end
-			3:(
-				pLinkerTagX = "$"+ pLinkerA.name +".modifiers[#SJ_Attribute_Holder].params.X" + (paramLinkerSpn.value as String) + ".controller"
-				pLinkerTagY = "$"+ pLinkerA.name +".modifiers[#SJ_Attribute_Holder].params.Y" + (paramLinkerSpn.value as String) + ".controller"
-				pLinkerTagZ = "$"+ pLinkerA.name +".modifiers[#SJ_Attribute_Holder].params.Z" + (paramLinkerSpn.value as String) + ".controller"
-					try(pLinkerB.scale.controller.X_Scale.controller = execute(pLinkerTagX))catch(messageBox"X‚Ì“\‚è•t‚¯‚É¸”s‚µ‚Ü‚µ‚½");
-					try(pLinkerB.scale.controller.Y_Scale.controller = execute(pLinkerTagY))catch(messageBox"Y‚Ì“\‚è•t‚¯‚É¸”s‚µ‚Ü‚µ‚½");
-					try(pLinkerB.scale.controller.Z_Scale.controller = execute(pLinkerTagZ))catch(messageBox"Z‚Ì“\‚è•t‚¯‚É¸”s‚µ‚Ü‚µ‚½");
-			);--3end
+    case paramLinkerRb.state of
+    (
+        1:(
+            pLinkerTagX = "$"+ pLinkerA.name +".modifiers[#SJ_Attribute_Holder].params.X" + (paramLinkerSpn.value as String) + ".controller"
+            pLinkerTagY = "$"+ pLinkerA.name +".modifiers[#SJ_Attribute_Holder].params.Y" + (paramLinkerSpn.value as String) + ".controller"
+            pLinkerTagZ = "$"+ pLinkerA.name +".modifiers[#SJ_Attribute_Holder].params.Z" + (paramLinkerSpn.value as String) + ".controller"
+                try(pLinkerB.pos.controller.X_Position.controller = execute(pLinkerTagX))catch(messageBox"Xã®è²¼ã‚Šä»˜ã‘ã«å¤±æ•—ã—ã¾ã—ãŸ");
+                try(pLinkerB.pos.controller.Y_Position.controller = execute(pLinkerTagY))catch(messageBox"Yã®è²¼ã‚Šä»˜ã‘ã«å¤±æ•—ã—ã¾ã—ãŸ");
+                try(pLinkerB.pos.controller.Z_Position.controller = execute(pLinkerTagZ))catch(messageBox"Zã®è²¼ã‚Šä»˜ã‘ã«å¤±æ•—ã—ã¾ã—ãŸ");
+        )--1end
+        2:(
+            pLinkerTagX = "$"+ pLinkerA.name +".modifiers[#SJ_Attribute_Holder].params.X" + (paramLinkerSpn.value as String) + ".controller"
+            pLinkerTagY = "$"+ pLinkerA.name +".modifiers[#SJ_Attribute_Holder].params.Y" + (paramLinkerSpn.value as String) + ".controller"
+            pLinkerTagZ = "$"+ pLinkerA.name +".modifiers[#SJ_Attribute_Holder].params.Z" + (paramLinkerSpn.value as String) + ".controller"
+                try(pLinkerB.rotation.controller.X_Rotation.controller = execute(pLinkerTagX))catch(messageBox"Xã®è²¼ã‚Šä»˜ã‘ã«å¤±æ•—ã—ã¾ã—ãŸ");
+                try(pLinkerB.rotation.controller.Y_Rotation.controller = execute(pLinkerTagY))catch(messageBox"Yã®è²¼ã‚Šä»˜ã‘ã«å¤±æ•—ã—ã¾ã—ãŸ");
+                try(pLinkerB.rotation.controller.Z_Rotation.controller = execute(pLinkerTagZ))catch(messageBox"Zã®è²¼ã‚Šä»˜ã‘ã«å¤±æ•—ã—ã¾ã—ãŸ");
+        )--2end
+        3:(
+            pLinkerTagX = "$"+ pLinkerA.name +".modifiers[#SJ_Attribute_Holder].params.X" + (paramLinkerSpn.value as String) + ".controller"
+            pLinkerTagY = "$"+ pLinkerA.name +".modifiers[#SJ_Attribute_Holder].params.Y" + (paramLinkerSpn.value as String) + ".controller"
+            pLinkerTagZ = "$"+ pLinkerA.name +".modifiers[#SJ_Attribute_Holder].params.Z" + (paramLinkerSpn.value as String) + ".controller"
+                try(pLinkerB.scale.controller.X_Scale.controller = execute(pLinkerTagX))catch(messageBox"Xã®è²¼ã‚Šä»˜ã‘ã«å¤±æ•—ã—ã¾ã—ãŸ");
+                try(pLinkerB.scale.controller.Y_Scale.controller = execute(pLinkerTagY))catch(messageBox"Yã®è²¼ã‚Šä»˜ã‘ã«å¤±æ•—ã—ã¾ã—ãŸ");
+                try(pLinkerB.scale.controller.Z_Scale.controller = execute(pLinkerTagZ))catch(messageBox"Zã®è²¼ã‚Šä»˜ã‘ã«å¤±æ•—ã—ã¾ã—ãŸ");
+        );--3end
 
-		);--case end
-		
-		pLinkerA = undefined;
-		pLinkerB = undefiend;
-	);--end
+    );--case end
+
+    pLinkerA = undefined;
+    pLinkerB = undefiend;
+);--end

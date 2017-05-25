@@ -1,129 +1,121 @@
-/*******************************************************
-System J Tools 
-********************************************************
-Name:SJ_Spark_SoundCnt.ms
-Created By:CaptainHansode
-WEB:www.sakaiden.com
-E-Mail:sakaiden@live.jp
-*******************************************************/
-	group "ŠÈˆÕƒvƒƒTƒEƒ“ƒhŠÇ—"
-	(
-	button soundCntAllDelBt "‘SƒTƒEƒ“ƒh‚ğíœ" width:160  hight:20
-	button soundCntSaveBt "ƒTƒEƒ“ƒhİ’è‚ğ•Û‘¶" width:160  hight:20
-	button soundCntLoadBt "ƒTƒEƒ“ƒhİ’è‚ğŠJ‚­" width:160  hight:20
-	)
-	
-	on soundCntAllDelBt pressed do
-	(
-		--•Ï”
-		local sndCount = 0;
-		
-		--ƒAƒNƒeƒBƒu‚©?
-		if (prosound.isActive()) then
-			(
-				sndCount = prosound.NumTracks();
-				--ƒTƒEƒ“ƒhƒgƒ‰ƒbƒN‚ğ‘S•”íœ
-				for i = 1 to sndCount do
-				(
-					prosound.delete 1;
-				);--for end
-			);--if end
-			
-		--‰Šú‰»
-		ProSound.Init(true);
-			
-	
-			
-			
-	);--on end
+/**
+ * -----------------------------------------------------------------------------
+ *
+ * SJ Tools
+ *
+ * -----------------------------------------------------------------------------
+ * @license MIT
+ * @author CaptainHansode åŠè¢–èˆ¹é•·
+ * @web http://www.sakaiden.com/
+ * @email sakaiden@live.jp
+ * @github https://github.com/CaptainHansode/SJTools
+ *
+ */
+group "ç°¡æ˜“ãƒ—ãƒ­ã‚µã‚¦ãƒ³ãƒ‰ç®¡ç†"
+(
+    button soundCntAllDelBt "å…¨ã‚µã‚¦ãƒ³ãƒ‰ã‚’å‰Šé™¤" width:160  hight:20
+    button soundCntSaveBt "ã‚µã‚¦ãƒ³ãƒ‰è¨­å®šã‚’ä¿å­˜" width:160  hight:20
+    button soundCntLoadBt "ã‚µã‚¦ãƒ³ãƒ‰è¨­å®šã‚’é–‹ã" width:160  hight:20
+)
 
-	
-	on soundCntSaveBt pressed do
-	(
-		--•Ï”
-		local sndCount = 0;
-		
-		--ƒAƒNƒeƒBƒu‚©?
-		if (prosound.isActive()) then
-			(
-				
-				--forƒ‹[ƒv‰ñ”‚ğİ’è
-				sndCount = prosound.NumTracks();
-				
-		--•Û‘¶‚Í‘Sİ’è‚ğ‘‚«o‚·
-		local saveFile = getSaveFileName types:"Setting File (*.txt)|*.txt|All(*.*)|*.*" caption:"ƒTƒEƒ“ƒhİ’è‚ğ•Û‘¶";
-		
-				--•Û‘¶ƒtƒ@ƒCƒ‹‚ªİ’è‚³‚ê‚Ä‚¢‚ê‚Î
-				if saveFile != undefined do
-				(
-					--•Û‘¶ƒtƒ@ƒCƒ‹‚ğì¬
-					saveFileList = createFile saveFile;
-					
-					--ƒgƒ‰ƒbƒN‚Ì”‚ğ‘‚«o‚µ
-					format "%\n" sndCount to:saveFileList;
-					
-						--ƒTƒEƒ“ƒhƒgƒ‰ƒbƒNİ’è‚ğ‘‚«o‚µ
-						for i = 1 to sndCount do
-						(
-							--ã‚©‚ç‡‚Éƒtƒ@ƒCƒ‹AƒGƒ“ƒhŠÔAƒXƒ^[ƒgŠÔ
-							format "%\n" (prosound.name i) to:saveFileList;
-							format "%\n" (prosound.end i) to:saveFileList;
-							format "%\n" (prosound.start i) to:saveFileList;
-						);--for end
-					--ƒtƒ@ƒCƒ‹‚ğ•Â‚¶‚é
-					close saveFileList
-				)--if end
+on soundCntAllDelBt pressed do
+(
+    --å¤‰æ•°
+    local sndCount = 0;
 
-			);--if end
-			
-	);--on end
-	
-	
-	
-	on soundCntLoadBt pressed do
-	(
-		--‚Ü‚¸ˆê’U‰Šú‰»‚µ‚Ä‚©‚çÀs‚·‚é
-		ProSound.Init(true);
-		
-		--•Ï”
-		local sndCount = 0;
-		
-		--ƒAƒNƒeƒBƒu‚©?
-		if (prosound.isActive()) then
-			(
-				--ÅŒã‚Ì‚à‚Ì‚ÍƒTƒEƒ“ƒhƒtƒ@ƒCƒ‹‚ª‚ ‚é‚©ƒ`ƒFƒbƒN‚·‚é
-				Local loadItemCount = 0, checkFile = true;
-				Local loadFile = getOpenFileName types:"Setting File (*.txt)|*.txt|All(*.*)|*.*" caption:"ƒTƒEƒ“ƒhİ’è‚ğŠJ‚­";
-				
-				if loadFile != undefined do
-				(
-					--ƒtƒ@ƒCƒ‹‚ğæ“¾
-					loadFileList = openFile loadFile;
-					
-					--Å‰‚Ì1s‚É“Ç‚İ‚Ş‰ñ”‚ª‘‚©‚ê‚Ä‚¢‚é
-					loadItemCount = readValue loadFileList;
-					
-					for i=1 to loadItemCount do
-					(
-						--ƒŠƒ^[ƒ“’l‚Å‚ ‚é•]‰¿‚ğ“ü‚ê‚éA¸”s‚È‚çfalse
-						checkFile = prosound.append (( readLine loadFileList ) as String);
-						
-						if checkFile then
-						(
-							--’Ç‰Á‚µ‚½ÅŒã‚ÌID‚Ìƒtƒ@ƒCƒ‹‚ğİ’è‚·‚é‚Ì‚ÅA1ƒ‹[ƒv‚¨‚«‚ÉÅŒã‚ÌID‚ğ“ü‚ê‚é
-							sndCount = prosound.NumTracks();
-							--İ’è‚ÍƒGƒ“ƒhƒ^ƒCƒ€‚©‚ç
-							prosound.Setend sndCount (readValue loadFileList);
-							prosound.Setstart sndCount (readValue loadFileList);
-							--prosound.shift sndCount (readValue loadFileList);
-						)else(
-							--2s•ª‚Ì“Ç‚İ‚İŒ‹‰Ê‚Í”jŠü
-							sndCount = readValue loadFileList;
-							sndCount = readValue loadFileList;
-						);--if end
-						
-					)--for end
-					close loadFileList
-				)--if end
-			);--if end
-	);--on end
+    --ã‚¢ã‚¯ãƒ†ã‚£ãƒ–ã‹?
+    if (prosound.isActive()) then
+    (
+        sndCount = prosound.NumTracks();
+        --ã‚µã‚¦ãƒ³ãƒ‰ãƒˆãƒ©ãƒƒã‚¯ã‚’å…¨éƒ¨å‰Šé™¤
+        for i = 1 to sndCount do
+        (
+            prosound.delete 1;
+        )
+    )
+    --åˆæœŸåŒ–
+    ProSound.Init(true);
+)
+
+
+on soundCntSaveBt pressed do
+(
+    --å¤‰æ•°
+    local sndCount = 0;
+
+    --ã‚¢ã‚¯ãƒ†ã‚£ãƒ–ã‹?
+    if (prosound.isActive()) then
+    (
+        --forãƒ«ãƒ¼ãƒ—å›æ•°ã‚’è¨­å®š
+        sndCount = prosound.NumTracks();
+        --ä¿å­˜ã¯å…¨è¨­å®šã‚’æ›¸ãå‡ºã™
+        local saveFile = getSaveFileName types:"Setting File (*.txt)|*.txt|All(*.*)|*.*" caption:"ã‚µã‚¦ãƒ³ãƒ‰è¨­å®šã‚’ä¿å­˜";
+        --ä¿å­˜ãƒ•ã‚¡ã‚¤ãƒ«ãŒè¨­å®šã•ã‚Œã¦ã„ã‚Œã°
+        if saveFile != undefined do
+        (
+            --ä¿å­˜ãƒ•ã‚¡ã‚¤ãƒ«ã‚’ä½œæˆ
+            saveFileList = createFile saveFile;
+
+            --ãƒˆãƒ©ãƒƒã‚¯ã®æ•°ã‚’æ›¸ãå‡ºã—
+            format "%\n" sndCount to:saveFileList;
+
+                --ã‚µã‚¦ãƒ³ãƒ‰ãƒˆãƒ©ãƒƒã‚¯è¨­å®šã‚’æ›¸ãå‡ºã—
+                for i = 1 to sndCount do
+                (
+                    --ä¸Šã‹ã‚‰é †ã«ãƒ•ã‚¡ã‚¤ãƒ«ã€ã‚¨ãƒ³ãƒ‰æ™‚é–“ã€ã‚¹ã‚¿ãƒ¼ãƒˆæ™‚é–“
+                    format "%\n" (prosound.name i) to:saveFileList;
+                    format "%\n" (prosound.end i) to:saveFileList;
+                    format "%\n" (prosound.start i) to:saveFileList;
+                )
+            --ãƒ•ã‚¡ã‚¤ãƒ«ã‚’é–‰ã˜ã‚‹
+            close saveFileList
+        )
+    )
+)
+
+on soundCntLoadBt pressed do
+(
+    --ã¾ãšä¸€æ—¦åˆæœŸåŒ–ã—ã¦ã‹ã‚‰å®Ÿè¡Œã™ã‚‹
+    ProSound.Init(true);
+
+    --å¤‰æ•°
+    local sndCount = 0;
+
+    --ã‚¢ã‚¯ãƒ†ã‚£ãƒ–ã‹?
+    if (prosound.isActive()) then
+    (
+        --æœ€å¾Œã®ã‚‚ã®ã¯ã‚µã‚¦ãƒ³ãƒ‰ãƒ•ã‚¡ã‚¤ãƒ«ãŒã‚ã‚‹ã‹ãƒã‚§ãƒƒã‚¯ã™ã‚‹
+        local loadItemCount = 0, checkFile = true;
+        local loadFile = getOpenFileName types:"Setting File (*.txt)|*.txt|All(*.*)|*.*" caption:"ã‚µã‚¦ãƒ³ãƒ‰è¨­å®šã‚’é–‹ã";
+
+        if loadFile != undefined do
+        (
+            --ãƒ•ã‚¡ã‚¤ãƒ«ã‚’å–å¾—
+            loadFileList = openFile loadFile;
+
+            --æœ€åˆã®1è¡Œã«èª­ã¿è¾¼ã‚€å›æ•°ãŒæ›¸ã‹ã‚Œã¦ã„ã‚‹
+            loadItemCount = readValue loadFileList;
+
+            for i=1 to loadItemCount do
+            (
+                --ãƒªã‚¿ãƒ¼ãƒ³å€¤ã§ã‚ã‚‹è©•ä¾¡ã‚’å…¥ã‚Œã‚‹ã€å¤±æ•—ãªã‚‰false
+                checkFile = prosound.append (( readLine loadFileList ) as String);
+
+                if checkFile then
+                (
+                    --è¿½åŠ ã—ãŸæœ€å¾Œã®IDã®ãƒ•ã‚¡ã‚¤ãƒ«ã‚’è¨­å®šã™ã‚‹ã®ã§ã€1ãƒ«ãƒ¼ãƒ—ãŠãã«æœ€å¾Œã®IDã‚’å…¥ã‚Œã‚‹
+                    sndCount = prosound.NumTracks();
+                    --è¨­å®šã¯ã‚¨ãƒ³ãƒ‰ã‚¿ã‚¤ãƒ ã‹ã‚‰
+                    prosound.Setend sndCount (readValue loadFileList);
+                    prosound.Setstart sndCount (readValue loadFileList);
+                    --prosound.shift sndCount (readValue loadFileList);
+                )else(
+                    --2è¡Œåˆ†ã®èª­ã¿è¾¼ã¿çµæœã¯ç ´æ£„
+                    sndCount = readValue loadFileList;
+                    sndCount = readValue loadFileList;
+                )
+            )
+            close loadFileList
+        )
+    )
+)

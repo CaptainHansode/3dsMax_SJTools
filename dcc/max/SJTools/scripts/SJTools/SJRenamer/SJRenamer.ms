@@ -1,27 +1,30 @@
 /**
  * -----------------------------------------------------------------------------
  *
- *  SJ Tools
+ * SJ Tools
  *
  * -----------------------------------------------------------------------------
  * @license MIT
  * @author CaptainHansode 半袖船長
  * @web http://www.sakaiden.com/
  * @email sakaiden@live.jp
- * @git https://github.com/CaptainHansode/SJTools
+ * @github https://github.com/CaptainHansode/SJTools
  *
  * SJ Renamer
  * 選択物リネームする
  *
  */
 
-(
-
 /**-----------------------------------------------------------------------------
  * global
  */
 global SJRenamerRol;
 global sjRnmResult = #();
+
+include "$scripts\SJTools\lib\progresBar.ms";
+
+
+(
 
 /**-----------------------------------------------------------------------------
  * Rollouts削除
@@ -32,8 +35,6 @@ try(closeRolloutFloater SJRenamerRol)catch();
 try(destroydialog SJRenamerRol)catch();
 try(closeRolloutFloater sjRenamerResultRol)catch();
 try(destroydialog sjRenamerResultRol)catch();
-
---include "$scripts/SJTools/lib/progresBar.ms";
 
 
 --基本言語ファイル
@@ -81,6 +82,8 @@ fn hitSelList_Fn=
  */
 fn newName_Fn =
 (
+    SJProgressBar.show();
+    SJProgressBar.update 50 "asdfasfdasfasfasfdaa";
     suspendEditing();
     with redraw off
     (
@@ -461,8 +464,8 @@ fn sj_searchSimilarStrings_Fn tagStr srchList judgLevel =
  */
 fn similarSearchBt_Fn =
 (
-    Local resultList = #();
-    Local tempObj = #();
+    local resultList = #();
+    local tempObj = #();
     sjRnmResult = #();
 
     try (destroydialog sjRenamerResultRol) catch();

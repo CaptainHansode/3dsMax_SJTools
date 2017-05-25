@@ -1,171 +1,121 @@
-/*******************************************************
-System J Tools 
-********************************************************
-Name:SJ_Spark_ArraySort.ms
-Created By:CaptainHansode
-WEB:www.sakaiden.com
-E-Mail:sakaiden@live.jp
-*******************************************************/
-	group "‘I‘ğ“à—e‚ğƒ\[ƒg"
-	(
-		button sortByParentBt "eq‡‚Éƒ\[ƒg" width:160
-		button sortByNameBt "–¼‘O‡‚Åƒ\[ƒg" width:160
-	)
-
+/**
+ * -----------------------------------------------------------------------------
+ *
+ * SJ Tools
+ *
+ * -----------------------------------------------------------------------------
+ * @license MIT
+ * @author CaptainHansode åŠè¢–èˆ¹é•·
+ * @web http://www.sakaiden.com/
+ * @email sakaiden@live.jp
+ * @github https://github.com/CaptainHansode/SJTools
+ *
+ */
+group "é¸æŠå†…å®¹ã‚’ã‚½ãƒ¼ãƒˆ"
+(
+    button sortByParentBt "è¦ªå­é †ã«ã‚½ãƒ¼ãƒˆ" width:160
+    button sortByNameBt "åå‰é †ã§ã‚½ãƒ¼ãƒˆ" width:160
+)
 
 on sortByParentBt pressed do
 (
+    if selection != 0 then
+    (
+        --éšå±¤æ§‹é€ ã‚’å…¨ã¦å–å¾—
+        local myObjAll = #(), delIndex = undefined;
+        local selObj = for i in selection collect i;
+        local objLevel = 1;
 
-if selection != 0 then
-(
-	
---ŠK‘w\‘¢‚ğ‘S‚Äæ“¾
-Local myObjAll = #(), delIndex = undefined;
-Local selObj = for i in selection collect i;
---Local selObj = selection;
-Local objLevel = 1;
+        --é…åˆ—ã‚’æº–å‚™
+        for i = 1 to 256 do
+        (
+            append myObjAll #();
+        )
 
---////////////////////////////////////////////////
---”z—ñ‚ğ€”õ
---////////////////////////////////////////////////
-for i = 1 to 256 do
-(
-	append myObjAll #();
-);--for end
+        --è¦ªãŒãªã„ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’æ¤œç´¢
+        for i in selObj do
+        (
+            myObj = #();
+            if i.parent == undefined then
+            (
+                append myObjAll[1] i;
+            )
+        )
 
---ƒvƒƒOƒŒƒXƒo[
-sj_functions.sj_progressBar_Fn()
+        --è¦ªã®ç„¡ã„ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’é…åˆ—ã‹ã‚‰æ’é™¤
+        for i in myObjAll do
+        (
+            for k in i do
+            (
+                delIndex = findItem selObj k;
+                deleteItem selObj delIndex;
+            )
+        )
 
---////////////////////////////////////////////////
---e‚ª‚È‚¢ƒIƒuƒWƒFƒNƒg‚ğŒŸõ
---////////////////////////////////////////////////
-for i in selObj do
-(
-	myObj = #();
-	if i.parent == undefined then
-	(
-		append myObjAll[1] i;
-	);
-);--for end
+        --éšå±¤ãƒ¬ãƒ™ãƒ«ã‚’è©•ä¾¡
+        local progCountAll = selObj.count;
+        local progCount = 1;
+        for i in selObj do
+        (
+            progCount += 1;
+            myObj = #();
+            objLevel = 1;
+            obj = i;
+            while obj.parent != undefined do
+            (
+                obj = obj.parent;
+                objLevel += 1;
+            )
+            append myObjAll[objLevel] i;
+        )
 
---e‚Ì–³‚¢ƒIƒuƒWƒFƒNƒg‚ğ”z—ñ‚©‚ç”rœ
-for i in myObjAll do
-(
-	for k in i do
-	(
-		delIndex = findItem selObj k;
-		deleteItem selObj delIndex;
-	);--for end	
-);--for end
+        --é¸æŠã‚’ã—ç›´ã—
+        clearSelection()
+        progCountAll = myObjAll.count;
+        progCount = 1;
+        for i in myObjAll do
+        (
+            progCount += 1;
+            if i.count != 0 then selectMore i
+        )
+        print "é¸æŠçµ‚äº†";
+    )
+)
 
---////////////////////////////////////////////////
---ŠK‘wƒŒƒxƒ‹‚ğ•]‰¿
---////////////////////////////////////////////////
-
---ƒvƒƒOƒŒƒXˆ—
-Local progCountAll = selObj.count;
-Local progCount = 1;
-
-for i in selObj do
-(
-	sj_progressBar_rol.processInfo.caption =  "\‘¢‚ğ•]‰¿‚µ‚Ä‚¢‚Ü‚·   " + (floor(((100.0/progCountAll) * progCount))as String) + "%";
-	sj_progressBar_rol.progbar.value = ((100.0/progCountAll) * progCount);
-	progCount += 1;
-	
-	myObj = #();
-	objLevel = 1;
-	obj = i;
-
-	while obj.parent != undefined do
-	(
-		obj = obj.parent
-		objLevel += 1;
-	)--while end
-
-		append myObjAll[objLevel] i;
-		
-);--for end
-
-
---////////////////////////////////////////////////
---‘I‘ğ‚ğ‚µ’¼‚µ
---////////////////////////////////////////////////
-
-clearSelection()
-
-progCountAll = myObjAll.count;
-progCount = 1;
-
-for i in myObjAll do
-(
-	sj_progressBar_rol.processInfo.caption =  "Ä‘I‘ğ‚µ‚Ä‚¢‚Ü‚·   " + (floor(((100.0/progCountAll) * progCount))as String) + "%";
-	sj_progressBar_rol.progbar.value = ((100.0/progCountAll) * progCount);
-	progCount += 1;
-	
-	if i.count != 0 then selectMore i
-);--for end
-
-try(destroydialog sj_progressBar_rol)catch()
-print "‘I‘ğI—¹";
-
-
-);--if end
-
-);--end
-
-
---////////////////////////////////////////////////
---–¼‘O‚Å•À‚Ñ‘Ö‚¦
---////////////////////////////////////////////////
+--åå‰ã§ä¸¦ã³æ›¿ãˆ
 on sortByNameBt pressed do
 (
+    if selection != 0 then
+    (
+        --éšå±¤æ§‹é€ ã‚’å…¨ã¦å–å¾—
+        local myObj = #(), myObjAfter = #();
+        local selObjName = for i in selection collect i.name;
+        local selObjIh = for i in selection collect i.inode.handle;
 
-if selection != 0 then
-(
+        local progCountAll = selObjName.count;
+        local progCount = 1;
 
---ŠK‘w\‘¢‚ğ‘S‚Äæ“¾
-Local myObj = #(), myObjAfter = #();
-Local selObjName = for i in selection collect i.name;
-Local selObjIh = for i in selection collect i.inode.handle;
+        --ã‚½ãƒ¼ãƒˆ
+        sort selObjName;
+        clearSelection()
 
-Local progCountAll = selObjName.count;
-Local progCount = 1;
-sj_functions.sj_progressBar_Fn()
-
---ƒ\[ƒg
-sort selObjName;
-
-clearSelection()
-
---////////////////////////////////////////////////
---‘I‘ğ‚ğ‚µ’¼‚µ
---////////////////////////////////////////////////
-for i in selObjName do
-(
---ƒvƒƒOƒŒƒXƒo[
-	sj_progressBar_rol.processInfo.caption =  "–¼‘O‡‚Éƒ\[ƒg‚µ‚Ä‚¢‚Ü‚·   " + (floor(((100.0/progCountAll) * progCount))as String) + "%";
-	sj_progressBar_rol.progbar.value = ((100.0/progCountAll) * progCount);
-	progCount += 1;
-
-	--‚»‚Ì–¼‘O‚ÌƒIƒuƒWƒFƒNƒg‚ğ‰ñû
-	myObj = getNodeByName i all:true;
-
-	--iƒnƒ“ƒhƒ‹‚Å–¼‘O‚Ìd•¡‚ğŠm”F
-	for k in myObj do
-	(
-		--Œ©‚Â‚©‚ê‚Î
-		if (findItem selObjIh k.inode.handle) != 0 then append myObjAfter k;
-	);--for end
-
-);--for end
-
---Ä‘I‘ğ
-select myObjAfter;
-
-try(destroydialog sj_progressBar_rol)catch()
-print "‘I‘ğI—¹";
-
-);--if end
-
-);--end
+        --é¸æŠã‚’ã—ç›´ã—
+        for i in selObjName do
+        (
+            --ãƒ—ãƒ­ã‚°ãƒ¬ã‚¹ãƒãƒ¼
+            progCount += 1;
+            --ãã®åå‰ã®ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’å›å
+            myObj = getNodeByName i all:true;
+            --iãƒãƒ³ãƒ‰ãƒ«ã§åå‰ã®é‡è¤‡ã‚’ç¢ºèª
+            for k in myObj do
+            (
+                --è¦‹ã¤ã‹ã‚Œã°
+                if (findItem selObjIh k.inode.handle) != 0 then append myObjAfter k;
+            )
+        )
+        --å†é¸æŠ
+        select myObjAfter;
+        print "é¸æŠçµ‚äº†";
+    )
+)
 

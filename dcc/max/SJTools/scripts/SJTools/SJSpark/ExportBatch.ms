@@ -1,39 +1,44 @@
-/*******************************************************
-System J Tools 
-********************************************************
-Name:SJ_Spark_ExportBatch.ms
-Created By:CaptainHansode
-WEB:www.sakaiden.com
-E-Mail:sakaiden@live.jp
-*******************************************************/
-	group "ExportBatch"
-	(
-		button exportBatchBt "‘‚«o‚µƒoƒbƒ`" width:160
-		editText exportBatchTxt "" width:160 height:16 align:#center;
-		button getExportPathBt "ƒpƒX‚ğæ“¾" width:160 align:#center;
-	)
+/**
+ * -----------------------------------------------------------------------------
+ *
+ * SJ Tools
+ *
+ * -----------------------------------------------------------------------------
+ * @license MIT
+ * @author CaptainHansode åŠè¢–èˆ¹é•·
+ * @web http://www.sakaiden.com/
+ * @email sakaiden@live.jp
+ * @github https://github.com/CaptainHansode/SJTools
+ *
+ */
+group "ExportBatch"
+(
+    button exportBatchBt "æ›¸ãå‡ºã—ãƒãƒƒãƒ" width:160
+    editText exportBatchTxt "" width:160 height:16 align:#center;
+    button getExportPathBt "ãƒ‘ã‚¹ã‚’å–å¾—" width:160 align:#center;
+)
 
 -----------------------------------------------------------------------------------------------------------
---ƒeƒLƒXƒg‚ğ‘‚«o‚µ
+--ãƒ†ã‚­ã‚¹ãƒˆã‚’æ›¸ãå‡ºã—
 -----------------------------------------------------------------------------------------------------------
 on getExportPathBt pressed do
 (
-	Local tempLoadFile = undefined;
-	tempLoadFile = getOpenFileName types:"ƒtƒ@ƒCƒ‹‚Í‰½‚Å‚à‚©‚Ü‚¢‚Ü‚¹‚ñ|*.*";
-	if (tempLoadFile != undefined) then exportBatchTxt.text = getFilenamePath tempLoadFile;
-);--end
+    Local tempLoadFile = undefined;
+    tempLoadFile = getOpenFileName types:"ãƒ•ã‚¡ã‚¤ãƒ«ã¯ä½•ã§ã‚‚ã‹ã¾ã„ã¾ã›ã‚“|*.*";
+    if (tempLoadFile != undefined) then exportBatchTxt.text = getFilenamePath tempLoadFile;
+)
 
---‚Ğ‚Æ‚Ü‚¸FBX‚Ì‘‚«o‚µƒeƒXƒg
+--ã²ã¨ã¾ãšFBXã®æ›¸ãå‡ºã—ãƒ†ã‚¹ãƒˆ
 on exportBatchBt pressed do
 (
-	if (exportBatchTxt.text != undefined) then
-	(
-		--‘I‘ğ‚Ô‚Â‚Ì‚İ
-		exportFile (exportBatchTxt.text + "Test") selectedOnly:true using:fbx;
-	)
-	else
-	(
-		messageBox "ƒpƒX‚ª‹ó‚Å‚·" title:"ƒGƒ‰[";
-	);--if end
-);--end
+    if (exportBatchTxt.text != undefined) then
+    (
+        --é¸æŠã¶ã¤ã®ã¿
+        exportFile (exportBatchTxt.text + "Test") selectedOnly:true using:fbx;
+    )
+    else
+    (
+        messageBox "ãƒ‘ã‚¹ãŒç©ºã§ã™" title:"ã‚¨ãƒ©ãƒ¼";
+    )
+)
 

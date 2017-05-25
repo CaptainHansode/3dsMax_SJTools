@@ -1,222 +1,212 @@
-/*******************************************************
-System J Tools 
-********************************************************
-Name:SJ_Spark_SetController
-Created By:CaptainHansode
-WEB:www.sakaiden.com
-E-Mail:sakaiden@live.jp
-*******************************************************/
-		group "Controller Add And Changes"
-		(
-			button nuAttachBt "Null ƒZƒOƒƒ“ƒgƒAƒ^ƒbƒ`" width:160
-			button addContPosBt "XYZˆÊ’uƒRƒ“ƒgƒ[ƒ‰[‚ğ’Ç‰Á" width:160
-			button posContAttBt "XYZˆÊ’uƒRƒ“ƒgƒ[ƒ‰[‚É•ÏŠ·" width:160
-			button addContRotBt "ƒIƒCƒ‰[XYZ’Ç‰Á" width:160
-			
-			button scaContInstBt "ƒXƒP[ƒ‹‚ğƒCƒ“ƒXƒ^ƒ“ƒX" width:160
-			button scaContAttBt "XYZƒXƒP[ƒ‹‚É•ÏŠ·" width:160
-			
-			button xtosaBt "ƒ^[ƒ“ƒAƒ“ƒOƒ‹2XRot" width:160
-		)
-		
-		group "Controll Breaker"
-		(
-		button scbPosBt "ˆÊ’u" width:160 height:20
-		button scbPosOffsetBt "ƒIƒtƒZƒbƒgˆÊ’u" width:160 height:20
-		
-		button scbRotBt "‰ñ“]" width:160 height:20
-		button scbRotOffsetBt "ƒIƒtƒZƒbƒg‰ñ“]" width:160 height:20
-
-		button scbScaBt "ƒXƒP[ƒ‹" width:160 height:20
-		button scbScaOffsetBt "ƒIƒtƒZƒbƒgƒXƒP[ƒ‹" width:160 height:20
-		)
------------------------------------------------------------------------------------------------------------
--- ˆÈ‰ºˆ—
------------------------------------------------------------------------------------------------------------
-		
-		
---////////////
---‘I‘ğƒƒbƒVƒ…‚Ì‘I‘ğ’¸“_‚ÉNull‚ğ”z’u‚·‚é
---///////////
-	on nuAttachBt pressed do
-	(
-	if selection.count == 1 and classOf selection[1].baseobject == Editable_Mesh	 then	--‘I‘ğ•¨1‚Â‚Å‚ª•ÒW‰Â”\ƒƒbƒVƒ…‚©H
-	(
-		local p = #()	--”z—ñéŒ¾
-			for i = 1 to selection[1].selectedVerts.count do
-			(
-				print selection[1].selectedVerts[i].index	--‚Ğ‚Æ‚Ü‚¸ƒvƒŠƒ“ƒg‚µ‚Æ‚±‚¤
-				p = Point pos:[0,0,0]	--Nullì¬
-				p.position.controller = position_script()	--ƒRƒ“ƒgƒ[ƒ‰[‚ğˆÊ’uƒXƒNƒŠƒvƒg‚É‚·‚é
-				p.position.controller.script = "pos = getvert $" + selection[1].name + " " + (selection[1].selectedVerts[i].index as String)	--ƒXƒNƒŠƒvƒg’Ç‰Á
-				--progbar.value = ((100.00/selection[1].selectedVerts.count)*i)	--ƒvƒƒOƒŒƒXƒo[ˆ—
-			)--for end
-		--progbar.value = 0
-	)
-	else(messageBox"ƒ~ƒX‚Á‚½")--if end
-	)
-
---////////////
---‘I‘ğ•¨‚ÉˆêŠ‡‚Åƒ}ƒNƒƒXƒNƒŠƒvƒg‚ğÀsEEEEƒzƒ“ƒg‚ÉƒRƒŒ‚Å‚¢‚¢‚ÌH
---////////////
-	on addContPosBt pressed do
-	(
-	try(
-		local sl = for i in selection collect i;
-		for i = 1 to sl.count do
-		(
-		select sl[i]
-		macros.run "Controllers" "XYZ_P"	--ƒ}ƒNƒƒXƒNƒŠƒvƒg•”
-		--clearSelection()
-		)
-	)catch(messageBox "¸”s" title:"Œx")--try end
-	)--end
-
-
---////////////
---XYZƒ|ƒWƒVƒ‡ƒ“ƒRƒ“ƒgƒ[ƒ‰[‚É•ÏŠ·
---///////////
-on PosContAttBt pressed do
+/**
+ * -----------------------------------------------------------------------------
+ *
+ * SJ Tools
+ *
+ * -----------------------------------------------------------------------------
+ * @license MIT
+ * @author CaptainHansode åŠè¢–èˆ¹é•·
+ * @web http://www.sakaiden.com/
+ * @email sakaiden@live.jp
+ * @github https://github.com/CaptainHansode/SJTools
+ *
+ */
+group "Controller Add And Changes"
 (
-	for i = 1 to selection.count do
-	(
-	selection[i].pos.controller = Position_XYZ ()
-	)--for end
+    button nuAttachBt "Null ã‚»ã‚°ãƒ¡ãƒ³ãƒˆã‚¢ã‚¿ãƒƒãƒ" width:160
+    button addContPosBt "XYZä½ç½®ã‚³ãƒ³ãƒˆãƒ­ãƒ¼ãƒ©ãƒ¼ã‚’è¿½åŠ " width:160
+    button posContAttBt "XYZä½ç½®ã‚³ãƒ³ãƒˆãƒ­ãƒ¼ãƒ©ãƒ¼ã«å¤‰æ›" width:160
+    button addContRotBt "ã‚ªã‚¤ãƒ©ãƒ¼XYZè¿½åŠ " width:160
+
+    button scaContInstBt "ã‚¹ã‚±ãƒ¼ãƒ«ã‚’ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹" width:160
+    button scaContAttBt "XYZã‚¹ã‚±ãƒ¼ãƒ«ã«å¤‰æ›" width:160
+
+    button xtosaBt "ã‚¿ãƒ¼ãƒ³ã‚¢ãƒ³ã‚°ãƒ«2XRot" width:160
 )
 
---////////////
---‘I‘ğ•¨‚ÉˆêŠ‡‚Åƒ}ƒNƒƒXƒNƒŠƒvƒg‚ğÀsEEEEƒzƒ“ƒg‚ÉƒRƒŒ‚Å‚¢‚¢‚ÌH
---////////////
-	on addContRotBt pressed do
-	(
-	try(
-		local sl = for i in selection collect i;
-		for i = 1 to sl.count do
-		(
-		select sl[i]
-		macros.run "Controllers" "EulerXYZ_R"	--ƒ}ƒNƒƒXƒNƒŠƒvƒg•”
-		--progbar.value = ((100.00/sl.count)*i)
-		clearSelection()
-		)
-	--progbar.value = 0
-	)catch(messageBox "¸”s" title:"Œx")--try end
-	)
-	
-	on scaContInstBt pressed do
-	(
-	try(
-		for i in selection do
-		(
-			i.scale.controller = selection[1].scale.controller;
-		)
-	--progbar.value = 0
-	)catch(messageBox "¸”s" title:"Œx")--try end
-	);--end
-	
-	
-	on scaContAttBt pressed do
-	(
-	try(
-		for i in selection do
-		(
-			i.scale.controller = ScaleXYZ ();
-		)
-	--progbar.value = 0
-	)catch(messageBox "¸”s" title:"Œx")--try end
-	);--end
-	
-	
---////////////
---ƒ^[ƒ“Šp“x‚ğİ’è
---///////////
-	on xtosaBt pressed do
-	(
-	try(
-		for i = 1 to selection.count do
-		(
-		selection[i].transform.controller.swivelAngle.controller = float_script()	--À”ƒXƒNƒŠƒvƒg‚ğƒ^[ƒ“Šp“x‚É“K‰
-		--selection[i].transform.controller.swivelAngle.controller.script = "--AAA\n"
-		--selection[i].transform.controller.swivelAngle.controller.script += "2"
-		--selection[i].transform.controller.swivelAngle.controller.script = "Local obj = nodeTransformMonitor node:selection[1] forwardTransformChangeMsgs:false;\n"
-		--selection[i].transform.controller.swivelAngle.controller.script += "obj.node.transform.controller.IK_goal.controller.Rotation.controller.X_Rotation" + " / (1/tan(1))\n"
-		selection[i].transform.controller.swivelAngle.controller.script = "$" + selection[i].name + ".transform.controller.IK_goal.controller.Rotation.controller.X_Rotation" + " / (1/tan(1))\n"
-		selection[i].transform.controller.swivelAngle.controller.script += "--AAA\n"		
-		)--for end
-	)catch(messageBox "ƒIƒuƒWƒFƒNƒg–¼‚ğ IK Chain ‚È‚ÇˆÈŠO‚É‚µ‚Ä‚İ‚Ä‚­‚¾‚³‚¢" title:"Œx")--try end
-	)
+group "Controll Breaker"
+(
+    button scbPosBt "ä½ç½®" width:160 height:20
+    button scbPosOffsetBt "ã‚ªãƒ•ã‚»ãƒƒãƒˆä½ç½®" width:160 height:20
 
------------------------------------------------------------------------------------------------------------
--- ƒRƒ“ƒgƒ[ƒ‹ƒuƒŒ[ƒJ[
------------------------------------------------------------------------------------------------------------
-	on scbPosBt pressed do	
-	(
-	undo on(
-		for i in selection do
-		(
-			i.pos.controller = position_list ();
-			i.pos.controller.delete 1;
-		);--for end
-	);--undo end
-	)--end
+    button scbRotBt "å›è»¢" width:160 height:20
+    button scbRotOffsetBt "ã‚ªãƒ•ã‚»ãƒƒãƒˆå›è»¢" width:160 height:20
 
-	on scbPosOffsetBt pressed do
-	(
-	undo on(
-		for i in selection do
-		(
-			i.pos.controller = position_list ();
-			i.pos.controller.enabled.controller = position_list ();
-			i.pos.controller.active = 2;
-		);--for end
-	);--undo end
-	)--end
-	
-	
-	on scbRotBt pressed do
-	(
-	undo on(
-		for i in selection do
-		(
-			i.rotation.controller = rotation_list ();
-			i.rotation.controller.delete 1;
-		);--for end
-	);--undo end
-	)--end
-	
-	on scbRotOffsetBt pressed do
-	(
-	undo on(
-		for i in selection do
-		(
-			i.rotation.controller = rotation_list ();
-			i.rotation.controller.enabled.controller = rotation_list ();
-			i.rotation.controller.active = 2;
-		);--for end
-	);--undo end
-	)--end
-	
-	on scbScaBt pressed do
-	(
-	undo on(
-		for i in selection do
-		(
-			i.scale.controller = scale_list ();
-			i.scale.controller.delete 1;
-		);--for end
-	);--undo end
-	)--end
-	
-	on scbScaOffsetBt pressed do
-	(
-	undo on(
-		for i in selection do
-		(
-			i.scale.controller = scale_list ();
-			i.scale.controller.enabled.controller = scale_list ();
-			i.scale.controller.active = 2;
-		);--for end
-	);--undo end
-	)--end
+    button scbScaBt "ã‚¹ã‚±ãƒ¼ãƒ«" width:160 height:20
+    button scbScaOffsetBt "ã‚ªãƒ•ã‚»ãƒƒãƒˆã‚¹ã‚±ãƒ¼ãƒ«" width:160 height:20
+)
+
+--é¸æŠãƒ¡ãƒƒã‚·ãƒ¥ã®é¸æŠé ‚ç‚¹ã«Nullã‚’é…ç½®ã™ã‚‹
+on nuAttachBt pressed do
+(
+    if selection.count == 1 and classOf selection[1].baseobject == Editable_Mesh	 then	--é¸æŠç‰©1ã¤ã§ãŒç·¨é›†å¯èƒ½ãƒ¡ãƒƒã‚·ãƒ¥ã‹ï¼Ÿ
+    (
+        local p = #()	--é…åˆ—å®£è¨€
+            for i = 1 to selection[1].selectedVerts.count do
+            (
+                print selection[1].selectedVerts[i].index	--ã²ã¨ã¾ãšãƒ—ãƒªãƒ³ãƒˆã—ã¨ã“ã†
+                p = Point pos:[0,0,0]	--Nullä½œæˆ
+                p.position.controller = position_script()	--ã‚³ãƒ³ãƒˆãƒ­ãƒ¼ãƒ©ãƒ¼ã‚’ä½ç½®ã‚¹ã‚¯ãƒªãƒ—ãƒˆã«ã™ã‚‹
+                p.position.controller.script = "pos = getvert $" + selection[1].name + " " + (selection[1].selectedVerts[i].index as String)	--ã‚¹ã‚¯ãƒªãƒ—ãƒˆè¿½åŠ 
+            )
+    ) else (
+        messageBox"ãƒŸã‚¹ã£ãŸ"
+    )
+)
+
+--é¸æŠç‰©ã«ä¸€æ‹¬ã§ãƒã‚¯ãƒ­ã‚¹ã‚¯ãƒªãƒ—ãƒˆã‚’å®Ÿè¡Œãƒ»ãƒ»ãƒ»ãƒ»ãƒ›ãƒ³ãƒˆã«ã‚³ãƒ¬ã§ã„ã„ã®ï¼Ÿ
+on addContPosBt pressed do
+(
+    try(
+        local sl = for i in selection collect i;
+        for i = 1 to sl.count do
+        (
+            select sl[i]
+            macros.run "Controllers" "XYZ_P"	--ãƒã‚¯ãƒ­ã‚¹ã‚¯ãƒªãƒ—ãƒˆéƒ¨
+        )
+    ) catch (
+        messageBox "å¤±æ•—" title:"è­¦å‘Š"
+    )
+)
+
+--XYZãƒã‚¸ã‚·ãƒ§ãƒ³ã‚³ãƒ³ãƒˆãƒ­ãƒ¼ãƒ©ãƒ¼ã«å¤‰æ›
+on PosContAttBt pressed do
+(
+    for i = 1 to selection.count do
+    (
+        selection[i].pos.controller = Position_XYZ ()
+    )
+)
+
+--é¸æŠç‰©ã«ä¸€æ‹¬ã§ãƒã‚¯ãƒ­ã‚¹ã‚¯ãƒªãƒ—ãƒˆã‚’å®Ÿè¡Œãƒ»ãƒ»ãƒ»ãƒ»ãƒ›ãƒ³ãƒˆã«ã‚³ãƒ¬ã§ã„ã„ã®ï¼Ÿ
+on addContRotBt pressed do
+(
+    try(
+        local sl = for i in selection collect i;
+        for i = 1 to sl.count do
+        (
+            select sl[i]
+            macros.run "Controllers" "EulerXYZ_R"	--ãƒã‚¯ãƒ­ã‚¹ã‚¯ãƒªãƒ—ãƒˆéƒ¨
+            clearSelection()
+        )
+    ) catch (
+        messageBox "å¤±æ•—" title:"è­¦å‘Š"
+    )
+)
+
+on scaContInstBt pressed do
+(
+    try(
+        for i in selection do
+        (
+            i.scale.controller = selection[1].scale.controller;
+        )
+    ) catch (
+        messageBox "å¤±æ•—" title:"è­¦å‘Š"
+    )
+)
+
+on scaContAttBt pressed do
+(
+    try(
+        for i in selection do
+        (
+            i.scale.controller = ScaleXYZ ();
+        )
+    ) catch (
+        messageBox "å¤±æ•—" title:"è­¦å‘Š"
+    )
+)
+
+--ã‚¿ãƒ¼ãƒ³è§’åº¦ã‚’è¨­å®š
+on xtosaBt pressed do
+(
+    try(
+        for i = 1 to selection.count do
+        (
+            selection[i].transform.controller.swivelAngle.controller = float_script()	--å®Ÿæ•°ã‚¹ã‚¯ãƒªãƒ—ãƒˆã‚’ã‚¿ãƒ¼ãƒ³è§’åº¦ã«é©å¿œ
+            selection[i].transform.controller.swivelAngle.controller.script = "$" + selection[i].name + ".transform.controller.IK_goal.controller.Rotation.controller.X_Rotation" + " / (1/tan(1))\n"
+            selection[i].transform.controller.swivelAngle.controller.script += "--AAA\n"
+        )
+    ) catch (
+        messageBox "ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆåã‚’ IK Chain ãªã©ä»¥å¤–ã«ã—ã¦ã¿ã¦ãã ã•ã„" title:"è­¦å‘Š"
+    )
+)
+
+-- ã‚³ãƒ³ãƒˆãƒ­ãƒ¼ãƒ«ãƒ–ãƒ¬ãƒ¼ã‚«ãƒ¼
+on scbPosBt pressed do
+(
+    undo on
+    (
+        for i in selection do
+        (
+            i.pos.controller = position_list ();
+            i.pos.controller.delete 1;
+        )
+    )
+)
+
+on scbPosOffsetBt pressed do
+(
+    undo on
+    (
+        for i in selection do
+        (
+            i.pos.controller = position_list ();
+            i.pos.controller.enabled.controller = position_list ();
+            i.pos.controller.active = 2;
+        )
+    )
+)
+
+on scbRotBt pressed do
+(
+    undo on
+    (
+        for i in selection do
+        (
+            i.rotation.controller = rotation_list ();
+            i.rotation.controller.delete 1;
+        )
+    )
+)
+
+on scbRotOffsetBt pressed do
+(
+    undo on
+    (
+        for i in selection do
+        (
+            i.rotation.controller = rotation_list ();
+            i.rotation.controller.enabled.controller = rotation_list ();
+            i.rotation.controller.active = 2;
+        )
+    )
+)
+
+on scbScaBt pressed do
+(
+    undo on
+    (
+        for i in selection do
+        (
+            i.scale.controller = scale_list ();
+            i.scale.controller.delete 1;
+        )
+    )
+)
+
+on scbScaOffsetBt pressed do
+(
+    undo on
+    (
+        for i in selection do
+        (
+            i.scale.controller = scale_list ();
+            i.scale.controller.enabled.controller = scale_list ();
+            i.scale.controller.active = 2;
+        )
+    )
+)
 
 
-	

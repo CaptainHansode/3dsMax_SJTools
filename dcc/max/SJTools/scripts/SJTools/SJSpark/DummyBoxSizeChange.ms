@@ -1,20 +1,25 @@
-/*******************************************************
-System J Tools 
-********************************************************
-Name:SJ_Spark_DummyBoxSizeChange
-Created By:CaptainHansode
-WEB:www.sakaiden.com
-E-Mail:sakaiden@live.jp
-*******************************************************/
-	group "ダミーの大きさを変更"
-	(
-		button dummySizeChangeBt "サイズ変更" width:160 hight:20
-		spinner dummySizeSpn "サイズ:" range:[0,01e+009,1] type:#float width:160 align:#center
-	);
-	
-	on dummySizeChangeBt pressed do
-	(
-		try(
-			for i in selection do i.boxsize = [dummySizeSpn.value,dummySizeSpn.value,dummySizeSpn.value];
-		)catch();
-	);
+/**
+ * -----------------------------------------------------------------------------
+ *
+ * SJ Tools
+ *
+ * -----------------------------------------------------------------------------
+ * @license MIT
+ * @author CaptainHansode 蜊願｢冶飴髟ｷ
+ * @web http://www.sakaiden.com/
+ * @email sakaiden@live.jp
+ * @github https://github.com/CaptainHansode/SJTools
+ *
+ */
+group "繝繝溘�ｼ縺ｮ螟ｧ縺阪＆繧貞､画峩"
+(
+    button dummySizeChangeBt "繧ｵ繧､繧ｺ螟画峩" width:160 hight:20
+    spinner dummySizeSpn "繧ｵ繧､繧ｺ:" range:[0,01e+009,1] type:#float width:160 align:#center
+)
+
+on dummySizeChangeBt pressed do
+(
+    try(
+        for i in selection do i.boxsize = [dummySizeSpn.value,dummySizeSpn.value,dummySizeSpn.value];
+    )catch();
+)

@@ -1,303 +1,163 @@
-r/*******************************************************
-System J Tools 
-********************************************************
-Name:SJ_Spark
-Created By:CaptainHansode
-WEB:www.sakaiden.com
-E-Mail:sakaiden@live.jp
-*******************************************************/
+/**
+ * -----------------------------------------------------------------------------
+ *
+ * SJ Tools
+ *
+ * -----------------------------------------------------------------------------
+ * @license MIT
+ * @author CaptainHansode åŠè¢–èˆ¹é•·
+ * @web http://www.sakaiden.com/
+ * @email sakaiden@live.jp
+ * @github https://github.com/CaptainHansode/SJTools
+ *
+ *
+ * Smart Preset And Rig Kit
+ *
+ */
+global sj_spark_rol;
+global sj_sparksub_rol;
+include "$scripts\SJTools\lib\progresBar.ms";
+
 (
------------------------------------------------------------------------------------------------------------
--- ƒOƒ[ƒoƒ‹ü‚è
------------------------------------------------------------------------------------------------------------
---ƒ[ƒ‹ƒAƒEƒg—p
-global sj_spark_rol
-global sj_sparksub_rol
------------------------------------------------------------------------------------------------------------
--- Œ¾Œê‰Šú‰»
------------------------------------------------------------------------------------------------------------
--- Œ¾Œê‰Šú‰»
-include "$scripts/SJTools/SJ_CommonLangSet.ms"
+local nameAndVersion = "ã™ã±ãƒ¼ãã‚“";
+local NearSearchTagObj;
 
---Version etc –¼‘O©‘Ì‚ÍSJTools.ini‚©‚ç
-Local nameAndVersion = (getINISetting("$scripts/SJTools/SJTools.ini")  "SJToolsToolName" "SJSparkToolName");
------------------------------------------------------------------------------------------------------------
-Local NearSearchTagObj;
------------------------------------------------------------------------------------------------------------
--- Rollouts
------------------------------------------------------------------------------------------------------------
-try(cui.FloatDialogBar sj_spark_rol)catch()
-try(cui.unRegisterDialogBar sj_spark_rol)catch()
-try( CloseRolloutFloater sj_spark_rol) catch()
-try(destroydialog sj_spark_rol)catch()
+try(cui.FloatDialogBar sj_spark_rol)catch();
+try(cui.unRegisterDialogBar sj_spark_rol)catch();
+try(CloseRolloutFloater sj_spark_rol)catch();
+try(destroydialog sj_spark_rol)catch();
 
------------------------------------------------------------------------------------------------------------
---ƒƒjƒ…[
------------------------------------------------------------------------------------------------------------
---////////////////////////////////////////////////
---ƒƒjƒ…[
---////////////////////////////////////////////////
 rcMenu sparkMenuBar
 (
-subMenu "ƒwƒ‹ƒv"
-( 
-menuItem helpMi "ƒwƒ‹ƒv"
-menuItem aboutMi "About"
-menuItem emailMi "E-Mail"
+    subMenu "ãƒ˜ãƒ«ãƒ—"
+    (
+        menuItem helpMi "ãƒ˜ãƒ«ãƒ—"
+        menuItem emailMi "E-Mail"
+    )
+    on helpMi picked do shellLaunch "http://www.sakaiden.com/?page_id=5896" "";
+    on emailMi picked do shellLaunch "mailTo:sakaiden@live.jp" "";
+    on poserMenuBar update do
+    (
+    )
 )
 
---////////////////////////////////////////////////
---ƒAƒNƒVƒ‡ƒ“
---////////////////////////////////////////////////
-on helpMi picked do shellLaunch "http://www.sakaiden.com/?page_id=5896" ""
-on aboutMi picked do sj_functions.sjtools_about_Fn();
-on emailMi picked do shellLaunch "mailTo:sakaiden@live.jp" ""
-on poserMenuBar update do
+--åˆ‡ã‚Šæ›¿ãˆã‚¿ãƒ–ç”¨
+rollout sj_spark_tabs_rol "ã‚¿ãƒ–åˆ‡ã‚Šæ›¿ãˆãƒœã‚¿ãƒ³"
 (
 )
-)--rcMenu end
 
------------------------------------------------------------------------------------------------------------
---Ø‚è‘Ö‚¦ƒ^ƒu—p
------------------------------------------------------------------------------------------------------------
-rollout sj_spark_tabs_rol "ƒ^ƒuØ‚è‘Ö‚¦ƒ{ƒ^ƒ“"-- width:224 height:800
+
+--ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆé–¢é€£ã€æ§‹é€ é–¢é€£
+rollout sj_spark_objects_rol "Spark!! Objects"
 (
+    include "$scripts/SJTools/SJSpark/ParentButton.ms"
+    include "$scripts/SJTools/SJSpark/HelperVisualChange.ms"
+    include "$scripts/SJTools/SJSpark/HelperGa.ms"
+    include "$scripts/SJTools/SJSpark/DummyBoxSizeChange.ms"
+    include "$scripts/SJTools/SJSpark/SnapShotMaster.ms"
+    include "$scripts/SJTools/SJSpark/Select.ms"
+    include "$scripts/SJTools/SJSpark/ArraySort.ms"
+    include "$scripts/SJTools/SJSpark/Text2EditableMesh.ms"
+    include "$scripts/SJTools/SJSpark/LayerLayer.ms"
+)
 
-	
-)--rol end
-
-
------------------------------------------------------------------------------------------------------------
---ƒIƒuƒWƒFƒNƒgŠÖ˜AA\‘¢ŠÖ˜A
------------------------------------------------------------------------------------------------------------
-rollout sj_spark_objects_rol "Spark!! Objects"-- width:224 height:800
+--ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³é–¢é€£
+rollout sj_spark_animations_rol "Spark!! Animtions"
 (
-	include "$scripts/SJTools/SJScripts/SJ_Spark_ParentButton.ms"	
-	include "$scripts/SJTools/SJScripts/SJ_Spark_HelperVisualChange.ms"	
-	include "$scripts/SJTools/SJScripts/SJ_Spark_HelperGa.ms"
-	include "$scripts/SJTools/SJScripts/SJ_Spark_DummyBoxSizeChange.ms"
-	include "$scripts/SJTools/SJScripts/SJ_Spark_SnapShotMaster.ms"
-	include "$scripts/SJTools/SJScripts/SJ_Spark_Select.ms"
-	include "$scripts/SJTools/SJScripts/SJ_Spark_ArraySort.ms"
-	include "$scripts/SJTools/SJScripts/SJ_Spark_Text2EditableMesh.ms"
-	include "$scripts/SJTools/SJScripts/SJ_Spark_LayerLayer.ms"
-	
-)--rol end
+    include "$scripts/SJTools/SJSpark/CameraConverter.ms"
+    include "$scripts/SJTools/SJSpark/PickTheCopy.ms"
+    include "$scripts/SJTools/SJSpark/BipControll.ms"
+    include "$scripts/SJTools/SJSpark/AnimKeyDelete.ms"
+)
 
-
------------------------------------------------------------------------------------------------------------
---ƒAƒjƒ[ƒVƒ‡ƒ“ŠÖ˜A
------------------------------------------------------------------------------------------------------------
-rollout sj_spark_animations_rol "Spark!! Animtions"-- width:224 height:800
-(
-	include "$scripts/SJTools/SJScripts/SJ_Spark_CameraConverter.ms"
-	include "$scripts/SJTools/SJScripts/SJ_Spark_PickTheCopy.ms"
-	include "$scripts/SJTools/SJScripts/SJ_Spark_BipControll.ms"
-	include "$scripts/SJTools/SJScripts/SJ_Spark_AnimKeyDelete.ms"
-		
-)--rol end
-
-
------------------------------------------------------------------------------------------------------------
---ƒRƒ“ƒgƒ[ƒ‰[ŠÖ˜A
------------------------------------------------------------------------------------------------------------
+--ã‚³ãƒ³ãƒˆãƒ­ãƒ¼ãƒ©ãƒ¼é–¢é€£
 rollout sj_spark_contorollers_rol "Spark!! Controllers"
 (
-	include "$scripts/SJTools/SJScripts/SJ_Spark_SetController.ms"
-	include "$scripts/SJTools/SJScripts/SJ_Spark_ObjectsDistance.ms"
-	include "$scripts/SJTools/SJScripts/SJ_Spark_ObjectsLinker.ms"
-	include "$scripts/SJTools/SJScripts/SJ_Spark_ParamerLinker.ms"
-	include "$scripts/SJTools/SJScripts/SJ_Spark_MakeLookatPoint.ms"
-	--include "$scripts/SJTools/SJScripts/SJ_Spark_AllBeyondArrayCheck.ms"
+    include "$scripts/SJTools/SJSpark/SetController.ms"
+    include "$scripts/SJTools/SJSpark/ObjectsDistance.ms"
+    include "$scripts/SJTools/SJSpark/ObjectsLinker.ms"
+    include "$scripts/SJTools/SJSpark/ParamerLinker.ms"
+    include "$scripts/SJTools/SJSpark/MakeLookatPoint.ms"
+)
 
-)--end
-
------------------------------------------------------------------------------------------------------------
---\‘¢Aƒc[ƒ‹ŠÖ˜A
------------------------------------------------------------------------------------------------------------
+--æ§‹é€ ã€ãƒ„ãƒ¼ãƒ«é–¢é€£
 rollout sj_spark_tools_rol "Spark!! Tools"
 (
-	include "$scripts/SJTools/SJScripts/SJ_Spark_MrSkiner.ms"
-	include "$scripts/SJTools/SJScripts/SJ_Spark_PolyMan.ms"
-	include "$scripts/SJTools/SJScripts/SJ_Spark_Zweihander.ms"
-	include "$scripts/SJTools/SJScripts/SJ_Spark_SoundCnt.ms"	
-	include "$scripts/SJTools/SJScripts/SJ_Spark_ExportBatch.ms"
-	include "$scripts/SJTools/SJScripts/SJ_Spark_ScaleChecker.ms"
-)--end
+    include "$scripts/SJTools/SJSpark/MrSkiner.ms"
+    include "$scripts/SJTools/SJSpark/PolyMan.ms"
+    include "$scripts/SJTools/SJSpark/Zweihander.ms"
+    include "$scripts/SJTools/SJSpark/SoundCnt.ms"
+    include "$scripts/SJTools/SJSpark/ExportBatch.ms"
+    include "$scripts/SJTools/SJSpark/ScaleChecker.ms"
+)
 
------------------------------------------------------------------------------------------------------------
---‚»‚Ì‘¼A“Áê
------------------------------------------------------------------------------------------------------------
+--ãã®ä»–ã€ç‰¹æ®Š
 rollout sj_spark_other_rol "Spark!! Other"
 (
-	include "$scripts/SJTools/SJScripts/SJ_Spark_Others.ms"
-	--include "$scripts/SJTools/SJScripts/SJ_Spark_AllBeyondArrayCheck.ms"
-
-)--end
-
------------------------------------------------------------------------------------------------------------
---‚»‚Ì‘¼
------------------------------------------------------------------------------------------------------------
-
-
-
-rollout sj_spark_rol nameAndVersion width:234 height:980
-(
------------------------------------------------------------------------------------------------------------
--- ƒtƒ@ƒ“ƒNƒVƒ‡ƒ“
------------------------------------------------------------------------------------------------------------
---ƒAƒNƒeƒBƒuX‚Ìİ’è
---activeXcontrol menuTabs "MSComctlLib.TabStrip.2" height:20;
-
---ƒ[ƒ‹ƒAƒEƒgİ’è
---ƒTƒuƒ[ƒ‹ƒAƒEƒg‚ÌƒGƒŠƒA‚ğ2‚Âİ’è‚·‚é
-
---ƒ^ƒuØ‚è‘Ö‚¦ƒ[ƒ‹ƒAƒEƒg
---subrollout sj_sparkTabs pos:[0,0] width:sj_spark_rol.width height:20;
---ƒƒCƒ“‚Ìƒ[ƒ‹ƒAƒEƒg
-subrollout sj_sparkarea pos:[0,60] width:sj_spark_rol.width height:920;
-	button sparkTabsS "S" pos:[0,8] width:46 height:46;
-	button sparkTabsP "P" pos:[47,8] width:46 height:46;
-	button sparkTabsA "A" pos:[94,8] width:46 height:46;
-	button sparkTabsR "R" pos:[141,8] width:46 height:46;
-	button sparkTabsK "K" pos:[188,8] width:46 height:46;
-
-	--ƒ^ƒuØ‚è‘Ö‚¦ƒAƒNƒVƒ‡ƒ“
-	on sparkTabsS pressed do
-		(
-		removeSubRollout sj_sparkarea sj_spark_animations_rol
-		removeSubRollout sj_sparkarea sj_spark_contorollers_rol
-		removeSubRollout sj_sparkarea sj_spark_tools_rol
-		removeSubRollout sj_sparkarea sj_spark_other_rol
-		addSubRollout sj_sparkarea sj_spark_objects_rol
-		)--on end
-	on sparkTabsP pressed do
-		(
-		removeSubRollout sj_sparkarea sj_spark_objects_rol
-		removeSubRollout sj_sparkarea sj_spark_contorollers_rol
-		removeSubRollout sj_sparkarea sj_spark_tools_rol
-		removeSubRollout sj_sparkarea sj_spark_other_rol
-		addSubRollout sj_sparkarea sj_spark_animations_rol
-		)--on end
-	on sparkTabsA pressed do
-		(
-		removeSubRollout sj_sparkarea sj_spark_objects_rol
-		removeSubRollout sj_sparkarea sj_spark_animations_rol
-		removeSubRollout sj_sparkarea sj_spark_tools_rol
-		removeSubRollout sj_sparkarea sj_spark_other_rol
-		addSubRollout sj_sparkarea sj_spark_contorollers_rol
-		)--on end
-	on sparkTabsR pressed do
-		(
-		removeSubRollout sj_sparkarea sj_spark_objects_rol
-		removeSubRollout sj_sparkarea sj_spark_animations_rol
-		removeSubRollout sj_sparkarea sj_spark_contorollers_rol
-		removeSubRollout sj_sparkarea sj_spark_other_rol
-		addSubRollout sj_sparkarea sj_spark_tools_rol
-		)--on end
-	on sparkTabsK pressed do
-		(
-		removeSubRollout sj_sparkarea sj_spark_objects_rol
-		removeSubRollout sj_sparkarea sj_spark_animations_rol
-		removeSubRollout sj_sparkarea sj_spark_contorollers_rol
-		removeSubRollout sj_sparkarea sj_spark_tools_rol
-		addSubRollout sj_sparkarea sj_spark_other_rol
-		)--on end
-
-
---ƒAƒNƒeƒBƒuX‚ÌØ‚è‘Ö‚¦ƒAƒNƒVƒ‡ƒ“
-/*
-on menuTabs Click do
-(
-	case menuTabs.SelectedItem.index of
-	(
-		1:
-		(
-		removeSubRollout sj_sparkarea sj_spark_animations_rol
-		removeSubRollout sj_sparkarea sj_spark_contorollers_rol
-		removeSubRollout sj_sparkarea sj_spark_tools_rol
-		removeSubRollout sj_sparkarea sj_spark_other_rol
-		addSubRollout sj_sparkarea sj_spark_objects_rol
-		)--case 1 end
-		2:
-		(
-		removeSubRollout sj_sparkarea sj_spark_objects_rol
-		removeSubRollout sj_sparkarea sj_spark_contorollers_rol
-		removeSubRollout sj_sparkarea sj_spark_tools_rol
-		removeSubRollout sj_sparkarea sj_spark_other_rol
-		addSubRollout sj_sparkarea sj_spark_animations_rol
-		)--case 2 end
-		3:
-		(
-		removeSubRollout sj_sparkarea sj_spark_objects_rol
-		removeSubRollout sj_sparkarea sj_spark_animations_rol
-		removeSubRollout sj_sparkarea sj_spark_tools_rol
-		removeSubRollout sj_sparkarea sj_spark_other_rol
-		addSubRollout sj_sparkarea sj_spark_contorollers_rol
-		)--case 2 end
-		4:
-		(
-		removeSubRollout sj_sparkarea sj_spark_objects_rol
-		removeSubRollout sj_sparkarea sj_spark_animations_rol
-		removeSubRollout sj_sparkarea sj_spark_contorollers_rol
-		removeSubRollout sj_sparkarea sj_spark_other_rol
-		addSubRollout sj_sparkarea sj_spark_tools_rol
-		)--case 2 end
-		5:
-		(
-		removeSubRollout sj_sparkarea sj_spark_objects_rol
-		removeSubRollout sj_sparkarea sj_spark_animations_rol
-		removeSubRollout sj_sparkarea sj_spark_contorollers_rol
-		removeSubRollout sj_sparkarea sj_spark_tools_rol
-		addSubRollout sj_sparkarea sj_spark_other_rol
-		)--case 2 end
-	)--case end
+    include "$scripts/SJTools/SJSpark/Others.ms"
 )
-*/
 
-on sj_spark_rol open do
+rollout sj_spark_rol nameAndVersion width:200 height:980
 (
+    subrollout sj_sparkarea pos:[0,60] width:sj_spark_rol.width height:920;
+    button sparkTabsS "S" pos:[0,8] width:40 height:46;
+    button sparkTabsP "P" pos:[40,8] width:40 height:46;
+    button sparkTabsA "A" pos:[80,8] width:40 height:46;
+    button sparkTabsR "R" pos:[120,8] width:40 height:46;
+    button sparkTabsK "K" pos:[160,8] width:40 height:46;
 
---Local aaa = #("$Scripts/SJTools/Images//SJ_button_add.gif", "$Scripts/SJTools/Images//SJ_button_add_a.gif", 2, 1, 1, 2, 2);
---print aaa
---showProperties menuTabs.ImageList
---print menuTabs.ImageList.count
---menuTabs[1].Image = aaa
---menuTabs.Image = #("$Scripts/SJTools/Images//SJ_button_pose.gif", "$Scripts/SJTools/Images//SJ_button_pose_a.gif", 2, 1, 1, 2, 2);
-
-	/*ƒAƒNƒeƒBƒuX‚Ìİ’è
-	menuTabs.tabs[1].caption = "S"
-	menuTabs.tabs.add pvCaption:"P"
-	menuTabs.tabs.add pvCaption:"A"
-	menuTabs.tabs.add pvCaption:"R"
-	menuTabs.tabs.add pvCaption:"K"
-	*/
-);
-
-on sj_spark_rol close do try(gc())catch();
-
-);--endMainRollout
-
-
-
------------------------------------------------------------------------------------------------------------
--- End of rollout & Create Dialog / Floater
------------------------------------------------------------------------------------------------------------
-CreateDialog sj_spark_rol pos:[50,50] style:#(#style_border, /*#style_titlebar,*/#style_toolwindow, #style_sysmenu, #style_resizing, #style_minimizebox) menu:sparkMenuBar;
---CreateDialog sj_spark_rol pos:[50,50] menu:sparkMenuBar style:#(#style_border, #style_titlebar, #style_sysmenu, #style_minimizebox) menu:CanvasMenu
-
-
---ƒTƒuƒ[ƒ‹ƒAƒEƒg‚ğ’Ç‰Á
---ƒ^ƒu—p
---addSubRollout sj_spark_rol.sj_sparkTabs sj_spark_tabs_rol;
---ƒIƒuƒWƒFƒNƒg—p
+    --ã‚¿ãƒ–åˆ‡ã‚Šæ›¿ãˆã‚¢ã‚¯ã‚·ãƒ§ãƒ³
+    on sparkTabsS pressed do
+    (
+        removeSubRollout sj_sparkarea sj_spark_animations_rol
+        removeSubRollout sj_sparkarea sj_spark_contorollers_rol
+        removeSubRollout sj_sparkarea sj_spark_tools_rol
+        removeSubRollout sj_sparkarea sj_spark_other_rol
+        addSubRollout sj_sparkarea sj_spark_objects_rol
+    )
+    on sparkTabsP pressed do
+    (
+        removeSubRollout sj_sparkarea sj_spark_objects_rol
+        removeSubRollout sj_sparkarea sj_spark_contorollers_rol
+        removeSubRollout sj_sparkarea sj_spark_tools_rol
+        removeSubRollout sj_sparkarea sj_spark_other_rol
+        addSubRollout sj_sparkarea sj_spark_animations_rol
+    )
+    on sparkTabsA pressed do
+    (
+        removeSubRollout sj_sparkarea sj_spark_objects_rol
+        removeSubRollout sj_sparkarea sj_spark_animations_rol
+        removeSubRollout sj_sparkarea sj_spark_tools_rol
+        removeSubRollout sj_sparkarea sj_spark_other_rol
+        addSubRollout sj_sparkarea sj_spark_contorollers_rol
+    )
+    on sparkTabsR pressed do
+    (
+        removeSubRollout sj_sparkarea sj_spark_objects_rol
+        removeSubRollout sj_sparkarea sj_spark_animations_rol
+        removeSubRollout sj_sparkarea sj_spark_contorollers_rol
+        removeSubRollout sj_sparkarea sj_spark_other_rol
+        addSubRollout sj_sparkarea sj_spark_tools_rol
+    )
+    on sparkTabsK pressed do
+    (
+        removeSubRollout sj_sparkarea sj_spark_objects_rol
+        removeSubRollout sj_sparkarea sj_spark_animations_rol
+        removeSubRollout sj_sparkarea sj_spark_contorollers_rol
+        removeSubRollout sj_sparkarea sj_spark_tools_rol
+        addSubRollout sj_sparkarea sj_spark_other_rol
+    )
+    on sj_spark_rol open do
+    (
+    )
+    on sj_spark_rol close do
+    (
+        try (
+            gc()
+        ) catch (
+        );
+    )
+)
+CreateDialog sj_spark_rol style:#(#style_border, #style_toolwindow, #style_sysmenu, #style_resizing, #style_minimizebox) menu:sparkMenuBar;
 addSubRollout sj_spark_rol.sj_sparkarea sj_spark_objects_rol;
---‚±‚ñ‚È•—‚É‚à’Ç‰Á‰Â”\
---addSubRollout sj_spark_rol.sj_sparkarea sj_spark_tools_rol
-
-
-
---addSubRollout sj_spark_rol.sj_sparkarea sj_spark_animations_rol
---addSubRollout sj_spark_rol.sj_sparkarea sj_spark_contorollers_rol
-
-)--end macroscript
+)

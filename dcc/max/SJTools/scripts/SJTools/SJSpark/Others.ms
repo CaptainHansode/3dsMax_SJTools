@@ -1,240 +1,224 @@
 /*******************************************************
-System J Tools 
+System J Tools
 ********************************************************
 Name:SJ_Spark_Others.ms
 Created By:CaptainHansode
 WEB:www.sakaiden.com
 E-Mail:sakaiden@live.jp
 *******************************************************/
-	group "Corve Hide/UnHide"
-	(
-		button cvHideBt "•\¦Ø‚è‘Ö‚¦" width:160
-	)
+    group "Corve Hide/UnHide"
+    (
+        button cvHideBt "è¡¨ç¤ºåˆ‡ã‚Šæ›¿ãˆ" width:160
+    )
 
-	group "Boost Heap"
-	(
-		button boostHeapBt "ŒÀŠE‚Ü‚Åƒq[ƒv—Ìˆæ‚ğŠm•Û" width:160;
-		button heapSizeUpBt "’l‚Åƒq[ƒv—Ìˆæ‚ğŠm•Û" width:160;
-		spinner heapSizeUpSpn "’PˆÊ‚ÍM‚Å‚·" range:[0.1,999,1] type:#integer width:160 align:#center;
-	)
+    group "Boost Heap"
+    (
+        button boostHeapBt "é™ç•Œã¾ã§ãƒ’ãƒ¼ãƒ—é ˜åŸŸã‚’ç¢ºä¿" width:160;
+        button heapSizeUpBt "å€¤ã§ãƒ’ãƒ¼ãƒ—é ˜åŸŸã‚’ç¢ºä¿" width:160;
+        spinner heapSizeUpSpn "å˜ä½ã¯Mã§ã™" range:[0.1,999,1] type:#integer width:160 align:#center;
+    )
 
-	group "Inode Handle Check"
-	(
-		button ihCheckBt "Inode Handle Call" width:160
-	)
+    group "Inode Handle Check"
+    (
+        button ihCheckBt "Inode Handle Call" width:160
+    )
 
-	group "Show Propaties & Class"
-	(
-		button showPBt "Show Properties " width:160
-		editText showPTxt "ƒvƒƒpƒeƒB–¼" width:160 height:16
-		label showLbl1 "baseObject--ƒx[ƒXƒIƒuƒWƒFƒNƒg" width:160
-		label showLbl2 "modifiers[#Control]--ƒ‚ƒfƒBƒtƒ@ƒCƒA" width:160
-		label showLbl3 "CustomNodes--”CˆÓ" width:160	
-		button showCBt "Show Class" width:160
-		editText showCTxt "ƒNƒ‰ƒX–¼" width:160 height:16
-		label showCLbl1 "path*--ƒƒCƒ‹ƒhƒJ[ƒh‚Á‚Û‚­" width:160
-	)
+    group "Show Propaties & Class"
+    (
+        button showPBt "Show Properties " width:160
+        editText showPTxt "ãƒ—ãƒ­ãƒ‘ãƒ†ã‚£å" width:160 height:16
+        label showLbl1 "baseObject--ãƒ™ãƒ¼ã‚¹ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ" width:160
+        label showLbl2 "modifiers[#Control]--ãƒ¢ãƒ‡ã‚£ãƒ•ã‚¡ã‚¤ã‚¢" width:160
+        label showLbl3 "CustomNodes--ä»»æ„" width:160
+        button showCBt "Show Class" width:160
+        editText showCTxt "ã‚¯ãƒ©ã‚¹å" width:160 height:16
+        label showCLbl1 "path*--ãƒ¯ã‚¤ãƒ«ãƒ‰ã‚«ãƒ¼ãƒ‰ã£ã½ã" width:160
+    )
 
-/*
-	group "nodeTransformMonitor"
-	(
-		pickbutton ntmAddBt "add"
-		editText ntmNameTxt "•Ï”–¼"--pos:[12,80] width:172 height:16 
-		spinner ntmIndex "" range:[1,1000,1] type:#integer --pos:[220,116]  width:80 height:16 
-	)
-*/
-
-
---////////////////////////////////////////////////
---Action
---////////////////////////////////////////////////
---////////////
---ƒJ[ƒu‚ğ•\¦
---///////////
-	on cvHideBt pressed do
-	(
-		if selection.count != 0 then
-		(
-			actionMan.executeAction 0 "276"
-		)
-		else
-		(
-			messageBox ("ƒIƒuƒWƒFƒNƒg‚ğ‘I‘ğ‚µ‚Ä‚©‚çÀs‚µ‚Ä‚­‚¾‚³‚¢") title:"Œx"
-		)--if end
-	)--
+    on cvHideBt pressed do
+    (
+        if selection.count != 0 then
+        (
+            actionMan.executeAction 0 "276"
+        )
+        else
+        (
+            messageBox ("ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’é¸æŠã—ã¦ã‹ã‚‰å®Ÿè¡Œã—ã¦ãã ã•ã„") title:"è­¦å‘Š"
+        )--if end
+    )--
 
 --////////////////////////
---ƒq[ƒv—Ìˆæ‚ğŠm•Û
+--ãƒ’ãƒ¼ãƒ—é ˜åŸŸã‚’ç¢ºä¿
 --////////////////////////
-	on boostHeapBt pressed do
-	(
+    on boostHeapBt pressed do
+    (
 
-	if queryBox ("
+    if queryBox ("
 ****************************************************************
-Œx
+è­¦å‘Š
 
-ƒq[ƒv—Ìˆæ‚ğÛŒÀ‚È‚­ŒÀ“x‚Ü‚Åˆø‚«ã‚°‚Ü‚·‚ª
-Max‚Ì“®ì‚ª•sˆÀ’è‚É‚È‚è‚Ü‚·
-—\Šú‚µ‚È‚¢ƒVƒƒƒbƒgƒ_ƒEƒ“‚ª‹N‚«‚é‰Â”\«‚ª‚ ‚è‚Ü‚·
+ãƒ’ãƒ¼ãƒ—é ˜åŸŸã‚’éš›é™ãªãé™åº¦ã¾ã§å¼•ãä¸Šã’ã¾ã™ãŒ
+Maxã®å‹•ä½œãŒä¸å®‰å®šã«ãªã‚Šã¾ã™
+äºˆæœŸã—ãªã„ã‚·ãƒ£ãƒƒãƒˆãƒ€ã‚¦ãƒ³ãŒèµ·ãã‚‹å¯èƒ½æ€§ãŒã‚ã‚Šã¾ã™
 
-‘‚â‚µ‚½ƒq[ƒv—Ìˆæ‚ÍŒ¸‚ç‚·‚±‚Æ‚ªo—ˆ‚Ü‚¹‚ñ
-ƒq[ƒv—Ìˆæ‚ğƒŠƒZƒbƒg‚·‚éê‡‚ÍMax‚ğÄ‹N“®‚µ‚Ä‚­‚¾‚³‚¢
+å¢—ã‚„ã—ãŸãƒ’ãƒ¼ãƒ—é ˜åŸŸã¯æ¸›ã‚‰ã™ã“ã¨ãŒå‡ºæ¥ã¾ã›ã‚“
+ãƒ’ãƒ¼ãƒ—é ˜åŸŸã‚’ãƒªã‚»ãƒƒãƒˆã™ã‚‹å ´åˆã¯Maxã‚’å†èµ·å‹•ã—ã¦ãã ã•ã„
 
-Às‚µ‚Ü‚·‚©?
+å®Ÿè¡Œã—ã¾ã™ã‹?
 
 ****************************************************************
 "
 ) == true do (
-		Local bHError = false;
-		while bHError == false do
-		(	
-			--10M‚Ã‚Âƒq[ƒvƒTƒCƒY‚ğã‚°‚é
-			try(heapSize += 10000000)catch(bHError = true)
-		);--while end
-		
-		messageBox ("ˆÈ‰º‚ÌƒTƒCƒY‚Ü‚Åƒq[ƒv—Ìˆæ‚ğŠm•Û‚µ‚Ü‚µ‚½\n" + (heapSize as String)) title:"ƒƒbƒZ[ƒW"
-		
+        Local bHError = false;
+        while bHError == false do
+        (
+            --10Mã¥ã¤ãƒ’ãƒ¼ãƒ—ã‚µã‚¤ã‚ºã‚’ä¸Šã’ã‚‹
+            try(heapSize += 10000000)catch(bHError = true)
+        );--while end
+
+        messageBox ("ä»¥ä¸‹ã®ã‚µã‚¤ã‚ºã¾ã§ãƒ’ãƒ¼ãƒ—é ˜åŸŸã‚’ç¢ºä¿ã—ã¾ã—ãŸ\n" + (heapSize as String)) title:"ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸"
+
 );--if end
-		
-	);--end
-	
+
+    );--end
+
 --////////////////////////
---ƒq[ƒv—Ìˆæ‚ğŠg‘å
+--ãƒ’ãƒ¼ãƒ—é ˜åŸŸã‚’æ‹¡å¤§
 --////////////////////////
-	on heapSizeUpBt pressed do
-	(
-		try(heapSize += (heapSizeUpSpn.value * 1000000);
-		messageBox ("ˆÈ‰º‚ÌƒTƒCƒY‚Ü‚Åƒq[ƒv—Ìˆæ‚ğŠm•Û‚µ‚Ü‚µ‚½\n" + (heapSize as String)) title:"ƒƒbƒZ[ƒW"
-		)catch(messageBox"Šg’£‚É¸”s‚µ‚Ü‚µ‚½Bƒq[ƒvƒTƒCƒY‚ª‘‚â‚¹‚Ü‚¹‚ñ" title:"ƒGƒ‰[");
-	);--end
-	
+    on heapSizeUpBt pressed do
+    (
+        try(heapSize += (heapSizeUpSpn.value * 1000000);
+        messageBox ("ä»¥ä¸‹ã®ã‚µã‚¤ã‚ºã¾ã§ãƒ’ãƒ¼ãƒ—é ˜åŸŸã‚’ç¢ºä¿ã—ã¾ã—ãŸ\n" + (heapSize as String)) title:"ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸"
+        )catch(messageBox"æ‹¡å¼µã«å¤±æ•—ã—ã¾ã—ãŸã€‚ãƒ’ãƒ¼ãƒ—ã‚µã‚¤ã‚ºãŒå¢—ã‚„ã›ã¾ã›ã‚“" title:"ã‚¨ãƒ©ãƒ¼");
+    );--end
+
 
 --////////////////////////
 --InodeHandleCheck
 --////////////////////////
-	on ihCheckBt pressed do
-	(
-		Local ihNom = 0
-		if selection.count != 0 do
-		(
-			for i = 1 to selection.count do
-			(	
-			ihNom = selection[i].inode.handle
-			messageBox ((selection[i].name as String) + " is\n" + (ihNom as String))
-			)
-		--message "ƒRƒ“ƒXƒgƒŒƒCƒ“ƒg‘ÎÛ‚ÌƒIƒuƒWƒFƒNƒg‚ğ‘I‘ğ‚µ‚Ä‚­‚¾‚³‚¢B"
-		)
-	)
-	
+    on ihCheckBt pressed do
+    (
+        Local ihNom = 0
+        if selection.count != 0 do
+        (
+            for i = 1 to selection.count do
+            (
+            ihNom = selection[i].inode.handle
+            messageBox ((selection[i].name as String) + " is\n" + (ihNom as String))
+            )
+        --message "ã‚³ãƒ³ã‚¹ãƒˆãƒ¬ã‚¤ãƒ³ãƒˆå¯¾è±¡ã®ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’é¸æŠã—ã¦ãã ã•ã„ã€‚"
+        )
+    )
+
 --////////////////////////
---Show 
+--Show
 --////////////////////////
-	on showPBt pressed do
-	(
-		if showPTxt.text != "" then(
-			for i in selection do
-			(
-				temp = "$"+ i.name + "." + showPTxt.text;
-				try(
-				temp = execute(temp);
-				ShowProperties temp;
-				)catch();
-			)--for end
-		)
-		else(
-			for i in selection do ShowProperties i;
-		)--if end
-	)--end
-	
-	on showCBt pressed do
-	(
-		showClass showCTxt.text
-	)--end
+    on showPBt pressed do
+    (
+        if showPTxt.text != "" then(
+            for i in selection do
+            (
+                temp = "$"+ i.name + "." + showPTxt.text;
+                try(
+                temp = execute(temp);
+                ShowProperties temp;
+                )catch();
+            )--for end
+        )
+        else(
+            for i in selection do ShowProperties i;
+        )--if end
+    )--end
 
-	
+    on showCBt pressed do
+    (
+        showClass showCTxt.text
+    )--end
+
+
 --////////////////////////
---‘I‘ğƒWƒIƒƒgƒŠî•ñ
+--é¸æŠã‚¸ã‚ªãƒ¡ãƒˆãƒªæƒ…å ±
 --////////////////////////
-	on srchnumBt pressed do
-	(
-		local float gnum = 0
-		local float v = 0
-		local float f = 0
-		local float tmesh = 0
-		--local float s = selection.count
+    on srchnumBt pressed do
+    (
+        local float gnum = 0
+        local float v = 0
+        local float f = 0
+        local float tmesh = 0
+        --local float s = selection.count
 
-			for i = 1 to selection.count do
-			(
-				try(	--ƒIƒuƒWƒFƒNƒg‚ªƒƒbƒVƒ…‚¾‚Á‚½ê‡‚¾‚¯ˆÈ‰º‚ğÀs
-				tmesh = snapshotAsMesh selection[i] --TriMesh ƒXƒiƒbƒvƒVƒ‡ƒbƒg‚ğì¬‚µ‚Ü‚·ATriMeshƒXƒiƒbƒvƒVƒ‡ƒbƒg‰»‚·‚é‚±‚Æ‚Å³Šm‚Èƒ|ƒŠƒSƒ“”‚È‚Ç‚ğ“¾‚ç‚ê‚Ü‚·
-				v += tmesh.numverts
-				f += tmesh.numfaces
-				gnum += 1
-				--v += tmesh.verts.count@--ƒRƒŒ‚Å‚à‚¢‚¢‚æ
-				--f += tmesh.faces.count
-				)catch()--try end
-			)--for end
-			infoSelect.caption = gnum as string
-			infoVers.caption = v as string
-			infoFaces.caption =  f as string
-	)
-	
+            for i = 1 to selection.count do
+            (
+                try(	--ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆãŒãƒ¡ãƒƒã‚·ãƒ¥ã ã£ãŸå ´åˆã ã‘ä»¥ä¸‹ã‚’å®Ÿè¡Œ
+                tmesh = snapshotAsMesh selection[i] --TriMesh ã‚¹ãƒŠãƒƒãƒ—ã‚·ãƒ§ãƒƒãƒˆã‚’ä½œæˆã—ã¾ã™ã€TriMeshã‚¹ãƒŠãƒƒãƒ—ã‚·ãƒ§ãƒƒãƒˆåŒ–ã™ã‚‹ã“ã¨ã§æ­£ç¢ºãªãƒãƒªã‚´ãƒ³æ•°ãªã©ã‚’å¾—ã‚‰ã‚Œã¾ã™
+                v += tmesh.numverts
+                f += tmesh.numfaces
+                gnum += 1
+                --v += tmesh.verts.countã€€--ã‚³ãƒ¬ã§ã‚‚ã„ã„ã‚ˆ
+                --f += tmesh.faces.count
+                )catch()--try end
+            )--for end
+            infoSelect.caption = gnum as string
+            infoVers.caption = v as string
+            infoFaces.caption =  f as string
+    )
+
 --////////////////////////
---ƒGƒLƒXƒ|[ƒg
+--ã‚¨ã‚­ã‚¹ãƒãƒ¼ãƒˆ
 --////////////////////////
-	on makeFileBt pressed do
-	(
-		local float v = 0
-		local float f = 0
-		local float smesh = 0
-		local float tmesh = 0
-		local float num_verts = 0
-		local float num_face = 0
-		local float Selectnum = 0
-		local out_name = getSaveFileName types:"Object Info(*.txt)|*.txt"	--MaxƒfƒtƒHƒ‹ƒg‚ÌƒfƒBƒŒƒNƒgƒŠˆÊ’u‚Éİ’è‚·‚é•Ï”
+    on makeFileBt pressed do
+    (
+        local float v = 0
+        local float f = 0
+        local float smesh = 0
+        local float tmesh = 0
+        local float num_verts = 0
+        local float num_face = 0
+        local float Selectnum = 0
+        local out_name = getSaveFileName types:"Object Info(*.txt)|*.txt"	--Maxãƒ‡ãƒ•ã‚©ãƒ«ãƒˆã®ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªä½ç½®ã«è¨­å®šã™ã‚‹å¤‰æ•°
 
-		try(	
+        try(
 
-		out_file = createfile out_name	--out_name‚Åƒtƒ@ƒCƒ‹–¼‚ğw’è‚µ‚½ƒtƒ@ƒCƒ‹‚ğì¬‚·‚é•Ï”‚ğéŒ¾
+        out_file = createfile out_name	--out_nameã§ãƒ•ã‚¡ã‚¤ãƒ«åã‚’æŒ‡å®šã—ãŸãƒ•ã‚¡ã‚¤ãƒ«ã‚’ä½œæˆã™ã‚‹å¤‰æ•°ã‚’å®£è¨€
 
-			--‘I‘ğƒIƒuƒWƒFƒNƒg‚Ìî•ñ‚ğƒtƒ@ƒCƒ‹‚É‘‚«‚Ş
-			for i = 1 to selection.count do
-			(
-			
-			try(	--ƒIƒuƒWƒFƒNƒg‚ªƒƒbƒVƒ…‚¾‚Á‚½ê‡‚¾‚¯ˆÈ‰º‚ğÀs
-			
-				smesh = snapshotAsMesh selection[i]
-				Selectnum += 1
-				v += smesh.numverts
-				f += smesh.numfaces
-			
-			)catch()
-			
-			)
-			format "Total,%\nTotalVertex,%\nTotalFace,%" Selectnum v f to:out_file
+            --é¸æŠã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã®æƒ…å ±ã‚’ãƒ•ã‚¡ã‚¤ãƒ«ã«æ›¸ãè¾¼ã‚€
+            for i = 1 to selection.count do
+            (
 
-			format "\n" to:out_file	--“r’†‚É‰üs‚ğ‹²‚Ş
-			format "\n" to:out_file	--“r’†‚É‰üs‚ğ‹²‚Ş
+            try(	--ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆãŒãƒ¡ãƒƒã‚·ãƒ¥ã ã£ãŸå ´åˆã ã‘ä»¥ä¸‹ã‚’å®Ÿè¡Œ
 
-			--‚±‚±‚©‚çŠeƒWƒIƒƒgƒŠ
-			for i = 1 to selection.count do
-			(
-			
-			try(	--ƒIƒuƒWƒFƒNƒg‚ªƒƒbƒVƒ…‚¾‚Á‚½ê‡‚¾‚¯ˆÈ‰º‚ğÀs
-			
-				tmesh = snapshotAsMesh selection[i]
-				Name = selection[i].name	--•Ï”‚É‘ã“ü
-				num_verts = tmesh.numverts	--•Ï”‚É‘ã“ü
-				num_faces = tmesh.numfaces	--•Ï”‚É‘ã
-				format "Name,%\nVertex,%\nFace,%" Name num_verts num_faces to:out_file
-				format "\n" to:out_file	--“r’†‚É‰üs‚ğ‹²‚Ş
-				--progbar.value = ((100.00/selection.count)*i)
-			
-			)catch()
-			
-			)
-			close out_file
-			--progbar.value = 0
-		)catch()
-		--edit out_name	--•Û‘¶Œã‚É“à—e‚ğŠm”F‚µ‚½‚¢ê‡‚ÍƒRƒƒ“ƒgƒAƒEƒg‚ğŠO‚·
-	)
+                smesh = snapshotAsMesh selection[i]
+                Selectnum += 1
+                v += smesh.numverts
+                f += smesh.numfaces
+
+            )catch()
+
+            )
+            format "Total,%\nTotalVertex,%\nTotalFace,%" Selectnum v f to:out_file
+
+            format "\n" to:out_file	--é€”ä¸­ã«æ”¹è¡Œã‚’æŒŸã‚€
+            format "\n" to:out_file	--é€”ä¸­ã«æ”¹è¡Œã‚’æŒŸã‚€
+
+            --ã“ã“ã‹ã‚‰å„ã‚¸ã‚ªãƒ¡ãƒˆãƒª
+            for i = 1 to selection.count do
+            (
+
+            try(	--ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆãŒãƒ¡ãƒƒã‚·ãƒ¥ã ã£ãŸå ´åˆã ã‘ä»¥ä¸‹ã‚’å®Ÿè¡Œ
+
+                tmesh = snapshotAsMesh selection[i]
+                Name = selection[i].name	--å¤‰æ•°ã«ä»£å…¥
+                num_verts = tmesh.numverts	--å¤‰æ•°ã«ä»£å…¥
+                num_faces = tmesh.numfaces	--å¤‰æ•°ã«ä»£
+                format "Name,%\nVertex,%\nFace,%" Name num_verts num_faces to:out_file
+                format "\n" to:out_file	--é€”ä¸­ã«æ”¹è¡Œã‚’æŒŸã‚€
+                --progbar.value = ((100.00/selection.count)*i)
+
+            )catch()
+
+            )
+            close out_file
+            --progbar.value = 0
+        )catch()
+        --edit out_name	--ä¿å­˜å¾Œã«å†…å®¹ã‚’ç¢ºèªã—ãŸã„å ´åˆã¯ã‚³ãƒ¡ãƒ³ãƒˆã‚¢ã‚¦ãƒˆã‚’å¤–ã™
+    )

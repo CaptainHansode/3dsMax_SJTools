@@ -1,78 +1,69 @@
-/*******************************************************
-System J Tools 
-********************************************************
-Name:SJ_Spark_PolyMan.ms
-Created By:CaptainHansode
-WEB:www.sakaiden.com
-E-Mail:sakaiden@live.jp
-*******************************************************/
-	group "ŠÈˆÕƒ|ƒŠƒSƒ“ŠÇ—"
-	(
-		button countPAndVBt "ƒ|ƒŠƒSƒ“’¸“_ƒJƒEƒ“ƒg" width:160 hight:20
-		button fiveGonSelectBt "5ŠpŒ`ˆÈã‚ğ‘I‘ğ" width:160 hight:20
-/*
-		button nearTagClearBt "ƒNƒŠƒA" width:160 hight:20
-		button doppelLinkerBt "ƒhƒbƒyƒ‹ƒŠƒ“ƒJ[" width:160 hight:20
-		button nearSearchTagBt "ˆê”Ô‹ß‚­‚ÌƒIƒuƒWƒFƒNƒg‚ÉƒŠƒ“ƒN" width:160 hight:20
-		button nearSearchTagCPBt "‹ß‚ÉˆÊ’uƒRƒ“ƒXƒgƒŒƒCƒ“ƒg" width:160 hight:20
-		checkbox posOffsetOLChk "ƒIƒtƒZƒbƒg" align:#left
-		button nearSearchTagCRBt "‹ß‚É‰ñ“]ƒRƒ“ƒXƒgƒŒƒCƒ“ƒg" width:160 hight:20
-		checkbox rotOffsetOLChk "ƒIƒtƒZƒbƒg" align:#left
-*/
-	)
+/**
+ * -----------------------------------------------------------------------------
+ *
+ * SJ Tools
+ *
+ * -----------------------------------------------------------------------------
+ * @license MIT
+ * @author CaptainHansode åŠè¢–èˆ¹é•·
+ * @web http://www.sakaiden.com/
+ * @email sakaiden@live.jp
+ * @github https://github.com/CaptainHansode/SJTools
+ *
+ */
+group "ç°¡æ˜“ãƒãƒªã‚´ãƒ³ç®¡ç†"
+(
+    button countPAndVBt "ãƒãƒªã‚´ãƒ³é ‚ç‚¹ã‚«ã‚¦ãƒ³ãƒˆ" width:160 hight:20
+    button fiveGonSelectBt "5è§’å½¢ä»¥ä¸Šã‚’é¸æŠ" width:160 hight:20
+)
+--ãƒãƒªã‚´ãƒ³ã‚«ã‚¦ãƒ³ãƒˆ
+on countPAndVBt pressed do
+(
+    Local myMesh = undefined, totalFaces = 0, totalVerts = 0;
+    for i in selection do
+    (
+        myMesh = snapshotAsMesh i;
+        messageBox(i.name+"\n" + (myMesh.faces.count as String) + "\n" + (myMesh.verts.count as String)) title:"Count stats";
+        totalFaces += myMesh.faces.count;
+        totalVerts +=  myMesh.verts.count;
+        delete myMesh;
+    )
+    messageBox("Total\n" + (totalFaces as String) + "\n" + (totalVerts as String)) title:"Count stats";
+)
 --////////////////////////////////////////////////
---ƒ|ƒŠƒSƒ“ƒJƒEƒ“ƒg
---////////////////////////////////////////////////	
-	on countPAndVBt pressed do
-	(
-		Local myMesh = undefined, totalFaces = 0, totalVerts = 0;
-		for i in selection do
-		(
-			myMesh = snapshotAsMesh i;
-			messageBox(i.name+"\n" + (myMesh.faces.count as String) + "\n" + (myMesh.verts.count as String)) title:"Count stats";
-			totalFaces += myMesh.faces.count;
-			totalVerts +=  myMesh.verts.count;
-			delete myMesh;
-		);--for end
-			messageBox("Total\n" + (totalFaces as String) + "\n" + (totalVerts as String)) title:"Count stats";
+--ç¢ºä¿
+--////////////////////////////////////////////////
+on fiveGonSelectBt pressed do
+(
+    local selectBitArray = #{};
+    for i in selection do
+    (
+        --Edit_Polyã ã£ãŸå ´åˆã«
+        if classOf i.baseobject != Editable_Poly then
+        (
+            if (queryBox ("ç·¨é›†å¯èƒ½ãƒãƒªã‚´ãƒ³ã§ã¯ã‚ã‚Šã¾ã›ã‚“\nã™ãã«ç·¨é›†å¯èƒ½ãƒãƒªã‚´ãƒ³ã«å¤‰æ›ã—ã¾ã™ã‹ï¼Ÿ")title:"ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸") then
+            (
+                convertto i editable_poly;
+            ) else ()
+        ) else (
+            for j = 1 to i.faces.count do
+            (
+                if (polyOp.getFaceDeg i j) >= 5 then append selectBitArray j;
+            )
 
-	);--end
---////////////////////////////////////////////////
---Šm•Û
---////////////////////////////////////////////////
-	on fiveGonSelectBt pressed do
-	(
-	Local selectBitArray = #{};
-		for i in selection do
-		(
-			--Edit_Poly‚¾‚Á‚½ê‡‚É
-			if classOf i.baseobject != Editable_Poly then
-			(
-				 if (queryBox ("•ÒW‰Â”\ƒ|ƒŠƒSƒ“‚Å‚Í‚ ‚è‚Ü‚¹‚ñ\n‚·‚®‚É•ÒW‰Â”\ƒ|ƒŠƒSƒ“‚É•ÏŠ·‚µ‚Ü‚·‚©H")title:"ƒƒbƒZ[ƒW") then
-				 (
-				 	convertto i editable_poly;
-				 )else();--if end
-			)else
-			(
-				for j = 1 to i.faces.count do
-				(
-					if (polyOp.getFaceDeg i j) >= 5 then append selectBitArray j;
-				);--for end
-				
-			--ÅŒã‚É‘I‘ğ
-			--print selectBitArray
-			if (selectBitArray.numberSet != 0) then
-			(
-			try(
-				i.EditablePoly.SetSelection #Face selectBitArray;
-				--messageBox(i.name + "‚É5ŠpŒ`ˆÈã‚Ìƒ|ƒŠƒSƒ“‚Í\n" + (i.selectedFaces.count as String) + "  ƒ|ƒŠƒSƒ“‚ ‚è‚Ü‚µ‚½")title:"ƒƒbƒZ[ƒW";
-				messageBox(i.name + "‚É5ŠpŒ`ˆÈã‚Ìƒ|ƒŠƒSƒ“‚Í\n" + (selectBitArray.numberSet as String) + "  ƒ|ƒŠƒSƒ“‚ ‚è‚Ü‚µ‚½")title:"ƒƒbƒZ[ƒW";
-			)catch(messageBox(i.name + "‚Ìƒ|ƒŠƒSƒ“‘I‘ğ‚É¸”s‚µ‚Ü‚µ‚½")title:"ƒƒbƒZ[ƒW");--try end
-			)else(messageBox("5ŠpŒ`ˆÈã‚Ìƒ|ƒŠƒSƒ“‚Í‚ ‚è‚Ü‚¹‚ñ")title:"ƒƒbƒZ[ƒW");--if end
-			
-			);--if end
-		
-			selectBitArray = #{};
-			
-		);--for end
-	);--end
+            --æœ€å¾Œã«é¸æŠ
+            --print selectBitArray
+            if (selectBitArray.numberSet != 0) then
+            (
+                try(
+                    i.EditablePoly.SetSelection #Face selectBitArray;
+                    --messageBox(i.name + "ã«5è§’å½¢ä»¥ä¸Šã®ãƒãƒªã‚´ãƒ³ã¯\n" + (i.selectedFaces.count as String) + "  ãƒãƒªã‚´ãƒ³ã‚ã‚Šã¾ã—ãŸ")title:"ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸";
+                    messageBox(i.name + "ã«5è§’å½¢ä»¥ä¸Šã®ãƒãƒªã‚´ãƒ³ã¯\n" + (selectBitArray.numberSet as String) + "  ãƒãƒªã‚´ãƒ³ã‚ã‚Šã¾ã—ãŸ")title:"ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸";
+                )catch(messageBox(i.name + "ã®ãƒãƒªã‚´ãƒ³é¸æŠã«å¤±æ•—ã—ã¾ã—ãŸ")title:"ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸");
+            ) else (
+                messageBox("5è§’å½¢ä»¥ä¸Šã®ãƒãƒªã‚´ãƒ³ã¯ã‚ã‚Šã¾ã›ã‚“")title:"ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸"
+            )
+        )
+        selectBitArray = #{};
+    )
+)

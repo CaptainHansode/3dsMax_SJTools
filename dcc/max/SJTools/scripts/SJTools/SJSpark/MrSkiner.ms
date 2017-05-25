@@ -1,63 +1,68 @@
-/*******************************************************
-System J Tools 
-********************************************************
-Name:SJ_Spark_MeSkiner
-Created By:CaptainHansode
-WEB:www.sakaiden.com
-E-Mail:sakaiden@live.jp
-*******************************************************/
-	group "ŠÈˆÕƒXƒLƒ“ŠÇ—"
-	(
-		button mrSkinerBt "ˆÈ‰º‚Ì’l‚Ì’¸“_‚ğ‘I‘ğ" width:160 hight:20
-		spinner mrSkinerCheckWeight "" range:[0,1,1] type:#float scale:0.001 width:160 align:#center
-	)
+/**
+ * -----------------------------------------------------------------------------
+ *
+ * SJ Tools
+ *
+ * -----------------------------------------------------------------------------
+ * @license MIT
+ * @author CaptainHansode åŠè¢–èˆ¹é•·
+ * @web http://www.sakaiden.com/
+ * @email sakaiden@live.jp
+ * @github https://github.com/CaptainHansode/SJTools
+ *
+ */
+group "ç°¡æ˜“ã‚¹ã‚­ãƒ³ç®¡ç†"
+(
+    button mrSkinerBt "ä»¥ä¸‹ã®å€¤ã®é ‚ç‚¹ã‚’é¸æŠ" width:160 hight:20
+    spinner mrSkinerCheckWeight "" range:[0,1,1] type:#float scale:0.001 width:160 align:#center
+)
 --////////////////////////////////////////////////
---Šm•Û
+--ç¢ºä¿
 --////////////////////////////////////////////////
-	on mrSkinerBt pressed do
-	(
-	--C³ƒpƒlƒ‹‚É‚µ‚È‚¢‚ÆƒGƒ‰[‚ªo‚é
-	max modify mode	
-	Local selectVertsArray = #{}, checkResult = false, myObj = selection[1], vertsCount = 0;
-	Local weightArray = #();
-	append weightArray mrSkinerCheckWeight.value;
-	
-	--ƒIƒuƒWƒFƒNƒg‚Í‘I‘ğ‚µ‚Ä‚¢‚é‚©H
-	if sj_functions.sj_SelectCheck_Fn() do
-	(
-	
-	--ƒXƒLƒ“‚à‚Àƒtƒ@ƒCƒA‚Í‚ ‚é‚©
-	if (myObj.modifiers["Skin"] != undefined) then
-	(
-		vertsCount = selection[1].verts.count;
-		if (skinOps.GetNumberBones myObj.skin) != 0 then
-		(
-			--1’¸“_‚²‚Æ‚É’²‚×‚é
-			for i = 1 to vertsCount do
-			(
-				checkResult = false;
-				--’¸“_‚ÌƒEƒFƒCƒg‚Ì‰e‹¿”•ª
-				for k = 1 to (skinops.GetVertexWeightCount myObj.skin i) do
-				(
-					--w’è‚ÌƒEƒFƒCƒg‚ª‚ ‚ê‚ÎŒ‹‰Ê‚ğtrue‚É
-					if (findItem weightArray (skinops.getVertexWeight myObj.skin i k) == 0) do checkResult = true;
-				);--for end
-				--ƒEƒFƒCƒg‚ª‹ó‚Ì’¸“_‚ğ‰ñû
-				if not checkResult then append selectVertsArray i;
-				--print selectVertsArray;
-			);--for end
-			
-			--‘I‘ğ
-			skinOps.SelectVertices myObj.skin selectVertsArray;
-			if (selectVertsArray.numberSet != 0) then messageBox("ˆÈ‰º‚Ì”‚¾‚¯’¸“_‚ğ‘I‘ğ‚µ‚Ü‚µ‚½\n" + (selectVertsArray.numberSet as String) + "  Œ©‚Â‚©‚è‚Ü‚µ‚½") title:"ƒƒbƒZ[ƒW";
-			
-		)else(
-			messageBox("ƒ{[ƒ“‚ª‚ ‚è‚Ü‚¹‚ñ")title:"ƒƒbƒZ[ƒW";
-		);--if end
-	)else(
-		messageBox("ƒXƒLƒ“ƒ‚ƒaƒtƒ@ƒCƒA‚ª‚ ‚è‚Ü‚¹‚ñ")title:"ƒƒbƒZ[ƒW";
-	);--if end
-	
-	);--if endƒIƒuƒWƒFƒNƒg‘I‘ğƒ`ƒFƒbƒN
+on mrSkinerBt pressed do
+(
+--ä¿®æ­£ãƒ‘ãƒãƒ«ã«ã—ãªã„ã¨ã‚¨ãƒ©ãƒ¼ãŒå‡ºã‚‹
+max modify mode
+Local selectVertsArray = #{}, checkResult = false, myObj = selection[1], vertsCount = 0;
+Local weightArray = #();
+append weightArray mrSkinerCheckWeight.value;
 
-	);--end
+--ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã¯é¸æŠã—ã¦ã„ã‚‹ã‹ï¼Ÿ
+if sj_functions.sj_SelectCheck_Fn() do
+(
+
+--ã‚¹ã‚­ãƒ³ã‚‚ã¢ãƒ•ã‚¡ã‚¤ã‚¢ã¯ã‚ã‚‹ã‹
+if (myObj.modifiers["Skin"] != undefined) then
+(
+    vertsCount = selection[1].verts.count;
+    if (skinOps.GetNumberBones myObj.skin) != 0 then
+    (
+        --1é ‚ç‚¹ã”ã¨ã«èª¿ã¹ã‚‹
+        for i = 1 to vertsCount do
+        (
+            checkResult = false;
+            --é ‚ç‚¹ã®ã‚¦ã‚§ã‚¤ãƒˆã®å½±éŸ¿æ•°åˆ†
+            for k = 1 to (skinops.GetVertexWeightCount myObj.skin i) do
+            (
+                --æŒ‡å®šã®ã‚¦ã‚§ã‚¤ãƒˆãŒã‚ã‚Œã°çµæœã‚’trueã«
+                if (findItem weightArray (skinops.getVertexWeight myObj.skin i k) == 0) do checkResult = true;
+            );--for end
+            --ã‚¦ã‚§ã‚¤ãƒˆãŒç©ºã®é ‚ç‚¹ã‚’å›å
+            if not checkResult then append selectVertsArray i;
+            --print selectVertsArray;
+        );--for end
+
+        --é¸æŠ
+        skinOps.SelectVertices myObj.skin selectVertsArray;
+        if (selectVertsArray.numberSet != 0) then messageBox("ä»¥ä¸‹ã®æ•°ã ã‘é ‚ç‚¹ã‚’é¸æŠã—ã¾ã—ãŸ\n" + (selectVertsArray.numberSet as String) + "  è¦‹ã¤ã‹ã‚Šã¾ã—ãŸ") title:"ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸";
+
+    )else(
+        messageBox("ãƒœãƒ¼ãƒ³ãŒã‚ã‚Šã¾ã›ã‚“")title:"ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸";
+    );--if end
+)else(
+    messageBox("ã‚¹ã‚­ãƒ³ãƒ¢ãƒ‚ãƒ•ã‚¡ã‚¤ã‚¢ãŒã‚ã‚Šã¾ã›ã‚“")title:"ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸";
+);--if end
+
+);--if endã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆé¸æŠãƒã‚§ãƒƒã‚¯
+
+);--end

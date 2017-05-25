@@ -1,135 +1,136 @@
-/*******************************************************
-System J Tools 
-********************************************************
-Name:SJ_Spark_BipControll.ms
-Created By:CaptainHansode
-WEB:www.sakaiden.com
-E-Mail:sakaiden@live.jp
-*******************************************************/
-	group "Bip Controll"
-	(
-		button slidingToFreeBt "Bip Slide to Free" width:160
-		button freeToSlidingBt "Bip Free to Slide" width:160
-	)
+/**
+ * -----------------------------------------------------------------------------
+ *
+ * SJ Tools
+ *
+ * -----------------------------------------------------------------------------
+ * @license MIT
+ * @author CaptainHansode åŠè¢–èˆ¹é•·
+ * @web http://www.sakaiden.com/
+ * @email sakaiden@live.jp
+ * @github https://github.com/CaptainHansode/SJTools
+ *
+ */
+group "Bip Controll"
+(
+    button slidingToFreeBt "Bip Slide to Free" width:160
+    button freeToSlidingBt "Bip Free to Slide" width:160
+)
 
 --////////////////////////////////////////////////
 --Action
 --////////////////////////////////////////////////
-	on slidingToFreeBt pressed do
-	(
-		if (queryBox("è‘«‘S‚Ä‚ÌƒL[‚ğƒtƒŠ[ƒL[‚É‚µ‚Ü‚·\nÀs‚µ‚Ü‚·‚©?\n ")title:"Šm”F") do
-		(
-		Local tempK = #()
-		suspendEditing()--ƒTƒXƒyƒ“ƒhƒ‚[ƒh
-		if maxOps.getSetKeyMode() == true do max set key mode --ƒZƒbƒgƒL[ƒ‚[ƒh‚¾‚Á‚½ê‡‚ÉƒZƒbƒgƒL[ƒ‚[ƒh‚ğoff
-		--set animate off
-		
-		--with redraw off
-		--(--Ä•`‰æ‹Ö~
-		
-		try(
-		for i=1 to 2 do
-		(
-			tempObj = biped.getNode $ i
-			tempBip = tempObj.transform.controller
-			
-			if tempBip.keys.count != 0 then
-			(
-			for u=1 to tempBip.keys.count do
-			(
-			append tempK tempBip.keys[u].time
-			)--for end
-			
-			for k=1 to tempK.count do
-			(
-			sliderTime = tempK[k]
-			biped.setFreeKey tempObj
-			)--for end
-			tempK = #()
-			)--if end
-		)--for end
-		for i=5 to 6 do
-		(
-			tempObj = biped.getNode $ i
-			tempBip = tempObj.transform.controller
-			
-			if tempBip.keys.count != 0 then
-			(
-			for u=1 to tempBip.keys.count do
-			(
-			append tempK tempBip.keys[u].time
-			)--for end
-			
-			for k=1 to tempK.count do
-			(
-			sliderTime = tempK[k]
-			biped.setFreeKey tempObj
-			)--for end
-			tempK = #()
-			)--if end
-		)--for end
-		)catch(messageBox("¸”s‚µ‚Ü‚µ‚½")title:"ƒƒbƒZ[ƒW");
-		--)--with redraw end	
-		resumeEditing()--Ä‚ÑƒAƒNƒeƒBƒu‚É
-		);--if end
-	)
+on slidingToFreeBt pressed do
+(
+    if (queryBox("æ‰‹è¶³å…¨ã¦ã®ã‚­ãƒ¼ã‚’ãƒ•ãƒªãƒ¼ã‚­ãƒ¼ã«ã—ã¾ã™\nå®Ÿè¡Œã—ã¾ã™ã‹?\n ")title:"ç¢ºèª") do
+    (
+    Local tempK = #()
+    suspendEditing()--ã‚µã‚¹ãƒšãƒ³ãƒ‰ãƒ¢ãƒ¼ãƒ‰
+    if maxOps.getSetKeyMode() == true do max set key mode --ã‚»ãƒƒãƒˆã‚­ãƒ¼ãƒ¢ãƒ¼ãƒ‰ã ã£ãŸå ´åˆã«ã‚»ãƒƒãƒˆã‚­ãƒ¼ãƒ¢ãƒ¼ãƒ‰ã‚’off
 
-	on freeToSlidingBt pressed do
-	(
-		if (queryBox("è‘«‘S‚Ä‚ÌƒL[‚ğƒXƒ‰ƒCƒhƒL[‚É‚µ‚Ü‚·\nÀs‚µ‚Ü‚·‚©?\n ")title:"Šm”F") do
-		(
-		Local tempK = #()
-		suspendEditing()--ƒTƒXƒyƒ“ƒhƒ‚[ƒh
-		if maxOps.getSetKeyMode() == true do max set key mode --ƒZƒbƒgƒL[ƒ‚[ƒh‚¾‚Á‚½ê‡‚ÉƒZƒbƒgƒL[ƒ‚[ƒh‚ğoff
-		--set animate off
-		
-		--with redraw off
-		--(--Ä•`‰æ‹Ö~
-		
-		try(
-		for i=1 to 2 do
-		(
-			tempObj = biped.getNode $ i
-			
-			tempBip = tempObj.transform.controller
-			if tempBip.keys.count != 0 then
-			(
-			for u=1 to tempBip.keys.count do
-			(
-			append tempK tempBip.keys[u].time
-			)--for end
-		
-			for k=1 to tempK.count do
-			(
-			sliderTime = tempK[k]
-			biped.setSlidingKey tempObj
-			)--for end
-			tempK = #()
-			)--if end
-		)--for end
-		for i=5 to 6 do
-		(
-			tempObj = biped.getNode $ i
-			
-			tempBip = tempObj.transform.controller
-			if tempBip.keys.count != 0 then
-			(
-			for u=1 to tempBip.keys.count do
-			(
-			append tempK tempBip.keys[u].time
-			)--for end
-		
-			for k=1 to tempK.count do
-			(
-			sliderTime = tempK[k]
-			biped.setSlidingKey tempObj
-			)--for end
-			tempK = #()
-			)--if end
-		)--for end
+    try(
+    for i=1 to 2 do
+    (
+        tempObj = biped.getNode $ i
+        tempBip = tempObj.transform.controller
 
-		)catch(messageBox("¸”s‚µ‚Ü‚µ‚½")title:"ƒƒbƒZ[ƒW");
-		--)--with redraw end	
-		resumeEditing()--Ä‚ÑƒAƒNƒeƒBƒu‚É
-		);--if end
-	)
+        if tempBip.keys.count != 0 then
+        (
+        for u=1 to tempBip.keys.count do
+        (
+        append tempK tempBip.keys[u].time
+        )--for end
+
+        for k=1 to tempK.count do
+        (
+        sliderTime = tempK[k]
+        biped.setFreeKey tempObj
+        )--for end
+        tempK = #()
+        )--if end
+    )--for end
+    for i=5 to 6 do
+    (
+        tempObj = biped.getNode $ i
+        tempBip = tempObj.transform.controller
+
+        if tempBip.keys.count != 0 then
+        (
+        for u=1 to tempBip.keys.count do
+        (
+        append tempK tempBip.keys[u].time
+        )--for end
+
+        for k=1 to tempK.count do
+        (
+        sliderTime = tempK[k]
+        biped.setFreeKey tempObj
+        )--for end
+        tempK = #()
+        )--if end
+    )--for end
+    )catch(messageBox("å¤±æ•—ã—ã¾ã—ãŸ")title:"ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸");
+    --)--with redraw end
+    resumeEditing()--å†ã³ã‚¢ã‚¯ãƒ†ã‚£ãƒ–ã«
+    );--if end
+)
+
+on freeToSlidingBt pressed do
+(
+    if (queryBox("æ‰‹è¶³å…¨ã¦ã®ã‚­ãƒ¼ã‚’ã‚¹ãƒ©ã‚¤ãƒ‰ã‚­ãƒ¼ã«ã—ã¾ã™\nå®Ÿè¡Œã—ã¾ã™ã‹?\n ")title:"ç¢ºèª") do
+    (
+    Local tempK = #()
+    suspendEditing()--ã‚µã‚¹ãƒšãƒ³ãƒ‰ãƒ¢ãƒ¼ãƒ‰
+    if maxOps.getSetKeyMode() == true do max set key mode --ã‚»ãƒƒãƒˆã‚­ãƒ¼ãƒ¢ãƒ¼ãƒ‰ã ã£ãŸå ´åˆã«ã‚»ãƒƒãƒˆã‚­ãƒ¼ãƒ¢ãƒ¼ãƒ‰ã‚’off
+    --set animate off
+
+    --with redraw off
+    --(--å†æç”»ç¦æ­¢
+
+    try(
+    for i=1 to 2 do
+    (
+        tempObj = biped.getNode $ i
+
+        tempBip = tempObj.transform.controller
+        if tempBip.keys.count != 0 then
+        (
+        for u=1 to tempBip.keys.count do
+        (
+        append tempK tempBip.keys[u].time
+        )--for end
+
+        for k=1 to tempK.count do
+        (
+        sliderTime = tempK[k]
+        biped.setSlidingKey tempObj
+        )--for end
+        tempK = #()
+        )--if end
+    )--for end
+    for i=5 to 6 do
+    (
+        tempObj = biped.getNode $ i
+
+        tempBip = tempObj.transform.controller
+        if tempBip.keys.count != 0 then
+        (
+        for u=1 to tempBip.keys.count do
+        (
+        append tempK tempBip.keys[u].time
+        )--for end
+
+        for k=1 to tempK.count do
+        (
+        sliderTime = tempK[k]
+        biped.setSlidingKey tempObj
+        )--for end
+        tempK = #()
+        )--if end
+    )--for end
+
+    )catch(messageBox("å¤±æ•—ã—ã¾ã—ãŸ")title:"ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸");
+    --)--with redraw end
+    resumeEditing()--å†ã³ã‚¢ã‚¯ãƒ†ã‚£ãƒ–ã«
+    );--if end
+)

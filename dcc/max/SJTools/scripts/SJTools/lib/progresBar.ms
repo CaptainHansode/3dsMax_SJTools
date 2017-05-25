@@ -8,7 +8,7 @@
  * @author CaptainHansode 半袖船長
  * @web http://www.sakaiden.com/
  * @email sakaiden@live.jp
- * @git https://github.com/CaptainHansode/SJTools
+ * @github https://github.com/CaptainHansode/SJTools
  *
  */
 struct SJProgressBar
@@ -23,7 +23,7 @@ struct SJProgressBar
         rollout SJProgressBarRol "" width:416 height:50
         (
             progressBar bar "" pos:[8,8] width:400 height:18 color:(color 72 192 192);
-            label info "" pos:[40,28] width:400 height:16;
+            label info "" pos:[10,28] width:400 height:16;
         )
         CreateDialog SJProgressBarRol style:#(#style_toolwindow, #style_minimizebox);
     ),
@@ -48,6 +48,12 @@ struct SJProgressBar
     function val barVal =
     (
         SJProgressBarRol.bar.value = barVal;
+    ),
+
+    function update barVal infoStr =
+    (
+        SJProgressBarRol.bar.value = barVal;
+        SJProgressBarRol.info.text = infoStr;
     ),
 
     function title titleStr =

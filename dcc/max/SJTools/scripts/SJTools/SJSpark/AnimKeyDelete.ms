@@ -1,115 +1,106 @@
-/*******************************************************
-System J Tools 
-********************************************************
-Name:SJ_Spark_AnimKeyDelete.ms
-Created By:CaptainHansode
-WEB:www.sakaiden.com
-E-Mail:sakaiden@live.jp
-*******************************************************/
+/**
+ * -----------------------------------------------------------------------------
+ *
+ * SJ Tools
+ *
+ * -----------------------------------------------------------------------------
+ * @license MIT
+ * @author CaptainHansode åŠè¢–èˆ¹é•·
+ * @web http://www.sakaiden.com/
+ * @email sakaiden@live.jp
+ * @github https://github.com/CaptainHansode/SJTools
+ *
+ */
 
-	group "Delete All Keys"
-	(
-		button delOutRangeKeysBt "”ÍˆÍŠOƒL[‚ðíœ" width:160
-		label delAllKeysLdl1"Transform" width:160
-		button delAllPosKeysBt "‘S‚Ä‚ÌˆÊ’uƒL[‚ðíœ" width:160
-		button delAllRotKeysBt "‘S‚Ä‚Ì‰ñ“]ƒL[‚ðíœ" width:160
-		button delAllScanKeysBt "‘S‚Ä‚ÌƒXƒP[ƒ‹ƒL[‚ðíœ" width:160
-	)
+group "Delete All Keys"
+(
+    button delOutRangeKeysBt "ç¯„å›²å¤–ã‚­ãƒ¼ã‚’å‰Šé™¤" width:160
+    label delAllKeysLdl1"Transform" width:160
+    button delAllPosKeysBt "å…¨ã¦ã®ä½ç½®ã‚­ãƒ¼ã‚’å‰Šé™¤" width:160
+    button delAllRotKeysBt "å…¨ã¦ã®å›žè»¢ã‚­ãƒ¼ã‚’å‰Šé™¤" width:160
+    button delAllScanKeysBt "å…¨ã¦ã®ã‚¹ã‚±ãƒ¼ãƒ«ã‚­ãƒ¼ã‚’å‰Šé™¤" width:160
+)
 
---////////////////////////////////////////////////
 --del
---////////////////////////////////////////////////
-	on delOutRangeKeysBt pressed do
-	(
-		for i in objects do
-		(
-			--ƒL[‘I‘ð‚ð‰ðœ	
-			deselectKeys i;
-			--”ÍˆÍŠO‚ÌƒL[‚ð‘I‘ð
-			selectkeys i (interval -100000 (animationRange.start-1));			
-			--‘I‘ð‚µ‚½ƒL[‚ðíœ
-			deleteKeys i #selection;
-			
-			--ƒL[‘I‘ð‚ð‰ðœ	
-			deselectKeys i;
-			--”ÍˆÍŠO‚ÌƒL[‚ð‘I‘ð
-			selectkeys i (interval (animationRange.end+1) 100000);
-			--‘I‘ð‚µ‚½ƒL[‚ðíœ
-			deleteKeys i #selection;
-		);--for end
-	);--end
-	
---////////////////////////////////////////////////
---del
---////////////////////////////////////////////////
-	on delAllPosKeysBt pressed do
-	(
-		Local oldTransform = undefined;
-		Local j = 0;
-		try(
-		for i in selection do
-		(
-		oldTransform = i.transform;
-		j = i.pos.controller.keys.count;
-		--ƒL[ƒJƒEƒ“ƒg‚ª‚È‚­‚È‚é‚Ü‚Å
-		--”z—ñ‚Ì‚¨K‚©‚çíœ
-		while j > 0 do
-		(
-			deleteKey i.pos.controller.keys j;
-			j -= 1;
-		);--while end
-		
-		--transform‚ð–ß‚·
-		i.transform = oldTransform;
-		);--for end
-		)catch()--try end
-		/*
-		--‚Ü‚¸ˆê“xƒL[‚ð“K“–‚ÈƒRƒ“ƒgƒ[ƒ‰[‚É•Ï‚¦’×‚·
-		$.pos.controller = Position_Expression ()
-		--Œ³‚É–ß‚·
-		$.pos.controller = Position_XYZ ()
-		*/
-	);--end
+on delOutRangeKeysBt pressed do
+(
+    for i in objects do
+    (
+        --ã‚­ãƒ¼é¸æŠžã‚’è§£é™¤
+        deselectKeys i;
+        --ç¯„å›²å¤–ã®ã‚­ãƒ¼ã‚’é¸æŠž
+        selectkeys i (interval -100000 (animationRange.start-1));
+        --é¸æŠžã—ãŸã‚­ãƒ¼ã‚’å‰Šé™¤
+        deleteKeys i #selection;
+        --ã‚­ãƒ¼é¸æŠžã‚’è§£é™¤
+        deselectKeys i;
+        --ç¯„å›²å¤–ã®ã‚­ãƒ¼ã‚’é¸æŠž
+        selectkeys i (interval (animationRange.end+1) 100000);
+        --é¸æŠžã—ãŸã‚­ãƒ¼ã‚’å‰Šé™¤
+        deleteKeys i #selection;
+    )
+)
 
-	on delAllRotKeysBt pressed do
-	(
-		Local oldTransform = undefined;
-		Local j = 0;
-		try(
-		for i in selection do
-		(
-		oldTransform = i.transform;
-		j = i.rotation.controller.keys.count;
-		--ƒL[ƒJƒEƒ“ƒg‚ª‚È‚­‚È‚é‚Ü‚Å
-		--”z—ñ‚Ì‚¨K‚©‚çíœ
-		while j > 0 do
-		(
-			deleteKey i.rotation.controller.keys j;
-			j -= 1;
-		);--while end
-		i.transform = oldTransform;
-		);--for end
-		)catch()--try end
-	);--end
-	
-	on delAllScanKeysBt pressed do
-	(
-		Local oldTransform = undefined;
-		Local j = 0;
-		
-		try(
-		for i in selection do
-		(
-		oldTransform = i.transform;
-		j = i.scale.controller.keys.count;
-		--ƒL[ƒJƒEƒ“ƒg‚ª‚È‚­‚È‚é‚Ü‚Å
-		--”z—ñ‚Ì‚¨K‚©‚çíœ
-		while j > 0 do
-		(
-			deleteKey i.scale.controller.keys j;
-			j -= 1;
-		);--while end
-		i.transform = oldTransform;
-		);--for end
-		)catch()--try end
-	);--end
+on delAllPosKeysBt pressed do
+(
+    local oldTransform = undefined;
+    local j = 0;
+    try(
+        for i in selection do
+        (
+            oldTransform = i.transform;
+            j = i.pos.controller.keys.count;
+            --ã‚­ãƒ¼ã‚«ã‚¦ãƒ³ãƒˆãŒãªããªã‚‹ã¾ã§
+            --é…åˆ—ã®ãŠå°»ã‹ã‚‰å‰Šé™¤
+            while j > 0 do
+            (
+                deleteKey i.pos.controller.keys j;
+                j -= 1;
+            )
+            --transformã‚’æˆ»ã™
+            i.transform = oldTransform;
+        )
+    )catch();
+)
+
+on delAllRotKeysBt pressed do
+(
+    local oldTransform = undefined;
+    local j = 0;
+    try(
+        for i in selection do
+        (
+            oldTransform = i.transform;
+            j = i.rotation.controller.keys.count;
+            --ã‚­ãƒ¼ã‚«ã‚¦ãƒ³ãƒˆãŒãªããªã‚‹ã¾ã§
+            --é…åˆ—ã®ãŠå°»ã‹ã‚‰å‰Šé™¤
+            while j > 0 do
+            (
+                deleteKey i.rotation.controller.keys j;
+                j -= 1;
+            )
+            i.transform = oldTransform;
+        )
+    )catch();
+)
+
+on delAllScanKeysBt pressed do
+(
+    local oldTransform = undefined;
+    local j = 0;
+    try(
+        for i in selection do
+        (
+            oldTransform = i.transform;
+            j = i.scale.controller.keys.count;
+            --ã‚­ãƒ¼ã‚«ã‚¦ãƒ³ãƒˆãŒãªããªã‚‹ã¾ã§
+            --é…åˆ—ã®ãŠå°»ã‹ã‚‰å‰Šé™¤
+            while j > 0 do
+            (
+                deleteKey i.scale.controller.keys j;
+                j -= 1;
+            )
+            i.transform = oldTransform;
+        )
+    )catch();
+)

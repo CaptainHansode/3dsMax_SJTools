@@ -1,59 +1,65 @@
-/*******************************************************
-System J Tools 
-********************************************************
-Name:SJ_Spark_ObjectsDistance.ms
-Created By:CaptainHansode
-WEB:www.sakaiden.com
-E-Mail:sakaiden@live.jp
-*******************************************************/
-	group "Objects Distance"
-	(
-	button parentDistanceBt "e‚©‚ç‚Ì‹——£" width:160 height:20
-	button measureObjectsBt "ƒƒWƒƒ["  width:160 height:20
-	)
-	
-	on parentDistanceBt pressed do
-	(
-	Local myFlag = false;
-	if queryBox ("Œ‹‰Ê‚ğƒƒbƒZ[ƒWƒ{ƒbƒNƒX‚Å•\¦‚µ‚Ü‚·‚©?") then myFlag = true;
-	for i in selection do
-	(
-		Local parentObj = i.parent
-		if parentObj != undefined then
-		(
-			myValue = distance i i.parent
-			print (i.name + "  -->  " + i.parent.name + "‚Ì‹——£‚Í  " + myValue as String + " ")
-			print myValue;
-			print "\n";
-			if myFlag then messageBox (i.name + "  -->  " + i.parent.name + "‚Ì‹——£‚Í  " + myValue as String + " ");
-		)else(
-			print ("e‚Í‚ ‚è‚Ü‚¹‚ñ\nƒ|ƒWƒVƒ‡ƒ“‚Í  "+(i.pos as String))
-			print "\n"
-			if myFlag then messageBox ("e‚Í‚ ‚è‚Ü‚¹‚ñ\nƒ|ƒWƒVƒ‡ƒ“‚Í  "+(i.pos as String));
-		)--if end
-	)--for end
-	)--end
-	
-	on measureObjectsBt pressed do
-	(
-		if selection.count != 0 then
-		(
-			Local myObj = selection[1];
-			Local targetObj = PickObject count:1 select:true message:"ƒIƒuƒWƒFƒNƒg‚ğ‘I‘ğ‚µ‚Ä‚­‚¾‚³‚¢B" Rubberband:selection[1].pos rubberBandColor:[0,0,0] ForceListenerFocus:False
-			if targetObj != undefined then
-			(
-			myValue = distance myObj targetObj
-			if queryBox ("Œ‹‰Ê‚ğƒƒbƒZ[ƒWƒ{ƒbƒNƒX‚Å•\¦‚µ‚Ü‚·‚©?") then
-			(
-				print (myObj.name + "  -->  " + targetObj.name + "‚Ì‹——£‚Í  " + myValue as String + " ")
-				print myValue;
-				print "\n"
-				messageBox (myObj.name + "  -->  " + targetObj.name + "‚Ì‹——£‚Í  " + myValue as String + " ");
-			)else(
-				print (myObj.name + "  -->  " + targetObj.name + "‚Ì‹——£‚Í  " + myValue as String + " ")
-				print myValue;
-				print "\n"
-			);--if end	
-			);--ifend
-		)else(messageBox("ƒIƒuƒWƒFƒNƒg‚ğ‘I‘ğ‚µ‚Ä‚­‚¾‚³‚¢"));--if end
-	)
+/**
+ * -----------------------------------------------------------------------------
+ *
+ * SJ Tools
+ *
+ * -----------------------------------------------------------------------------
+ * @license MIT
+ * @author CaptainHansode èœŠé¡˜ï½¢å†¶é£´é«Ÿï½·
+ * @web http://www.sakaiden.com/
+ * @email sakaiden@live.jp
+ * @github https://github.com/CaptainHansode/SJTools
+ *
+ */
+
+group "Objects Distance"
+(
+    button parentDistanceBt "è¦ªã‹ã‚‰ã®è·é›¢" width:160 height:20
+    button measureObjectsBt "ãƒ¡ã‚¸ãƒ£ãƒ¼"  width:160 height:20
+)
+
+on parentDistanceBt pressed do
+(
+Local myFlag = false;
+if queryBox ("çµæœã‚’ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ãƒœãƒƒã‚¯ã‚¹ã§è¡¨ç¤ºã—ã¾ã™ã‹?") then myFlag = true;
+for i in selection do
+(
+    Local parentObj = i.parent
+    if parentObj != undefined then
+    (
+        myValue = distance i i.parent
+        print (i.name + "  -->  " + i.parent.name + "ã®è·é›¢ã¯  " + myValue as String + " ")
+        print myValue;
+        print "\n";
+        if myFlag then messageBox (i.name + "  -->  " + i.parent.name + "ã®è·é›¢ã¯  " + myValue as String + " ");
+    )else(
+        print ("è¦ªã¯ã‚ã‚Šã¾ã›ã‚“\nãƒã‚¸ã‚·ãƒ§ãƒ³ã¯  "+(i.pos as String))
+        print "\n"
+        if myFlag then messageBox ("è¦ªã¯ã‚ã‚Šã¾ã›ã‚“\nãƒã‚¸ã‚·ãƒ§ãƒ³ã¯  "+(i.pos as String));
+    )--if end
+)--for end
+)--end
+
+on measureObjectsBt pressed do
+(
+    if selection.count != 0 then
+    (
+        Local myObj = selection[1];
+        Local targetObj = PickObject count:1 select:true message:"ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’é¸æŠã—ã¦ãã ã•ã„ã€‚" Rubberband:selection[1].pos rubberBandColor:[0,0,0] ForceListenerFocus:False
+        if targetObj != undefined then
+        (
+        myValue = distance myObj targetObj
+        if queryBox ("çµæœã‚’ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ãƒœãƒƒã‚¯ã‚¹ã§è¡¨ç¤ºã—ã¾ã™ã‹?") then
+        (
+            print (myObj.name + "  -->  " + targetObj.name + "ã®è·é›¢ã¯  " + myValue as String + " ")
+            print myValue;
+            print "\n"
+            messageBox (myObj.name + "  -->  " + targetObj.name + "ã®è·é›¢ã¯  " + myValue as String + " ");
+        )else(
+            print (myObj.name + "  -->  " + targetObj.name + "ã®è·é›¢ã¯  " + myValue as String + " ")
+            print myValue;
+            print "\n"
+        );--if end
+        );--ifend
+    )else(messageBox("ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’é¸æŠã—ã¦ãã ã•ã„"));--if end
+)
