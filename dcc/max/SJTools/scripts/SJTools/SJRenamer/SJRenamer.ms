@@ -36,12 +36,12 @@ try(destroydialog SJRenamerRol)catch();
 try(closeRolloutFloater sjRenamerResultRol)catch();
 try(destroydialog sjRenamerResultRol)catch();
 
-
 --基本言語ファイル
 local language = "JP";
 
 --Version
 local nameAndVersion = "りねーまー";
+
 --なんか色々
 local allOj = #(), hitText = undefined, hitCount = 0, k = 0, NumStr = "", NameStr = "";
 
@@ -82,47 +82,40 @@ fn hitSelList_Fn=
  */
 fn newName_Fn =
 (
-    SJProgressBar.show();
-    SJProgressBar.update 50 "asdfasfdasfasfasfdaa";
-    suspendEditing();
-    with redraw off
+    if SJRenamerRol.newNameEdt.text != "" then
+    (NameStr = SJRenamerRol.newNameEdt.text) else (NameStr = "Empty");
+
+    --数の設定
+    NumStr = "";
+    k = 0;
+    digitNum = SJRenamerRol.newNameSpn3.value;
+
+    if SJRenamerRol.withNumberChk.checked then
     (
-        if SJRenamerRol.newNameEdt.text != "" then
-        (NameStr = SJRenamerRol.newNameEdt.text) else (NameStr = "Empty");
+        --一度代入
+        NumStr = (SJRenamerRol.newNameSpn1.value as String);
 
-        --数の設定
-        NumStr = "";
-        k = 0;
-        digitNum = SJRenamerRol.newNameSpn3.value;
-
-        if SJRenamerRol.withNumberChk.checked then
+        for i in selection do
         (
-            --一度代入
-            NumStr = (SJRenamerRol.newNameSpn1.value as String);
+            --数字文字列を合成
+            NumStr = ((SJRenamerRol.newNameSpn1.value + (k*SJRenamerRol.newNameSpn2.value)) as String);
 
-            for i in selection do
-            (
-                --数字文字列を合成
-                NumStr = ((SJRenamerRol.newNameSpn1.value + (k*SJRenamerRol.newNameSpn2.value)) as String);
+            --桁は足りているか?
+            while ( NumStr.count < digitNum) do NumStr = ("0" + NumStr);
 
-                --桁は足りているか?
-                while ( NumStr.count < digitNum) do NumStr = ("0" + NumStr);
+            --名前を合成
+            if SJRenamerRol.addNumberChk.checked then
+            (i.name = i.name + NumStr) else (i.name = NameStr + NumStr);
 
-                --名前を合成
-                if SJRenamerRol.addNumberChk.checked then
-                (i.name = i.name + NumStr) else (i.name = NameStr + NumStr);
-
-                k += 1;
-            )
-        ) else (
-            for i in selection do
-            (
-                i.name = NameStr;
-                k += 1;
-            )
+            k += 1;
+        )
+    ) else (
+        for i in selection do
+        (
+            i.name = NameStr;
+            k += 1;
         )
     )
-    resumeEditing();
 )
 
 /**-----------------------------------------------------------------------------
@@ -303,7 +296,6 @@ fn searchName_Fn =
     suspendEditing()--サスペンドモード
     with redraw off
     (
-        try (destroydialog sjRenamerResultRol) catch();
         sjRnmResult = #()
 
         if SJRenamerRol.searchNameEdt.text != "" then
@@ -468,7 +460,6 @@ fn similarSearchBt_Fn =
     local tempObj = #();
     sjRnmResult = #();
 
-    try (destroydialog sjRenamerResultRol) catch();
     allOj = for i in objects collect i.name --オブジェクトの数だけオブジェクト内容を収集
 
     --判定レベル2で実行
@@ -503,33 +494,41 @@ fn similarSearchBt_Fn =
  */
 fn doubleNameName_Fn =
 (
-    try (destroydialog sjRenamerResultRol) catch();
-    suspendEditing();
-    with redraw off
-    (
-        allOj = for i in objects collect i --オブジェクトの数だけオブジェクト内容を収集
-        sjRnmResult = #()
-        hitCount = 0
-        k = 1;
-        for i in allOj do
-        (
-            hitCount = 0
-            for u in allOj do
-            (
-                if (matchPattern i.name pattern:u.name ignoreCase:SearchType) == true do hitCount += 1;
-            )
-            if hitCount > 1 do append sjRnmResult i; --カウントが2以上だったら
-            k += 1;
-        )
+    SJProgressBar.show();
 
-        if sjRnmResult.count != 0 then
+    allObj = for i in objects collect i; --オブジェクトの数だけオブジェクト内容を収集
+    allNames = for i in objects collect i.name;
+    sjRnmResult = #();
+    local cnt = 1;
+    local ret;
+    local findObjs = #();
+    for i in allObj do
+    (
+        SJProgressBar.update (floor ((100.0 / allObj.count) * cnt)) i.name;
+        ret = findItem allNames i.name;
+        if (ret != cnt) do (
+            append findObjs i;
+        )
+        cnt += 1;
+    )
+
+    for i in findObjs do
+    (
+        for n in allNames do
         (
-            hitSelList_Fn();
-        ) else (
-            messageBox("見つかりませんでした") title:"検索結果";
+            if (n == i.name) do (
+                append sjRnmResult i;
+            )
         )
     )
-    resumeEditing();
+
+    if sjRnmResult.count != 0 then
+    (
+        hitSelList_Fn();
+    ) else (
+        messageBox("見つかりませんでした") title:"検索結果";
+    )
+    SJProgressBar.hide();
 )
 
 /**-----------------------------------------------------------------------------
@@ -684,16 +683,34 @@ rollout SJRenamerRol nameAndVersion width:200 height:676;
         saveIni_Fn();
     )
 
-    on newNameBt pressed do newName_Fn();
-    on renameSubstringBt pressed do replaceName_Fn()
-    on addFNameBt pressed do prefixName_Fn()
-    on addBNameBt pressed do suffixName_Fn()
-    on nAddFNameBt pressed do nPrefixName_Fn()
-    on nAddBNameBt pressed do nSuffixName_Fn()
-    on deleteNameBt pressed do deleteName_Fn()
-    on SearchBt pressed do searchName_Fn()
-    on similarSearchBt pressed do similarSearchBt_Fn()
-    on doubleNameBt pressed do doubleNameName_Fn()
+    on newNameBt pressed do
+    (
+        suspendEditing();
+        with redraw off
+        (
+            newName_Fn();
+        )
+        resumeEditing();
+    )
+
+    on renameSubstringBt pressed do replaceName_Fn();
+    on addFNameBt pressed do prefixName_Fn();
+    on addBNameBt pressed do suffixName_Fn();
+    on nAddFNameBt pressed do nPrefixName_Fn();
+    on nAddBNameBt pressed do nSuffixName_Fn();
+    on deleteNameBt pressed do deleteName_Fn();
+    on SearchBt pressed do searchName_Fn();
+    on similarSearchBt pressed do similarSearchBt_Fn();
+
+    on doubleNameBt pressed do
+    (
+        suspendEditing();
+        with redraw off
+        (
+            doubleNameName_Fn();
+        )
+        resumeEditing();
+    )
 
     on newNameEdt changed txt do saveIni_Fn();
     on beforeEdt changed txt do saveIni_Fn();
