@@ -7,3 +7,6 @@ F:\Project_SJTools\SJTools\win\test\TestDragAndDrop\TestDragAndDrop\TestDragAndD
 F:\Project_SJTools\SJTools\win\test\TestDragAndDrop\TestDragAndDrop\TestDragAndDrop\obj\Debug\TestDragAndDrop.csproj.GenerateResource.Cache
 F:\Project_SJTools\SJTools\win\test\TestDragAndDrop\TestDragAndDrop\TestDragAndDrop\obj\Debug\TestDragAndDrop.exe
 F:\Project_SJTools\SJTools\win\test\TestDragAndDrop\TestDragAndDrop\TestDragAndDrop\obj\Debug\TestDragAndDrop.pdb
+F:\Project_SJTools\SJTools\win\test\TestDragAndDrop\TestDragAndDrop\bin\Debug\TestDragAndDrop.exe.config
+F:\Project_SJTools\SJTools\win\test\TestDragAndDrop\TestDragAndDrop\obj\Debug\TestDragAndDrop.exe
+F:\Project_SJTools\SJTools\win\test\TestDragAndDrop\TestDragAndDrop\obj\Debug\TestDragAndDrop.pdb
