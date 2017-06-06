@@ -16,6 +16,7 @@ group "簡易ポリゴン管理"
     button countPAndVBt "ポリゴン頂点カウント" width:160 hight:20
     button fiveGonSelectBt "5角形以上を選択" width:160 hight:20
 )
+
 --ポリゴンカウント
 on countPAndVBt pressed do
 (
@@ -52,7 +53,6 @@ on fiveGonSelectBt pressed do
             )
 
             --最後に選択
-            --print selectBitArray
             if (selectBitArray.numberSet != 0) then
             (
                 try(
