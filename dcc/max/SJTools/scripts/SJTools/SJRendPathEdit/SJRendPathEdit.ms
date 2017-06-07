@@ -179,72 +179,76 @@ SJRdPathEdit.SJRdPathEditRol =
         local elmEdtList = #();
         local elmLblList = #();
 
-        groupBox 'grp1' "一括設定" pos:[8,8] width:296 height:88 align:#left
-        button 'allSetBtn' "レンダリング出力パスを全てのエレメントに" pos:[16,32] width:276 height:24 align:#left
-        button 'allOKBtn' "全てOK" pos:[16,64] width:136 height:24 align:#left
-        button 'allDelBtn' "全て削除" pos:[156,64] width:136 height:24 align:#left
-        groupBox 'grp2' "置換" pos:[8,104] width:296 height:148 align:#left
-        editText 'findEdt' "" pos:[12,144] width:280 height:20 align:#left
-        label 'lbl1' "検索文字" pos:[16,126] width:168 height:16 align:#left
-        editText 'repEdt' "" pos:[12,188] width:280 height:20 align:#left
-        label 'lbl2' "置換文字" pos:[16,170] width:168 height:16 align:#left
-        button 'repBtn' "置換" pos:[16,216] width:276 height:24 align:#left
+        GroupBox 'grp1' "一括設定" pos:[8,8] width:296 height:84 align:#left
+        button 'allSetBtn' "レンダリング出力パスを全てのエレメントに" pos:[16,28] width:276 height:24 align:#left
+        button 'allDelBtn' "全て空欄" pos:[16,60] width:276 height:24 align:#left
 
-        groupBox 'grp3' "レンダリング出力" pos:[8,264] width:296 height:52 align:#left
-        editText 'rendPathEdt' "" pos:[13,288] width:231 height:20 align:#left
-        button 'rendPathBtn' "..." pos:[248,288] width:20 height:20 align:#left
-        button 'rendOKBtn' "OK" pos:[272,288] width:20 height:20 align:#left
+        GroupBox 'grp2' "置換" pos:[8,100] width:296 height:148 align:#left
+        edittext 'findEdt' "" pos:[12,140] width:280 height:20 align:#left
+        label 'lbl1' "検索文字" pos:[16,122] width:168 height:16 align:#left
+        edittext 'repEdt' "" pos:[12,184] width:280 height:20 align:#left
+        label 'lbl2' "置換文字" pos:[16,166] width:168 height:16 align:#left
+        button 'repBtn' "置換" pos:[16,212] width:276 height:24 align:#left
 
-        groupBox 'grp4' "Render Elements" pos:[8,328] width:296 height:592 align:#left
-        editText 'remElmEdt01' "" pos:[13,366] width:231 height:20 align:#left
-        button 'rEPathBtn01' "..." pos:[248,366] width:20 height:20 align:#left
-        button 'rEOKBtn01' "OK" pos:[272,366] width:20 height:20 align:#left
-        label 'rnElmLbl01' "エレメント1" pos:[16,348] width:168 height:16 align:#left
-        editText 'remElmEdt02' "" pos:[12,410] width:231 height:20 align:#left
-        button 'rEPathBtn02' "..." pos:[247,410] width:20 height:20 align:#left
-        button 'rEOKBtn02' "OK" pos:[271,410] width:20 height:20 align:#left
-        label 'rnElmLbl02' "エレメント2" pos:[15,392] width:168 height:16 align:#left
-        editText 'remElmEdt03' "" pos:[12,454] width:231 height:20 align:#left
-        button 'rEPathBtn03' "..." pos:[247,454] width:20 height:20 align:#left
-        button 'rEOKBtn03' "OK" pos:[271,454] width:20 height:20 align:#left
-        label 'rnElmLbl03' "エレメント3" pos:[15,436] width:168 height:16 align:#left
-        editText 'remElmEdt04' "" pos:[12,498] width:231 height:20 align:#left
-        button 'rEPathBtn04' "..." pos:[247,498] width:20 height:20 align:#left
-        button 'rEOKBtn04' "OK" pos:[271,498] width:20 height:20 align:#left
-        label 'rnElmLbl04' "エレメント4" pos:[15,480] width:168 height:16 align:#left
-        checkButton 'ckb1' "CheckButton" pos:[76,648] width:0 height:0 align:#left
-        editText 'remElmEdt05' "" pos:[13,542] width:231 height:20 align:#left
-        button 'rEPathBtn05' "..." pos:[248,542] width:20 height:20 align:#left
-        button 'rEOKBtn05' "OK" pos:[272,542] width:20 height:20 align:#left
-        label 'rnElmLbl05' "エレメント5" pos:[16,524] width:168 height:16 align:#left
-        editText 'remElmEdt06' "" pos:[12,586] width:231 height:20 align:#left
-        button 'rEPathBtn06' "..." pos:[247,586] width:20 height:20 align:#left
-        button 'rEOKBtn06' "OK" pos:[271,586] width:20 height:20 align:#left
-        label 'rnElmLbl06' "エレメント6" pos:[15,568] width:168 height:16 align:#left
-        editText 'remElmEdt07' "" pos:[12,630] width:231 height:20 align:#left
-        button 'rEPathBtn07' "..." pos:[247,630] width:20 height:20 align:#left
-        button 'rEOKBtn07' "OK" pos:[271,630] width:20 height:20 align:#left
-        label 'rnElmLbl07' "エレメント7" pos:[15,612] width:168 height:16 align:#left
-        editText 'remElmEdt08' "" pos:[12,674] width:231 height:20 align:#left
-        button 'rEPathBtn08' "..." pos:[247,674] width:20 height:20 align:#left
-        button 'rEOKBtn08' "OK" pos:[271,674] width:20 height:20 align:#left
-        label 'rnElmLbl08' "エレメント8" pos:[15,656] width:168 height:16 align:#left
-        editText 'remElmEdt09' "" pos:[13,718] width:231 height:20 align:#left
-        button 'rEPathBtn09' "..." pos:[248,718] width:20 height:20 align:#left
-        button 'rEOKBtn09' "OK" pos:[272,718] width:20 height:20 align:#left
-        label 'rnElmLbl09' "エレメント9" pos:[16,700] width:168 height:16 align:#left
-        editText 'remElmEdt10' "" pos:[12,762] width:231 height:20 align:#left
-        button 'rEPathBtn10' "..." pos:[247,762] width:20 height:20 align:#left
-        button 'rEOKBtn10' "OK" pos:[271,762] width:20 height:20 align:#left
-        label 'rnElmLbl10' "エレメント10" pos:[15,744] width:168 height:16 align:#left
-        editText 'remElmEdt11' "" pos:[12,806] width:231 height:20 align:#left
-        button 'rEPathBtn11' "..." pos:[247,806] width:20 height:20 align:#left
-        button 'rEOKBtn11' "OK" pos:[271,806] width:20 height:20 align:#left
-        label 'rnElmLbl11' "エレメント11" pos:[15,788] width:168 height:16 align:#left
-        editText 'remElmEdt12' "" pos:[12,850] width:231 height:20 align:#left
-        button 'rEPathBtn12' "..." pos:[247,850] width:20 height:20 align:#left
-        button 'rEOKBtn12' "OK" pos:[271,850] width:20 height:20 align:#left
-        label 'rnElmLbl12' "エレメント12" pos:[16,832] width:168 height:16 align:#left
+        GroupBox 'grp5' "適応" pos:[8,256] width:296 height:84 align:#left
+        button 'updateBtn' "更新" pos:[20,276] width:272 height:24 align:#left
+        button 'allOKBtn' "適応" pos:[20,308] width:272 height:24 align:#left
+
+        GroupBox 'grp3' "レンダリング出力" pos:[8,348] width:296 height:52 align:#left
+        edittext 'rendPathEdt' "" pos:[13,372] width:231 height:20 align:#left
+        button 'rendPathBtn' "..." pos:[248,372] width:20 height:20 align:#left
+        button 'rendOKBtn' "OK" pos:[272,372] width:20 height:20 align:#left
+
+        GroupBox 'grp4' "Render Elements" pos:[8,404] width:296 height:592 align:#left
+        edittext 'remElmEdt01' "" pos:[13,442] width:231 height:20 align:#left
+        button 'rEPathBtn01' "..." pos:[248,442] width:20 height:20 align:#left
+        button 'rEOKBtn01' "OK" pos:[272,442] width:20 height:20 align:#left
+        label 'rnElmLbl01' "エレメント1" pos:[16,424] width:168 height:16 align:#left
+        edittext 'remElmEdt02' "" pos:[12,486] width:231 height:20 align:#left
+        button 'rEPathBtn02' "..." pos:[247,486] width:20 height:20 align:#left
+        button 'rEOKBtn02' "OK" pos:[271,486] width:20 height:20 align:#left
+        label 'rnElmLbl02' "エレメント2" pos:[15,468] width:168 height:16 align:#left
+        edittext 'remElmEdt03' "" pos:[12,530] width:231 height:20 align:#left
+        button 'rEPathBtn03' "..." pos:[247,530] width:20 height:20 align:#left
+        button 'rEOKBtn03' "OK" pos:[271,530] width:20 height:20 align:#left
+        label 'rnElmLbl03' "エレメント3" pos:[15,512] width:168 height:16 align:#left
+        edittext 'remElmEdt04' "" pos:[12,574] width:231 height:20 align:#left
+        button 'rEPathBtn04' "..." pos:[247,574] width:20 height:20 align:#left
+        button 'rEOKBtn04' "OK" pos:[271,574] width:20 height:20 align:#left
+        label 'rnElmLbl04' "エレメント4" pos:[15,556] width:168 height:16 align:#left
+        checkbutton 'ckb1' "CheckButton" pos:[76,648] width:0 height:0 align:#left
+        edittext 'remElmEdt05' "" pos:[13,618] width:231 height:20 align:#left
+        button 'rEPathBtn05' "..." pos:[248,618] width:20 height:20 align:#left
+        button 'rEOKBtn05' "OK" pos:[272,618] width:20 height:20 align:#left
+        label 'rnElmLbl05' "エレメント5" pos:[16,600] width:168 height:16 align:#left
+        edittext 'remElmEdt06' "" pos:[12,662] width:231 height:20 align:#left
+        button 'rEPathBtn06' "..." pos:[247,662] width:20 height:20 align:#left
+        button 'rEOKBtn06' "OK" pos:[271,662] width:20 height:20 align:#left
+        label 'rnElmLbl06' "エレメント6" pos:[15,644] width:168 height:16 align:#left
+        edittext 'remElmEdt07' "" pos:[12,706] width:231 height:20 align:#left
+        button 'rEPathBtn07' "..." pos:[247,706] width:20 height:20 align:#left
+        button 'rEOKBtn07' "OK" pos:[271,706] width:20 height:20 align:#left
+        label 'rnElmLbl07' "エレメント7" pos:[15,688] width:168 height:16 align:#left
+        edittext 'remElmEdt08' "" pos:[12,750] width:231 height:20 align:#left
+        button 'rEPathBtn08' "..." pos:[247,750] width:20 height:20 align:#left
+        button 'rEOKBtn08' "OK" pos:[271,750] width:20 height:20 align:#left
+        label 'rnElmLbl08' "エレメント8" pos:[15,732] width:168 height:16 align:#left
+        edittext 'remElmEdt09' "" pos:[13,794] width:231 height:20 align:#left
+        button 'rEPathBtn09' "..." pos:[248,794] width:20 height:20 align:#left
+        button 'rEOKBtn09' "OK" pos:[272,794] width:20 height:20 align:#left
+        label 'rnElmLbl09' "エレメント9" pos:[16,776] width:168 height:16 align:#left
+        edittext 'remElmEdt10' "" pos:[12,838] width:231 height:20 align:#left
+        button 'rEPathBtn10' "..." pos:[247,838] width:20 height:20 align:#left
+        button 'rEOKBtn10' "OK" pos:[271,838] width:20 height:20 align:#left
+        label 'rnElmLbl10' "エレメント10" pos:[15,820] width:168 height:16 align:#left
+        edittext 'remElmEdt11' "" pos:[12,882] width:231 height:20 align:#left
+        button 'rEPathBtn11' "..." pos:[247,882] width:20 height:20 align:#left
+        button 'rEOKBtn11' "OK" pos:[271,882] width:20 height:20 align:#left
+        label 'rnElmLbl11' "エレメント11" pos:[15,864] width:168 height:16 align:#left
+        edittext 'remElmEdt12' "" pos:[12,926] width:231 height:20 align:#left
+        button 'rEPathBtn12' "..." pos:[247,926] width:20 height:20 align:#left
+        button 'rEOKBtn12' "OK" pos:[271,926] width:20 height:20 align:#left
+        label 'rnElmLbl12' "エレメント12" pos:[16,908] width:168 height:16 align:#left
 
         /**-----------------------------------------------------------------------------
         * イベント
@@ -265,6 +269,8 @@ SJRdPathEdit.SJRdPathEditRol =
             remElmEdt11.text = rendPath;
             remElmEdt12.text = rendPath;
         )
+
+        on updateBtn pressed do initialize(SJRdPathEditRol);
 
         on allOKBtn pressed do
         (
