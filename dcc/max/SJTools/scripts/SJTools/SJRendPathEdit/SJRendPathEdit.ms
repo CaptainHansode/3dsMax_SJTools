@@ -190,10 +190,16 @@ function initialize rol =
     rol.rendPathEdt.text = rendOutputFilename;
     re = maxOps.GetCurRenderElementMgr();
 
+    local elmPath = "";
+
     for n = 0 to (re.numrenderelements () - 1) do
     (
         i = n + 1;
-        rol.elmEdtList[i].text = re.GetRenderElementFileName n;
+        elmPath = re.GetRenderElementFileName n;
+        if (elmPath != undefined) do
+        (
+            rol.elmEdtList[i].text = elmPath;
+        )
         el = re.getrenderelement n;
         rol.elmLblList[i].caption = el.elementname;
 
