@@ -8,18 +8,18 @@ E-Mail:sakaiden@live.jp
 *******************************************************/
 (
 -----------------------------------------------------------------------------------------------------------
--- ƒOƒ[ƒoƒ‹ü‚è
+-- ã‚°ãƒ­ãƒ¼ãƒãƒ«å‘¨ã‚Š
 -----------------------------------------------------------------------------------------------------------
---ƒ[ƒ‹ƒAƒEƒg—p
+--ãƒ­ãƒ¼ãƒ«ã‚¢ã‚¦ãƒˆç”¨
 global sj_pbake_rol
 global sj_pbake_selset_rol
 -----------------------------------------------------------------------------------------------------------
--- Œ¾Œê‰Šú‰»
+-- è¨€èªåˆæœŸåŒ–
 -----------------------------------------------------------------------------------------------------------
--- Œ¾Œê‰Šú‰»
+-- è¨€èªåˆæœŸåŒ–
 include "$scripts/SJTools/SJ_CommonLangSet.ms"
 
---Version etc –¼‘O©‘Ì‚ÍSJTools.ini‚©‚ç
+--Version etc åå‰è‡ªä½“ã¯SJTools.iniã‹ã‚‰
 Local nameAndVersion = (getINISetting("$scripts/SJTools/SJTools.ini")  "SJToolsToolName" "SJPBakeToolName");
 -----------------------------------------------------------------------------------------------------------
 --Version etc
@@ -27,135 +27,135 @@ Local fileLockID = 8558132647868;
 	
 --Local sjLangageFile"D:/Test.ini"
 
---‚È‚ñ‚©’´‚¢‚Á‚Ï‚¢—p
+--ãªã‚“ã‹è¶…ã„ã£ã±ã„ç”¨
 Local pbake_bakeType = 1, sByS = 0, bakeFm = #(), f, s, startFmTm, endFmTm, posKeys = #(), rotKeys = #(), scaKeys = #();
 Local newObj = undefined, lListObj = undefined, rListObj = undefined, tempObj = undefined, bakedSel = #(), itemCount, newObjName = "_Baked", bakeLayer = undefined;
 
---d•¡ƒ`ƒFƒbƒN—p
+--é‡è¤‡ãƒã‚§ãƒƒã‚¯ç”¨
 Local doubleNameCheck = false;
 	
 /*
 pbake_bakeType
-0--‘S‚Ä
-1--ˆÊ’u‰ñ“]
-2--ˆÊ’uƒXƒP[ƒ‹
-3--ˆÊ’u
-4--‰ñ“]ƒXƒP[ƒ‹
-5--‰ñ“]
-6--ƒXƒP[ƒ‹
+0--å…¨ã¦
+1--ä½ç½®å›è»¢
+2--ä½ç½®ã‚¹ã‚±ãƒ¼ãƒ«
+3--ä½ç½®
+4--å›è»¢ã‚¹ã‚±ãƒ¼ãƒ«
+5--å›è»¢
+6--ã‚¹ã‚±ãƒ¼ãƒ«
 */
---IKŠi”[—p
---ikObj‚É‘S‚ÄŠi”[‚·‚éAhdikObj‚ÍƒRƒ“ƒgƒ[ƒ‰[íœ—p
---ikObjCont‚ÍƒRƒ“ƒgƒ[ƒ‰[ˆ—’†‚ÌƒJƒEƒ“ƒg
+--IKæ ¼ç´ç”¨
+--ikObjã«å…¨ã¦æ ¼ç´ã™ã‚‹ã€hdikObjã¯ã‚³ãƒ³ãƒˆãƒ­ãƒ¼ãƒ©ãƒ¼å‰Šé™¤ç”¨
+--ikObjContã¯ã‚³ãƒ³ãƒˆãƒ­ãƒ¼ãƒ©ãƒ¼å‡¦ç†ä¸­ã®ã‚«ã‚¦ãƒ³ãƒˆ
 Local ikCheck = false, ikObjQuery = false, ikObj = #(), hdikObj = #(), ikObjEff = #(), ikObjIndex = #(), ikBakeObj = #(), ikObjCont = 1,ikdependObj = #();
 
---ƒŒƒCƒ„[–¼ü‚è
-Local newLayer = undefined, numberStr, layerNameStr = "ƒxƒCƒNƒIƒuƒWƒFƒNƒg";
+--ãƒ¬ã‚¤ãƒ¤ãƒ¼åå‘¨ã‚Š
+Local newLayer = undefined, numberStr, layerNameStr = "ãƒ™ã‚¤ã‚¯ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ";
 
---‰Šúİ’èAini“à—e‚ğã‚©‚ç‡‚É•À‚×‚Ä‚¢‚é
+--åˆæœŸè¨­å®šã€iniå†…å®¹ã‚’ä¸Šã‹ã‚‰é †ã«ä¸¦ã¹ã¦ã„ã‚‹
 Local iniSetting = #(true,false,true,true,true)
---’[‚©‚ç‡‚ÉAƒ^ƒCƒvAƒIƒvƒVƒ‡ƒ“Aƒ~ƒ‰[AƒXƒ^[ƒgAƒGƒ“ƒhAƒXƒeƒbƒvAƒoƒCƒXƒeƒbƒvAˆÊ’uƒL[A‰ñ“]ƒL[AƒXƒP[ƒ‹ƒL[
+--ç«¯ã‹ã‚‰é †ã«ã€ã‚¿ã‚¤ãƒ—ã€ã‚ªãƒ—ã‚·ãƒ§ãƒ³ã€ãƒŸãƒ©ãƒ¼ã€ã‚¹ã‚¿ãƒ¼ãƒˆã€ã‚¨ãƒ³ãƒ‰ã€ã‚¹ãƒ†ãƒƒãƒ—ã€ãƒã‚¤ã‚¹ãƒ†ãƒƒãƒ—ã€ä½ç½®ã‚­ãƒ¼ã€å›è»¢ã‚­ãƒ¼ã€ã‚¹ã‚±ãƒ¼ãƒ«ã‚­ãƒ¼
 Local toolSetting = #(1,1,false,0,100,1,false,true,true,true);
 
---ƒ~ƒ‰[ƒŠƒ“ƒO
+--ãƒŸãƒ©ãƒ¼ãƒªãƒ³ã‚°
 Local mT = #(1,-1,-1,-1,1,1,-1,1,1,-1,1,1), mirrorMenu = #(true,false,false,false,false,false,false,false,false);
 
---ƒIƒtƒZƒbƒgİ’è
+--ã‚ªãƒ•ã‚»ãƒƒãƒˆè¨­å®š
 Local offsetNum = 1, offsetMenu = #(true,false,false), offsetSetting = #(1,2,3);
 
 -----------------------------------------------------------------------------------------------------------
--- ƒ[ƒ‹ƒAƒEƒgü‚è
+-- ãƒ­ãƒ¼ãƒ«ã‚¢ã‚¦ãƒˆå‘¨ã‚Š
 -----------------------------------------------------------------------------------------------------------
-try(cui.FloatDialogBar sj_pbake_rol)catch()	--PBakeƒ_ƒCƒAƒƒO‚Ìƒtƒ[ƒg‰»‚ğ‚İ‚Ü‚·
-try(cui.unRegisterDialogBar sj_pbake_rol)catch()		--ƒhƒbƒLƒ“ƒO‰Â”\‚È MAXScript ƒEƒBƒ“ƒhƒE‚ğ–¢“o˜^‚É‚µ‚Ü‚·
-try(closeRolloutFloater sj_pbake_rol) catch()	--ƒ[ƒ‹ƒAƒEƒgƒtƒ[ƒ^[‚ªŠJ‚¢‚Ä‚¢‚½‚çˆê’[•Â‚¶‚é
-try(destroydialog sj_pbake_rol)catch()		--ƒ_ƒCƒAƒƒO‚ªŠù‚ÉŠJ‚¢‚Ä‚¢‚½ê‡‚Íˆê“x•Â‚¶‚é‚ğ‚İ‚Ü‚·
+try(cui.FloatDialogBar sj_pbake_rol)catch()	--PBakeãƒ€ã‚¤ã‚¢ãƒ­ã‚°ã®ãƒ•ãƒ­ãƒ¼ãƒˆåŒ–ã‚’è©¦ã¿ã¾ã™
+try(cui.unRegisterDialogBar sj_pbake_rol)catch()		--ãƒ‰ãƒƒã‚­ãƒ³ã‚°å¯èƒ½ãª MAXScript ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ã‚’æœªç™»éŒ²ã«ã—ã¾ã™
+try(closeRolloutFloater sj_pbake_rol) catch()	--ãƒ­ãƒ¼ãƒ«ã‚¢ã‚¦ãƒˆãƒ•ãƒ­ãƒ¼ã‚¿ãƒ¼ãŒé–‹ã„ã¦ã„ãŸã‚‰ä¸€ç«¯é–‰ã˜ã‚‹
+try(destroydialog sj_pbake_rol)catch()		--ãƒ€ã‚¤ã‚¢ãƒ­ã‚°ãŒæ—¢ã«é–‹ã„ã¦ã„ãŸå ´åˆã¯ä¸€åº¦é–‰ã˜ã‚‹ã‚’è©¦ã¿ã¾ã™
 try(destroydialog sj_progressBar_rol)catch()
 
 -----------------------------------------------------------------------------------------------------------
---ƒƒjƒ…[
+--ãƒ¡ãƒ‹ãƒ¥ãƒ¼
 -----------------------------------------------------------------------------------------------------------
 --////////////////////////////////////////////////
---ƒƒjƒ…[
+--ãƒ¡ãƒ‹ãƒ¥ãƒ¼
 --////////////////////////////////////////////////
 rcMenu pbakeMenuBar
 (
 	
-subMenu "ƒtƒ@ƒCƒ‹"
+subMenu "ãƒ•ã‚¡ã‚¤ãƒ«"
 (
-menuItem saveFileMi "ƒŠƒXƒg•Û‘¶" enabled:true
-menuItem loadFileMi "ƒŠƒXƒgŠJ‚­" enabled:true
-menuItem mergeFileMi "ƒŠƒXƒg‡¬" enabled:true
+menuItem saveFileMi "ãƒªã‚¹ãƒˆä¿å­˜" enabled:true
+menuItem loadFileMi "ãƒªã‚¹ãƒˆé–‹ã" enabled:true
+menuItem mergeFileMi "ãƒªã‚¹ãƒˆåˆæˆ" enabled:true
 seperator sep01
-menuItem saveSettingFileMi "İ’è‚ğ•Û‘¶" enabled:true
-menuItem loadSettingFileMi "İ’è‚ğŠJ‚­" enabled:true	
+menuItem saveSettingFileMi "è¨­å®šã‚’ä¿å­˜" enabled:true
+menuItem loadSettingFileMi "è¨­å®šã‚’é–‹ã" enabled:true	
 seperator sep02
-menuItem closeMi "I—¹" enabled:true
+menuItem closeMi "çµ‚äº†" enabled:true
 )
 
-subMenu "ƒ~ƒ‰[İ’è"
+subMenu "ãƒŸãƒ©ãƒ¼è¨­å®š"
 (
-menuItem mirrorYZplaneMi "YZ•½–Ê ƒtƒŠƒbƒvX" checked:true
-menuItem mirrorXZplaneMi "XZ•½–Ê ƒtƒŠƒbƒvX" checked:false
-menuItem mirrorXYplaneMi "XY•½–Ê ƒtƒŠƒbƒvX" checked:false
+menuItem mirrorYZplaneMi "YZå¹³é¢ ãƒ•ãƒªãƒƒãƒ—X" checked:true
+menuItem mirrorXZplaneMi "XZå¹³é¢ ãƒ•ãƒªãƒƒãƒ—X" checked:false
+menuItem mirrorXYplaneMi "XYå¹³é¢ ãƒ•ãƒªãƒƒãƒ—X" checked:false
 seperator sep03
-menuItem mirrorXFripZMi "YZ•½–Ê ƒtƒŠƒbƒvZ" checked:false
-menuItem mirrorYFripZMi "XZ•½–Ê ƒtƒŠƒbƒvZ" checked:false
-menuItem mirrorZFripZMi "XY•½–Ê ƒtƒŠƒbƒvZ" checked:false
+menuItem mirrorXFripZMi "YZå¹³é¢ ãƒ•ãƒªãƒƒãƒ—Z" checked:false
+menuItem mirrorYFripZMi "XZå¹³é¢ ãƒ•ãƒªãƒƒãƒ—Z" checked:false
+menuItem mirrorZFripZMi "XYå¹³é¢ ãƒ•ãƒªãƒƒãƒ—Z" checked:false
 seperator sep04
-menuItem mirrorXFripYMi "YZ•½–Ê ƒtƒŠƒbƒvY" checked:false
-menuItem mirrorYFripYMi "XZ•½–Ê ƒtƒŠƒbƒvY" checked:false
-menuItem mirrorZFripYMi "XY•½–Ê ƒtƒŠƒbƒvY" checked:false
+menuItem mirrorXFripYMi "YZå¹³é¢ ãƒ•ãƒªãƒƒãƒ—Y" checked:false
+menuItem mirrorYFripYMi "XZå¹³é¢ ãƒ•ãƒªãƒƒãƒ—Y" checked:false
+menuItem mirrorZFripYMi "XYå¹³é¢ ãƒ•ãƒªãƒƒãƒ—Y" checked:false
 )                                 
 /*
-subMenu "ƒIƒtƒZƒbƒgİ’è"
+subMenu "ã‚ªãƒ•ã‚»ãƒƒãƒˆè¨­å®š"
 (
-menuItem posHoldMi "Œ»İˆÊ’u‚ğ•Û" enabled:false
+menuItem posHoldMi "ç¾åœ¨ä½ç½®ã‚’ä¿æŒ" enabled:false
 
 seperator offsetSep01
-menuItem axisHoldMi "Œ»İ²‚ğ•Û" checked:true
-menuItem axisReplaceiXYMi "²ƒŠƒvƒŒƒCƒX X-->Y" checked:false
-menuItem axisReplaceiXZMi "²ƒŠƒvƒŒƒCƒX X-->Z" checked:false
+menuItem axisHoldMi "ç¾åœ¨è»¸ã‚’ä¿æŒ" checked:true
+menuItem axisReplaceiXYMi "è»¸ãƒªãƒ—ãƒ¬ã‚¤ã‚¹ X-->Y" checked:false
+menuItem axisReplaceiXZMi "è»¸ãƒªãƒ—ãƒ¬ã‚¤ã‚¹ X-->Z" checked:false
 */
 /*
-menuItem mirrorXYaplaneMi "XY•½–Êƒ~ƒ‰[" checked:false
+menuItem mirrorXYaplaneMi "XYå¹³é¢ãƒŸãƒ©ãƒ¼" checked:false
 seperator sep02
-menuItem mirrorXaaFripZMi "X²ƒ~ƒ‰[ƒtƒŠƒbƒvZ" checked:false
-menuItem mirrorYaaFripZMi "Y²ƒ~ƒ‰[ƒtƒŠƒbƒvZ" checked:false
-menuItem mirrorZaaFripZMi "Z²ƒ~ƒ‰[ƒtƒŠƒbƒvZ" checked:false
+menuItem mirrorXaaFripZMi "Xè»¸ãƒŸãƒ©ãƒ¼ãƒ•ãƒªãƒƒãƒ—Z" checked:false
+menuItem mirrorYaaFripZMi "Yè»¸ãƒŸãƒ©ãƒ¼ãƒ•ãƒªãƒƒãƒ—Z" checked:false
+menuItem mirrorZaaFripZMi "Zè»¸ãƒŸãƒ©ãƒ¼ãƒ•ãƒªãƒƒãƒ—Z" checked:false
 seperator sep03
-menuItem mirrorXaaFripYMi "X²ƒ~ƒ‰[ƒtƒŠƒbƒvY" checked:false
-menuItem mirrorYaaFripYMi "Y²ƒ~ƒ‰[ƒtƒŠƒbƒvY" checked:false
-menuItem mirrorZaaFripYMi "Z²ƒ~ƒ‰[ƒtƒŠƒbƒvY" checked:false
+menuItem mirrorXaaFripYMi "Xè»¸ãƒŸãƒ©ãƒ¼ãƒ•ãƒªãƒƒãƒ—Y" checked:false
+menuItem mirrorYaaFripYMi "Yè»¸ãƒŸãƒ©ãƒ¼ãƒ•ãƒªãƒƒãƒ—Y" checked:false
+menuItem mirrorZaaFripYMi "Zè»¸ãƒŸãƒ©ãƒ¼ãƒ•ãƒªãƒƒãƒ—Y" checked:false
 )
 */
-subMenu "ƒrƒˆƒ“ƒh"
+subMenu "ãƒ“ãƒ¨ãƒ³ãƒ‰"
 ( 
-menuItem fkBeyond "FKƒRƒ“ƒo[ƒg" enabled:false;
+menuItem fkBeyond "FKã‚³ãƒ³ãƒãƒ¼ãƒˆ" enabled:false;
 )
 
-subMenu "‰Šúİ’è"
+subMenu "åˆæœŸè¨­å®š"
 (
-menuItem loadListMi "‘O‰ñ‹N“®‚ÌƒŠƒXƒg‚ğˆÛ" enabled:true checked:true;
-menuItem loadSettingMi "‘O‰ñ‹N“®‚Ìİ’è‚ğˆÛ" enabled:true checked:false;
+menuItem loadListMi "å‰å›èµ·å‹•æ™‚ã®ãƒªã‚¹ãƒˆã‚’ç¶­æŒ" enabled:true checked:true;
+menuItem loadSettingMi "å‰å›èµ·å‹•æ™‚ã®è¨­å®šã‚’ç¶­æŒ" enabled:true checked:false;
 seperator sep05
-menuItem pBakedSelectMi "PBakeŒã‚É‘I‘ğ‚ğ‰ğœ" enabled:true checked:true;
+menuItem pBakedSelectMi "PBakeå¾Œã«é¸æŠã‚’è§£é™¤" enabled:true checked:true;
 seperator sep06
-menuItem bakedLayerMi "BBakeŒãAV‚µ‚¢ƒŒƒCƒ„[‚ÉƒIƒuƒWƒFƒNƒg‚ğ‚Ü‚Æ‚ß‚é" enabled:true checked:true;
-menuItem bBakedSelectMi "BBakeŒã‚ÉƒIƒuƒWƒFƒNƒg‚ğ‘I‘ğ" enabled:true checked:true
+menuItem bakedLayerMi "BBakeå¾Œã€æ–°ã—ã„ãƒ¬ã‚¤ãƒ¤ãƒ¼ã«ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’ã¾ã¨ã‚ã‚‹" enabled:true checked:true;
+menuItem bBakedSelectMi "BBakeå¾Œã«ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’é¸æŠ" enabled:true checked:true
 seperator sep07
-menuItem bakedLayerNameMi "ì¬‚·‚éƒŒƒCƒ„[–¼‚ğİ’è" enabled:true
+menuItem bakedLayerNameMi "ä½œæˆã™ã‚‹ãƒ¬ã‚¤ãƒ¤ãƒ¼åã‚’è¨­å®š" enabled:true
 )
 
-subMenu "ƒwƒ‹ƒv"
+subMenu "ãƒ˜ãƒ«ãƒ—"
 ( 
-menuItem helpMi "ƒwƒ‹ƒv"
+menuItem helpMi "ãƒ˜ãƒ«ãƒ—"
 menuItem aboutMi "About"
 menuItem emailMi "E-Mail"
 )
 
 --////////////////////////////////////////////////
---ƒAƒNƒVƒ‡ƒ“
+--ã‚¢ã‚¯ã‚·ãƒ§ãƒ³
 --////////////////////////////////////////////////
 on closeMi  picked do
 (
@@ -175,7 +175,7 @@ on helpMi picked do shellLaunch "http://www.sakaiden.com/?page_id=4163" ""
 on aboutMi picked do sj_functions.sjtools_about_Fn();
 on emailMi picked do shellLaunch "mailTo:sakaiden@live.jp" ""
 
---ƒ~ƒ‰[ƒŠƒ“ƒOİ’è•ÏX
+--ãƒŸãƒ©ãƒ¼ãƒªãƒ³ã‚°è¨­å®šå¤‰æ›´
 on mirrorYZplaneMi picked do (
 mT = #(1,-1,-1,-1,1,1,-1,1,1,-1,1,1)
 mirrorMenu = #(true,false,false,false,false,false,false,false,false))
@@ -204,7 +204,7 @@ on mirrorZFripYMi picked do (
 mT = #(1,1,-1,-1,-1,1,1,1,-1,1,1,-1)
 mirrorMenu = #(false,false,false,false,false,false,false,false,true))
 
---‰Šúİ’è•”
+--åˆæœŸè¨­å®šéƒ¨
 on loadListMi picked do (if iniSetting[1] then iniSetting[1] = false else iniSetting[1] = true;
 	sj_pbake_rol.saveIni_Fn());
 on loadSettingMi picked do (if iniSetting[2] then iniSetting[2] = false else iniSetting[2] = true;
@@ -217,40 +217,40 @@ on bBakedSelectMi picked do (if iniSetting[5] then iniSetting[5] = false else in
 	sj_pbake_rol.saveIni_Fn());
 on bakedLayerNameMi picked do
 (
-	--ƒ[ƒ‹ƒAƒEƒg‚ğì¬
+	--ãƒ­ãƒ¼ãƒ«ã‚¢ã‚¦ãƒˆã‚’ä½œæˆ
 	global sj_pbake_layerName_rol
 	try (destroydialog sj_pbake_layerName_rol) catch()
 		
-		rollout sj_pbake_layerName_rol "ƒŒƒCƒ„[–¼‚ğİ’è‚µ‚Ä‚­‚¾‚³‚¢" width:200 height:52
+		rollout sj_pbake_layerName_rol "ãƒ¬ã‚¤ãƒ¤ãƒ¼åã‚’è¨­å®šã—ã¦ãã ã•ã„" width:200 height:52
 		(
 			--////////////////////////////////////////////////
-			--ƒŒƒCƒAƒEƒg
+			--ãƒ¬ã‚¤ã‚¢ã‚¦ãƒˆ
 			edittext newNameEdt "" pos:[4,8] width:188 height:16
-			button okBt "OK" pos:[8,28] width:88 height:20 toolTip:"–¼‘O‚ğİ’è‚µ‚Ü‚·"
-			button closeBt "ƒLƒƒƒ“ƒZƒ‹" pos:[104,28] width:88 height:20 toolTip:"‚±‚ÌƒEƒBƒ“ƒhƒE‚ğ•Â‚¶‚Ü‚·"
+			button okBt "OK" pos:[8,28] width:88 height:20 toolTip:"åå‰ã‚’è¨­å®šã—ã¾ã™"
+			button closeBt "ã‚­ãƒ£ãƒ³ã‚»ãƒ«" pos:[104,28] width:88 height:20 toolTip:"ã“ã®ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ã‚’é–‰ã˜ã¾ã™"
 			--local resizeBitMap = openBitmap "$Scripts/SJTools/Images/SJ_button_resize.png"
 			--ImgTag resizeImg "Bitmap" pos:[190,326] width:10 height:10 enabled:false bitmap:resizeBitMap transparent:(color 255 255 255);
 			--////////////////////////////////////////////////
-			--ƒAƒNƒVƒ‡ƒ“
-			on sj_pbake_layerName_rol open do --ƒ[ƒ‹ƒAƒEƒg‚ªŠJ‚¢‚½‚Æ‚«
+			--ã‚¢ã‚¯ã‚·ãƒ§ãƒ³
+			on sj_pbake_layerName_rol open do --ãƒ­ãƒ¼ãƒ«ã‚¢ã‚¦ãƒˆãŒé–‹ã„ãŸã¨ã
 			(
-				--•Ï”‚É“K‰
+				--å¤‰æ•°ã«é©å¿œ
 				newNameEdt.text = layerNameStr;
 			)--open do end
 			on okBt pressed do
 			(
 				layerNameStr = newNameEdt.text;
-				--INI‚É‘‚«‚İ
+				--INIã«æ›¸ãè¾¼ã¿
 				setINISetting ((getDir #scripts) + "\SJTools\SJTools.ini") "SJPBake" "BakedLayerName" newNameEdt.text;
-				try (destroydialog sj_pbake_layerName_rol) catch() --ƒ_ƒCƒAƒƒO‚ğ•Â‚¶‚é
+				try (destroydialog sj_pbake_layerName_rol) catch() --ãƒ€ã‚¤ã‚¢ãƒ­ã‚°ã‚’é–‰ã˜ã‚‹
 			)--end
 			on closeBt pressed do
 			(
-				try (destroydialog sj_pbake_layerName_rol) catch() --ƒ_ƒCƒAƒƒO‚ğ•Â‚¶‚é
+				try (destroydialog sj_pbake_layerName_rol) catch() --ãƒ€ã‚¤ã‚¢ãƒ­ã‚°ã‚’é–‰ã˜ã‚‹
 			)--end
 		);--rollout rs_hitobj_rol
 		--////////////////////////////////////////////////
-		--ƒ_ƒCƒAƒƒOƒNƒŠƒG[ƒg
+		--ãƒ€ã‚¤ã‚¢ãƒ­ã‚°ã‚¯ãƒªã‚¨ãƒ¼ãƒˆ
 		CreateDialog sj_pbake_layerName_rol /*pos:[sj_renamer_rol.pos[1],sj_renamer_rol.pos[2]]*/ style:#(#style_border, #style_titlebar, #style_sysmenu, #style_minimizebox, #style_resizing, #style_toolwindow) --pos:[50,50]
 );
 	
@@ -271,10 +271,10 @@ offsetMenu = #(false,false,true);
 offsetSetting = #(3,1,2);
 )
 
---ƒƒjƒ…[‚ğŠJ‚­‚½‚Ñ‚ÉÀs‚³‚ê‚éƒAƒbƒvƒf[ƒg
+--ãƒ¡ãƒ‹ãƒ¥ãƒ¼ã‚’é–‹ããŸã³ã«å®Ÿè¡Œã•ã‚Œã‚‹ã‚¢ãƒƒãƒ—ãƒ‡ãƒ¼ãƒˆ
 on pbakeMenuBar update do
 (
---ƒ~ƒ‰[İ’è
+--ãƒŸãƒ©ãƒ¼è¨­å®š
 pbakeMenuBar.mirrorYZplaneMi.checked = mirrorMenu[1]
 pbakeMenuBar.mirrorXZplaneMi.checked = mirrorMenu[2]
 pbakeMenuBar.mirrorXYplaneMi.checked = mirrorMenu[3]
@@ -286,7 +286,7 @@ pbakeMenuBar.mirrorYFripYMi.checked = mirrorMenu[8]
 pbakeMenuBar.mirrorZFripYMi.checked = mirrorMenu[9]
 
 	
---‰Šúİ’è
+--åˆæœŸè¨­å®š
 pbakeMenuBar.loadListMi.checked = iniSetting[1];
 pbakeMenuBar.loadSettingMi.checked = iniSetting[2];
 pbakeMenuBar.pBakedSelectMi.checked = iniSetting[3];
@@ -310,26 +310,26 @@ pbakeMenuBar.closeMi.enabled = not rcMenuFlag
 )--rcMenu end
 
 -----------------------------------------------------------------------------------------------------------
--- ƒƒCƒ“ Rollout
+-- ãƒ¡ã‚¤ãƒ³ Rollout
 -----------------------------------------------------------------------------------------------------------
 rollout sj_pbake_rol nameAndVersion width:452 height:404
 (
 
 -----------------------------------------------------------------------------------------------------------
--- ƒtƒ@ƒ“ƒNƒVƒ‡ƒ“
+-- ãƒ•ã‚¡ãƒ³ã‚¯ã‚·ãƒ§ãƒ³
 -----------------------------------------------------------------------------------------------------------
 --////////////////////////////////////////////////
 --load default
 --////////////////////////////////////////////////
 fn loadDefault_Fn =
 (
---‚È‚ñ‚Æ‚È‚­ˆÃ†‰»
+--ãªã‚“ã¨ãªãæš—å·åŒ–
 TimeMachineDefalutFile = openEncryptedFile "$Scripts/SJTools//TimeMachineDefalut.dat" fileLockID
 tempName = #();
 --tempValue = #();
 --temp = #();
 
-	--ƒoƒO‰ñ”ğ—p‚Étry catch
+	--ãƒã‚°å›é¿ç”¨ã«try catch
 	--try(
 
 	tempName = readValue TimeMachineDefalutFile
@@ -357,8 +357,8 @@ tempName = #();
 --////////////////////////////////////////////////
 fn saveDefault_Fn = 
 (
---‚È‚ñ‚Æ‚È‚­ˆÃ†‰»
---print "•Û‘¶‚µ‚Ü‚·"
+--ãªã‚“ã¨ãªãæš—å·åŒ–
+--print "ä¿å­˜ã—ã¾ã™"
 PbakeDefalutFile = createFile "$Scripts/SJTools//PbakeDefalut.tmp"
 format "%"  to:PbakeDefalutFile;
 close PbakeDefalutFile;
@@ -368,30 +368,30 @@ close PbakeDefalutFile;
 )--fn end
 
 -----------------------------------------------------------------------------------------------------------
---‰Šú‰»
+--åˆæœŸåŒ–
 -----------------------------------------------------------------------------------------------------------
 --////////////////////////////////////////////////
---‰Šú‰»
+--åˆæœŸåŒ–
 --////////////////////////////////////////////////
 fn initialize_Fn = (
-	--‰Šúİ’è‚ğini‚©‚ç“Ç‚İ‚Ş
+	--åˆæœŸè¨­å®šã‚’iniã‹ã‚‰èª­ã¿è¾¼ã‚€
 	iniSetting[1] = execute(getINISetting ((getDir #scripts) + "\SJTools\SJTools.ini") "SJPBake" "LoadList");
 	iniSetting[2] = execute(getINISetting ((getDir #scripts) + "\SJTools\SJTools.ini") "SJPBake" "LoadSetting");
 	iniSetting[3] = execute(getINISetting ((getDir #scripts) + "\SJTools\SJTools.ini") "SJPBake" "PBakedSelect");
 	iniSetting[4] = execute(getINISetting ((getDir #scripts) + "\SJTools\SJTools.ini") "SJPBake" "BakedLayer");
 	iniSetting[5] = execute(getINISetting ((getDir #scripts) + "\SJTools\SJTools.ini") "SJPBake" "BBakedSelect");
 	
-	--•Ï”‚É“K‰
+	--å¤‰æ•°ã«é©å¿œ
 	layerNameStr = (getINISetting ((getDir #scripts) + "\SJTools\SJTools.ini") "SJPBake" "BakedLayerName");
 	
 	if iniSetting[1] then (
-	--Iniƒtƒ@ƒCƒ‹‚©‚ç‘O‰ñ‹N“®‚Ìó‘Ô‚ğæ“¾
+	--Iniãƒ•ã‚¡ã‚¤ãƒ«ã‹ã‚‰å‰å›èµ·å‹•æ™‚ã®çŠ¶æ…‹ã‚’å–å¾—
 		--print (getINISetting ((getDir #scripts) + "\SJTools\SJTools.ini") "SJPBake" "ListL")
 	sj_pbake_rol.pb_listL.items = execute(getINISetting ((getDir #scripts) + "\SJTools\SJTools.ini") "SJPBake" "ListL");
 	sj_pbake_rol.pb_listR.items = execute(getINISetting ((getDir #scripts) + "\SJTools\SJTools.ini") "SJPBake" "ListR");
 	);--if end
 	
-	--•Ï”‚É“K‰
+	--å¤‰æ•°ã«é©å¿œ
 	toolSetting = execute(getINISetting ((getDir #scripts) + "\SJTools\SJTools.ini") "SJPBake" "ToolSetting");
 	
 	if iniSetting[2] then (
@@ -417,7 +417,7 @@ fn initialize_Fn = (
 );--end
 
 --////////////////////////////////////////////////
---‰Šú’l•Û‘¶
+--åˆæœŸå€¤ä¿å­˜
 --////////////////////////////////////////////////
 fn saveIni_Fn = (
 	toolSetting[1] = sj_pbake_rol.pbTypeRb.state;
@@ -438,13 +438,13 @@ setINISetting ((getDir #scripts) + "\SJTools\SJTools.ini") "SJPBake" "BakedLayer
 setINISetting ((getDir #scripts) + "\SJTools\SJTools.ini") "SJPBake" "BBakedSelect" (iniSetting[5] as String)
 setINISetting ((getDir #scripts) + "\SJTools\SJTools.ini") "SJPBake" "ToolSetting" (toolSetting as String)
 
---”z—ñ‚ğ•¶š—ñ‰»
+--é…åˆ—ã‚’æ–‡å­—åˆ—åŒ–
 local arrayStr = "#("
-for i in sj_pbake_rol.pb_listL.items do arrayStr += "\"" + i + "\",";--\"‚Åƒ_ƒuƒ‹ƒNƒH[ƒe[ƒVƒ‡ƒ“‚ÌƒGƒXƒP[ƒvƒV[ƒPƒ“ƒX
+for i in sj_pbake_rol.pb_listL.items do arrayStr += "\"" + i + "\",";--\"ã§ãƒ€ãƒ–ãƒ«ã‚¯ã‚©ãƒ¼ãƒ†ãƒ¼ã‚·ãƒ§ãƒ³ã®ã‚¨ã‚¹ã‚±ãƒ¼ãƒ—ã‚·ãƒ¼ã‚±ãƒ³ã‚¹
 if (arrayStr != "#(") then arrayStr = replace arrayStr (arrayStr.count) 1 ")" else arrayStr = "#()";
 setINISetting ((getDir #scripts) + "\SJTools\SJTools.ini") "SJPBake" "ListL" arrayStr;
 arrayStr = "#("
-for i in sj_pbake_rol.pb_listR.items do arrayStr += "\"" + i + "\",";--\"‚Åƒ_ƒuƒ‹ƒNƒH[ƒe[ƒVƒ‡ƒ“‚ÌƒGƒXƒP[ƒvƒV[ƒPƒ“ƒX
+for i in sj_pbake_rol.pb_listR.items do arrayStr += "\"" + i + "\",";--\"ã§ãƒ€ãƒ–ãƒ«ã‚¯ã‚©ãƒ¼ãƒ†ãƒ¼ã‚·ãƒ§ãƒ³ã®ã‚¨ã‚¹ã‚±ãƒ¼ãƒ—ã‚·ãƒ¼ã‚±ãƒ³ã‚¹
 if (arrayStr != "#(") then arrayStr = replace arrayStr (arrayStr.count) 1 ")" else arrayStr = "#()";
 setINISetting ((getDir #scripts) + "\SJTools\SJTools.ini") "SJPBake" "ListR" arrayStr;
 
@@ -452,10 +452,10 @@ setINISetting ((getDir #scripts) + "\SJTools\SJTools.ini") "SJPBake" "ListR" arr
 
 
 -----------------------------------------------------------------------------------------------------------
--- ƒ`ƒFƒbƒJ[ƒtƒ@ƒ“ƒNƒVƒ‡ƒ“
+-- ãƒã‚§ãƒƒã‚«ãƒ¼ãƒ•ã‚¡ãƒ³ã‚¯ã‚·ãƒ§ãƒ³
 -----------------------------------------------------------------------------------------------------------
 --////////////////////////////////////////////////
---ƒxƒCƒNƒ^ƒCƒv”»’è
+--ãƒ™ã‚¤ã‚¯ã‚¿ã‚¤ãƒ—åˆ¤å®š
 --////////////////////////////////////////////////
 fn bakeTypeCheck_Fn =
 (
@@ -486,7 +486,7 @@ local checkTemp = #()
 )
 
 --////////////////////////////////////////////////
---ƒxƒCƒNƒL[ƒL[”»’è
+--ãƒ™ã‚¤ã‚¯ã‚­ãƒ¼ã‚­ãƒ¼åˆ¤å®š
 --////////////////////////////////////////////////
 fn bakeKeyCheck_Fn =
 (
@@ -496,7 +496,7 @@ fn bakeKeyCheck_Fn =
 		(
 			if sj_pbake_rol.scaleCb.checked == true then
 			(
-			--‘S‚Ä‚ÉƒL[
+			--å…¨ã¦ã«ã‚­ãƒ¼
 				pbake_bakeType = 0
 				sj_pbake_rol.pBakeBt.enabled = true
 				--sj_pbake_rol.offsetChk.checked = true;
@@ -504,7 +504,7 @@ fn bakeKeyCheck_Fn =
 			)
 			else
 			(
-			--ˆÊ’uA‰ñ“]
+			--ä½ç½®ã€å›è»¢
 				pbake_bakeType = 1
 				sj_pbake_rol.pBakeBt.enabled = true
 				--sj_pbake_rol.offsetChk.checked = false;
@@ -515,7 +515,7 @@ fn bakeKeyCheck_Fn =
 		(
 			if sj_pbake_rol.scaleCb.checked == true then
 			(
-			--ˆÊ’uAƒXƒP[ƒ‹
+			--ä½ç½®ã€ã‚¹ã‚±ãƒ¼ãƒ«
 				pbake_bakeType = 2
 				sj_pbake_rol.pBakeBt.enabled = true
 				--sj_pbake_rol.offsetChk.checked = false;
@@ -523,7 +523,7 @@ fn bakeKeyCheck_Fn =
 			)
 			else
 			(
-			--ˆÊ’u‚Ì‚İ
+			--ä½ç½®ã®ã¿
 				pbake_bakeType = 3
 				sj_pbake_rol.pBakeBt.enabled = true
 				--sj_pbake_rol.offsetChk.checked = false;
@@ -537,7 +537,7 @@ fn bakeKeyCheck_Fn =
 		(
 			if sj_pbake_rol.scaleCb.checked == true then
 			(
-			--‰ñ“]AƒXƒP[ƒ‹
+			--å›è»¢ã€ã‚¹ã‚±ãƒ¼ãƒ«
 				pbake_bakeType = 4
 				sj_pbake_rol.pBakeBt.enabled = true
 				--sj_pbake_rol.offsetChk.checked = false;
@@ -545,7 +545,7 @@ fn bakeKeyCheck_Fn =
 			)
 			else
 			(
-			--‰ñ“]‚Ì‚İ
+			--å›è»¢ã®ã¿
 				pbake_bakeType = 5
 				sj_pbake_rol.pBakeBt.enabled = true
 				--sj_pbake_rol.offsetChk.checked = false;
@@ -556,7 +556,7 @@ fn bakeKeyCheck_Fn =
 		(
 			if sj_pbake_rol.scaleCb.checked == true then
 			(
-			--ƒXƒP[ƒ‹‚Ì‚İ
+			--ã‚¹ã‚±ãƒ¼ãƒ«ã®ã¿
 				pbake_bakeType = 6
 				sj_pbake_rol.pBakeBt.enabled = true
 				--sj_pbake_rol.offsetChk.checked = false;
@@ -564,7 +564,7 @@ fn bakeKeyCheck_Fn =
 			)
 			else
 			(
-			--pBake–³Œø
+			--pBakeç„¡åŠ¹
 				pbake_bakeType = 0
 				sj_pbake_rol.pBakeBt.enabled = false
 				--sj_pbake_rol.offsetChk.checked = false;
@@ -575,7 +575,7 @@ fn bakeKeyCheck_Fn =
 )--fn end
 
 --////////////////////////////////////////////////
---Step by Step@ƒ`ƒFƒbƒN
+--Step by Stepã€€ãƒã‚§ãƒƒã‚¯
 --////////////////////////////////////////////////
 fn sBySCheck_Fn stateTm =
 (
@@ -594,7 +594,7 @@ fn sBySCheck_Fn stateTm =
 )
 
 --////////////////////////////////////////////////
---ƒŠƒXƒg‚Í‹ó‚©H
+--ãƒªã‚¹ãƒˆã¯ç©ºã‹ï¼Ÿ
 --////////////////////////////////////////////////
 fn bakeListCheck_Fn checkList =
 (
@@ -604,18 +604,18 @@ fn bakeListCheck_Fn checkList =
 	)
 	else
 	(
-		messageBox("ƒŠƒXƒg‚ª‹ó‚Å‚·‚£!") title:MesseTitleInfoStr;
+		messageBox("ãƒªã‚¹ãƒˆãŒç©ºã§ã™ã…!") title:MesseTitleInfoStr;
 		return false
 	)
 )--fn end
 
 --////////////////////////////////////////////////
---ƒIƒuƒWƒFƒNƒg‚ª‚ ‚é‚©‚Ç‚¤‚©”»’è
+--ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆãŒã‚ã‚‹ã‹ã©ã†ã‹åˆ¤å®š
 --////////////////////////////////////////////////
 fn bakeListSelectCheck_Fn = 
 (
-sj_progressBar_rol.processInfo.caption = "ƒŠƒXƒg‚ğƒ`ƒFƒbƒN’†"
-Local checkListTag = sj_pbake_rol.pb_listL.items;--¶‚ÌƒAƒCƒeƒ€
+sj_progressBar_rol.processInfo.caption = "ãƒªã‚¹ãƒˆã‚’ãƒã‚§ãƒƒã‚¯ä¸­"
+Local checkListTag = sj_pbake_rol.pb_listL.items;--å·¦ã®ã‚¢ã‚¤ãƒ†ãƒ 
 Local errorFlag = 0, progCount = 1;
 
 tempObj = undefined;
@@ -623,55 +623,55 @@ tempObj = undefined;
 Local getNodeTemp = undefined;
 Local getNodeTempCount = 0;
 	
-	--ƒŠƒXƒg‚Í‚©‚ç‚©H
+	--ãƒªã‚¹ãƒˆã¯ã‹ã‚‰ã‹ï¼Ÿ
 	if checkListTag.count == 0 do
 	(
-		messageBox("ƒŠƒXƒg‚ª‹ó‚Å‚·I") title:MesseTitleInfoStr;
+		messageBox("ãƒªã‚¹ãƒˆãŒç©ºã§ã™ï¼") title:MesseTitleInfoStr;
 		return false;
 	);
 
 	--////////////////////////////////////////////////
-	--PBake—pƒŠƒXƒg”»’è
+	--PBakeç”¨ãƒªã‚¹ãƒˆåˆ¤å®š
 	--////////////////////////////////////////////////
 	if(sj_pbake_rol.pbTypeRb.state == 1)do
 	(
-		--ƒAƒCƒeƒ€”‚ª’´‚¦‚Ä‚¢‚È‚¢‚©H
+		--ã‚¢ã‚¤ãƒ†ãƒ æ•°ãŒè¶…ãˆã¦ã„ãªã„ã‹ï¼Ÿ
 		if (sj_pbake_rol.pb_listL.items.count > sj_pbake_rol.pb_listR.items.count) do
 		(
-			messageBox("ƒxƒCƒNƒ^[ƒQƒbƒg‚ª‚ ‚è‚Ü‚¹‚ñ!\n‰EƒŠƒXƒg‚Éƒ^[ƒQƒbƒg‚ğİ’è‚µ‚Ä‚­‚¾‚³‚¢") title:MesseTitleInfoStr;
+			messageBox("ãƒ™ã‚¤ã‚¯ã‚¿ãƒ¼ã‚²ãƒƒãƒˆãŒã‚ã‚Šã¾ã›ã‚“!\nå³ãƒªã‚¹ãƒˆã«ã‚¿ãƒ¼ã‚²ãƒƒãƒˆã‚’è¨­å®šã—ã¦ãã ã•ã„") title:MesseTitleInfoStr;
 			return false;
 		)
-	);--Pbake—pƒŠƒXƒg”»’è
+	);--Pbakeç”¨ãƒªã‚¹ãƒˆåˆ¤å®š
 
-	 for i in checkListTag do--‘I‘ğƒeƒXƒgŠJn
+	 for i in checkListTag do--é¸æŠãƒ†ã‚¹ãƒˆé–‹å§‹
 	 (
-		--ƒIƒuƒWƒFƒNƒg‚ğŠm•Û--‘å•¶š¬•¶š”»’è‚ ‚è
+		--ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’ç¢ºä¿--å¤§æ–‡å­—å°æ–‡å­—åˆ¤å®šã‚ã‚Š
 		 getNodeTemp = (getNodeByName i exact:false ignoreCase:false all:true);
-		 --ã‚ÌgetNodeByname‚Í”z—ñ‚ª•Ô‚³‚ê‚é‚Ì‚Å’ˆÓI
+		 --ä¸Šã®getNodeBynameã¯é…åˆ—ãŒè¿”ã•ã‚Œã‚‹ã®ã§æ³¨æ„ï¼
 	 
-		--ƒIƒuƒWƒFƒNƒg‚Í‚ ‚é‚©?”z—ñ‚Ì”‚ª0‚È‚ç‚Î
+		--ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã¯ã‚ã‚‹ã‹?é…åˆ—ã®æ•°ãŒ0ãªã‚‰ã°
 		if (getNodeTemp.count == 0) do
 		(
-			messageBox("ˆÈ‰º‚ÌƒIƒuƒWƒFƒNƒg‚ªƒV[ƒ“ã‚É‚ ‚è‚Ü‚¹‚ñ\n" + i) title:MesseTitleInfoStr;
+			messageBox("ä»¥ä¸‹ã®ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆãŒã‚·ãƒ¼ãƒ³ä¸Šã«ã‚ã‚Šã¾ã›ã‚“\n" + i) title:MesseTitleInfoStr;
 			return false;
 		);--if end
 		
-		--“¯‚¶–¼‘O‚ÌƒIƒuƒWƒFƒNƒg‚ª‚ ‚é‚©?”z—ñ‚ÅŠi”[‚µ‚Ä‚¢‚é‚Ì‚ÅA2ˆÈã‚È‚çd•¡–¼‚ ‚è
+		--åŒã˜åå‰ã®ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆãŒã‚ã‚‹ã‹?é…åˆ—ã§æ ¼ç´ã—ã¦ã„ã‚‹ã®ã§ã€2ä»¥ä¸Šãªã‚‰é‡è¤‡åã‚ã‚Š
 		if (getNodeTemp.count >= 2) do doubleNameCheck = true;
 
-		--Plot‚Ìê‡‚ÌŠm”Fbip‚©‚Ç‚¤‚©Šm”F
+		--Plotã®å ´åˆã®ç¢ºèªbipã‹ã©ã†ã‹ç¢ºèª
 		if (sj_pbake_rol.pbTypeRb.state == 3) then
 		(
 			tempObj = getNodeByName i;
 			if ((classOf tempObj) == Biped_Object) or ((classOf tempObj.controller) == BipSlave_Control) then
 			(
-			--messageBox("PBake‚ÆPlot‚ÍBiped‚É‘Î‰‚µ‚Ä‚¢‚Ü‚¹‚ñB\n" + i) title:MesseTitleInfoStr;
-			messageBox("Plot‚ÍBiped‚É‘Î‰‚µ‚Ä‚¢‚Ü‚¹‚ñB\n" + i) title:MesseTitleInfoStr;
+			--messageBox("PBakeã¨Plotã¯Bipedã«å¯¾å¿œã—ã¦ã„ã¾ã›ã‚“ã€‚\n" + i) title:MesseTitleInfoStr;
+			messageBox("Plotã¯Bipedã«å¯¾å¿œã—ã¦ã„ã¾ã›ã‚“ã€‚\n" + i) title:MesseTitleInfoStr;
 			return false;
 			);--if end
 		);--if end
 	
-	--ƒvƒƒOƒŒƒXˆ—
+	--ãƒ—ãƒ­ã‚°ãƒ¬ã‚¹å‡¦ç†
 	progCount += 1;
 	sj_progressBar_rol.progbar.color = (color 190 10 30);
 	sj_progressBar_rol.progbar.value = ((100.00/checkListTag.count) * progCount) as Integer;
@@ -680,39 +680,39 @@ Local getNodeTempCount = 0;
 
 	getNodeTempCount = 0;
 	
-	--pbake‚Ìê‡‚Í‰EƒŠƒXƒg‚àŒŸõ
+	--pbakeã®å ´åˆã¯å³ãƒªã‚¹ãƒˆã‚‚æ¤œç´¢
 	if (sj_pbake_rol.pbTypeRb.state == 1) do
 	(
-	--ˆê’[‰Šú‰»A¶‘¤ƒŠƒXƒg‚Ìd•¡—p‚Ìƒtƒ‰ƒO‚Í‚·‚Å‚Éˆ—Ï‚İ
+	--ä¸€ç«¯åˆæœŸåŒ–ã€å·¦å´ãƒªã‚¹ãƒˆã®é‡è¤‡ç”¨ã®ãƒ•ãƒ©ã‚°ã¯ã™ã§ã«å‡¦ç†æ¸ˆã¿
 	getNodeTemp = undefined;
 		
 	checkListTag = sj_pbake_rol.pb_listR.items;
 	progCount = 1;
 		
-		for i in checkListTag do--‘I‘ğƒeƒXƒgŠJn
+		for i in checkListTag do--é¸æŠãƒ†ã‚¹ãƒˆé–‹å§‹
 		 (
-			--ƒIƒuƒWƒFƒNƒg‚ğŠm•Û
+			--ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’ç¢ºä¿
 			getNodeTemp = (getNodeByName i exact:false ignoreCase:false all:true);
-			--ã‚ÌgetNodeByname‚Í”z—ñ‚ª•Ô‚³‚ê‚é‚Ì‚Å’ˆÓI
+			--ä¸Šã®getNodeBynameã¯é…åˆ—ãŒè¿”ã•ã‚Œã‚‹ã®ã§æ³¨æ„ï¼
 			 
-			--ƒIƒuƒWƒFƒNƒg‚Í‚ ‚é‚©?”z—ñ‚Ì”‚ª0‚È‚ç‚Î
+			--ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã¯ã‚ã‚‹ã‹?é…åˆ—ã®æ•°ãŒ0ãªã‚‰ã°
 			if (getNodeTemp.count == 0) do
 			(
-				messageBox("ˆÈ‰º‚ÌƒIƒuƒWƒFƒNƒg‚ªƒV[ƒ“ã‚É‚ ‚è‚Ü‚¹‚ñ\n" + i) title:MesseTitleInfoStr;
+				messageBox("ä»¥ä¸‹ã®ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆãŒã‚·ãƒ¼ãƒ³ä¸Šã«ã‚ã‚Šã¾ã›ã‚“\n" + i) title:MesseTitleInfoStr;
 				return false;
 			);--if end
 			
-			--“¯‚¶–¼‘O‚ÌƒIƒuƒWƒFƒNƒg‚ª‚ ‚é‚©?
+			--åŒã˜åå‰ã®ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆãŒã‚ã‚‹ã‹?
 			if (getNodeTemp.count > 1) do doubleNameCheck = true;
 
-		--ƒvƒƒOƒŒƒX
+		--ãƒ—ãƒ­ã‚°ãƒ¬ã‚¹
 		progCount += 1;
 		sj_progressBar_rol.progbar.color = (color 190 10 30);
 		sj_progressBar_rol.progbar.value = ((100.00/checkListTag.count) * progCount) as Integer;
 	);--for end
 	);--if end
 
-	--ƒvƒƒOƒŒƒXˆ—
+	--ãƒ—ãƒ­ã‚°ãƒ¬ã‚¹å‡¦ç†
 	sj_progressBar_rol.progbar.color = (color 30 10 190);
 	sj_progressBar_rol.progbar.value = 0;
 	
@@ -723,15 +723,15 @@ Local getNodeTempCount = 0;
 
 
 --////////////////////////////////////////////////
---IKƒIƒuƒWƒFƒNƒg‚ğŠm”F‚µ‚ÄŠi”[‚·‚é
+--IKã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’ç¢ºèªã—ã¦æ ¼ç´ã™ã‚‹
 --////////////////////////////////////////////////
 fn bakeListIKCheck_Fn = 
 (
-	sj_progressBar_rol.processInfo.caption = "ƒŠƒXƒgƒ`ƒFƒbƒN’†";
+	sj_progressBar_rol.processInfo.caption = "ãƒªã‚¹ãƒˆãƒã‚§ãƒƒã‚¯ä¸­";
 	Local checkListTag = sj_pbake_rol.pb_listL.items;
 	Local progCount = 1, k = undefined;
 	
-	--‰Šú‰»
+	--åˆæœŸåŒ–
 	ikCheck = false;
 	ikObjQuery = false;
 	ikObj = #();
@@ -742,38 +742,38 @@ fn bakeListIKCheck_Fn =
 	ikObjCont = 1;
 	ikdependObj = #();
 	
-	 for i in checkListTag do--‘I‘ğƒeƒXƒgŠJn
+	 for i in checkListTag do--é¸æŠãƒ†ã‚¹ãƒˆé–‹å§‹
 	 (
 		k = (getNodeByName i);
 		 
-		--K‚ÌƒIƒuƒWƒFƒNƒg‚ªƒV[ƒ“‚É‚ ‚é‚©H
+		--Kã®ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆãŒã‚·ãƒ¼ãƒ³ã«ã‚ã‚‹ã‹ï¼Ÿ
 		if (k != undefined ) do
 		(
-		--IKŠÖ˜A‚ÌƒIƒuƒWƒFƒNƒg‚È‚ç‰ñû
+		--IKé–¢é€£ã®ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆãªã‚‰å›å
 		if ((classOf k.controller) == IKControl) then 
 		(
 			append ikObj k;
-			--‚»‚Ìindex‚ğ‰ñûprogCount‚ÍLsit‚ÌID‚Æˆê’v‚µ‚Ä‚¢‚é
+			--ãã®indexã‚’å›åprogCountã¯Lsitã®IDã¨ä¸€è‡´ã—ã¦ã„ã‚‹
 			append ikObjIndex progCount;
 			ikCheck = true;
 		);--if end
 		
-		--HDIK‚ğ‰ñû
+		--HDIKã‚’å›å
 		if ((classOf k.controller) == IK_ControllerMatrix3Controller) then
 		 (
 			append ikObj k;
 			append hdikObj k;
-			--‚»‚Ìindex‚ğ‰ñûprogCount‚ÍLsit‚ÌID‚Æˆê’v‚µ‚Ä‚¢‚é
+			--ãã®indexã‚’å›åprogCountã¯Lsitã®IDã¨ä¸€è‡´ã—ã¦ã„ã‚‹
 			append ikObjIndex progCount;
 			ikCheck = true;
 		 );--if end
 		
-		--‚±‚Á‚¿‚ÍƒGƒtƒFƒNƒ^
+		--ã“ã£ã¡ã¯ã‚¨ãƒ•ã‚§ã‚¯ã‚¿
 		if ((classOf k) == IK_Chain_Object) then 
 		(
 			append ikObj k;
 			append ikObjEff k;
-			--‚»‚Ìindex‚ğ‰ñûprogCount‚ÍLsit‚ÌID‚Æˆê’v‚µ‚Ä‚¢‚é
+			--ãã®indexã‚’å›åprogCountã¯Lsitã®IDã¨ä¸€è‡´ã—ã¦ã„ã‚‹
 			append ikObjIndex progCount;
 			ikCheck = true;
 			--append ikObjIndex progCount;
@@ -781,7 +781,7 @@ fn bakeListIKCheck_Fn =
 		
 		);--if end
 		
-		--progCount‚ÍLsit‚ÌID‚Æˆê’v‚µ‚Ä‚¢‚é
+		--progCountã¯Lsitã®IDã¨ä¸€è‡´ã—ã¦ã„ã‚‹
 		progCount += 1;
 		--sj_progressBar_rol.progbar.color = (color 190 10 30);
 		sj_progressBar_rol.progbar.value = ((100.00/sj_pbake_rol.pb_listL.items.count) * progCount) as Integer;
@@ -792,10 +792,10 @@ fn bakeListIKCheck_Fn =
 
 
 -----------------------------------------------------------------------------------------------------------
---ƒŠƒXƒg‚ğ‚¢‚¶‚éƒtƒ@ƒ“ƒNƒVƒ‡ƒ“
+--ãƒªã‚¹ãƒˆã‚’ã„ã˜ã‚‹ãƒ•ã‚¡ãƒ³ã‚¯ã‚·ãƒ§ãƒ³
 -----------------------------------------------------------------------------------------------------------
 --////////////////////////////////////////////////
---ƒŠƒXƒg‚É’Ç‰Áƒtƒ@ƒ“ƒNƒVƒ‡ƒ“
+--ãƒªã‚¹ãƒˆã«è¿½åŠ ãƒ•ã‚¡ãƒ³ã‚¯ã‚·ãƒ§ãƒ³
 --////////////////////////////////////////////////
 fn addList_Fn =
 (
@@ -805,20 +805,20 @@ fn addList_Fn =
 		append addList i.name;
 	)
 	return addList;
-	--sort addList --ƒ\[ƒg‚µ‚Ü‚·
+	--sort addList --ã‚½ãƒ¼ãƒˆã—ã¾ã™
 )
 
 --////////////////////////////////////////////////
---íœƒtƒ@ƒ“ƒNƒVƒ‡ƒ“ ’Z‚¢‚¯‚Ç‚Ü‚ŸA—ûK‚Ì‚½‚ß‚É
+--å‰Šé™¤ãƒ•ã‚¡ãƒ³ã‚¯ã‚·ãƒ§ãƒ³ çŸ­ã„ã‘ã©ã¾ãã€ç·´ç¿’ã®ãŸã‚ã«
 --////////////////////////////////////////////////
 fn deleteList_Fn delList delSel =
 (
-	if delList.count != 0 then deleteItem delList delSel --íœ
+	if delList.count != 0 then deleteItem delList delSel --å‰Šé™¤
 
 )
 
 --////////////////////////////////////////////////
---ƒAƒbƒvƒ_ƒEƒ“
+--ã‚¢ãƒƒãƒ—ãƒ€ã‚¦ãƒ³
 --////////////////////////////////////////////////
 fn selUp_Fn selUpList selUpIndex =
 (
@@ -835,7 +835,7 @@ fn selDown_Fn selDownList selDownIndex =
 )
 
 --////////////////////////////////////////////////
---ƒ\[ƒgƒtƒ@ƒ“ƒNƒVƒ‡ƒ“@ƒtƒ@ƒ“ƒNƒVƒ‡ƒ“‰»‚·‚é•K—v‚Í‚È‚¢‚¯‚Ç—ûK‚É
+--ã‚½ãƒ¼ãƒˆãƒ•ã‚¡ãƒ³ã‚¯ã‚·ãƒ§ãƒ³ã€€ãƒ•ã‚¡ãƒ³ã‚¯ã‚·ãƒ§ãƒ³åŒ–ã™ã‚‹å¿…è¦ã¯ãªã„ã‘ã©ç·´ç¿’ã«
 --////////////////////////////////////////////////
 fn sortList_Fn sortList =
 (
@@ -845,11 +845,11 @@ fn sortList_Fn sortList =
 )
 
 --////////////////////////////////////////////////
---eq‡‚Éƒ\[ƒg‚·‚é
+--è¦ªå­é †ã«ã‚½ãƒ¼ãƒˆã™ã‚‹
 --////////////////////////////////////////////////
 fn parentSort_Fn sortList =
 (
-	--•Ï”‚ğ€”õ
+	--å¤‰æ•°ã‚’æº–å‚™
 	Local selObj = #();
 	Local myObjAll = #();
 	Local addList = #();
@@ -857,26 +857,26 @@ fn parentSort_Fn sortList =
 	Local delNameAll = "";
 	tempObj = undefined;
 	
-	--ƒ\[ƒgƒŠƒXƒg‚©‚çˆê’[æ“¾‚·‚é
+	--ã‚½ãƒ¼ãƒˆãƒªã‚¹ãƒˆã‹ã‚‰ä¸€ç«¯å–å¾—ã™ã‚‹
 	for i in sortList do
 	(
 		tempObj = (getNodeByName i ignoreCase:false all:false);
-		--‘¶İ‚µ‚Ä‚È‚©‚Á‚½‚çAŒx‚ğo‚·—l‚É–¼‘O‚ğ‰ñû
+		--å­˜åœ¨ã—ã¦ãªã‹ã£ãŸã‚‰ã€è­¦å‘Šã‚’å‡ºã™æ§˜ã«åå‰ã‚’å›å
 		if (tempObj != undefined) then (append selObj tempObj)else(append delName i );
 	);--for end
 		tempObj = undefined;
-	--Šm•Û‚Å‚«‚½‚È‚ç‚Î
+	--ç¢ºä¿ã§ããŸãªã‚‰ã°
 	if selObj.count != 0 then
 	(
-		myObjAll = (sj_functions.sj_sortByBranch_Fn selObj);--ƒ\[ƒgŠÖ”‚É‘—‚é
-		addList = for i in myObjAll collect i.name;--–¼‘O‚ğ‰ñû
-	--”‚ªŒ¸‚Á‚Ä‚¢‚½‚çŒx‚ğo‚·
+		myObjAll = (sj_functions.sj_sortByBranch_Fn selObj);--ã‚½ãƒ¼ãƒˆé–¢æ•°ã«é€ã‚‹
+		addList = for i in myObjAll collect i.name;--åå‰ã‚’å›å
+	--æ•°ãŒæ¸›ã£ã¦ã„ãŸã‚‰è­¦å‘Šã‚’å‡ºã™
 	if (sortList.count > addList.count) then
 	(
 		for i in delName do delNameAll += i + ", ";
-		messageBox("ƒV[ƒ“‚É‘¶İ‚µ‚©‚È‚Á‚½ˆÈ‰º‚Ì€–Ú‚ğíœ‚µ‚Ü‚µ‚½\n"+ delNameAll + "\n ")title:MesseTitleInfoStr;
+		messageBox("ã‚·ãƒ¼ãƒ³ã«å­˜åœ¨ã—ã‹ãªã£ãŸä»¥ä¸‹ã®é …ç›®ã‚’å‰Šé™¤ã—ã¾ã—ãŸ\n"+ delNameAll + "\n ")title:MesseTitleInfoStr;
 	);--if end
-	--‰Šú‰»‚µ‚ÄgcAˆê‰ƒƒ‚ƒŠ‚ğŠJ•ú
+	--åˆæœŸåŒ–ã—ã¦gcã€ä¸€å¿œãƒ¡ãƒ¢ãƒªã‚’é–‹æ”¾
 	selObj = #();
 	myObjAll = #();
 	delName = #();
@@ -884,9 +884,9 @@ fn parentSort_Fn sortList =
 		
 	return addList;
 	
-	)else(messageBox("ƒŠƒXƒgã‚ÌƒIƒuƒWƒFƒNƒg‚ªƒV[ƒ“ã‚É‚ ‚è‚Ü‚¹‚ñ\n ")title:MesseTitleInfoStr);--if end
+	)else(messageBox("ãƒªã‚¹ãƒˆä¸Šã®ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆãŒã‚·ãƒ¼ãƒ³ä¸Šã«ã‚ã‚Šã¾ã›ã‚“\n ")title:MesseTitleInfoStr);--if end
 	
-	--ƒIƒuƒWƒFƒNƒg‚ª–³‚¯‚ê‚Î‚»‚Ì‚Ü‚ÜƒŠƒ^[ƒ“
+	--ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆãŒç„¡ã‘ã‚Œã°ãã®ã¾ã¾ãƒªã‚¿ãƒ¼ãƒ³
 	tempObj = undefined;
 	return sortList;
 );--fn end
@@ -894,7 +894,7 @@ fn parentSort_Fn sortList =
 
 /*
 --////////////////////////////////////////////////
---‘I‘ğƒZƒbƒg‚©‚ç
+--é¸æŠã‚»ãƒƒãƒˆã‹ã‚‰
 --////////////////////////////////////////////////
 fn getSelSet_Fn =
 (
@@ -905,35 +905,35 @@ fn getSelSet_Fn =
 		(
 
 			--////////////////////////////////////////////////
-			--ƒŒƒCƒAƒEƒg
+			--ãƒ¬ã‚¤ã‚¢ã‚¦ãƒˆ
 			--////////////////////////////////////////////////
 				dropDownList selsetDl "" pos:[8,8] width:132 height:22
 				button okBt "OK" pos:[8,36] width:64 height:20
-				button cancelBt "ƒLƒƒƒ“ƒZƒ‹" pos:[76,36] width:64 height:20
+				button cancelBt "ã‚­ãƒ£ãƒ³ã‚»ãƒ«" pos:[76,36] width:64 height:20
 				
 			--////////////////////////////////////////////////
-			--ƒAƒNƒVƒ‡ƒ“
+			--ã‚¢ã‚¯ã‚·ãƒ§ãƒ³
 			--////////////////////////////////////////////////			
-			on selset_rol open do --ƒ[ƒ‹ƒAƒEƒg‚ªŠJ‚¢‚½‚Æ‚«
+			on selset_rol open do --ãƒ­ãƒ¼ãƒ«ã‚¢ã‚¦ãƒˆãŒé–‹ã„ãŸã¨ã
 			(
 				local selSetTempA = #()
-				if selectionSets.count != 0 do --‘I‘ğƒZƒbƒg‚ª‚ ‚Á‚½ê‡
+				if selectionSets.count != 0 do --é¸æŠã‚»ãƒƒãƒˆãŒã‚ã£ãŸå ´åˆ
 				(
 					for i = 1 to selectionSets.count do
 					(
-					append selSetTempA ( getNamedSelSetName i ) --‘I‘ğƒZƒbƒg‚©‚ç‘I‘ğƒZƒbƒg–¼‚ğæ“¾ getNamedSelSet‚Æ‚©‚Í‘I‘ğƒZƒbƒg‚ª‚ç‚İ
+					append selSetTempA ( getNamedSelSetName i ) --é¸æŠã‚»ãƒƒãƒˆã‹ã‚‰é¸æŠã‚»ãƒƒãƒˆåã‚’å–å¾— getNamedSelSetã¨ã‹ã¯é¸æŠã‚»ãƒƒãƒˆãŒã‚‰ã¿
 					)--for end
 					selsetDl.items = selSetTempA
 				)--if end
 			) --end
 			
 			--////////////////////////////////////////////////
-			--OKƒ{ƒ^ƒ“
+			--OKãƒœã‚¿ãƒ³
 			--////////////////////////////////////////////////	
 			on okBt pressed do
 			(
 				local selsetTempB = #()
-				if selsetDl.selection != 0 do --ƒhƒƒbƒvƒ_ƒEƒ“‚Å‘I‘ğ‚µ‚Ä‚¢‚½‚ç
+				if selsetDl.selection != 0 do --ãƒ‰ãƒ­ãƒƒãƒ—ãƒ€ã‚¦ãƒ³ã§é¸æŠã—ã¦ã„ãŸã‚‰
 				(
 					for i=1 to getNamedSelSetItemCount selsetDl.selection do
 					(
@@ -941,7 +941,7 @@ fn getSelSet_Fn =
 						append selsetTempB s.name
 					)
 
-						if pbake_tagListNum == true then --“ü—Íæ‚ğ‘I‘ğ
+						if pbake_tagListNum == true then --å…¥åŠ›å…ˆã‚’é¸æŠ
 						(
 							sj_pbake_rol.pb_listR.items = selsetTempB
 							sj_pbake_rol.listCntR.caption = (sj_pbake_rol.pb_listR.items.count as String)
@@ -953,43 +953,43 @@ fn getSelSet_Fn =
 						)--if end
 				
 				)--if end
-				try (destroydialog selset_rol) catch() --ƒ_ƒCƒAƒƒO‚ğ•Â‚¶‚é
+				try (destroydialog selset_rol) catch() --ãƒ€ã‚¤ã‚¢ãƒ­ã‚°ã‚’é–‰ã˜ã‚‹
 			)--end
 
 			--////////////////////////////////////////////////
-			--ƒLƒƒƒ“ƒZƒ‹ƒ{ƒ^ƒ“
+			--ã‚­ãƒ£ãƒ³ã‚»ãƒ«ãƒœã‚¿ãƒ³
 			--////////////////////////////////////////////////
 			on cancelBt pressed do
 			(
-				try (destroydialog selset_rol) catch() --ƒ_ƒCƒAƒƒO‚ğ•Â‚¶‚é
+				try (destroydialog selset_rol) catch() --ãƒ€ã‚¤ã‚¢ãƒ­ã‚°ã‚’é–‰ã˜ã‚‹
 			)--end
 		
 		)--rollout selset_rol
 
 		--////////////////////////////////////////////////
-		--ƒ_ƒCƒAƒƒOƒNƒŠƒG[ƒg
+		--ãƒ€ã‚¤ã‚¢ãƒ­ã‚°ã‚¯ãƒªã‚¨ãƒ¼ãƒˆ
 		--////////////////////////////////////////////////	
 		CreateDialog selset_rol 144 64 style:#(#style_border, #style_titlebar, #style_sysmenu, #style_minimizebox, #style_resizing) --pos:[50,50]
 )--fn end
 */
 
 --////////////////////////////////////////////////
---‘S‘I‘ğ
+--å…¨é¸æŠ
 --////////////////////////////////////////////////	
 fn allSelList_Fn selList =
 (
 clearSelection()
-sj_progressBar_rol.processInfo.caption = "‘I‘ğ’†"
+sj_progressBar_rol.processInfo.caption = "é¸æŠä¸­"
 	if (bakeListCheck_Fn selList) == true do
 	(
-	 	for i=1 to selList.count do--‘I‘ğƒeƒXƒgŠJn
+	 	for i=1 to selList.count do--é¸æŠãƒ†ã‚¹ãƒˆé–‹å§‹
 		 (
 			try(
 			selectMore (getNodeByName selList[i])
 			)
 			catch
 			(
-			messageBox("ˆÈ‰º‚ÌƒIƒuƒWƒFƒNƒg‚ªƒV[ƒ“ã‚É‚ ‚è‚Ü‚¹‚ñ\n" + (selList[i]))title:MesseTitleInfoStr;
+			messageBox("ä»¥ä¸‹ã®ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆãŒã‚·ãƒ¼ãƒ³ä¸Šã«ã‚ã‚Šã¾ã›ã‚“\n" + (selList[i]))title:MesseTitleInfoStr;
 			)
 		sj_progressBar_rol.progbar.value = ((100.00/sj_pbake_rol.pb_listL.items.count) * i)
 		)--for end
@@ -1003,7 +1003,7 @@ fn saveListFile_Fn saveListL saveListR =
 (
 	if saveListL.count != 0 then
 	(
-		local saveFile = getSaveFileName types:"Bake List File (*.blf)|*.blf|All(*.*)|*.*" caption:"ƒŠƒXƒg‚ğ•Û‘¶"
+		local saveFile = getSaveFileName types:"Bake List File (*.blf)|*.blf|All(*.*)|*.*" caption:"ãƒªã‚¹ãƒˆã‚’ä¿å­˜"
 		
 		if saveFile != undefined do
 		(
@@ -1025,7 +1025,7 @@ fn saveListFile_Fn saveListL saveListR =
 	)
 	else
 	(
-		messageBox("ƒŠƒXƒg‚ª‹ó‚Å‚·!")title:MesseTitleInfoStr;
+		messageBox("ãƒªã‚¹ãƒˆãŒç©ºã§ã™!")title:MesseTitleInfoStr;
 	)--if end
 )
 
@@ -1035,7 +1035,7 @@ fn saveListFile_Fn saveListL saveListR =
 fn loadListFile_Fn isClear =
 (
 	Local itemName = #(), loadItemCount = 0
-	local loadFile = getOpenFileName types:"Bake List File (*.blf)|*.blf|All(*.*)|*.*" caption:"ƒŠƒXƒg‚ğ“Ç‚İ‚İ"
+	local loadFile = getOpenFileName types:"Bake List File (*.blf)|*.blf|All(*.*)|*.*" caption:"ãƒªã‚¹ãƒˆã‚’èª­ã¿è¾¼ã¿"
 	
 	if loadFile != undefined do
 	(
@@ -1076,7 +1076,7 @@ fn loadListFile_Fn isClear =
 			print itemName
 		)--while end
 		
-		if pbake_tagListNum == true then --“ü—Íæ‚ğ‘I‘ğ
+		if pbake_tagListNum == true then --å…¥åŠ›å…ˆã‚’é¸æŠ
 		(
 			sj_pbake_rol.pb_listR.items = itemName
 		)
@@ -1095,7 +1095,7 @@ fn loadListFile_Fn isClear =
 --////////////////////////////////////////////////	
 fn saveSettingFile_Fn =
 (
-		local saveFile = getSaveFileName types:"Setting File (*.txt)|*.txt|All(*.*)|*.*" caption:"İ’è‚ğ•Û‘¶"
+		local saveFile = getSaveFileName types:"Setting File (*.txt)|*.txt|All(*.*)|*.*" caption:"è¨­å®šã‚’ä¿å­˜"
 		
 		if saveFile != undefined do
 		(
@@ -1110,7 +1110,7 @@ fn saveSettingFile_Fn =
 --////////////////////////////////////////////////	
 fn loadSettingFile_Fn =
 (
-	local loadSettingFile = getOpenFileName types:"Setting File (*.txt)|*.txt|All(*.*)|*.*" caption:"İ’è‚ğ“Ç‚İ‚İ"
+	local loadSettingFile = getOpenFileName types:"Setting File (*.txt)|*.txt|All(*.*)|*.*" caption:"è¨­å®šã‚’èª­ã¿è¾¼ã¿"
 	
 	if loadSettingFile != undefined do
 	(
@@ -1136,7 +1136,7 @@ fn loadSettingFile_Fn =
 )
 
 --////////////////////////////////////////////////
---ƒŒƒCƒ„[ˆ—
+--ãƒ¬ã‚¤ãƒ¤ãƒ¼å‡¦ç†
 --////////////////////////////////////////////////
 fn createNewLayer_Fn layerNameStr = 
 (
@@ -1155,10 +1155,10 @@ newLayer.current = true
 )
 
 -----------------------------------------------------------------------------------------------------------
---ƒxƒCƒNˆ—–{‘Ì
+--ãƒ™ã‚¤ã‚¯å‡¦ç†æœ¬ä½“
 -----------------------------------------------------------------------------------------------------------
 --////////////////////////////////////////////////
---ƒL[æ“¾
+--ã‚­ãƒ¼å–å¾—
 --////////////////////////////////////////////////
 fn getKeyArray_Fn lListObj bakeFm =
 (
@@ -1185,7 +1185,7 @@ fn getKeyArray_Fn lListObj bakeFm =
 )
 
 --////////////////////////////////////////////////
---ƒAƒjƒ[ƒVƒ‡ƒ“ƒL[ˆ—
+--ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³ã‚­ãƒ¼å‡¦ç†
 --////////////////////////////////////////////////
 --Type0 all key
 fn allKeyCreate_Fn sel tag frame = ( undo off( for i in frame do animate on (at time i sel.transform = tag.transform) ) )--fn end
@@ -1201,7 +1201,7 @@ undo off
 		(
 			at time i
 			(	
-			sel.pos = tag.pos --ˆÊ’u,ƒI[ƒgƒL[‚ğ—˜—p‚µ‚ÄƒL[‚ğì¬‚·‚é
+			sel.pos = tag.pos --ä½ç½®,ã‚ªãƒ¼ãƒˆã‚­ãƒ¼ã‚’åˆ©ç”¨ã—ã¦ã‚­ãƒ¼ã‚’ä½œæˆã™ã‚‹
 			sel.rotation.X_Rotation = (in coordsys world tag.rotation.X_Rotation)
 			sel.rotation.Y_Rotation = (in coordsys world tag.rotation.Y_Rotation)
 			sel.rotation.Z_Rotation = (in coordsys world tag.rotation.Z_Rotation)
@@ -1222,7 +1222,7 @@ undo off
 		(
 			at time i
 			(
-			sel.pos = tag.pos --ˆÊ’u,ƒI[ƒgƒL[‚ğ—˜—p‚µ‚ÄƒL[‚ğì¬‚·‚é
+			sel.pos = tag.pos --ä½ç½®,ã‚ªãƒ¼ãƒˆã‚­ãƒ¼ã‚’åˆ©ç”¨ã—ã¦ã‚­ãƒ¼ã‚’ä½œæˆã™ã‚‹
 			sel.scale = tag.scale
 			)
 		)
@@ -1292,7 +1292,7 @@ undo off
 		(
 			at time i
 			(
-			sel.rotation.X_Rotation = (in coordsys world tag.rotation.X_Rotation) --ƒ[ƒ‹ƒh‚ÉŠ·Z‚µ‚½”’l‚ğ‘ã“ü‚·‚éAƒI[ƒgƒL[‚ğ—˜—p‚µ‚ÄƒL[‚ğì¬‚·‚é
+			sel.rotation.X_Rotation = (in coordsys world tag.rotation.X_Rotation) --ãƒ¯ãƒ¼ãƒ«ãƒ‰ã«æ›ç®—ã—ãŸæ•°å€¤ã‚’ä»£å…¥ã™ã‚‹ã€ã‚ªãƒ¼ãƒˆã‚­ãƒ¼ã‚’åˆ©ç”¨ã—ã¦ã‚­ãƒ¼ã‚’ä½œæˆã™ã‚‹
 			sel.rotation.Y_Rotation = (in coordsys world tag.rotation.Y_Rotation) 
 			sel.rotation.Z_Rotation = (in coordsys world tag.rotation.Z_Rotation)
 			)
@@ -1305,7 +1305,7 @@ undo off
 fn keyScaCreate_Fn sel tag frame = ( undo off( for i in frame do animate on at time i sel.scale = tag.scale ) )--fn end
 
 --////////////////////////////////////////////////
---ƒAƒjƒ[ƒVƒ‡ƒ“ƒL[ˆ—ƒ~ƒ‰[
+--ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³ã‚­ãƒ¼å‡¦ç†ãƒŸãƒ©ãƒ¼
 --////////////////////////////////////////////////
 fn keyMirrorCreate_Fn sel tag frame =
 (
@@ -1332,7 +1332,7 @@ undo off
 );
 
 --////////////////////////////////////////////////
---ƒAƒjƒ[ƒVƒ‡ƒ“ƒL[ˆ—ƒIƒtƒZƒbƒg
+--ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³ã‚­ãƒ¼å‡¦ç†ã‚ªãƒ•ã‚»ãƒƒãƒˆ
 --////////////////////////////////////////////////
 fn keyOffsetCreate_Fn sel tag frame =
 (
@@ -1354,19 +1354,19 @@ undo off
 )--fn end
 
 --////////////////////////////////////////////////
---ƒAƒjƒ[ƒVƒ‡ƒ“ƒL[ˆ—BIP
+--ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³ã‚­ãƒ¼å‡¦ç†BIP
 --////////////////////////////////////////////////
 fn keyBipCreate_Fn sel tag frame =
 (
 /*
 pbake_bakeType
-0--‘S‚Ä
-1--ˆÊ’u‰ñ“]
-2--ˆÊ’uƒXƒP[ƒ‹
-3--ˆÊ’u
-4--‰ñ“]ƒXƒP[ƒ‹
-5--‰ñ“]
-6--ƒXƒP[ƒ‹
+0--å…¨ã¦
+1--ä½ç½®å›è»¢
+2--ä½ç½®ã‚¹ã‚±ãƒ¼ãƒ«
+3--ä½ç½®
+4--å›è»¢ã‚¹ã‚±ãƒ¼ãƒ«
+5--å›è»¢
+6--ã‚¹ã‚±ãƒ¼ãƒ«
 */
 undo off
 (
@@ -1397,21 +1397,21 @@ undo off
 -----------------------------------------------------------------------------------------------------------
 -- Layout
 -----------------------------------------------------------------------------------------------------------
---Bakeƒ^ƒCƒv‘I‘ğ
-	GroupBox grp_bakeType "ƒ^ƒCƒv" pos:[8,4] width:64 height:84;
+--Bakeã‚¿ã‚¤ãƒ—é¸æŠ
+	GroupBox grp_bakeType "ã‚¿ã‚¤ãƒ—" pos:[8,4] width:64 height:84;
 	radiobuttons pbTypeRb "" pos:[12,20] width:61 height:48 labels:#("PBake", "BBake", "Plot") default:1 columns:1;
 	
---BakeƒIƒvƒVƒ‡ƒ“
-	GroupBox grp_bakeOptions "ƒIƒvƒVƒ‡ƒ“" pos:[80,4] width:80 height:84
-	--checkbox offsetChk "ƒIƒtƒZƒbƒg" pos:[88,20] width:64 height:16 enabled:false
-	checkbox mirrorChk "ƒ~ƒ‰[" pos:[88,20] width:56 height:16 enabled:false
-	radiobuttons pbOpRb "" pos:[88,35] width:86 height:32 enabled:false labels:#("ƒ|ƒCƒ“ƒg", "ƒIƒŠƒWƒiƒ‹") default:1 columns:1
+--Bakeã‚ªãƒ—ã‚·ãƒ§ãƒ³
+	GroupBox grp_bakeOptions "ã‚ªãƒ—ã‚·ãƒ§ãƒ³" pos:[80,4] width:80 height:84
+	--checkbox offsetChk "ã‚ªãƒ•ã‚»ãƒƒãƒˆ" pos:[88,20] width:64 height:16 enabled:false
+	checkbox mirrorChk "ãƒŸãƒ©ãƒ¼" pos:[88,20] width:56 height:16 enabled:false
+	radiobuttons pbOpRb "" pos:[88,35] width:86 height:32 enabled:false labels:#("ãƒã‚¤ãƒ³ãƒˆ", "ã‚ªãƒªã‚¸ãƒŠãƒ«") default:1 columns:1
 	
---ƒtƒŒ[ƒ€İ’èSJ_button_parentsort.png
-	GroupBox grp_frame "ƒtƒŒ[ƒ€" pos:[168,4] width:200 height:84;
-	label startLbl "ƒXƒ^[ƒg" pos:[176,20] width:48 height:16;
-	label endLbl "ƒGƒ“ƒh" pos:[176,40] width:48 height:16;
-	label stepLbl "ƒXƒeƒbƒv" pos:[176,60] width:48 height:16;
+--ãƒ•ãƒ¬ãƒ¼ãƒ è¨­å®šSJ_button_parentsort.png
+	GroupBox grp_frame "ãƒ•ãƒ¬ãƒ¼ãƒ " pos:[168,4] width:200 height:84;
+	label startLbl "ã‚¹ã‚¿ãƒ¼ãƒˆ" pos:[176,20] width:48 height:16;
+	label endLbl "ã‚¨ãƒ³ãƒ‰" pos:[176,40] width:48 height:16;
+	label stepLbl "ã‚¹ãƒ†ãƒƒãƒ—" pos:[176,60] width:48 height:16;
 	spinner startFm "" pos:[220,20] width:80 height:16 range:[-1e+009,1e+009,animationRange.Start] type:#integer;
 	spinner endFm "" pos:[220,40] width:80 height:16 range:[-1e+009,1e+009,animationRange.End] type:#integer;
 	/*
@@ -1423,39 +1423,39 @@ undo off
 	button nowTimeEBt "Now" pos:[304,40] width:56 height:16
 	checkbox sBySCb "byStep" pos:[304,60] width:57 height:15 checked:false --width:48 height:16;
 	
---ƒL[İ’è
-	GroupBox grp_key "ƒL[" pos:[376,4] width:68 height:84;
-	checkbox posCb "ˆÊ’u" pos:[384,20] width:56 height:16 checked:true;
-	checkbox rotCb "‰ñ“]" pos:[384,36] width:56 height:16 checked:true;
-	checkbox scaleCb "ƒXƒP[ƒ‹" pos:[384,52] width:56 height:16 checked:true;
+--ã‚­ãƒ¼è¨­å®š
+	GroupBox grp_key "ã‚­ãƒ¼" pos:[376,4] width:68 height:84;
+	checkbox posCb "ä½ç½®" pos:[384,20] width:56 height:16 checked:true;
+	checkbox rotCb "å›è»¢" pos:[384,36] width:56 height:16 checked:true;
+	checkbox scaleCb "ã‚¹ã‚±ãƒ¼ãƒ«" pos:[384,52] width:56 height:16 checked:true;
 	
---Bakeƒ{ƒ^ƒ“
-	button pBakeBt "P Bake !" pos:[8,368] width:436 height:32 toolTip:"‚¨‚Á‚Ï‚¶‚ß‚æ‚¤‚ºƒb!";
+--Bakeãƒœã‚¿ãƒ³
+	button pBakeBt "P Bake !" pos:[8,368] width:436 height:32 toolTip:"ãŠã£ã±ã˜ã‚ã‚ˆã†ãœãƒƒ!";
 
---¶
-	GroupBox grp_list "ƒŠƒXƒg" pos:[8,92] width:436 height:272;
+--å·¦
+	GroupBox grp_list "ãƒªã‚¹ãƒˆ" pos:[8,92] width:436 height:272;
 	
 	listbox pb_listL "" pos:[16,132] width:208 height:16;
-	button addListBtL "" pos:[16,108] width:20 height:20 images:#("$Scripts/SJTools/Images//SJ_button_add.png", "$Scripts/SJTools/Images//SJ_button_add_a.png", 2, 1, 1, 2, 2) toolTip:"‘I‘ğ‚ğ’Ç‰Á";
-	button allSelListBtL "" pos:[40,108] width:20 height:20 images:#("$Scripts/SJTools/Images//SJ_button_allsel.png", "$Scripts/SJTools/Images//SJ_button_allsel_a.png", 2, 1, 1, 2, 2) toolTip:"‘S‘I‘ğ";
+	button addListBtL "" pos:[16,108] width:20 height:20 images:#("$Scripts/SJTools/Images//SJ_button_add.png", "$Scripts/SJTools/Images//SJ_button_add_a.png", 2, 1, 1, 2, 2) toolTip:"é¸æŠã‚’è¿½åŠ ";
+	button allSelListBtL "" pos:[40,108] width:20 height:20 images:#("$Scripts/SJTools/Images//SJ_button_allsel.png", "$Scripts/SJTools/Images//SJ_button_allsel_a.png", 2, 1, 1, 2, 2) toolTip:"å…¨é¸æŠ";
 	button upListBtL "" pos:[64,108] width:20 height:20 images:#("$Scripts/SJTools/Images//SJ_button_up.png", "$Scripts/SJTools/Images//SJ_button_up_a.png", 2, 1, 1, 2, 2) toolTip:"Up";
 	button downListBtL "" pos:[88,108] width:20 height:20 images:#("$Scripts/SJTools/Images//SJ_button_down.png", "$Scripts/SJTools/Images//SJ_button_down_a.png", 2, 1, 1, 2, 2) toolTip:"Down";
-	button sortBtL "ƒ\[ƒg" pos:[112,108] width:20 height:20 images:#("$Scripts/SJTools/Images//SJ_button_sort.png", "$Scripts/SJTools/Images//SJ_button_sort_a.png", 2, 1, 1, 2, 2) toolTip:"–¼‘O‡‚Åƒ\[ƒg‚·‚é";
-	button pSortBtL "ƒ\[ƒg" pos:[136,108] width:20 height:20 images:#("$Scripts/SJTools/Images//SJ_button_parentsort.png", "$Scripts/SJTools/Images//SJ_button_parentsort_a.png", 2, 1, 1, 2, 2) toolTip:"eq\‘¢‡‚Éƒ\[ƒg‚·‚é";
-	button delBtL "" pos:[160,108] width:20 height:20 images:#("$Scripts/SJTools/Images//SJ_button_delete.png", "$Scripts/SJTools/Images//SJ_button_delete_a.png", 2, 1, 1, 2, 2) toolTip:"íœ";
-	button clearBtL "" pos:[184,108] width:20 height:20 images:#("$Scripts/SJTools/Images//SJ_button_clear.png", "$Scripts/SJTools/Images//SJ_button_clear_a.png", 2, 1, 1, 2, 2) toolTip:"ƒNƒŠƒA";
+	button sortBtL "ã‚½ãƒ¼ãƒˆ" pos:[112,108] width:20 height:20 images:#("$Scripts/SJTools/Images//SJ_button_sort.png", "$Scripts/SJTools/Images//SJ_button_sort_a.png", 2, 1, 1, 2, 2) toolTip:"åå‰é †ã§ã‚½ãƒ¼ãƒˆã™ã‚‹";
+	button pSortBtL "ã‚½ãƒ¼ãƒˆ" pos:[136,108] width:20 height:20 images:#("$Scripts/SJTools/Images//SJ_button_parentsort.png", "$Scripts/SJTools/Images//SJ_button_parentsort_a.png", 2, 1, 1, 2, 2) toolTip:"è¦ªå­æ§‹é€ é †ã«ã‚½ãƒ¼ãƒˆã™ã‚‹";
+	button delBtL "" pos:[160,108] width:20 height:20 images:#("$Scripts/SJTools/Images//SJ_button_delete.png", "$Scripts/SJTools/Images//SJ_button_delete_a.png", 2, 1, 1, 2, 2) toolTip:"å‰Šé™¤";
+	button clearBtL "" pos:[184,108] width:20 height:20 images:#("$Scripts/SJTools/Images//SJ_button_clear.png", "$Scripts/SJTools/Images//SJ_button_clear_a.png", 2, 1, 1, 2, 2) toolTip:"ã‚¯ãƒªã‚¢";
 	label listCntL "0" pos:[20,348] width:204 height:13;
 
---‰E
+--å³
 	listbox pb_listR "" pos:[228,132] width:208 height:16;
-	button addListBtR "" pos:[228,108] width:20 height:20 images:#("$Scripts/SJTools/Images//SJ_button_add.png", "$Scripts/SJTools/Images//SJ_button_add_a.png", 2, 1, 1, 2, 2) toolTip:"‘I‘ğ‚ğ’Ç‰Á";
-	button allSelListBtR "" pos:[252,108] width:20 height:20 images:#("$Scripts/SJTools/Images//SJ_button_allsel.png", "$Scripts/SJTools/Images//SJ_button_allsel_a.png", 2, 1, 1, 2, 2) toolTip:"‘S‘I‘ğ";
+	button addListBtR "" pos:[228,108] width:20 height:20 images:#("$Scripts/SJTools/Images//SJ_button_add.png", "$Scripts/SJTools/Images//SJ_button_add_a.png", 2, 1, 1, 2, 2) toolTip:"é¸æŠã‚’è¿½åŠ ";
+	button allSelListBtR "" pos:[252,108] width:20 height:20 images:#("$Scripts/SJTools/Images//SJ_button_allsel.png", "$Scripts/SJTools/Images//SJ_button_allsel_a.png", 2, 1, 1, 2, 2) toolTip:"å…¨é¸æŠ";
 	button upListBtR "" pos:[276,108] width:20 height:20 images:#("$Scripts/SJTools/Images//SJ_button_up.png", "$Scripts/SJTools/Images//SJ_button_up_a.png", 2, 1, 1, 2, 2) toolTip:"Up";
 	button downListBtR "" pos:[300,108] width:20 height:20 images:#("$Scripts/SJTools/Images//SJ_button_down.png", "$Scripts/SJTools/Images//SJ_button_down_a.png", 2, 1, 1, 2, 2) toolTip:"Down";
-	button sortBtR "ƒ\[ƒg" pos:[324,108] width:20 height:20 images:#("$Scripts/SJTools/Images//SJ_button_sort.png", "$Scripts/SJTools/Images//SJ_button_sort_a.png", 2, 1, 1, 2, 2) toolTip:"–¼‘O‡‚Åƒ\[ƒg‚·‚é";
-	button pSortBtR "ƒ\[ƒg" pos:[348,108] width:20 height:20 images:#("$Scripts/SJTools/Images//SJ_button_parentsort.png", "$Scripts/SJTools/Images//SJ_button_parentsort_a.png", 2, 1, 1, 2, 2) toolTip:"eq\‘¢‡‚Éƒ\[ƒg‚·‚é";
-	button delBtR "" pos:[372,108] width:20 height:20 images:#("$Scripts/SJTools/Images//SJ_button_delete.png", "$Scripts/SJTools/Images//SJ_button_delete_a.png", 2, 1, 1, 2, 2) toolTip:"íœ";
-	button clearBtR "" pos:[396,108] width:20 height:20 images:#("$Scripts/SJTools/Images//SJ_button_clear.png", "$Scripts/SJTools/Images//SJ_button_clear_a.png", 2, 1, 1, 2, 2) toolTip:"ƒNƒŠƒA";
+	button sortBtR "ã‚½ãƒ¼ãƒˆ" pos:[324,108] width:20 height:20 images:#("$Scripts/SJTools/Images//SJ_button_sort.png", "$Scripts/SJTools/Images//SJ_button_sort_a.png", 2, 1, 1, 2, 2) toolTip:"åå‰é †ã§ã‚½ãƒ¼ãƒˆã™ã‚‹";
+	button pSortBtR "ã‚½ãƒ¼ãƒˆ" pos:[348,108] width:20 height:20 images:#("$Scripts/SJTools/Images//SJ_button_parentsort.png", "$Scripts/SJTools/Images//SJ_button_parentsort_a.png", 2, 1, 1, 2, 2) toolTip:"è¦ªå­æ§‹é€ é †ã«ã‚½ãƒ¼ãƒˆã™ã‚‹";
+	button delBtR "" pos:[372,108] width:20 height:20 images:#("$Scripts/SJTools/Images//SJ_button_delete.png", "$Scripts/SJTools/Images//SJ_button_delete_a.png", 2, 1, 1, 2, 2) toolTip:"å‰Šé™¤";
+	button clearBtR "" pos:[396,108] width:20 height:20 images:#("$Scripts/SJTools/Images//SJ_button_clear.png", "$Scripts/SJTools/Images//SJ_button_clear_a.png", 2, 1, 1, 2, 2) toolTip:"ã‚¯ãƒªã‚¢";
 	label listCntR "0" pos:[232,348] width:204 height:13;
 	
 	
@@ -1463,21 +1463,21 @@ undo off
 	ImgTag resizeImg "Bitmap" pos:[442,394] width:10 height:10 enabled:false bitmap:resizeBitMap transparent:(color 255 255 255);
 	
 -----------------------------------------------------------------------------------------------------------
--- İ’è
+-- è¨­å®š
 -----------------------------------------------------------------------------------------------------------
 --////////////////////////////////////////////////
---ƒtƒŒ[ƒ€ˆ—
+--ãƒ•ãƒ¬ãƒ¼ãƒ å‡¦ç†
 --////////////////////////////////////////////////
 	on nowTimeSBt pressed do startFm.value = currentTime;
 	on nowTimeEBt pressed do endFm.value = currentTime;
 
 --////////////////////////////////////////////////
---ƒxƒCƒNƒ^ƒCƒv”»’è
+--ãƒ™ã‚¤ã‚¯ã‚¿ã‚¤ãƒ—åˆ¤å®š
 --////////////////////////////////////////////////
 	on pbTypeRb changed state do bakeTypeCheck_Fn()
 
 --////////////////////////////////////////////////
---ƒL[”»’èˆ—
+--ã‚­ãƒ¼åˆ¤å®šå‡¦ç†
 --////////////////////////////////////////////////
 	on posCb changed state do (bakeKeyCheck_Fn());
 	on rotCb changed state do bakeKeyCheck_Fn();
@@ -1492,22 +1492,22 @@ undo off
 	);--end
 
 -------------------------------------------------------------------------------------------------------
--- ƒŠƒXƒgˆ—
+-- ãƒªã‚¹ãƒˆå‡¦ç†
 -----------------------------------------------------------------------------------------------------------
---ƒŠƒXƒg‚©‚çƒIƒuƒWƒFƒNƒg‚ğ‘I‘ğ
-	on pb_listR doubleclicked sR do --ƒ_ƒuƒ‹ƒNƒŠƒbƒN‚ÅÀs‚·‚éƒCƒxƒ“ƒgƒnƒ“ƒhƒ‰
+--ãƒªã‚¹ãƒˆã‹ã‚‰ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’é¸æŠ
+	on pb_listR doubleclicked sR do --ãƒ€ãƒ–ãƒ«ã‚¯ãƒªãƒƒã‚¯ã§å®Ÿè¡Œã™ã‚‹ã‚¤ãƒ™ãƒ³ãƒˆãƒãƒ³ãƒ‰ãƒ©
 	try
 	(
-		select (getNodeByName pb_listR.items[sR]) -- ƒIƒuƒWƒFƒNƒg‚ğ‘I‘ğ‚·‚é
-	)catch(messageBox("‘I‘ğ‚µ‚½–¼‘O‚ÌƒIƒuƒWƒFƒNƒg‚ª‚ ‚è‚Ü‚¹‚ñ!")title:MesseTitleInfoStr)
+		select (getNodeByName pb_listR.items[sR]) -- ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’é¸æŠã™ã‚‹
+	)catch(messageBox("é¸æŠã—ãŸåå‰ã®ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆãŒã‚ã‚Šã¾ã›ã‚“!")title:MesseTitleInfoStr)
 
-	on pb_listL doubleclicked sL do --ƒ_ƒuƒ‹ƒNƒŠƒbƒN‚ÅÀs‚·‚éƒCƒxƒ“ƒgƒnƒ“ƒhƒ‰
+	on pb_listL doubleclicked sL do --ãƒ€ãƒ–ãƒ«ã‚¯ãƒªãƒƒã‚¯ã§å®Ÿè¡Œã™ã‚‹ã‚¤ãƒ™ãƒ³ãƒˆãƒãƒ³ãƒ‰ãƒ©
 	try
 	(
-		select (getNodeByName pb_listL.items[sL]) -- ƒIƒuƒWƒFƒNƒg‚ğ‘I‘ğ‚·‚é
-	)catch(messageBox("‘I‘ğ‚µ‚½–¼‘O‚ÌƒIƒuƒWƒFƒNƒg‚ª‚ ‚è‚Ü‚¹‚ñ!")title:MesseTitleInfoStr)
+		select (getNodeByName pb_listL.items[sL]) -- ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’é¸æŠã™ã‚‹
+	)catch(messageBox("é¸æŠã—ãŸåå‰ã®ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆãŒã‚ã‚Šã¾ã›ã‚“!")title:MesseTitleInfoStr)
 
---‘I‘ğ’Ç‰Á
+--é¸æŠè¿½åŠ 
 	on addListBtR pressed do
 	(
 		pb_listR.items += addList_Fn()
@@ -1522,47 +1522,47 @@ undo off
 --Up Down
 	on upListBtR pressed do
 	(
-		if pb_listR.selection != 0 and pb_listR.selection != 1 do -- ƒZƒŒƒNƒg‚³‚ê‚Ä‚¢‚ÄA‚È‚¨‚©‚Â”z—ñ‚ÌÅ‰‚ª‘I‘ğ‚³‚ê‚Ä‚¢‚È‚¯‚ê‚Î
+		if pb_listR.selection != 0 and pb_listR.selection != 1 do -- ã‚»ãƒ¬ã‚¯ãƒˆã•ã‚Œã¦ã„ã¦ã€ãªãŠã‹ã¤é…åˆ—ã®æœ€åˆãŒé¸æŠã•ã‚Œã¦ã„ãªã‘ã‚Œã°
 		(
 		(selUp_Fn pb_listR.items pb_listR.selection)
-		pb_listR.items = pb_listR.items --•\¦XV
-		pb_listR.selection -= 1 --‘I‘ğXV—p
-		pb_listR.selection = pb_listR.selection --‘I‘ğXV
+		pb_listR.items = pb_listR.items --è¡¨ç¤ºæ›´æ–°
+		pb_listR.selection -= 1 --é¸æŠæ›´æ–°ç”¨
+		pb_listR.selection = pb_listR.selection --é¸æŠæ›´æ–°
 		)
 		listCntR.caption = (pb_listR.items.count as String)
 	)
 	on upListBtL pressed do
 	(
-		if pb_listL.selection != 0 and pb_listL.selection != 1 do -- ƒZƒŒƒNƒg‚³‚ê‚Ä‚¢‚ÄA‚È‚¨‚©‚Â”z—ñ‚ÌÅ‰‚ª‘I‘ğ‚³‚ê‚Ä‚¢‚È‚¯‚ê‚Î
+		if pb_listL.selection != 0 and pb_listL.selection != 1 do -- ã‚»ãƒ¬ã‚¯ãƒˆã•ã‚Œã¦ã„ã¦ã€ãªãŠã‹ã¤é…åˆ—ã®æœ€åˆãŒé¸æŠã•ã‚Œã¦ã„ãªã‘ã‚Œã°
 		(
 		(selUp_Fn pb_listL.items pb_listL.selection)
-		pb_listL.items = pb_listL.items --•\¦XV
-		pb_listL.selection -= 1 --‘I‘ğXV—p
-		pb_listL.selection = pb_listL.selection --‘I‘ğXV
+		pb_listL.items = pb_listL.items --è¡¨ç¤ºæ›´æ–°
+		pb_listL.selection -= 1 --é¸æŠæ›´æ–°ç”¨
+		pb_listL.selection = pb_listL.selection --é¸æŠæ›´æ–°
 		)
 		listCntL.caption = (pb_listL.items.count as String)
 	)
 
 	on downListBtR pressed do
 	(
-		if  pb_listR.selection != 0 and  pb_listR.items.count > pb_listR.selection do --ƒZƒŒƒNƒg‚³‚ê‚Ä‚¢‚ÄA‚È‚¨‚©‚Â”z—ñ‚ÌÅŒã‚ª‘I‘ğ‚³‚ê‚Ä‚¢‚È‚¯‚ê‚Î
+		if  pb_listR.selection != 0 and  pb_listR.items.count > pb_listR.selection do --ã‚»ãƒ¬ã‚¯ãƒˆã•ã‚Œã¦ã„ã¦ã€ãªãŠã‹ã¤é…åˆ—ã®æœ€å¾ŒãŒé¸æŠã•ã‚Œã¦ã„ãªã‘ã‚Œã°
 		(
 		(selDown_Fn pb_listR.items pb_listR.selection)
-		pb_listR.items = pb_listR.items --•\¦XV
-		pb_listR.selection += 1 --‘I‘ğXV—p
-		pb_listR.selection = pb_listR.selection --‘I‘ğXV
+		pb_listR.items = pb_listR.items --è¡¨ç¤ºæ›´æ–°
+		pb_listR.selection += 1 --é¸æŠæ›´æ–°ç”¨
+		pb_listR.selection = pb_listR.selection --é¸æŠæ›´æ–°
 		)
 		listCntR.caption = (pb_listR.items.count as String)
 	)
 	
 	on downListBtL pressed do
 	(
-		if pb_listL.selection != 0 and pb_listL.items.count > pb_listL.selection do --ƒZƒŒƒNƒg‚³‚ê‚Ä‚¢‚ÄA‚È‚¨‚©‚Â”z—ñ‚ÌÅŒã‚ª‘I‘ğ‚³‚ê‚Ä‚¢‚È‚¯‚ê‚Î
+		if pb_listL.selection != 0 and pb_listL.items.count > pb_listL.selection do --ã‚»ãƒ¬ã‚¯ãƒˆã•ã‚Œã¦ã„ã¦ã€ãªãŠã‹ã¤é…åˆ—ã®æœ€å¾ŒãŒé¸æŠã•ã‚Œã¦ã„ãªã‘ã‚Œã°
 		(
 		(selDown_Fn pb_listL.items pb_listL.selection)
-		pb_listL.items = pb_listL.items --•\¦XV
-		pb_listL.selection += 1 --‘I‘ğXV—p
-		pb_listL.selection = pb_listL.selection --‘I‘ğXV
+		pb_listL.items = pb_listL.items --è¡¨ç¤ºæ›´æ–°
+		pb_listL.selection += 1 --é¸æŠæ›´æ–°ç”¨
+		pb_listL.selection = pb_listL.selection --é¸æŠæ›´æ–°
 		)
 		listCntL.caption = (pb_listL.items.count as String)
 	)
@@ -1595,7 +1595,7 @@ undo off
 		if pb_listR.selection != 0 do
 		(
 		(deleteList_Fn pb_listR.items pb_listR.selection)
-		pb_listR.items = pb_listR.items --•\¦XV—p
+		pb_listR.items = pb_listR.items --è¡¨ç¤ºæ›´æ–°ç”¨
 		)
 		listCntR.caption = (pb_listR.items.count as String)
 	)
@@ -1604,7 +1604,7 @@ undo off
 		if pb_listL.selection != 0 do
 		(
 		(deleteList_Fn pb_listL.items pb_listL.selection)
-		pb_listL.items = pb_listL.items --•\¦XV—p
+		pb_listL.items = pb_listL.items --è¡¨ç¤ºæ›´æ–°ç”¨
 		)
 		listCntL.caption = (pb_listL.items.count as String)
 	)
@@ -1656,92 +1656,92 @@ undo off
 	)
 
 --////////////////////////////////////////////////////////////////////////////////////////////////////
---ƒŒƒbƒcpbake
+--ãƒ¬ãƒƒãƒ„pbake
 --////////////////////////////////////////////////////////////////////////////////////////////////////
 	on pBakeBt pressed do
 	(
 
 	--////////////////////////////////////////////////
-	--•Ï”‚È‚Ç‚ğİ’è
+	--å¤‰æ•°ãªã©ã‚’è¨­å®š
 	--////////////////////////////////////////////////
 	sj_functions.sj_progressBar_Fn()
-	--ƒtƒŒ[ƒ€—p
+	--ãƒ•ãƒ¬ãƒ¼ãƒ ç”¨
 	startFmTm = startFm.value; endFmTm = endFm.value; posKeys = #(); rotKeys = #(); scaKeys = #()
-	--ƒIƒuƒWƒFƒNƒg—p
+	--ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆç”¨
 	newObj = undefined; lListObj = undefined; rListObj = undefined; bakedSel = #()
-	itemCount = pb_listL.items.count --forƒ‹[ƒv‰ñ”
+	itemCount = pb_listL.items.count --forãƒ«ãƒ¼ãƒ—å›æ•°
 	
-	--d•¡ƒ`ƒFƒbƒN‰Šú‰»	
+	--é‡è¤‡ãƒã‚§ãƒƒã‚¯åˆæœŸåŒ–	
 	doubleNameCheck = false;
 	
 	if not mirrorChk.checked then --Mirror?
 	(newObjName = "_Baked")else(newObjName = "_MirrorBaked")
 	
 		--------------------------------------------
-		--ƒtƒŒ[ƒ€‚ğæ“¾
+		--ãƒ•ãƒ¬ãƒ¼ãƒ ã‚’å–å¾—
 		bakeFm = #();
-		f = ( endFm.value - ( startFm.value ) ) / stepFm.value; --‰ñ”
-		s = stepFm.value --ƒXƒeƒbƒv”
+		f = ( endFm.value - ( startFm.value ) ) / stepFm.value; --å›æ•°
+		s = stepFm.value --ã‚¹ãƒ†ãƒƒãƒ—æ•°
 		
-		--Å‰‚ÌƒtƒŒ[ƒ€‚ğ‘}“ü
+		--æœ€åˆã®ãƒ•ãƒ¬ãƒ¼ãƒ ã‚’æŒ¿å…¥
 		append bakeFm startFm.value;
-		--‰ñû
+		--å›å
 		for i=1 to f do append bakeFm (startFm.value + (i*s));
-		--ÅŒã‚ÌƒtƒŒ[ƒ€‚ª–³‚¯‚ê‚Î‘}“ü
+		--æœ€å¾Œã®ãƒ•ãƒ¬ãƒ¼ãƒ ãŒç„¡ã‘ã‚Œã°æŒ¿å…¥
 		if (findItem bakeFm endFm.value) == 0 then append bakeFm endFm.value;
 	
 	--////////////////////////////////////////////////
-	--max‚Ì—]•ª‚Èˆ—‚ğ‰Ÿ‚³‚¦@ˆ—‘¬“x‚ğ‚‘¬‰»
+	--maxã®ä½™åˆ†ãªå‡¦ç†ã‚’æŠ¼ã•ãˆã€€å‡¦ç†é€Ÿåº¦ã‚’é«˜é€ŸåŒ–
 	--////////////////////////////////////////////////
-	suspendEditing()--ƒTƒXƒyƒ“ƒhƒ‚[ƒh
-	if maxOps.getSetKeyMode() == true do max set key mode --ƒZƒbƒgƒL[ƒ‚[ƒh‚¾‚Á‚½ê‡‚ÉƒZƒbƒgƒL[ƒ‚[ƒh‚ğoff
-	max create mode--ƒNƒŠƒG[ƒgƒ‚[ƒh‚É•ÏX
+	suspendEditing()--ã‚µã‚¹ãƒšãƒ³ãƒ‰ãƒ¢ãƒ¼ãƒ‰
+	if maxOps.getSetKeyMode() == true do max set key mode --ã‚»ãƒƒãƒˆã‚­ãƒ¼ãƒ¢ãƒ¼ãƒ‰ã ã£ãŸå ´åˆã«ã‚»ãƒƒãƒˆã‚­ãƒ¼ãƒ¢ãƒ¼ãƒ‰ã‚’off
+	max create mode--ã‚¯ãƒªã‚¨ãƒ¼ãƒˆãƒ¢ãƒ¼ãƒ‰ã«å¤‰æ›´
 	with redraw off
-	(--Ä•`‰æ‹Ö~
+	(--å†æç”»ç¦æ­¢
 	
-	--İ’èƒtƒŒ[ƒ€ƒ`ƒFƒbƒN
+	--è¨­å®šãƒ•ãƒ¬ãƒ¼ãƒ ãƒã‚§ãƒƒã‚¯
 	if endFmTm >= startFmTm then
 	(
-	)--İ’èƒtƒŒ[ƒ€ƒ`ƒFƒbƒN
+	)--è¨­å®šãƒ•ãƒ¬ãƒ¼ãƒ ãƒã‚§ãƒƒã‚¯
 	else
 	(
-		messageBox("ƒGƒ“ƒhƒtƒŒ[ƒ€‚ğƒXƒ^[ƒgƒtƒŒ[ƒ€‚æ‚è‘å‚«‚¢ŠÔ‚Åİ’è‚µ‚Ä‚­‚¾‚³‚¢!")title:MesseTitleInfoStr;
-		return ();--ƒŠƒ^[ƒ“‚ÅI—¹
-	);-- ifƒGƒ“ƒhƒtƒŒ[ƒ€”»’è
+		messageBox("ã‚¨ãƒ³ãƒ‰ãƒ•ãƒ¬ãƒ¼ãƒ ã‚’ã‚¹ã‚¿ãƒ¼ãƒˆãƒ•ãƒ¬ãƒ¼ãƒ ã‚ˆã‚Šå¤§ãã„æ™‚é–“ã§è¨­å®šã—ã¦ãã ã•ã„!")title:MesseTitleInfoStr;
+		return ();--ãƒªã‚¿ãƒ¼ãƒ³ã§çµ‚äº†
+	);-- ifã‚¨ãƒ³ãƒ‰ãƒ•ãƒ¬ãƒ¼ãƒ åˆ¤å®š
 		
-	--ƒŠƒXƒg‚ÌƒIƒuƒWƒFƒNƒg‚ÍƒV[ƒ“ã‚É‚ ‚é‚©?
-	--ƒŠƒXƒg‚Ì’†g‚ğƒ`ƒFƒbƒN
+	--ãƒªã‚¹ãƒˆã®ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã¯ã‚·ãƒ¼ãƒ³ä¸Šã«ã‚ã‚‹ã‹?
+	--ãƒªã‚¹ãƒˆã®ä¸­èº«ã‚’ãƒã‚§ãƒƒã‚¯
 	if bakeListSelectCheck_Fn() then
 	(
-		if doubleNameCheck do messageBox("ƒV[ƒ““à‚ÌƒIƒuƒWƒFƒNƒg‚Ì–¼‘O‚ªd•¡‚µ‚Ä‚¢‚Ü‚·\nŒë“®ì‚ğ‚·‚é‰Â”\«‚ª‚ ‚è‚Ü‚·‚Ì‚Å\n‚²’ˆÓ‚­‚¾‚³‚¢\n ")title:MesseTitleChkStr;
+		if doubleNameCheck do messageBox("ã‚·ãƒ¼ãƒ³å†…ã®ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã®åå‰ãŒé‡è¤‡ã—ã¦ã„ã¾ã™\nèª¤å‹•ä½œã‚’ã™ã‚‹å¯èƒ½æ€§ãŒã‚ã‚Šã¾ã™ã®ã§\nã”æ³¨æ„ãã ã•ã„\n ")title:MesseTitleChkStr;
 	)else(
 		try(destroydialog sj_progressBar_rol)catch();
-		return ();--ƒŠƒ^[ƒ“‚Åˆ—I—¹
-	);--if end ƒŠƒXƒg‚ÌƒIƒuƒWƒFƒNƒg‘¶İƒ`ƒFƒbƒN
+		return ();--ãƒªã‚¿ãƒ¼ãƒ³ã§å‡¦ç†çµ‚äº†
+	);--if end ãƒªã‚¹ãƒˆã®ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆå­˜åœ¨ãƒã‚§ãƒƒã‚¯
 	
 	
 	case pbTypeRb.state of
 	(
 	
 		--////////////////////////////////////////////////
-		--ˆ—1 Pbake
+		--å‡¦ç†1 Pbake
 		--////////////////////////////////////////////////
 		1:(
-				--IKƒIƒuƒWƒFƒNƒg‚ğƒ`ƒFƒbƒN
+				--IKã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’ãƒã‚§ãƒƒã‚¯
 				bakeListIKCheck_Fn();
 			
 				if ikCheck then
 				(
-				--IK‚ªŒ©‚Â‚©‚Á‚½‚çŒx‚ğo‚·
-				if not (queryBox("IKƒRƒ“ƒgƒ[ƒ‰[‚ª“K‰‚³‚ê‚½ƒIƒuƒWƒFƒNƒg‚ª‚ ‚è‚Ü‚·\n”j‘¹‚·‚é‰Â”\«‚ª‚ ‚è‚Ü‚·‚ª‘±s‚µ‚Ü‚·‚©?\n(‚±‚Ìì‹Æ‚ÍƒAƒ“ƒhƒDo—ˆ‚Ü‚¹‚ñ)")title:MesseTitleChkStr) then
+				--IKãŒè¦‹ã¤ã‹ã£ãŸã‚‰è­¦å‘Šã‚’å‡ºã™
+				if not (queryBox("IKã‚³ãƒ³ãƒˆãƒ­ãƒ¼ãƒ©ãƒ¼ãŒé©å¿œã•ã‚ŒãŸã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆãŒã‚ã‚Šã¾ã™\nç ´æã™ã‚‹å¯èƒ½æ€§ãŒã‚ã‚Šã¾ã™ãŒç¶šè¡Œã—ã¾ã™ã‹?\n(ã“ã®ä½œæ¥­ã¯ã‚¢ãƒ³ãƒ‰ã‚¥å‡ºæ¥ã¾ã›ã‚“)")title:MesseTitleChkStr) then
 				(
-					resumeEditing();--Ä‚ÑƒAƒNƒeƒBƒu‚É
+					resumeEditing();--å†ã³ã‚¢ã‚¯ãƒ†ã‚£ãƒ–ã«
 					try(destroydialog sj_progressBar_rol)catch();
 					
-					--ƒŠƒ^[ƒ“‚Åˆ—I—¹
+					--ãƒªã‚¿ãƒ¼ãƒ³ã§å‡¦ç†çµ‚äº†
 					return ();
 					--)--with redraw end
-				);--IKƒ`ƒFƒbƒNend
+				);--IKãƒã‚§ãƒƒã‚¯end
 				);--IKcountend
 				
 				undo off
@@ -1749,21 +1749,21 @@ undo off
 				
 				for n=1 to itemCount do
 				(
-				--ESCƒL[‚ğ‰Ÿ‚µ‚½ê‡‚Éforloop‚ğ’†’f‚µ‚Ü‚·
+				--ESCã‚­ãƒ¼ã‚’æŠ¼ã—ãŸå ´åˆã«forloopã‚’ä¸­æ–­ã—ã¾ã™
 				--escapeEnable = true;
 				
 				lListObj = (getNodeByName pb_listL.items[n])
 				rListObj = (getNodeByName pb_listR.items[n])
-				sj_progressBar_rol.processInfo.caption = (floor(((100.00/itemCount) * (n - 1))) as String) + "% Š®—¹" + pb_listL.items[n] + "‚ğˆ—’†   ";
+				sj_progressBar_rol.processInfo.caption = (floor(((100.00/itemCount) * (n - 1))) as String) + "% å®Œäº†" + pb_listL.items[n] + "ã‚’å‡¦ç†ä¸­   ";
 
-				if sByS == 0 then --step by step ‚©H
+				if sByS == 0 then --step by step ã‹ï¼Ÿ
 				(
 				--------------------------------------------
-				--Bip‚©?
+				--Bipã‹?
 				if ((classOf  lListObj) != Biped_Object) and ((classOf  lListObj.controller) != BipSlave_Control) then
 				(
 				--------------------------------------------
-				--’Êí
+				--é€šå¸¸
 					case pbake_bakeType of
 					(
 						0:(allKeyCreate_Fn lListObj rListObj bakeFm)
@@ -1774,22 +1774,22 @@ undo off
 						5:(keyCreateTypeFive_Fn lListObj rListObj bakeFm)
 						6:(keyCreateTypeSix_Fn lListObj rListObj bakeFm)
 				--------------------------------------------
-				--ƒIƒtƒZƒbƒg
+				--ã‚ªãƒ•ã‚»ãƒƒãƒˆ
 						7:(keyOffsetCreate_Fn lListObj rListObj bakeFm);--end
 					);--case end			
 				)else(
 					keyBipCreate_Fn lListObj  rListObj bakeFm;
 				);--bip if end
 				
-				--‰º‚ÍbyStep‚Ì•ªŠò
+				--ä¸‹ã¯byStepã®åˆ†å²
 				)else
 				(
 				--------------------------------------------
-				--ƒL[‚ğæ“¾
+				--ã‚­ãƒ¼ã‚’å–å¾—
 				getKeyArray_Fn rListObj bakeFm
 
 				--------------------------------------------
-				--Bip‚©?
+				--Bipã‹?
 				if ((classOf  lListObj) != Biped_Object) then
 				(
 					case pbake_bakeType of
@@ -1840,10 +1840,10 @@ undo off
 
 
 		--////////////////////////////////////////////////
-		--ˆ—2 Bake
+		--å‡¦ç†2 Bake
 		--////////////////////////////////////////////////
 		2:(
-				--V‹KƒŒƒCƒ„[ì¬
+				--æ–°è¦ãƒ¬ã‚¤ãƒ¤ãƒ¼ä½œæˆ
 				if iniSetting[4] do createNewLayer_Fn layerNameStr;
 
 				undo off
@@ -1852,33 +1852,33 @@ undo off
 				for n=1 to itemCount do
 				(
 	
-				--ESCƒL[‚ğ‰Ÿ‚µ‚½ê‡‚Éforloop‚ğ’†’f‚µ‚Ü‚·
+				--ESCã‚­ãƒ¼ã‚’æŠ¼ã—ãŸå ´åˆã«forloopã‚’ä¸­æ–­ã—ã¾ã™
 				--if keyboard.escPressed do (exit)-- if keyboard End
 				
-				sj_progressBar_rol.processInfo.caption = (floor(((100.00/itemCount) * (n - 1))) as String) + "% Š®—¹" + pb_listL.items[n] + "‚ğˆ—’†   ";
+				sj_progressBar_rol.processInfo.caption = (floor(((100.00/itemCount) * (n - 1))) as String) + "% å®Œäº†" + pb_listL.items[n] + "ã‚’å‡¦ç†ä¸­   ";
 				lListObj = (getNodeByName pb_listL.items[n])
 					case pbOpRb.state of
 					(
-						--ƒ|ƒCƒ“ƒgƒwƒ‹ƒp[ì¬
+						--ãƒã‚¤ãƒ³ãƒˆãƒ˜ãƒ«ãƒ‘ãƒ¼ä½œæˆ
 						1:(
-						newObj = Point pos:[0,0,0] --Nullì¬
-						at time startFmTm newObj.transform = lListObj.transform --Å‰‚Éƒgƒ‰ƒ“ƒXƒtƒH[ƒ€‚ğˆê’v‚³‚¹‚é
-						newObj.parent = Undefined --eqŠÖŒW‚Í‚È‚µ
+						newObj = Point pos:[0,0,0] --Nullä½œæˆ
+						at time startFmTm newObj.transform = lListObj.transform --æœ€åˆã«ãƒˆãƒ©ãƒ³ã‚¹ãƒ•ã‚©ãƒ¼ãƒ ã‚’ä¸€è‡´ã•ã›ã‚‹
+						newObj.parent = Undefined --è¦ªå­é–¢ä¿‚ã¯ãªã—
 						newObj.name = pb_listL.items[n] + newObjName
 						)
-						--ƒXƒiƒbƒvƒƒbƒVƒ…ì¬	
+						--ã‚¹ãƒŠãƒƒãƒ—ãƒ¡ãƒƒã‚·ãƒ¥ä½œæˆ	
 						2:(
-						newObj = snapshot lListObj at time startFmTm--ƒXƒiƒbƒvƒVƒ‡ƒbƒg
-						newObj.parent = Undefined --eqŠÖŒW‚Í‚È‚µ
+						newObj = snapshot lListObj at time startFmTm--ã‚¹ãƒŠãƒƒãƒ—ã‚·ãƒ§ãƒƒãƒˆ
+						newObj.parent = Undefined --è¦ªå­é–¢ä¿‚ã¯ãªã—
 						newObj.name = pb_listL.items[n] + newObjName
-						--newObj.pos.controller = Position_XYZ () --•W€ƒRƒ“ƒgƒ[ƒ‰[‚É•ÏŠ·
-						--newObj.rotation.controller = Euler_XYZ () --•W€ƒRƒ“ƒgƒ[ƒ‰[‚É•ÏŠ·
-						--newObj.scale.controller = bezier_scale () --•W€ƒRƒ“ƒgƒ[ƒ‰[‚É•ÏŠ·
+						--newObj.pos.controller = Position_XYZ () --æ¨™æº–ã‚³ãƒ³ãƒˆãƒ­ãƒ¼ãƒ©ãƒ¼ã«å¤‰æ›
+						--newObj.rotation.controller = Euler_XYZ () --æ¨™æº–ã‚³ãƒ³ãƒˆãƒ­ãƒ¼ãƒ©ãƒ¼ã«å¤‰æ›
+						--newObj.scale.controller = bezier_scale () --æ¨™æº–ã‚³ãƒ³ãƒˆãƒ­ãƒ¼ãƒ©ãƒ¼ã«å¤‰æ›
 						)
 					) --case end
 					append bakedSel newObj
 					
-					if sByS == 0 then --step by step ‚©H
+					if sByS == 0 then --step by step ã‹ï¼Ÿ
 					(
 						if not mirrorChk.checked then --Mirror?
 						(allKeyCreate_Fn newObj lListObj bakeFm)
@@ -1907,7 +1907,7 @@ undo off
 					)else
 					(
 				--------------------------------------------
-				--ƒL[‚ğæ“¾
+				--ã‚­ãƒ¼ã‚’å–å¾—
 				getKeyArray_Fn lListObj bakeFm
 				/*
 				posKeys = #()
@@ -1977,27 +1977,27 @@ undo off
 
 
 		--////////////////////////////////////////////////
-		--ˆ—3 Plot
+		--å‡¦ç†3 Plot
 		--////////////////////////////////////////////////
 		3:(
 			
-			--IK‘Îô‚ğ‰Šú‰»,IK‚ğŠm”F
+			--IKå¯¾ç­–ã‚’åˆæœŸåŒ–,IKã‚’ç¢ºèª
 			bakeListIKCheck_Fn();
 			
 				undo off
 				(
 
-					--IKƒIƒuƒWƒFƒNƒg‘Îô
+					--IKã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆå¯¾ç­–
 					if ikCheck then
 					(
 					
-					if (queryBox("IKƒIƒuƒWƒFƒNƒg‚ªŠm”F‚³‚ê‚Ü‚µ‚½\n
-©“®“I‚ÉƒRƒ“ƒgƒ[ƒ‰[‚ª–³Œø‚É‚È‚è‚Ü‚·‚ª‚æ‚ë‚µ‚¢‚Å‚·‚©?
-HDIK‚Ìê‡A”j’]‚ğ–h‚®‚½‚ß‚ÉƒRƒ“ƒgƒ[ƒ‰[‚Ííœ‚³‚ê‚Ü‚·
+					if (queryBox("IKã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆãŒç¢ºèªã•ã‚Œã¾ã—ãŸ\n
+è‡ªå‹•çš„ã«ã‚³ãƒ³ãƒˆãƒ­ãƒ¼ãƒ©ãƒ¼ãŒç„¡åŠ¹ã«ãªã‚Šã¾ã™ãŒã‚ˆã‚ã—ã„ã§ã™ã‹?
+HDIKã®å ´åˆã€ç ´ç¶»ã‚’é˜²ããŸã‚ã«ã‚³ãƒ³ãƒˆãƒ­ãƒ¼ãƒ©ãƒ¼ã¯å‰Šé™¤ã•ã‚Œã¾ã™
 
-IKŠÔÚ‚Ìˆê•”‚¾‚¯‚ğPlot‚·‚é‚ÆƒAƒjƒ[ƒVƒ‡ƒ“‚ª”j’]‚µ‚Ü‚·
+IKé–“æ¥ã®ä¸€éƒ¨ã ã‘ã‚’Plotã™ã‚‹ã¨ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³ãŒç ´ç¶»ã—ã¾ã™
 ") title:MesseTitleChkStr) then	(
-					--ikŠm”F‚ğ•ÏX
+					--ikç¢ºèªã‚’å¤‰æ›´
 					ikObjQuery = true;
 					
 					for n in ikObjIndex do
@@ -2005,49 +2005,49 @@ IKŠÔÚ‚Ìˆê•”‚¾‚¯‚ğPlot‚·‚é‚ÆƒAƒjƒ[ƒVƒ‡ƒ“‚ª”j’]‚µ‚Ü‚·
 						lListObj = (getNodeByName pb_listL.items[n]);
 						
 						sj_progressBar_rol.progbar.value = ((100.00/ikObjIndex.count) * n);
-						sj_progressBar_rol.processInfo.caption = "IKƒIƒuƒWƒFƒNƒg‚ªŠm”F‚³‚ê‚Ü‚µ‚½ ‘Îˆˆ—‚ğs‚Á‚Ä‚¢‚Ü‚·";
-						--ƒ|ƒCƒ“ƒg‚ğì¬‚µ‚Ä•Ï”‚ÉŠi”[AŠi”[æ‚ÍikBakeObj
+						sj_progressBar_rol.processInfo.caption = "IKã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆãŒç¢ºèªã•ã‚Œã¾ã—ãŸ å¯¾å‡¦å‡¦ç†ã‚’è¡Œã£ã¦ã„ã¾ã™";
+						--ãƒã‚¤ãƒ³ãƒˆã‚’ä½œæˆã—ã¦å¤‰æ•°ã«æ ¼ç´ã€æ ¼ç´å…ˆã¯ikBakeObj
 						tempObj = Point pos:[0,0,0];
 						tempObj.name = lListObj.name + "_IKBaked";
 						tempObj.parent = lListObj.parent;
 						append ikBakeObj tempObj;
 						
-						--ƒ~ƒ‰[‚©H
+						--ãƒŸãƒ©ãƒ¼ã‹ï¼Ÿ
 						if not mirrorChk.checked then
 						(allKeyCreate_Fn tempObj lListObj bakeFm)
 						else(keyMirrorCreate_Fn tempObj lListObj bakeFm);
 						
-						--ƒL[‚ğì¬‚µ‚·‚é
+						--ã‚­ãƒ¼ã‚’ä½œæˆã—ã™ã‚‹
 						if not mirrorChk.checked then
 						(allKeyCreate_Fn tempObj lListObj bakeFm)
 						else(keyMirrorCreate_Fn tempObj lListObj bakeFm);
 						
 					);--for end
 
-						--ƒRƒ“ƒgƒ[ƒ‰[‚ğíœ‚·‚é
+						--ã‚³ãƒ³ãƒˆãƒ­ãƒ¼ãƒ©ãƒ¼ã‚’å‰Šé™¤ã™ã‚‹
 						for n in hdikObj do
 						(
-							--íœ
+							--å‰Šé™¤
 							try(HDIKSys.RemoveChain n)catch();
 						);--if end
 
-						--ƒRƒ“ƒgƒ[ƒ‰[‚ğ–³Œø‚É‚·‚é
+						--ã‚³ãƒ³ãƒˆãƒ­ãƒ¼ãƒ©ãƒ¼ã‚’ç„¡åŠ¹ã«ã™ã‚‹
 						for n in ikObjEff do
 						(
-							--‚È‚º‚©float’l‚Åİ’è‚µ‚Ä‚¢‚é
+							--ãªãœã‹floatå€¤ã§è¨­å®šã—ã¦ã„ã‚‹
 							n.transform.controller.enabled = 0;
 						);--for end
 						
-						--ƒRƒ“ƒgƒ[ƒ‰[‚ğ–³Œø‚É‚·‚é
-						--‚½‚¾‚µAÅŒã‚ÌŠÔÚ‚ÆÅ‰‚ÌŠÔÚ‚¾‚¯‘Î‰
+						--ã‚³ãƒ³ãƒˆãƒ­ãƒ¼ãƒ©ãƒ¼ã‚’ç„¡åŠ¹ã«ã™ã‚‹
+						--ãŸã ã—ã€æœ€å¾Œã®é–“æ¥ã¨æœ€åˆã®é–“æ¥ã ã‘å¯¾å¿œ
 						for n in ikObj do
 						(
-							--]‘®ƒIƒuƒWƒFƒNƒg‚ğŠm•Û
+							--å¾“å±ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’ç¢ºä¿
 							ikdependObj = refs.dependents n;
 							
 							for j in ikdependObj do
 							(
-							--IKİ’èƒIƒuƒWƒFƒNƒg‚È‚çƒRƒ“ƒgƒ[ƒ‰[‚ğ–³Œø
+							--IKè¨­å®šã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆãªã‚‰ã‚³ãƒ³ãƒˆãƒ­ãƒ¼ãƒ©ãƒ¼ã‚’ç„¡åŠ¹
 							if ((classOf j)==IK_Chain_Object) then j.transform.controller.enabled = 0;
 							);--forend
 						);--for end
@@ -2062,23 +2062,23 @@ IKŠÔÚ‚Ìˆê•”‚¾‚¯‚ğPlot‚·‚é‚ÆƒAƒjƒ[ƒVƒ‡ƒ“‚ª”j’]‚µ‚Ü‚·
 				
 				--plotKeyCreate_Fn itemCount lListObj startFmTm 
 				
-				--IKƒIƒuƒWƒFƒNƒg‚©‚Ç‚¤‚©Šm”FƒIƒuƒWƒFƒNƒg‚ªŠi”[‚³‚ê‚Ä‚¢‚È‚¯‚ê‚Î’Êíˆ—
+				--IKã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‹ã©ã†ã‹ç¢ºèªã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆãŒæ ¼ç´ã•ã‚Œã¦ã„ãªã‘ã‚Œã°é€šå¸¸å‡¦ç†
 				if ( findItem ikObjIndex n ) == 0 then
 				(
 				
 				
-				--ESCƒL[‚ğ‰Ÿ‚µ‚½ê‡‚Éforloop‚ğ’†’f‚µ‚Ü‚·
+				--ESCã‚­ãƒ¼ã‚’æŠ¼ã—ãŸå ´åˆã«forloopã‚’ä¸­æ–­ã—ã¾ã™
 				--if keyboard.escPressed do (exit)-- if keyboard End
 				
 					sj_progressBar_rol.progbar.value = ((100.00/itemCount) * n);
-					sj_progressBar_rol.processInfo.caption = (floor (((100.00/itemCount) * (n - 1))) as String) + "% Š®—¹" + pb_listL.items[n] + "‚ğˆ—’†   ";
+					sj_progressBar_rol.processInfo.caption = (floor (((100.00/itemCount) * (n - 1))) as String) + "% å®Œäº†" + pb_listL.items[n] + "ã‚’å‡¦ç†ä¸­   ";
 					lListObj = (getNodeByName pb_listL.items[n])
 
-					newObj = snapshot lListObj at time startFmTm--ƒXƒiƒbƒvƒVƒ‡ƒbƒg ‚±‚Ì‚Æ‚«©“®“I‚Éeq\‘¢‚ªŒ‹‚Î‚ê‚é
+					newObj = snapshot lListObj at time startFmTm--ã‚¹ãƒŠãƒƒãƒ—ã‚·ãƒ§ãƒƒãƒˆ ã“ã®ã¨ãè‡ªå‹•çš„ã«è¦ªå­æ§‹é€ ãŒçµã°ã‚Œã‚‹
 					addNewkey newObj.controller startFmTm
 					newObj.name = "plotTempObj"
 					
-					--StepByStep‚Ìê‡AƒL[‚ğ‰ñû
+					--StepByStepã®å ´åˆã€ã‚­ãƒ¼ã‚’å›å
 					if sByS == 1 then
 					(
 					getKeyArray_Fn lListObj bakeFm
@@ -2088,7 +2088,7 @@ IKŠÔÚ‚Ìˆê•”‚¾‚¯‚ğPlot‚·‚é‚ÆƒAƒjƒ[ƒVƒ‡ƒ“‚ª”j’]‚µ‚Ü‚·
 					bakeFm = posKeys
 					);--if end
 
-						--ƒ~ƒ‰[‚©H
+						--ãƒŸãƒ©ãƒ¼ã‹ï¼Ÿ
 						if not mirrorChk.checked then
 						(allKeyCreate_Fn newObj lListObj bakeFm)
 						else(keyMirrorCreate_Fn newObj lListObj bakeFm);
@@ -2099,46 +2099,46 @@ IKŠÔÚ‚Ìˆê•”‚¾‚¯‚ğPlot‚·‚é‚ÆƒAƒjƒ[ƒVƒ‡ƒ“‚ª”j’]‚µ‚Ü‚·
 							try(
 							lListObj.Transform.controller = prs ()
 							lListObj.controller = copy newObj.controller
-							)catch(messageBox("ƒRƒ“ƒgƒ[ƒ‰[‚ğ•ÏX‚Å‚«‚Ü‚¹‚ñ‚Å‚µ‚½\n"+lListObj.name) title:MesseTitleInfoStr);
+							)catch(messageBox("ã‚³ãƒ³ãƒˆãƒ­ãƒ¼ãƒ©ãƒ¼ã‚’å¤‰æ›´ã§ãã¾ã›ã‚“ã§ã—ãŸ\n"+lListObj.name) title:MesseTitleInfoStr);
 						)
 						1:(
 							try(
-							lListObj.pos.controller = Position_XYZ () --•W€ƒRƒ“ƒgƒ[ƒ‰[‚É•ÏŠ·
-							lListObj.rotation.controller = Euler_XYZ () --•W€ƒRƒ“ƒgƒ[ƒ‰[‚É•ÏŠ·
+							lListObj.pos.controller = Position_XYZ () --æ¨™æº–ã‚³ãƒ³ãƒˆãƒ­ãƒ¼ãƒ©ãƒ¼ã«å¤‰æ›
+							lListObj.rotation.controller = Euler_XYZ () --æ¨™æº–ã‚³ãƒ³ãƒˆãƒ­ãƒ¼ãƒ©ãƒ¼ã«å¤‰æ›
 							lListObj.pos.controller = copy newObj.pos.controller
 							lListObj.rotation.controller = copy newObj.rotation.controller
-							)catch(messageBox("ƒRƒ“ƒgƒ[ƒ‰[‚ğ•ÏX‚Å‚«‚Ü‚¹‚ñ‚Å‚µ‚½\n"+lListObj.name) title:MesseTitleInfoStr);
+							)catch(messageBox("ã‚³ãƒ³ãƒˆãƒ­ãƒ¼ãƒ©ãƒ¼ã‚’å¤‰æ›´ã§ãã¾ã›ã‚“ã§ã—ãŸ\n"+lListObj.name) title:MesseTitleInfoStr);
 						)
 						2:(
 							try(
-							lListObj.pos.controller = Position_XYZ () --•W€ƒRƒ“ƒgƒ[ƒ‰[‚É•ÏŠ·
-							lListObj.scale.controller = bezier_scale () --•W€ƒRƒ“ƒgƒ[ƒ‰[‚É•ÏŠ·
+							lListObj.pos.controller = Position_XYZ () --æ¨™æº–ã‚³ãƒ³ãƒˆãƒ­ãƒ¼ãƒ©ãƒ¼ã«å¤‰æ›
+							lListObj.scale.controller = bezier_scale () --æ¨™æº–ã‚³ãƒ³ãƒˆãƒ­ãƒ¼ãƒ©ãƒ¼ã«å¤‰æ›
 							lListObj.pos.controller = copy newObj.pos.controller
 							lListObj.scale.controller = copy newObj.scale.controller
-							)catch(messageBox("ƒRƒ“ƒgƒ[ƒ‰[‚ğ•ÏX‚Å‚«‚Ü‚¹‚ñ‚Å‚µ‚½\n"+lListObj.name) title:MesseTitleInfoStr);
+							)catch(messageBox("ã‚³ãƒ³ãƒˆãƒ­ãƒ¼ãƒ©ãƒ¼ã‚’å¤‰æ›´ã§ãã¾ã›ã‚“ã§ã—ãŸ\n"+lListObj.name) title:MesseTitleInfoStr);
 						)
 						3:(
 							try(						
-							lListObj.pos.controller = Position_XYZ () --•W€ƒRƒ“ƒgƒ[ƒ‰[‚É•ÏŠ·
+							lListObj.pos.controller = Position_XYZ () --æ¨™æº–ã‚³ãƒ³ãƒˆãƒ­ãƒ¼ãƒ©ãƒ¼ã«å¤‰æ›
 							lListObj.pos.controller = copy newObj.pos.controller
-							)catch(messageBox("ƒRƒ“ƒgƒ[ƒ‰[‚ğ•ÏX‚Å‚«‚Ü‚¹‚ñ‚Å‚µ‚½\n"+lListObj.name) title:MesseTitleInfoStr);
+							)catch(messageBox("ã‚³ãƒ³ãƒˆãƒ­ãƒ¼ãƒ©ãƒ¼ã‚’å¤‰æ›´ã§ãã¾ã›ã‚“ã§ã—ãŸ\n"+lListObj.name) title:MesseTitleInfoStr);
 						)
 						4:(	
 							try(
-							lListObj.rotation.controller = Euler_XYZ () --•W€ƒRƒ“ƒgƒ[ƒ‰[‚É•ÏŠ·
-							lListObj.scale.controller = bezier_scale () --•W€ƒRƒ“ƒgƒ[ƒ‰[‚É•ÏŠ·
+							lListObj.rotation.controller = Euler_XYZ () --æ¨™æº–ã‚³ãƒ³ãƒˆãƒ­ãƒ¼ãƒ©ãƒ¼ã«å¤‰æ›
+							lListObj.scale.controller = bezier_scale () --æ¨™æº–ã‚³ãƒ³ãƒˆãƒ­ãƒ¼ãƒ©ãƒ¼ã«å¤‰æ›
 							lListObj.rotation.controller = copy newObj.rotation.controller
 							lListObj.scale.controller = copy newObj.scale.controller
-							)catch(messageBox("ƒRƒ“ƒgƒ[ƒ‰[‚ğ•ÏX‚Å‚«‚Ü‚¹‚ñ‚Å‚µ‚½\n"+lListObj.name) title:MesseTitleInfoStr)
+							)catch(messageBox("ã‚³ãƒ³ãƒˆãƒ­ãƒ¼ãƒ©ãƒ¼ã‚’å¤‰æ›´ã§ãã¾ã›ã‚“ã§ã—ãŸ\n"+lListObj.name) title:MesseTitleInfoStr)
 						)
 						5:(
 							try(
-							lListObj.rotation.controller = Euler_XYZ () --•W€ƒRƒ“ƒgƒ[ƒ‰[‚É•ÏŠ·
+							lListObj.rotation.controller = Euler_XYZ () --æ¨™æº–ã‚³ãƒ³ãƒˆãƒ­ãƒ¼ãƒ©ãƒ¼ã«å¤‰æ›
 							lListObj.rotation.controller = copy newObj.rotation.controller
-							)catch(messageBox("ƒRƒ“ƒgƒ[ƒ‰[‚ğ•ÏX‚Å‚«‚Ü‚¹‚ñ‚Å‚µ‚½\n"+lListObj.name) title:MesseTitleInfoStr)
+							)catch(messageBox("ã‚³ãƒ³ãƒˆãƒ­ãƒ¼ãƒ©ãƒ¼ã‚’å¤‰æ›´ã§ãã¾ã›ã‚“ã§ã—ãŸ\n"+lListObj.name) title:MesseTitleInfoStr)
 						)
 						6:(
-							lListObj.scale.controller = bezier_scale () --•W€ƒRƒ“ƒgƒ[ƒ‰[‚É•ÏŠ·
+							lListObj.scale.controller = bezier_scale () --æ¨™æº–ã‚³ãƒ³ãƒˆãƒ­ãƒ¼ãƒ©ãƒ¼ã«å¤‰æ›
 							lListObj.scale.controller = copy newObj.scale.controller
 						)
 					)--case end
@@ -2148,46 +2148,46 @@ IKŠÔÚ‚Ìˆê•”‚¾‚¯‚ğPlot‚·‚é‚ÆƒAƒjƒ[ƒVƒ‡ƒ“‚ª”j’]‚µ‚Ü‚·
 				)else(
 				
 					--////////////////////////////////////////////////
-					--IK‚¾‚Á‚½ê‡‚Ìˆ—
+					--IKã ã£ãŸå ´åˆã®å‡¦ç†
 					--////////////////////////////////////////////////
-					--ˆ—‚ÉOK‚ªo‚Ä‚¢‚ê‚Î
+					--å‡¦ç†ã«OKãŒå‡ºã¦ã„ã‚Œã°
 					if ikObjQuery then
 					(
 					sj_progressBar_rol.progbar.value = ((100.00/itemCount) * n);
-					sj_progressBar_rol.processInfo.caption = (floor (((100.00/itemCount) * (n - 1))) as String) + "% Š®—¹" + pb_listL.items[n] + "‚ğˆ—’†   "
+					sj_progressBar_rol.processInfo.caption = (floor (((100.00/itemCount) * (n - 1))) as String) + "% å®Œäº†" + pb_listL.items[n] + "ã‚’å‡¦ç†ä¸­   "
 					lListObj = (getNodeByName pb_listL.items[n]);
 
 					case pbake_bakeType of
 					(
 						0:(
-							--‚Ü‚¸IK‚Ì’ÊíƒRƒ“ƒgƒ[ƒ‰[‚©?
+							--ã¾ãšIKã®é€šå¸¸ã‚³ãƒ³ãƒˆãƒ­ãƒ¼ãƒ©ãƒ¼ã‹?
 							if ((classOf lListObj.controller) == IKControl) then 
 							(
 							try(
 							lListObj.controller.FK_Sub_Control.controller = prs ();
 							lListObj.controller.FK_Sub_Control.controller = copy ikBakeObj[ikObjCont].controller;
-							)catch(messageBox("ƒRƒ“ƒgƒ[ƒ‰[‚ğ•ÏX‚Å‚«‚Ü‚¹‚ñ‚Å‚µ‚½\n" + lListObj.name) title:MesseTitleInfoStr);
+							)catch(messageBox("ã‚³ãƒ³ãƒˆãƒ­ãƒ¼ãƒ©ãƒ¼ã‚’å¤‰æ›´ã§ãã¾ã›ã‚“ã§ã—ãŸ\n" + lListObj.name) title:MesseTitleInfoStr);
 							);--if end
-							--IK‚ÌƒRƒ“ƒgƒ[ƒ‰[‚©?
+							--IKã®ã‚³ãƒ³ãƒˆãƒ­ãƒ¼ãƒ©ãƒ¼ã‹?
 							if ((classOf lListObj) == IK_Chain_Object) then 
 							(
 							try(
 							lListObj.controller.IK_goal.controller = prs ();
 							lListObj.controller.IK_goal.controller = copy ikBakeObj[ikObjCont].controller;
-							)catch(messageBox("ƒRƒ“ƒgƒ[ƒ‰[‚ğ•ÏX‚Å‚«‚Ü‚¹‚ñ‚Å‚µ‚½\n" + lListObj.name) title:MesseTitleInfoStr);
+							)catch(messageBox("ã‚³ãƒ³ãƒˆãƒ­ãƒ¼ãƒ©ãƒ¼ã‚’å¤‰æ›´ã§ãã¾ã›ã‚“ã§ã—ãŸ\n" + lListObj.name) title:MesseTitleInfoStr);
 							);--if end
-							--‚»‚êˆÈŠO(HDIK),‚±‚ê‚Í’Êí‚ÌƒRƒ“ƒgƒ[ƒ‰[‚Æ‚İ‚È‚·
+							--ãã‚Œä»¥å¤–(HDIK),ã“ã‚Œã¯é€šå¸¸ã®ã‚³ãƒ³ãƒˆãƒ­ãƒ¼ãƒ©ãƒ¼ã¨ã¿ãªã™
 							if (not ((classOf lListObj) == IK_Chain_Object)) and (not ((classOf lListObj.controller) == IKControl)) then
 							(
 							try(
 							lListObj.Transform.controller = prs ()
 							lListObj.controller = copy ikBakeObj[ikObjCont].controller
-							)catch(messageBox("ƒRƒ“ƒgƒ[ƒ‰[‚ğ•ÏX‚Å‚«‚Ü‚¹‚ñ‚Å‚µ‚½\n" + lListObj.name) title:MesseTitleInfoStr);
+							)catch(messageBox("ã‚³ãƒ³ãƒˆãƒ­ãƒ¼ãƒ©ãƒ¼ã‚’å¤‰æ›´ã§ãã¾ã›ã‚“ã§ã—ãŸ\n" + lListObj.name) title:MesseTitleInfoStr);
 							);--if end
 						)
 						1:(
-							--ˆÊ’u‰ñ“]
-							--‚Ü‚¸IK‚Ì’ÊíƒRƒ“ƒgƒ[ƒ‰[‚©?
+							--ä½ç½®å›è»¢
+							--ã¾ãšIKã®é€šå¸¸ã‚³ãƒ³ãƒˆãƒ­ãƒ¼ãƒ©ãƒ¼ã‹?
 							if ((classOf lListObj.controller) == IKControl) then 
 							(
 							try(
@@ -2195,9 +2195,9 @@ IKŠÔÚ‚Ìˆê•”‚¾‚¯‚ğPlot‚·‚é‚ÆƒAƒjƒ[ƒVƒ‡ƒ“‚ª”j’]‚µ‚Ü‚·
 							lListObj.controller.FK_Sub_Control.controller.Rotation.controller = Euler_XYZ ();
 							lListObj.controller.FK_Sub_Control.controller.Pos.controller = copy ikBakeObj[ikObjCont].pos.controller;
 							lListObj.controller.FK_Sub_Control.controller.Rotation.controller = copy ikBakeObj[ikObjCont].rotation.controller;
-							)catch(messageBox("ƒRƒ“ƒgƒ[ƒ‰[‚ğ•ÏX‚Å‚«‚Ü‚¹‚ñ‚Å‚µ‚½\n" + lListObj.name) title:MesseTitleInfoStr);
+							)catch(messageBox("ã‚³ãƒ³ãƒˆãƒ­ãƒ¼ãƒ©ãƒ¼ã‚’å¤‰æ›´ã§ãã¾ã›ã‚“ã§ã—ãŸ\n" + lListObj.name) title:MesseTitleInfoStr);
 							);--if end
-							--IK‚ÌƒRƒ“ƒgƒ[ƒ‰[‚©?
+							--IKã®ã‚³ãƒ³ãƒˆãƒ­ãƒ¼ãƒ©ãƒ¼ã‹?
 							if ((classOf lListObj) == IK_Chain_Object) then 
 							(
 							try(
@@ -2205,9 +2205,9 @@ IKŠÔÚ‚Ìˆê•”‚¾‚¯‚ğPlot‚·‚é‚ÆƒAƒjƒ[ƒVƒ‡ƒ“‚ª”j’]‚µ‚Ü‚·
 							lListObj.controller.IK_goal.controller.Rotation.controller = Euler_XYZ ();
 							lListObj.controller.IK_goal.controller.Pos.controller = copy ikBakeObj[ikObjCont].pos.controller;
 							lListObj.controller.IK_goal.controller.Rotation.controller = copy ikBakeObj[ikObjCont].rotation.controller;
-							)catch(messageBox("ƒRƒ“ƒgƒ[ƒ‰[‚ğ•ÏX‚Å‚«‚Ü‚¹‚ñ‚Å‚µ‚½\n" + lListObj.name) title:MesseTitleInfoStr);
+							)catch(messageBox("ã‚³ãƒ³ãƒˆãƒ­ãƒ¼ãƒ©ãƒ¼ã‚’å¤‰æ›´ã§ãã¾ã›ã‚“ã§ã—ãŸ\n" + lListObj.name) title:MesseTitleInfoStr);
 							);--if end
-							--‚»‚êˆÈŠO(HDIK),‚±‚ê‚Í’Êí‚ÌƒRƒ“ƒgƒ[ƒ‰[‚Æ‚İ‚È‚·
+							--ãã‚Œä»¥å¤–(HDIK),ã“ã‚Œã¯é€šå¸¸ã®ã‚³ãƒ³ãƒˆãƒ­ãƒ¼ãƒ©ãƒ¼ã¨ã¿ãªã™
 							if (not ((classOf lListObj) == IK_Chain_Object)) and (not ((classOf lListObj.controller) == IKControl)) then
 							(
 							try(
@@ -2215,12 +2215,12 @@ IKŠÔÚ‚Ìˆê•”‚¾‚¯‚ğPlot‚·‚é‚ÆƒAƒjƒ[ƒVƒ‡ƒ“‚ª”j’]‚µ‚Ü‚·
 							lListObj.rotation.controller = Euler_XYZ ();
 							lListObj.pos.controller = copy ikBakeObj[ikObjCont].pos.controller;
 							lListObj.rotation.controller = copy ikBakeObj[ikObjCont].rotation.controller;
-							)catch(messageBox("ƒRƒ“ƒgƒ[ƒ‰[‚ğ•ÏX‚Å‚«‚Ü‚¹‚ñ‚Å‚µ‚½\n" + lListObj.name) title:MesseTitleInfoStr);
+							)catch(messageBox("ã‚³ãƒ³ãƒˆãƒ­ãƒ¼ãƒ©ãƒ¼ã‚’å¤‰æ›´ã§ãã¾ã›ã‚“ã§ã—ãŸ\n" + lListObj.name) title:MesseTitleInfoStr);
 							);--if end
 						)
 						2:(
-							--ˆÊ’uƒXƒP[ƒ‹
-							--‚Ü‚¸IK‚Ì’ÊíƒRƒ“ƒgƒ[ƒ‰[‚©?
+							--ä½ç½®ã‚¹ã‚±ãƒ¼ãƒ«
+							--ã¾ãšIKã®é€šå¸¸ã‚³ãƒ³ãƒˆãƒ­ãƒ¼ãƒ©ãƒ¼ã‹?
 							if ((classOf lListObj.controller) == IKControl) then 
 							(
 							try(
@@ -2228,9 +2228,9 @@ IKŠÔÚ‚Ìˆê•”‚¾‚¯‚ğPlot‚·‚é‚ÆƒAƒjƒ[ƒVƒ‡ƒ“‚ª”j’]‚µ‚Ü‚·
 							lListObj.controller.FK_Sub_Control.controller.Scale.controller = bezier_scale ();
 							lListObj.controller.FK_Sub_Control.controller.Pos.controller = copy ikBakeObj[ikObjCont].pos.controller;
 							lListObj.controller.FK_Sub_Control.controller.Scale.controller = copy ikBakeObj[ikObjCont].scale.controller
-							)catch(messageBox("ƒRƒ“ƒgƒ[ƒ‰[‚ğ•ÏX‚Å‚«‚Ü‚¹‚ñ‚Å‚µ‚½\n" + lListObj.name) title:MesseTitleInfoStr);
+							)catch(messageBox("ã‚³ãƒ³ãƒˆãƒ­ãƒ¼ãƒ©ãƒ¼ã‚’å¤‰æ›´ã§ãã¾ã›ã‚“ã§ã—ãŸ\n" + lListObj.name) title:MesseTitleInfoStr);
 							);--if end
-							--IK‚ÌƒRƒ“ƒgƒ[ƒ‰[‚©?
+							--IKã®ã‚³ãƒ³ãƒˆãƒ­ãƒ¼ãƒ©ãƒ¼ã‹?
 							if ((classOf lListObj) == IK_Chain_Object) then 
 							(
 							try(
@@ -2238,9 +2238,9 @@ IKŠÔÚ‚Ìˆê•”‚¾‚¯‚ğPlot‚·‚é‚ÆƒAƒjƒ[ƒVƒ‡ƒ“‚ª”j’]‚µ‚Ü‚·
 							lListObj.controller.IK_goal.controller.Scale.controller = bezier_scale ();
 							lListObj.controller.IK_goal.controller.Pos.controller = copy ikBakeObj[ikObjCont].pos.controller;
 							lListObj.controller.IK_goal.controller.Scale.controller = copy ikBakeObj[ikObjCont].scale.controller;
-							)catch(messageBox("ƒRƒ“ƒgƒ[ƒ‰[‚ğ•ÏX‚Å‚«‚Ü‚¹‚ñ‚Å‚µ‚½\n" + lListObj.name) title:MesseTitleInfoStr);
+							)catch(messageBox("ã‚³ãƒ³ãƒˆãƒ­ãƒ¼ãƒ©ãƒ¼ã‚’å¤‰æ›´ã§ãã¾ã›ã‚“ã§ã—ãŸ\n" + lListObj.name) title:MesseTitleInfoStr);
 							);--if end
-							--‚»‚êˆÈŠO(HDIK),‚±‚ê‚Í’Êí‚ÌƒRƒ“ƒgƒ[ƒ‰[‚Æ‚İ‚È‚·
+							--ãã‚Œä»¥å¤–(HDIK),ã“ã‚Œã¯é€šå¸¸ã®ã‚³ãƒ³ãƒˆãƒ­ãƒ¼ãƒ©ãƒ¼ã¨ã¿ãªã™
 							if (not ((classOf lListObj) == IK_Chain_Object)) and (not ((classOf lListObj.controller) == IKControl)) then
 							(
 							try(
@@ -2248,40 +2248,40 @@ IKŠÔÚ‚Ìˆê•”‚¾‚¯‚ğPlot‚·‚é‚ÆƒAƒjƒ[ƒVƒ‡ƒ“‚ª”j’]‚µ‚Ü‚·
 							lListObj.scale.controller = bezier_scale ();
 							lListObj.pos.controller = copy ikBakeObj[ikObjCont].pos.controller;
 							lListObj.scale.controller = copy ikBakeObj[ikObjCont].scale.controller;
-							)catch(messageBox("ƒRƒ“ƒgƒ[ƒ‰[‚ğ•ÏX‚Å‚«‚Ü‚¹‚ñ‚Å‚µ‚½\n" + lListObj.name) title:MesseTitleInfoStr);
+							)catch(messageBox("ã‚³ãƒ³ãƒˆãƒ­ãƒ¼ãƒ©ãƒ¼ã‚’å¤‰æ›´ã§ãã¾ã›ã‚“ã§ã—ãŸ\n" + lListObj.name) title:MesseTitleInfoStr);
 							);--if end
 						)
 						3:(
-							--ˆÊ’u
-							--‚Ü‚¸IK‚Ì’ÊíƒRƒ“ƒgƒ[ƒ‰[‚©?
+							--ä½ç½®
+							--ã¾ãšIKã®é€šå¸¸ã‚³ãƒ³ãƒˆãƒ­ãƒ¼ãƒ©ãƒ¼ã‹?
 							if ((classOf lListObj.controller) == IKControl) then 
 							(
 							try(
 							lListObj.controller.FK_Sub_Control.controller.Pos.controller = Position_XYZ ();
 							lListObj.controller.FK_Sub_Control.controller.Pos.controller = copy ikBakeObj[ikObjCont].pos.controller;
-							)catch(messageBox("ƒRƒ“ƒgƒ[ƒ‰[‚ğ•ÏX‚Å‚«‚Ü‚¹‚ñ‚Å‚µ‚½\n" + lListObj.name) title:MesseTitleInfoStr);
+							)catch(messageBox("ã‚³ãƒ³ãƒˆãƒ­ãƒ¼ãƒ©ãƒ¼ã‚’å¤‰æ›´ã§ãã¾ã›ã‚“ã§ã—ãŸ\n" + lListObj.name) title:MesseTitleInfoStr);
 							);--if end
-							--IK‚ÌƒRƒ“ƒgƒ[ƒ‰[‚©?
+							--IKã®ã‚³ãƒ³ãƒˆãƒ­ãƒ¼ãƒ©ãƒ¼ã‹?
 							if ((classOf lListObj) == IK_Chain_Object) then
 							(
 							try(
 							lListObj.controller.IK_goal.controller.Pos.controller = Position_XYZ ();
 							lListObj.controller.IK_goal.controller.Pos.controller = copy ikBakeObj[ikObjCont].pos.controller;
-							)catch(messageBox("ƒRƒ“ƒgƒ[ƒ‰[‚ğ•ÏX‚Å‚«‚Ü‚¹‚ñ‚Å‚µ‚½\n" + lListObj.name) title:MesseTitleInfoStr);
+							)catch(messageBox("ã‚³ãƒ³ãƒˆãƒ­ãƒ¼ãƒ©ãƒ¼ã‚’å¤‰æ›´ã§ãã¾ã›ã‚“ã§ã—ãŸ\n" + lListObj.name) title:MesseTitleInfoStr);
 							);--if end
-							--‚»‚êˆÈŠO(HDIK),‚±‚ê‚Í’Êí‚ÌƒRƒ“ƒgƒ[ƒ‰[‚Æ‚İ‚È‚·
+							--ãã‚Œä»¥å¤–(HDIK),ã“ã‚Œã¯é€šå¸¸ã®ã‚³ãƒ³ãƒˆãƒ­ãƒ¼ãƒ©ãƒ¼ã¨ã¿ãªã™
 							if (not ((classOf lListObj) == IK_Chain_Object)) and (not ((classOf lListObj.controller) == IKControl)) then
 							(
 							try(
 							lListObj.pos.controller = Position_XYZ ();
 							lListObj.pos.controller = copy ikBakeObj[ikObjCont].pos.controller;
-							)catch(messageBox("ƒRƒ“ƒgƒ[ƒ‰[‚ğ•ÏX‚Å‚«‚Ü‚¹‚ñ‚Å‚µ‚½\n" + lListObj.name) title:MesseTitleInfoStr);
+							)catch(messageBox("ã‚³ãƒ³ãƒˆãƒ­ãƒ¼ãƒ©ãƒ¼ã‚’å¤‰æ›´ã§ãã¾ã›ã‚“ã§ã—ãŸ\n" + lListObj.name) title:MesseTitleInfoStr);
 							);--if end
 
 						)
 						4:(
-							--‰ñ“]ƒXƒP[ƒ‹
-							--‚Ü‚¸IK‚Ì’ÊíƒRƒ“ƒgƒ[ƒ‰[‚©?
+							--å›è»¢ã‚¹ã‚±ãƒ¼ãƒ«
+							--ã¾ãšIKã®é€šå¸¸ã‚³ãƒ³ãƒˆãƒ­ãƒ¼ãƒ©ãƒ¼ã‹?
 							if ((classOf lListObj.controller) == IKControl) then 
 							(
 							try(
@@ -2289,9 +2289,9 @@ IKŠÔÚ‚Ìˆê•”‚¾‚¯‚ğPlot‚·‚é‚ÆƒAƒjƒ[ƒVƒ‡ƒ“‚ª”j’]‚µ‚Ü‚·
 							lListObj.controller.FK_Sub_Control.controller.Scale.controller = bezier_scale ();
 							lListObj.controller.FK_Sub_Control.controller.Rotation.controller = copy ikBakeObj[ikObjCont].rotation.controller;
 							lListObj.controller.FK_Sub_Control.controller.Scale.controller = copy ikBakeObj[ikObjCont].scale.controller
-							)catch(messageBox("ƒRƒ“ƒgƒ[ƒ‰[‚ğ•ÏX‚Å‚«‚Ü‚¹‚ñ‚Å‚µ‚½\n" + lListObj.name) title:MesseTitleInfoStr);
+							)catch(messageBox("ã‚³ãƒ³ãƒˆãƒ­ãƒ¼ãƒ©ãƒ¼ã‚’å¤‰æ›´ã§ãã¾ã›ã‚“ã§ã—ãŸ\n" + lListObj.name) title:MesseTitleInfoStr);
 							);--if end
-							--IK‚ÌƒRƒ“ƒgƒ[ƒ‰[‚©?
+							--IKã®ã‚³ãƒ³ãƒˆãƒ­ãƒ¼ãƒ©ãƒ¼ã‹?
 							if ((classOf lListObj) == IK_Chain_Object) then 
 							(
 							try(
@@ -2299,9 +2299,9 @@ IKŠÔÚ‚Ìˆê•”‚¾‚¯‚ğPlot‚·‚é‚ÆƒAƒjƒ[ƒVƒ‡ƒ“‚ª”j’]‚µ‚Ü‚·
 							lListObj.controller.IK_goal.controller.Scale.controller = bezier_scale ();
 							lListObj.controller.IK_goal.controller.Rotation.controller = copy ikBakeObj[ikObjCont].rotation.controller;
 							lListObj.controller.IK_goal.controller.Scale.controller = copy ikBakeObj[ikObjCont].scale.controller;
-							)catch(messageBox("ƒRƒ“ƒgƒ[ƒ‰[‚ğ•ÏX‚Å‚«‚Ü‚¹‚ñ‚Å‚µ‚½\n" + lListObj.name) title:MesseTitleInfoStr);
+							)catch(messageBox("ã‚³ãƒ³ãƒˆãƒ­ãƒ¼ãƒ©ãƒ¼ã‚’å¤‰æ›´ã§ãã¾ã›ã‚“ã§ã—ãŸ\n" + lListObj.name) title:MesseTitleInfoStr);
 							);--if end
-							--‚»‚êˆÈŠO(HDIK),‚±‚ê‚Í’Êí‚ÌƒRƒ“ƒgƒ[ƒ‰[‚Æ‚İ‚È‚·
+							--ãã‚Œä»¥å¤–(HDIK),ã“ã‚Œã¯é€šå¸¸ã®ã‚³ãƒ³ãƒˆãƒ­ãƒ¼ãƒ©ãƒ¼ã¨ã¿ãªã™
 							if (not ((classOf lListObj) == IK_Chain_Object)) and (not ((classOf lListObj.controller) == IKControl)) then
 							(
 							try(
@@ -2309,61 +2309,61 @@ IKŠÔÚ‚Ìˆê•”‚¾‚¯‚ğPlot‚·‚é‚ÆƒAƒjƒ[ƒVƒ‡ƒ“‚ª”j’]‚µ‚Ü‚·
 							lListObj.scale.controller = bezier_scale ();
 							lListObj.rotation.controller = copy ikBakeObj[ikObjCont].rotation.controller;
 							lListObj.scale.controller = copy ikBakeObj[ikObjCont].scale.controller;
-							)catch(messageBox("ƒRƒ“ƒgƒ[ƒ‰[‚ğ•ÏX‚Å‚«‚Ü‚¹‚ñ‚Å‚µ‚½\n" + lListObj.name) title:MesseTitleInfoStr);
+							)catch(messageBox("ã‚³ãƒ³ãƒˆãƒ­ãƒ¼ãƒ©ãƒ¼ã‚’å¤‰æ›´ã§ãã¾ã›ã‚“ã§ã—ãŸ\n" + lListObj.name) title:MesseTitleInfoStr);
 							);--if end
 						)
 						5:(
-							--‰ñ“]
-							--‚Ü‚¸IK‚Ì’ÊíƒRƒ“ƒgƒ[ƒ‰[‚©?
+							--å›è»¢
+							--ã¾ãšIKã®é€šå¸¸ã‚³ãƒ³ãƒˆãƒ­ãƒ¼ãƒ©ãƒ¼ã‹?
 							if ((classOf lListObj.controller) == IKControl) then 
 							(
 							try(
 							lListObj.controller.FK_Sub_Control.controller.Rotation.controller = Euler_XYZ ();
 							lListObj.controller.FK_Sub_Control.controller.Rotation.controller = copy ikBakeObj[ikObjCont].rotation.controller;
-							)catch(messageBox("ƒRƒ“ƒgƒ[ƒ‰[‚ğ•ÏX‚Å‚«‚Ü‚¹‚ñ‚Å‚µ‚½\n" + lListObj.name) title:MesseTitleInfoStr);
+							)catch(messageBox("ã‚³ãƒ³ãƒˆãƒ­ãƒ¼ãƒ©ãƒ¼ã‚’å¤‰æ›´ã§ãã¾ã›ã‚“ã§ã—ãŸ\n" + lListObj.name) title:MesseTitleInfoStr);
 							);--if end
-							--IK‚ÌƒRƒ“ƒgƒ[ƒ‰[‚©?
+							--IKã®ã‚³ãƒ³ãƒˆãƒ­ãƒ¼ãƒ©ãƒ¼ã‹?
 							if ((classOf lListObj) == IK_Chain_Object) then 
 							(
 							try(
 							lListObj.controller.IK_goal.controller.Rotation.controller = Euler_XYZ ();
 							lListObj.controller.IK_goal.controller.Rotation.controller = copy ikBakeObj[ikObjCont].rotation.controller;
-							)catch(messageBox("ƒRƒ“ƒgƒ[ƒ‰[‚ğ•ÏX‚Å‚«‚Ü‚¹‚ñ‚Å‚µ‚½\n" + lListObj.name) title:MesseTitleInfoStr);
+							)catch(messageBox("ã‚³ãƒ³ãƒˆãƒ­ãƒ¼ãƒ©ãƒ¼ã‚’å¤‰æ›´ã§ãã¾ã›ã‚“ã§ã—ãŸ\n" + lListObj.name) title:MesseTitleInfoStr);
 							);--if end
-							--‚»‚êˆÈŠO(HDIK),‚±‚ê‚Í’Êí‚ÌƒRƒ“ƒgƒ[ƒ‰[‚Æ‚İ‚È‚·
+							--ãã‚Œä»¥å¤–(HDIK),ã“ã‚Œã¯é€šå¸¸ã®ã‚³ãƒ³ãƒˆãƒ­ãƒ¼ãƒ©ãƒ¼ã¨ã¿ãªã™
 							if (not ((classOf lListObj) == IK_Chain_Object)) and (not ((classOf lListObj.controller) == IKControl)) then
 							(
 							try(
 							lListObj.rotation.controller = Euler_XYZ ();
 							lListObj.rotation.controller = copy ikBakeObj[ikObjCont].rotation.controller;
-							)catch(messageBox("ƒRƒ“ƒgƒ[ƒ‰[‚ğ•ÏX‚Å‚«‚Ü‚¹‚ñ‚Å‚µ‚½\n" + lListObj.name) title:MesseTitleInfoStr);
+							)catch(messageBox("ã‚³ãƒ³ãƒˆãƒ­ãƒ¼ãƒ©ãƒ¼ã‚’å¤‰æ›´ã§ãã¾ã›ã‚“ã§ã—ãŸ\n" + lListObj.name) title:MesseTitleInfoStr);
 							);--if end
 						)
 						6:(
-							--ƒXƒP[ƒ‹
-							--‚Ü‚¸IK‚Ì’ÊíƒRƒ“ƒgƒ[ƒ‰[‚©?
+							--ã‚¹ã‚±ãƒ¼ãƒ«
+							--ã¾ãšIKã®é€šå¸¸ã‚³ãƒ³ãƒˆãƒ­ãƒ¼ãƒ©ãƒ¼ã‹?
 							if ((classOf lListObj.controller) == IKControl) then 
 							(
 							try(
 							lListObj.controller.FK_Sub_Control.controller.Scale.controller = bezier_scale ();
 							lListObj.controller.FK_Sub_Control.controller.Scale.controller = copy ikBakeObj[ikObjCont].scale.controller
-							)catch(messageBox("ƒRƒ“ƒgƒ[ƒ‰[‚ğ•ÏX‚Å‚«‚Ü‚¹‚ñ‚Å‚µ‚½\n" + lListObj.name) title:MesseTitleInfoStr);
+							)catch(messageBox("ã‚³ãƒ³ãƒˆãƒ­ãƒ¼ãƒ©ãƒ¼ã‚’å¤‰æ›´ã§ãã¾ã›ã‚“ã§ã—ãŸ\n" + lListObj.name) title:MesseTitleInfoStr);
 							);--if end
-							--IK‚ÌƒRƒ“ƒgƒ[ƒ‰[‚©?
+							--IKã®ã‚³ãƒ³ãƒˆãƒ­ãƒ¼ãƒ©ãƒ¼ã‹?
 							if ((classOf lListObj) == IK_Chain_Object) then 
 							(
 							try(
 							lListObj.controller.IK_goal.controller.Scale.controller = bezier_scale ();
 							lListObj.controller.IK_goal.controller.Scale.controller = copy ikBakeObj[ikObjCont].scale.controller;
-							)catch(messageBox("ƒRƒ“ƒgƒ[ƒ‰[‚ğ•ÏX‚Å‚«‚Ü‚¹‚ñ‚Å‚µ‚½\n" + lListObj.name) title:MesseTitleInfoStr);
+							)catch(messageBox("ã‚³ãƒ³ãƒˆãƒ­ãƒ¼ãƒ©ãƒ¼ã‚’å¤‰æ›´ã§ãã¾ã›ã‚“ã§ã—ãŸ\n" + lListObj.name) title:MesseTitleInfoStr);
 							);--if end
-							--‚»‚êˆÈŠO(HDIK),‚±‚ê‚Í’Êí‚ÌƒRƒ“ƒgƒ[ƒ‰[‚Æ‚İ‚È‚·
+							--ãã‚Œä»¥å¤–(HDIK),ã“ã‚Œã¯é€šå¸¸ã®ã‚³ãƒ³ãƒˆãƒ­ãƒ¼ãƒ©ãƒ¼ã¨ã¿ãªã™
 							if (not ((classOf lListObj) == IK_Chain_Object)) and (not ((classOf lListObj.controller) == IKControl)) then
 							(
 							try(
 							lListObj.scale.controller = bezier_scale ();
 							lListObj.scale.controller = copy ikBakeObj[ikObjCont].scale.controller;
-							)catch(messageBox("ƒRƒ“ƒgƒ[ƒ‰[‚ğ•ÏX‚Å‚«‚Ü‚¹‚ñ‚Å‚µ‚½\n" + lListObj.name) title:MesseTitleInfoStr);
+							)catch(messageBox("ã‚³ãƒ³ãƒˆãƒ­ãƒ¼ãƒ©ãƒ¼ã‚’å¤‰æ›´ã§ãã¾ã›ã‚“ã§ã—ãŸ\n" + lListObj.name) title:MesseTitleInfoStr);
 							);--if end
 						)
 					);--case end
@@ -2372,7 +2372,7 @@ IKŠÔÚ‚Ìˆê•”‚¾‚¯‚ğPlot‚·‚é‚ÆƒAƒjƒ[ƒVƒ‡ƒ“‚ª”j’]‚µ‚Ü‚·
 					
 					);--if end
 				
-				);--if end IKŠm”F
+				);--if end IKç¢ºèª
 				
 				);--for end
 
@@ -2388,13 +2388,13 @@ IKŠÔÚ‚Ìˆê•”‚¾‚¯‚ğPlot‚·‚é‚ÆƒAƒjƒ[ƒVƒ‡ƒ“‚ª”j’]‚µ‚Ü‚·
 		);--case end
 		
 	--////////////////////////////////////////////////
-	--•œ‹A
+	--å¾©å¸°
 	--////////////////////////////////////////////////
 	)--with redraw end	
-	resumeEditing()--Ä‚ÑƒAƒNƒeƒBƒu‚É
+	resumeEditing()--å†ã³ã‚¢ã‚¯ãƒ†ã‚£ãƒ–ã«
 	try(destroydialog sj_progressBar_rol)catch()
 	
-	try( gc light:false delayed:false)catch()--ƒƒ‚ƒŠ[‚ğ‰ğ•ú‚·‚é
+	try( gc light:false delayed:false)catch()--ãƒ¡ãƒ¢ãƒªãƒ¼ã‚’è§£æ”¾ã™ã‚‹
 	
 	);--pbake end
 
@@ -2405,28 +2405,28 @@ IKŠÔÚ‚Ìˆê•”‚¾‚¯‚ğPlot‚·‚é‚ÆƒAƒjƒ[ƒVƒ‡ƒ“‚ª”j’]‚µ‚Ü‚·
 
 	on sj_pbake_rol close do saveIni_Fn();
 	--////////////////////////////////////////////////
-	--ƒŠƒTƒCƒYƒCƒxƒ“ƒg
+	--ãƒªã‚µã‚¤ã‚ºã‚¤ãƒ™ãƒ³ãƒˆ
 	--////////////////////////////////////////////////
 	on sj_pbake_rol resized val do
 	(
 	--width:452 height:404
 		/*
-			GroupBox grp_list "ƒŠƒXƒg" pos:[8,92] width:436 height:272;
+			GroupBox grp_list "ãƒªã‚¹ãƒˆ" pos:[8,92] width:436 height:272;
 	listbox pb_listR "" pos:[228,132] width:208 height:16;
-	button addListBtR "" pos:[228,108] width:20 height:20 images:#("$Scripts/SJTools/Images//SJ_button_add.png", "$Scripts/SJTools/Images//SJ_button_add_a.png", 2, 1, 1, 2, 2) toolTip:"‘I‘ğ‚ğ’Ç‰Á";
-	button allSelListBtR "" pos:[252,108] width:20 height:20 images:#("$Scripts/SJTools/Images//SJ_button_allsel.png", "$Scripts/SJTools/Images//SJ_button_allsel_a.png", 2, 1, 1, 2, 2) toolTip:"‘S‘I‘ğ";
+	button addListBtR "" pos:[228,108] width:20 height:20 images:#("$Scripts/SJTools/Images//SJ_button_add.png", "$Scripts/SJTools/Images//SJ_button_add_a.png", 2, 1, 1, 2, 2) toolTip:"é¸æŠã‚’è¿½åŠ ";
+	button allSelListBtR "" pos:[252,108] width:20 height:20 images:#("$Scripts/SJTools/Images//SJ_button_allsel.png", "$Scripts/SJTools/Images//SJ_button_allsel_a.png", 2, 1, 1, 2, 2) toolTip:"å…¨é¸æŠ";
 	button upListBtR "" pos:[276,108] width:20 height:20 images:#("$Scripts/SJTools/Images//SJ_button_up.png", "$Scripts/SJTools/Images//SJ_button_up_a.png", 2, 1, 1, 2, 2) toolTip:"Up";
 	button downListBtR "" pos:[300,108] width:20 height:20 images:#("$Scripts/SJTools/Images//SJ_button_down.png", "$Scripts/SJTools/Images//SJ_button_down_a.png", 2, 1, 1, 2, 2) toolTip:"Down";
-	button sortBtR "ƒ\[ƒg" pos:[324,108] width:20 height:20 images:#("$Scripts/SJTools/Images//SJ_button_sort.png", "$Scripts/SJTools/Images//SJ_button_sort_a.png", 2, 1, 1, 2, 2) toolTip:"–¼‘O‡‚Åƒ\[ƒg‚·‚é";
-	button pSortBtR "ƒ\[ƒg" pos:[348,108] width:20 height:20 images:#("$Scripts/SJTools/Images//SJ_button_parentsort.png", "$Scripts/SJTools/Images//SJ_button_parentsort_a.png", 2, 1, 1, 2, 2) toolTip:"eq\‘¢‡‚Éƒ\[ƒg‚·‚é";
-	button delBtR "" pos:[372,108] width:20 height:20 images:#("$Scripts/SJTools/Images//SJ_button_delete.png", "$Scripts/SJTools/Images//SJ_button_delete_a.png", 2, 1, 1, 2, 2) toolTip:"íœ";
-	button clearBtR "" pos:[396,108] width:20 height:20 images:#("$Scripts/SJTools/Images//SJ_button_clear.png", "$Scripts/SJTools/Images//SJ_button_clear_a.png", 2, 1, 1, 2, 2) toolTip:"ƒNƒŠƒA";
+	button sortBtR "ã‚½ãƒ¼ãƒˆ" pos:[324,108] width:20 height:20 images:#("$Scripts/SJTools/Images//SJ_button_sort.png", "$Scripts/SJTools/Images//SJ_button_sort_a.png", 2, 1, 1, 2, 2) toolTip:"åå‰é †ã§ã‚½ãƒ¼ãƒˆã™ã‚‹";
+	button pSortBtR "ã‚½ãƒ¼ãƒˆ" pos:[348,108] width:20 height:20 images:#("$Scripts/SJTools/Images//SJ_button_parentsort.png", "$Scripts/SJTools/Images//SJ_button_parentsort_a.png", 2, 1, 1, 2, 2) toolTip:"è¦ªå­æ§‹é€ é †ã«ã‚½ãƒ¼ãƒˆã™ã‚‹";
+	button delBtR "" pos:[372,108] width:20 height:20 images:#("$Scripts/SJTools/Images//SJ_button_delete.png", "$Scripts/SJTools/Images//SJ_button_delete_a.png", 2, 1, 1, 2, 2) toolTip:"å‰Šé™¤";
+	button clearBtR "" pos:[396,108] width:20 height:20 images:#("$Scripts/SJTools/Images//SJ_button_clear.png", "$Scripts/SJTools/Images//SJ_button_clear_a.png", 2, 1, 1, 2, 2) toolTip:"ã‚¯ãƒªã‚¢";
 	label listCntR "0" pos:[232,348] width:204 height:13;	
 		*/
-		--val‚ªƒŠƒTƒCƒY‚Ì‘å‚«‚³
-		--1‚ª•
+		--valãŒãƒªã‚µã‚¤ã‚ºæ™‚ã®å¤§ãã•
+		--1ãŒå¹…
 
-		--‘å‚«‚³‚ªŒ³‚Ì‘å‚«‚³‚ğ’´‚¦‚Ä‚¢‚ê‚Î
+		--å¤§ãã•ãŒå…ƒã®å¤§ãã•ã‚’è¶…ãˆã¦ã„ã‚Œã°
 		if ((sj_pbake_rol.width >= 452) and (sj_pbake_rol.height >= 404)) then
 		(
 			widthVal = (val[1] as float / 2.0);
@@ -2455,7 +2455,7 @@ IKŠÔÚ‚Ìˆê•”‚¾‚¯‚ğPlot‚·‚é‚ÆƒAƒjƒ[ƒVƒ‡ƒ“‚ª”j’]‚µ‚Ü‚·
 
 			listCntR.pos = [(widthVal+6),(val[2]-56)];
 			
-			--ƒŠƒTƒCƒYƒCƒ[ƒW‚ÌˆÊ’u
+			--ãƒªã‚µã‚¤ã‚ºã‚¤ãƒ¡ãƒ¼ã‚¸ã®ä½ç½®
 			resizeImg.pos = [(val[1]-10),(val[2]-10)];
 			
 		)else
@@ -2470,7 +2470,7 @@ IKŠÔÚ‚Ìˆê•”‚¾‚¯‚ğPlot‚·‚é‚ÆƒAƒjƒ[ƒVƒ‡ƒ“‚ª”j’]‚µ‚Ü‚·
 );--rollout end
 
 -----------------------------------------------------------------------------------------------------------
---ƒ[ƒ‹ƒAƒEƒg
+--ãƒ­ãƒ¼ãƒ«ã‚¢ã‚¦ãƒˆ
 -----------------------------------------------------------------------------------------------------------
 CreateDialog sj_pbake_rol pos:[50,50] menu:pbakeMenuBar style:#(#style_border, /*#style_titlebar,*/#style_toolwindow, #style_sysmenu, #style_resizing, #style_minimizebox) menu:CanvasMenu
 
