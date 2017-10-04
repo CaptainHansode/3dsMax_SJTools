@@ -23,7 +23,7 @@ struct SJRendPathEdit (
                         mainRolWidth = 310,
                         mainRolheight = 450,
                         TOOL_NAME = "パスチカン",
-                        TOOL_VERSION = "試作品",
+                        TOOL_VERSION = "試作品 v2",
                         AUTHOR = "半袖船長 CaptainHansode",
                         WEB = "試作品",
                         emlBtnName = "エレメント",
@@ -34,9 +34,9 @@ struct SJRendPathEdit (
                         lblPosX = 16,
                         pathBtnPosX = 248,
                         okBtnPosX = 272,
-                        rendBtnPosY = 372,
-                        elmLblPosY = 424,
-                        elmBtnPosY = 442
+                        rendBtnPosY = 412,
+                        elmLblPosY = 464,
+                        elmBtnPosY = 482
                       );
 
 try(cui.FloatDialogBar SJRdPathEdit.SJRdPathEditRol)catch();
@@ -183,14 +183,24 @@ function initialize rol =
     local btY = SJRdPathEdit.elmBtnPosY;
 
     local lbX = SJRdPathEdit.lblPosX;
-    local edX = SJRdPathEdit.edtPosX;
-    local pBtX = SJRdPathEdit.pathBtnPosX;
-    local okBtX = SJRdPathEdit.okBtnPosX;
+    local edX = SJRdPathEdit.edtPosX + 4;
+    local pBtX = SJRdPathEdit.pathBtnPosX + 8;
+    local okBtX = SJRdPathEdit.okBtnPosX + 8;
 
     rol.rendPathEdt.text = rendOutputFilename;
     re = maxOps.GetCurRenderElementMgr();
 
     local elmPath = "";
+
+    -- 一旦初期化
+    for i = 1 to 12 do
+    (
+        rol.elmEdtList[i].text = "";
+        rol.elmEdtList[i].pos = [edX, -50];
+        rol.elmLblList[i].pos = [lbX, -50];
+        rol.elmPhList[i].pos = [pBtX, -50];
+        rol.elmBtList[i].pos = [okBtX, -50];
+    )
 
     for n = 0 to (re.numrenderelements () - 1) do
     (
@@ -235,6 +245,7 @@ function resizeRol rol val = (
     )
 
     local offsetW = val[1] - width;
+    local elmGrpH = 24;
     local grpOffset = 14;
     local edtOffset = 34;
     local rendOffset = 84;
@@ -261,7 +272,10 @@ function resizeRol rol val = (
         rol.elmPhList[n].pos = [pathBtX, posY];
         rol.elmBtList[n].pos = [okBtX, posY];
         posY += 44;
+        elmGrpH += 44;
     )
+
+    rol.emlGrp.height = elmGrpH; -- 高さ
 )
 
 /**-----------------------------------------------------------------------------
@@ -300,25 +314,26 @@ SJRdPathEdit.SJRdPathEditRol =
 
         GroupBox 'grp1' "一括設定" pos:[8,8] width:296 height:84 align:#left
         button 'allSetBtn' "レンダリング出力パスを全てのエレメントに" pos:[16,28] width:276 height:24 align:#left
-        button 'allDelBtn' "全て空欄" pos:[16,60] width:276 height:24 align:#left
+        button 'allMkDirBtn' "全てのパスのフォルダを作成" pos:[16,60] width:276 height:24 align:#left
+        button 'allDelBtn' "全て空欄" pos:[16,92] width:276 height:24 align:#left
 
-        GroupBox 'repGrp' "置換" pos:[8,100] width:296 height:148 align:#left
-        edittext 'findEdt' "" pos:[12,140] width:280 height:20 align:#left
-        label 'lbl1' "検索文字" pos:[16,122] width:168 height:16 align:#left
-        edittext 'repEdt' "" pos:[12,184] width:280 height:20 align:#left
-        label 'lbl2' "置換文字" pos:[16,166] width:168 height:16 align:#left
-        button 'repBtn' "置換" pos:[16,212] width:276 height:24 align:#left
+        GroupBox 'repGrp' "置換" pos:[8,132] width:296 height:148 align:#left
+        edittext 'findEdt' "" pos:[12,172] width:280 height:20 align:#left
+        label 'lbl1' "検索文字" pos:[16,154] width:168 height:16 align:#left
+        edittext 'repEdt' "" pos:[12,216] width:280 height:20 align:#left
+        label 'lbl2' "置換文字" pos:[16,198] width:168 height:16 align:#left
+        button 'repBtn' "置換" pos:[16,244] width:276 height:24 align:#left
 
-        GroupBox 'grp5' "適応" pos:[8,256] width:296 height:84 align:#left
-        button 'updateBtn' "リロード" pos:[20,276] width:272 height:24 align:#left
-        button 'allOKBtn' "シーンに適応" pos:[20,308] width:272 height:24 align:#left
+        GroupBox 'grp5' "適応 リロード" pos:[8,288] width:296 height:92 align:#left
+        button 'updateBtn' "リロード" pos:[20,308] width:272 height:24 align:#left
+        button 'allOKBtn' "シーンに適応" pos:[20,340] width:272 height:36 align:#left
 
-        GroupBox 'rendGrp' "レンダリング出力" pos:[8,348] width:296 height:52 align:#left
-        edittext 'rendPathEdt' "" pos:[12,372] width:231 height:20 align:#left
-        button 'rendPathBtn' "..." pos:[248,372] width:20 height:20 align:#left
-        button 'rendOKBtn' "OK" pos:[272,372] width:20 height:20 align:#left
+        GroupBox 'rendGrp' "レンダリング出力" pos:[8,388] width:296 height:60 align:#left
+        edittext 'rendPathEdt' "" pos:[12,412] width:231 height:20 align:#left
+        button 'rendPathBtn' "..." pos:[248,412] width:20 height:20 align:#left
+        button 'rendOKBtn' "OK" pos:[272,412] width:20 height:20 align:#left
 
-        GroupBox 'emlGrp' "Render Elements" pos:[8,404] width:296 height:592 align:#left
+        GroupBox 'emlGrp' "Render Elements" pos:[8,444] width:296 height:24 align:#left
         edittext 'remElmEdt01' "" pos:[12,-100] width:231 height:20 align:#left
         button 'rEPathBtn01' "..." pos:[248,-100] width:20 height:20 align:#left
         button 'rEOKBtn01' "OK" pos:[272,-100] width:20 height:20 align:#left
@@ -374,22 +389,67 @@ SJRdPathEdit.SJRdPathEditRol =
         */
         on allSetBtn pressed do
         (
-            local rendPath = rendPathEdt.text;
-            remElmEdt01.text = rendPath;
-            remElmEdt02.text = rendPath;
-            remElmEdt03.text = rendPath;
-            remElmEdt04.text = rendPath;
-            remElmEdt05.text = rendPath;
-            remElmEdt06.text = rendPath;
-            remElmEdt07.text = rendPath;
-            remElmEdt08.text = rendPath;
-            remElmEdt09.text = rendPath;
-            remElmEdt10.text = rendPath;
-            remElmEdt11.text = rendPath;
-            remElmEdt12.text = rendPath;
+            local rendPath = getFilenamePath rendPathEdt.text;
+            local myPath = "";
+            myPath = filenameFromPath remElmEdt01.text;
+            remElmEdt01.text = rendPath + myPath;
+            myPath = filenameFromPath remElmEdt02.text;
+            remElmEdt02.text = rendPath + myPath;
+            myPath = filenameFromPath remElmEdt03.text;
+            remElmEdt03.text = rendPath + myPath;
+            myPath = filenameFromPath remElmEdt04.text;
+            remElmEdt04.text = rendPath + myPath;
+            myPath = filenameFromPath remElmEdt05.text;
+            remElmEdt05.text = rendPath + myPath;
+            myPath = filenameFromPath remElmEdt06.text;
+            remElmEdt06.text = rendPath + myPath;
+            myPath = filenameFromPath remElmEdt07.text;
+            remElmEdt07.text = rendPath + myPath;
+            myPath = filenameFromPath remElmEdt08.text;
+            remElmEdt08.text = rendPath + myPath;
+            myPath = filenameFromPath remElmEdt09.text;
+            remElmEdt09.text = rendPath + myPath;
+            myPath = filenameFromPath remElmEdt10.text;
+            remElmEdt10.text = rendPath + myPath;
+            myPath = filenameFromPath remElmEdt11.text;
+            remElmEdt11.text = rendPath + myPath;
+            myPath = filenameFromPath remElmEdt12.text;
+            remElmEdt12.text = rendPath + myPath;
         )
 
-        on updateBtn pressed do initialize(SJRdPathEditRol);
+        function mkDir path =
+        (
+            try (
+                makeDir path;
+            ) catch (
+                print "パスのディレクトリを作成できませんでした";
+            )
+        )
+
+        on allMkDirBtn pressed do
+        (
+            mkDir (getFilenamePath rendPathEdt.text);
+            mkDir (getFilenamePath remElmEdt01.text);
+            mkDir (getFilenamePath remElmEdt02.text);
+            mkDir (getFilenamePath remElmEdt03.text);
+            mkDir (getFilenamePath remElmEdt04.text);
+            mkDir (getFilenamePath remElmEdt05.text);
+            mkDir (getFilenamePath remElmEdt06.text);
+            mkDir (getFilenamePath remElmEdt07.text);
+            mkDir (getFilenamePath remElmEdt08.text);
+            mkDir (getFilenamePath remElmEdt09.text);
+            mkDir (getFilenamePath remElmEdt10.text);
+            mkDir (getFilenamePath remElmEdt11.text);
+            mkDir (getFilenamePath remElmEdt12.text);
+        )
+
+        on updateBtn pressed do
+        (
+            initialize SJRdPathEditRol;
+            resizeRol \
+                SJRdPathEditRol \
+                [SJRdPathEditRol.width, SJRdPathEditRol.height];
+        )
 
         on allOKBtn pressed do
         (
@@ -403,6 +463,11 @@ SJRdPathEdit.SJRdPathEditRol =
 
         on repBtn pressed do
         (
+            if (findEdt.text == "" and repEdt.text == "") do
+            (
+                return false;
+            )
+
             replacePath rendPathEdt elmEdtList findEdt.text repEdt.text;
         )
 
@@ -440,7 +505,7 @@ SJRdPathEdit.SJRdPathEditRol =
 
         on SJRdPathEditRol resized val do resizeRol SJRdPathEditRol val;
 
-        on SJRdPathEditRol open do initialize(SJRdPathEditRol);
+        on SJRdPathEditRol open do initialize SJRdPathEditRol;
         on SJRdPathEditRol moved val do
         (
             --local iniPath = ((getDir #scripts) + "\SJTools\SJRenamer\SJRenamer.ini");
