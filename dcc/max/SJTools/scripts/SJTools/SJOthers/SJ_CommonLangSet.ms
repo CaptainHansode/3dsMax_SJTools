@@ -24,11 +24,11 @@ if  (language == "JP") then
 
 --全てのツールで共通の文字列
 
-Local MesseTitleInfoStr = (getINISetting(languageFilePath) "SJ_Tools_Common" "MesseTitleInfoStr");
-Local MesseTitleWngStr = (getINISetting(languageFilePath) "SJ_Tools_Common" "MesseTitleWngStr");
-Local MesseTitleCtnStr = (getINISetting(languageFilePath) "SJ_Tools_Common" "MesseTitleCtnStr");
-Local MesseTitleErrStr = (getINISetting(languageFilePath) "SJ_Tools_Common" "MesseTitleErrStr");
-Local MesseTitleChkStr = (getINISetting(languageFilePath) "SJ_Tools_Common" "MesseTitleChkStr");
+Local MesseTitleInfoStr = "お知らせ";
+Local MesseTitleWngStr = "警告";
+Local MesseTitleCtnStr = "注意";
+Local MesseTitleErrStr = "エラー";
+Local MesseTitleChkStr = "確認";
 
 --iniの改行コードを使いたい場合はexecuteをつかい、さらにiniは"を二重に設置する
 Local MesseCmnErrStr = (getINISetting(languageFilePath) "SJ_Tools_Common" "MesseCmnErrStr");

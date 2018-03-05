@@ -46,4 +46,5 @@ struct SJPolyUtil
             polyop.deleteFaces obj delFacies;
         )
     )
+
 )

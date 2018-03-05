@@ -60,4 +60,5 @@ struct SJProgressBar
     (
         SJProgressBarRol.title = titleStr;
     )
+
 )
