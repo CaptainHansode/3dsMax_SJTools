@@ -11,40 +11,40 @@
  * @github https://github.com/CaptainHansode/SJTools
  *
  * SJRendPathEdit
- *
+ * TODO: incudeするとシステムエラーが起きる
  */
 
 /**-----------------------------------------------------------------------------
  * global
  */
-global SJRdPathEdit;
+global SJRPE;
 struct SJRendPathEdit (
-                        SJRdPathEditRol,
-                        mainRolWidth = 310,
-                        mainRolheight = 450,
-                        TOOL_NAME = "パスチカン",
-                        TOOL_VERSION = "試作品 v2",
-                        AUTHOR = "半袖船長 CaptainHansode",
-                        WEB = "試作品",
-                        emlBtnName = "エレメント",
-                        grpWidth = 296,
-                        edtWidth = 231,
+    SJRPERol,
+    mainRolWidth = 310,
+    mainRolheight = 450,
+    TOOL_NAME = "パスチカン",
+    TOOL_VERSION = "試作品 v2",
+    AUTHOR = "半袖船長 CaptainHansode",
+    WEB = "試作品",
+    emlBtnName = "エレメント",
+    grpWidth = 296,
+    edtWidth = 231,
 
-                        edtPosX = 12,
-                        lblPosX = 16,
-                        pathBtnPosX = 248,
-                        okBtnPosX = 272,
-                        rendBtnPosY = 412,
-                        elmLblPosY = 464,
-                        elmBtnPosY = 482
-                      );
+    edtPosX = 12,
+    lblPosX = 16,
+    pathBtnPosX = 248,
+    okBtnPosX = 272,
+    rendBtnPosY = 412,
+    elmLblPosY = 464,
+    elmBtnPosY = 482
+)
 
-try(cui.FloatDialogBar SJRdPathEdit.SJRdPathEditRol)catch();
-try(cui.unRegisterDialogBar SJRdPathEdit.SJRdPathEditRol)catch();
-try(closeRolloutFloater SJRdPathEdit.SJRdPathEditRol)catch();
-try(destroydialog SJRdPathEdit.SJRdPathEditRol)catch();
+try(cui.FloatDialogBar SJRPE.SJRPERol)catch();
+try(cui.unRegisterDialogBar SJRPE.SJRPERol)catch();
+try(closeRolloutFloater SJRPE.SJRPERol)catch();
+try(destroydialog SJRPE.SJRPERol)catch();
 
-SJRdPathEdit = SJRendPathEdit();
+SJRPE = SJRendPathEdit();
 
 --include "$scripts\SJTools\lib\progresBar.ms";
 
@@ -179,13 +179,13 @@ function initialize rol =
     append rol.elmPhList rol.rEPathBtn11;
     append rol.elmPhList rol.rEPathBtn12;
 
-    local lbY = SJRdPathEdit.elmLblPosY;
-    local btY = SJRdPathEdit.elmBtnPosY;
+    local lbY = SJRPE.elmLblPosY;
+    local btY = SJRPE.elmBtnPosY;
 
-    local lbX = SJRdPathEdit.lblPosX;
-    local edX = SJRdPathEdit.edtPosX + 4;
-    local pBtX = SJRdPathEdit.pathBtnPosX + 8;
-    local okBtX = SJRdPathEdit.okBtnPosX + 8;
+    local lbX = SJRPE.lblPosX;
+    local edX = SJRPE.edtPosX + 4;
+    local pBtX = SJRPE.pathBtnPosX + 8;
+    local okBtX = SJRPE.okBtnPosX + 8;
 
     rol.rendPathEdt.text = rendOutputFilename;
     re = maxOps.GetCurRenderElementMgr();
@@ -222,23 +222,22 @@ function initialize rol =
         btY += 44;
     )
 
-    rol.height = SJRdPathEdit.mainRolheight + (re.numrenderelements () * 48);
+    rol.height = SJRPE.mainRolheight + (re.numrenderelements () * 48);
 )
 
 /**-----------------------------------------------------------------------------
  * 設定を保存
  */
 function saveIni = (
-    --local iniPath = ((getDir #scripts) + "\SJTools\SJRenamer\SJRenamer.ini");
-    --(setINISetting iniPath "SJRenamer" "LastKeyWordNews" SJRenamerRol.newNameEdt.text);
+    local iniPath = "$scripts/SJTools/SJRendPathEdit/SJRendPathEdit.ini";
 )
 
 /**-----------------------------------------------------------------------------
  * リサイズ
  */
 function resizeRol rol val = (
-    local width = SJRdPathEdit.mainRolWidth;
-    local height = SJRdPathEdit.mainRolWidth;
+    local width = SJRPE.mainRolWidth;
+    local height = SJRPE.mainRolWidth;
     if ((rol.width <= width) and (rol.height <= height)) then
     (
         return false;
@@ -249,9 +248,9 @@ function resizeRol rol val = (
     local grpOffset = 14;
     local edtOffset = 34;
     local rendOffset = 84;
-    local pathBtX = SJRdPathEdit.pathBtnPosX + offsetW;
-    local okBtX = SJRdPathEdit.okBtnPosX + offsetW;
-    local posY = SJRdPathEdit.rendBtnPosY;
+    local pathBtX = SJRPE.pathBtnPosX + offsetW;
+    local okBtX = SJRPE.okBtnPosX + offsetW;
+    local posY = SJRPE.rendBtnPosY;
 
     rol.repGrp.width = val[1] - grpOffset;
     rol.findEdt.width = val[1] - edtOffset;
@@ -262,7 +261,7 @@ function resizeRol rol val = (
     rol.rendOKBtn.pos = [okBtX, posY];
     rol.emlGrp.width = val[1] - grpOffset;
 
-    posY = SJRdPathEdit.elmBtnPosY;
+    posY = SJRPE.elmBtnPosY;
 
     re = maxOps.GetCurRenderElementMgr();
 
@@ -281,7 +280,7 @@ function resizeRol rol val = (
 /**-----------------------------------------------------------------------------
  * メニュー
  */
-rcMenu SJRdPathEditMenu
+rcMenu SJRPEMenu
 (
     subMenu "ヘルプ"
     (
@@ -293,7 +292,7 @@ rcMenu SJRdPathEditMenu
     --アクション
     on helpMi picked do shellLaunch "http://www.sakaiden.com/?page_id=5880" "";
     on emailMi picked do shellLaunch "mailTo:sakaiden@live.jp" "";
-    on SJRdPathEditMenu update do
+    on SJRPEMenu update do
     (
     )
 )
@@ -301,11 +300,11 @@ rcMenu SJRdPathEditMenu
 /**----------------------------------------------------------------------------------------------------------------------------------------------------------
  * メイン Rollout
  */
-SJRdPathEdit.SJRdPathEditRol =
+SJRPE.SJRPERol =
 (
-    local SJRdPathEditRol;
-    local toolName = SJRdPathEdit.TOOL_NAME + " " + SJRdPathEdit.TOOL_VERSION;
-    rollout SJRdPathEditRol toolName width:SJRdPathEdit.mainRolWidth height:SJRdPathEdit.mainRolheight;
+    local SJRPERol;
+    local toolName = SJRPE.TOOL_NAME + " " + SJRPE.TOOL_VERSION;
+    rollout SJRPERol toolName width:SJRPE.mainRolWidth height:SJRPE.mainRolheight;
     (
         local elmEdtList = #();
         local elmLblList = #();
@@ -445,10 +444,10 @@ SJRdPathEdit.SJRdPathEditRol =
 
         on updateBtn pressed do
         (
-            initialize SJRdPathEditRol;
+            initialize SJRPERol;
             resizeRol \
-                SJRdPathEditRol \
-                [SJRdPathEditRol.width, SJRdPathEditRol.height];
+                SJRPERol \
+                [SJRPERol.width, SJRPERol.height];
         )
 
         on allOKBtn pressed do
@@ -503,14 +502,14 @@ SJRdPathEdit.SJRdPathEditRol =
         on rEOKBtn11 pressed do setEmlRendPath 11 remElmEdt11.text;
         on rEOKBtn12 pressed do setEmlRendPath 12 remElmEdt12.text;
 
-        on SJRdPathEditRol resized val do resizeRol SJRdPathEditRol val;
+        on SJRPERol resized val do resizeRol SJRPERol val;
 
-        on SJRdPathEditRol open do initialize SJRdPathEditRol;
-        on SJRdPathEditRol moved val do
+        on SJRPERol open do initialize SJRPERol;
+        on SJRPERol moved val do
         (
-            --local iniPath = ((getDir #scripts) + "\SJTools\SJRenamer\SJRenamer.ini");
-            --(setINISetting iniPath "SJRenamer" "rolPosX" (val[1] as String));
-            --(setINISetting iniPath "SJRenamer" "rolPosY" (val[2] as String));
+            local iniPath = "$scripts/SJTools/SJRendPathEdit/SJRendPathEdit.ini";
+            (setINISetting iniPath "SJRendPathEdit" "rolPosX" (val[1] as String));
+            (setINISetting iniPath "SJRendPathEdit" "rolPosY" (val[2] as String));
         )
     )
 )
@@ -518,21 +517,7 @@ SJRdPathEdit.SJRdPathEditRol =
 /**-----------------------------------------------------------------------------
  * End of rollout & Create Dialog / Floater
  */
- function runSJRdPathEdit =
- (
-    --local iniPath = ((getDir #scripts) + "\SJTools\SJRenamer\SJRenamer.ini");
-    --local posX = execute(getINISetting iniPath "SJRenamer" "rolPosX");
-    --local posY = execute(getINISetting iniPath "SJRenamer" "rolPosY");
-    posX = 150;
-    posY = 150;
-    CreateDialog SJRdPathEdit.SJRdPathEditRol /*pos:[posX, posY]*/ menu:SJRdPathEditMenu style:#(#style_border, #style_toolwindow, #style_sysmenu, #style_resizing, #style_minimizebox) menu:CanvasMenu;
- )
-
--- run
-runSJRdPathEdit();
-
-/*
-on execute do
-(
-)
-*/
+iniPath = "$scripts/SJTools/SJRendPathEdit/SJRendPathEdit.ini";
+posX = execute(getINISetting iniPath "SJRendPathEdit" "rolPosX");
+posY = execute(getINISetting iniPath "SJRendPathEdit" "rolPosY");
+CreateDialog SJRPE.SJRPERol pos:[posX, posY] menu:SJRPEMenu style:#(#style_border, #style_toolwindow, #style_sysmenu, #style_resizing, #style_minimizebox) menu:CanvasMenu;

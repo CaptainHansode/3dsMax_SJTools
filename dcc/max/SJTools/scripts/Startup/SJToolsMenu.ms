@@ -25,7 +25,7 @@ fn addSJToolsMene =
     local mParent;
 
     try (
-        mItem = menuMan.createActionItem "Renamer" "SJTools";
+        mItem = menuMan.createActionItem "SJRenamer" "SJTools";
         subMenu.addItem mItem -1;
     ) catch ();
 
@@ -34,8 +34,9 @@ fn addSJToolsMene =
         subMenu.addItem mItem -1;
     ) catch ();
 
+
     try (
-        mItem = menuMan.createActionItem "Spark" "SJTools";
+        mItem = menuMan.createActionItem "SJRendPathEdit" "SJTools";
         subMenu.addItem mItem -1;
     ) catch ();
 

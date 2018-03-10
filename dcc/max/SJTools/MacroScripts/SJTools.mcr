@@ -21,7 +21,7 @@
     (
         include "$scripts/SJTools/SJRenamer/SJRenamer.ms"
     )
-/*
+
     -- SJSpark
     macroScript SJSpark
     category:"SJTools"
@@ -32,15 +32,14 @@
         include "$scripts/SJTools/SJSpark/SJSpark.ms"
     )
 
-    
     macroScript SJRendPathEdit
     category:"SJTools"
     toolTip:"SJRendPathEdit"
     buttonText:"SJRendPathEdit"
-    Icon:#("SJTools_Icon01", 4)
+    -- Icon:#("SJTools_Icon01", 4)
     (
-        include "$scripts/SJTools/SJRendPathEdit/SJRendPathEdit.ms"
+        -- TODO: fileinじゃなくてinclude出来るように直す
+        filein "$scripts/SJTools/SJRendPathEdit/SJRendPathEdit.ms"
+        -- include "$scripts/SJTools/SJRendPathEdit/SJRendPathEdit.ms"
     )
-    */
-
 )
