@@ -396,8 +396,8 @@ rollout SjTimeMachineRol nameAndVersion
             --menuItem offsetKeysMi "キーオフセット"
             seperator sep04;
             menuItem helpMi "ヘルプ!"
-            menuItem aboutMi "About"
-            menuItem emailMi  "E-Mail"
+            --menuItem aboutMi "About"
+            --menuItem emailMi  "E-Mail"
 
             on maxPreviewMi picked do max preview;
             on createPreviewMi picked do createPreview()
@@ -729,11 +729,9 @@ rollout SjTimeMachineRol nameAndVersion
     checkbox reverseChk "" pos:[1468,4] width:15 height:15 checked:false
     checkbox selectedOnlyChk "" pos:[1512,4] width:15 height:15 checked:true ight:15
 
---////////////////////////////////////////////////
---アクション
---////////////////////////////////////////////////
-    --on keyMachineBt pressed do macros.run "SJTools" "SJ_Key_Machine";
-
+    --////////////////////////////////////////////////
+    --アクション
+    --////////////////////////////////////////////////
     on closeBt pressed do
     (
         saveDefault_Fn()
@@ -743,6 +741,11 @@ rollout SjTimeMachineRol nameAndVersion
         try(closeRolloutFloater sj_tm_reduce_rol) catch()
         try(destroydialog sj_tm_reduce_rol)catch()
         try(destroydialog sj_progressBar_rol)catch()
+    )
+
+    on preViewBt pressed do
+    (
+        createPreview()
     )
 
     on helpBt pressed do
