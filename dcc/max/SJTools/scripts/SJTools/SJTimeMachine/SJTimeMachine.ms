@@ -5,38 +5,37 @@
  *
  * -----------------------------------------------------------------------------
  * @license MIT
- * @author CaptainHansode ”¼‘³‘D’·
+ * @author CaptainHansode åŠè¢–èˆ¹é•·
  * @web http://www.sakaiden.com/
  * @email sakaiden@live.jp
  * @github https://github.com/CaptainHansode/SJTools
  *
  * SJTimeMachine
- * ’N‚¾‚æA‚±‚ÌƒEƒ“ƒR[ƒh‘‚¢‚½‚ÌEEE‚ A‰´‚©EEE
+ * èª°ã ã‚ˆã€ã“ã®ã‚¦ãƒ³ã‚³ãƒ¼ãƒ‰æ›¸ã„ãŸã®ãƒ»ãƒ»ãƒ»ã‚ã€ä¿ºã‹ãƒ»ãƒ»ãƒ»
  *
  */
 
 (
+/**-----------------------------------------------------------------------------
+ * ã‚°ãƒ­ãƒ¼ãƒãƒ«å‘¨ã‚Š
+ */
+global SjTimeMachineRol --ãƒ­ãƒ¼ãƒ«ã‚¢ã‚¦ãƒˆç”¨
 
---------------------------------------------------------------------------------
--- ƒOƒ[ƒoƒ‹ü‚è
---------------------------------------------------------------------------------
-global SjTimeMachineRol --ƒ[ƒ‹ƒAƒEƒg—p
+local nameAndVersion = "SJ Time Machine";
+local fileLockID = 6581883285124;
 
-Local nameAndVersion = "SJ Time Machine";
-Local fileLockID = 6581883285124;
+--ã‚¹ãƒ†ãƒ¼ã‚¿ã‚¹
+local bookFm = #( #(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0), #(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0), #(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0), #(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0), #(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0), #(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0), #(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0), #(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0), #(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0), #(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0) )
+local bookFmFlag = #( #(false,false,false,false,false,false,false), #(false,false,false,false,false,false,false), #(false,false,false,false,false,false,false), #(false,false,false,false,false,false,false), #(false,false,false,false,false,false,false), #(false,false,false,false,false,false,false), #(false,false,false,false,false,false,false), #(false,false,false,false,false,false,false), #(false,false,false,false,false,false,false), #(false,false,false,false,false,false,false) )
 
---ƒXƒe[ƒ^ƒX
-Local bookFm = #( #(0,0,0,0,0,0,0,0,0,0,0,0,0,0), #(0,0,0,0,0,0,0,0,0,0,0,0,0,0), #(0,0,0,0,0,0,0,0,0,0,0,0,0,0), #(0,0,0,0,0,0,0,0,0,0,0,0,0,0), #(0,0,0,0,0,0,0,0,0,0,0,0,0,0), #(0,0,0,0,0,0,0,0,0,0,0,0,0,0), #(0,0,0,0,0,0,0,0,0,0,0,0,0,0), #(0,0,0,0,0,0,0,0,0,0,0,0,0,0), #(0,0,0,0,0,0,0,0,0,0,0,0,0,0), #(0,0,0,0,0,0,0,0,0,0,0,0,0,0) )
-Local bookFmFlag = #( #(false,false,false,false,false,false,false), #(false,false,false,false,false,false,false), #(false,false,false,false,false,false,false), #(false,false,false,false,false,false,false), #(false,false,false,false,false,false,false), #(false,false,false,false,false,false,false), #(false,false,false,false,false,false,false), #(false,false,false,false,false,false,false), #(false,false,false,false,false,false,false), #(false,false,false,false,false,false,false) )
+local editMode = 1;
+local obj = undefined;
+local scaleValue = 1;
+local bookLN = 1;
 
-Local editMode = 1;
-Local obj = undefined;
-Local scaleValue = 1;
-Local bookLN = 1;
-
---------------------------------------------------------------------------------
--- ƒ[ƒ‹ƒAƒEƒgü‚è
---------------------------------------------------------------------------------
+/**-----------------------------------------------------------------------------
+ * ãƒ­ãƒ¼ãƒ«ã‚¢ã‚¦ãƒˆå‘¨ã‚Š
+ */
 try(cui.unRegisterDialogBar SjTimeMachineRol)catch()
 try(closeRolloutFloater SjTimeMachineRol)catch()
 try(destroydialog SjTimeMachineRol)catch()
@@ -47,31 +46,30 @@ try(destroydialog sj_tm_reduce_rol)catch()
 try(destroydialog sj_tm_merge_rol) catch()
 try(destroydialog sj_progressBar_rol)catch()
 
-
 /**-----------------------------------------------------------------------------
- * ƒL[ƒŠƒ_ƒNƒVƒ‡ƒ“
+ * ã‚­ãƒ¼ãƒªãƒ€ã‚¯ã‚·ãƒ§ãƒ³
  */
 fn SjTimeMachineKeysReduce =
 (
     global sj_tm_reduce_rol
     try (destroydialog sj_tm_reduce_rol) catch()
 
-    rollout sj_tm_reduce_rol "ƒL[ƒŠƒ_ƒNƒVƒ‡ƒ“" width:140 height:152
+    rollout sj_tm_reduce_rol "ã‚­ãƒ¼ãƒªãƒ€ã‚¯ã‚·ãƒ§ãƒ³" width:140 height:152
     (
-        Local obj = undefined
-        --ƒL[ƒŠƒ_ƒNƒVƒ‡ƒ“
+        local obj = undefined
+        --ã‚­ãƒ¼ãƒªãƒ€ã‚¯ã‚·ãƒ§ãƒ³
         fn reduceStepKeys_Fn i reduceFm=
         (
-            --ƒvƒƒpƒeƒB‚É"Position"‚ª‚ ‚ê‚Îture
+            --ãƒ—ãƒ­ãƒ‘ãƒ†ã‚£ã«"Position"ãŒã‚ã‚Œã°ture
             if (isProperty i.controller "Position") then
             (
-                --ƒIƒuƒWƒFƒNƒg‚ÌƒL[‚ğ‰ñû
+                --ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã®ã‚­ãƒ¼ã‚’å›å
                 posKeys = for k in i.pos.controller.keys collect k.time;
                 rotKeys = for k in i.rotation.controller.keys collect k.time;
                 scaKeys = for k in i.scale.controller.keys collect k.time;
 
-                --ˆÊ’u
-                --íœ‚ÍŒã‚ë‚©‚ç
+                --ä½ç½®
+                --å‰Šé™¤æ™‚ã¯å¾Œã‚ã‹ã‚‰
                 delIndex = for k in reduceFm collect findItem posKeys k;
                 j = delIndex.count;
                 while j != 0 do
@@ -98,7 +96,7 @@ fn SjTimeMachineKeysReduce =
             )
         )
 
-        --ƒŒƒCƒAƒEƒg
+        --ãƒ¬ã‚¤ã‚¢ã‚¦ãƒˆ
         groupBox Grp "Key Reduce" pos:[4,4] width:132 height:144
         label threshLbl "Thresh" pos:[10,20] width:59 height:16
         label stepLbl "Step" pos:[71,20] width:59 height:16
@@ -106,13 +104,13 @@ fn SjTimeMachineKeysReduce =
         spinner stepSp "" pos:[71,36] width:56 height:16 range:[0,1000,1] type:#float scale:0.01
 
         checkbox regularlyChk "" pos:[11,56] width:16 height:16 enabled:true
-        label regularlyLbl "’èŠúƒtƒŒ[ƒ€" pos:[31,58] width:100 height:16 enabled:true
+        label regularlyLbl "å®šæœŸãƒ•ãƒ¬ãƒ¼ãƒ " pos:[31,58] width:100 height:16 enabled:true
         spinner regularlySpn "" pos:[10,76] width:117 height:16 enabled:false range:[1,1000,1] type:#integer
 
         checkbox selOnlyRedChk "" pos:[12,100] width:16 height:16 enabled:true
-        label selOnlyRedLbl "‘I‘ğ‚Ì‚İ" pos:[32,102] width:100 height:16 enabled:true
-        button setReduceBt "Às" pos:[10,124] width:56 height:20
-        button cancelReduceBt "ƒLƒƒƒ“ƒZƒ‹" pos:[72,124] width:56 height:20
+        label selOnlyRedLbl "é¸æŠã®ã¿" pos:[32,102] width:100 height:16 enabled:true
+        button setReduceBt "å®Ÿè¡Œ" pos:[10,124] width:56 height:20
+        button cancelReduceBt "ã‚­ãƒ£ãƒ³ã‚»ãƒ«" pos:[72,124] width:56 height:20
 
         on regularlyChk changed state do
         (
@@ -133,17 +131,17 @@ fn SjTimeMachineKeysReduce =
             )
         )
 
-        --Às
+        --å®Ÿè¡Œ
         on setReduceBt pressed do
         (
-            --max‚Ì—]•ª‚Èˆ—‚ğ‰Ÿ‚³‚¦@ˆ—‘¬“x‚ğ‚‘¬‰»
-            suspendEditing()  --ƒTƒXƒyƒ“ƒhƒ‚[ƒh
-            max create mode  --ƒNƒŠƒG[ƒgƒ‚[ƒh‚É•ÏX
-            with redraw off  --Ä•`‰æ‹Ö~
+            --maxã®ä½™åˆ†ãªå‡¦ç†ã‚’æŠ¼ã•ãˆã€€å‡¦ç†é€Ÿåº¦ã‚’é«˜é€ŸåŒ–
+            suspendEditing()  --ã‚µã‚¹ãƒšãƒ³ãƒ‰ãƒ¢ãƒ¼ãƒ‰
+            max create mode  --ã‚¯ãƒªã‚¨ãƒ¼ãƒˆãƒ¢ãƒ¼ãƒ‰ã«å¤‰æ›´
+            with redraw off  --å†æç”»ç¦æ­¢
             (
                 undo off
                 (
-                    --‚Ó‚Â‚¤‚ÌƒŠƒ_ƒNƒVƒ‡ƒ“
+                    --ãµã¤ã†ã®ãƒªãƒ€ã‚¯ã‚·ãƒ§ãƒ³
                     if (not regularlyChk.checked) then
                     (
                         if SjTimeMachineRol.selectedOnlyChk.checked then (
@@ -154,18 +152,18 @@ fn SjTimeMachineKeysReduce =
                         reduceKeys obj threshSp.value stepSp.value (interval animationRange.start animationRange.end)
 
                     ) else (
-                    --’èŠúƒtƒŒ[ƒ€
-                    --ƒtƒŒ[ƒ€‚ªŒ»İ‚ÌƒŒƒ“ƒW‚ğ‰z‚¦‚Ä‚¢‚È‚¯‚ê‚Î
+                    --å®šæœŸãƒ•ãƒ¬ãƒ¼ãƒ 
+                    --ãƒ•ãƒ¬ãƒ¼ãƒ ãŒç¾åœ¨ã®ãƒ¬ãƒ³ã‚¸ã‚’è¶Šãˆã¦ã„ãªã‘ã‚Œã°
                         if regularlySpn.value < (animationRange.end-(animationRange.start)) then
                         (
-                            messageBox "’èŠúƒtƒŒ[ƒ€‚Ìê‡Aƒgƒ‰ƒ“ƒXƒtƒH[ƒ€‚É‚Ì‚İˆ—‚ğs‚¢‚Ü‚·\n‚»‚Ì‘¼‚ÌƒAƒjƒ[ƒVƒ‡ƒ“ƒL[‚Í‘ÎÛŠO‚Æ‚È‚è‚Ü‚·\ng—p‚É‚Í‚²’ˆÓ‚­‚¾‚³‚¢\n " title:"‚¨’m‚ç‚¹";
+                            messageBox "å®šæœŸãƒ•ãƒ¬ãƒ¼ãƒ ã®å ´åˆã€ãƒˆãƒ©ãƒ³ã‚¹ãƒ•ã‚©ãƒ¼ãƒ ã«ã®ã¿å‡¦ç†ã‚’è¡Œã„ã¾ã™\nãã®ä»–ã®ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³ã‚­ãƒ¼ã¯å¯¾è±¡å¤–ã¨ãªã‚Šã¾ã™\nä½¿ç”¨ã«ã¯ã”æ³¨æ„ãã ã•ã„\n " title:"ãŠçŸ¥ã‚‰ã›";
                             sj_functions.sj_progressBar_Fn()
 
                             local reduceFm = #(), delIndex = #(), posKeys = #(), rotKeys = #(), scaKeys = #()
                             local fm = animationRange.start;
-                            --ƒvƒƒOƒŒƒXƒo[—p
+                            --ãƒ—ãƒ­ã‚°ãƒ¬ã‚¹ãƒãƒ¼ç”¨
                             local n, m;
-                            --íœ‚·‚éƒtƒŒ[ƒ€‚ğ‰ñû
+                            --å‰Šé™¤ã™ã‚‹ãƒ•ãƒ¬ãƒ¼ãƒ ã‚’å›å
                             while fm < animationRange.end do
                             (
                                 for j=1 to regularlySpn.value do
@@ -180,20 +178,20 @@ fn SjTimeMachineKeysReduce =
                             if SjTimeMachineRol.selectedOnlyChk.checked then
                             (obj = selection) else (obj = for i in objects collect i)
 
-                            --ƒL[‚ğˆ—
+                            --ã‚­ãƒ¼ã‚’å‡¦ç†
                             n = obj.count;
                             m = 1;
 
                             for i in obj do
                             (
-                                sj_progressBar_rol.processInfo.caption = i.name + "‚ğˆ—’†   " + (floor((100.0/n) * (m-1)) as String) + "% Š®—¹";
+                                sj_progressBar_rol.processInfo.caption = i.name + "ã‚’å‡¦ç†ä¸­   " + (floor((100.0/n) * (m-1)) as String) + "% å®Œäº†";
                                 reduceStepKeys_Fn i reduceFm;
                                 sj_progressBar_rol.progbar.value = ((100.0/n) * m)
                                 m += 1;
                             )
                             sj_progressBar_rol.progbar.value = 0;
                             destroydialog sj_progressBar_rol;
-                        ) else (messageBox "ƒtƒŒ[ƒ€İ’è‚ªŒ»İ‚ÌƒtƒŒ[ƒ€”ÍˆÍ‚ğ’´‚¦‚Ä‚¢‚Ü‚·" title:"Œx")
+                        ) else (messageBox "ãƒ•ãƒ¬ãƒ¼ãƒ è¨­å®šãŒç¾åœ¨ã®ãƒ•ãƒ¬ãƒ¼ãƒ ç¯„å›²ã‚’è¶…ãˆã¦ã„ã¾ã™" title:"è­¦å‘Š")
                     )
 
                     try(closeRolloutFloater sj_tm_reduce_rol) catch()
@@ -204,7 +202,7 @@ fn SjTimeMachineKeysReduce =
             resumeEditing()
         )
 
-        --ƒLƒƒƒ“ƒZƒ‹
+        --ã‚­ãƒ£ãƒ³ã‚»ãƒ«
         on cancelReduceBt pressed do
         (
             try(closeRolloutFloater sj_tm_reduce_rol) catch()
@@ -212,40 +210,38 @@ fn SjTimeMachineKeysReduce =
             try(destroydialog sj_progressBar_rol)catch()
         )
 
-        --ƒ_ƒCƒAƒƒOƒI[ƒvƒ“
+        --ãƒ€ã‚¤ã‚¢ãƒ­ã‚°ã‚ªãƒ¼ãƒ—ãƒ³
         on sj_tm_reduce_rol open do
         (
             selOnlyRedChk.checked = SjTimeMachineRol.selectedOnlyChk.checked;
         )
     )
-    --ƒ_ƒCƒAƒƒOƒNƒŠƒG[ƒg
+    --ãƒ€ã‚¤ã‚¢ãƒ­ã‚°ã‚¯ãƒªã‚¨ãƒ¼ãƒˆ
     CreateDialog sj_tm_reduce_rol style:#(#style_titlebar, #style_minimizebox)
 )
 
 
 /**-----------------------------------------------------------------------------
- * ƒ}[ƒW
+ * ãƒãƒ¼ã‚¸
  */
 fn SjTimeMachineMerge =
 (
     global sj_tm_reduce_rol
     try (destroydialog sj_tm_merge_rol) catch()
 
-    rollout sj_tm_merge_rol "ƒ}[ƒWƒIƒvƒVƒ‡ƒ“" width:140 height:82
+    rollout sj_tm_merge_rol "ãƒãƒ¼ã‚¸ã‚ªãƒ—ã‚·ãƒ§ãƒ³" width:140 height:82
     (
-        radioButtons mergeTypeRdo "" pos:[12,20] width:96 height:32 labels:#("’[‹l‚ß", "ƒ^ƒCƒ€ƒƒ‚—“’PˆÊ") columns:1
+        radioButtons mergeTypeRdo "" pos:[12,20] width:96 height:32 labels:#("ç«¯è©°ã‚", "ã‚¿ã‚¤ãƒ ãƒ¡ãƒ¢æ¬„å˜ä½") columns:1
         button MergeBt "OK" pos:[10,54] width:56 height:20
-        button cancelMergeBt "ƒLƒƒƒ“ƒZƒ‹" pos:[72,54] width:56 height:20
+        button cancelMergeBt "ã‚­ãƒ£ãƒ³ã‚»ãƒ«" pos:[72,54] width:56 height:20
         GroupBox mergeGrp "Merge Option" pos:[4,4] width:132 height:74
 
-        --////////////////////////////////////////////////
-        --Às
-        --////////////////////////////////////////////////
+        --å®Ÿè¡Œ
         on MergeBt pressed do
         (
-            local loadFile = getOpenFileName types:"ƒeƒLƒXƒg(*.txt)|*.txt|All(*.*)|*.*" caption:"ƒuƒbƒNƒ}[ƒN‚ğ‡¬"
+            local loadFile = getOpenFileName types:"ãƒ†ã‚­ã‚¹ãƒˆ(*.txt)|*.txt|All(*.*)|*.*" caption:"ãƒ–ãƒƒã‚¯ãƒãƒ¼ã‚¯ã‚’åˆæˆ"
 
-            --ƒoƒbƒNƒAƒbƒv
+            --ãƒãƒƒã‚¯ã‚¢ãƒƒãƒ—
             local bookFmFlagBack = bookFmFlag, bookFmBack = bookFm;
 
             if loadFile != undefined do
@@ -258,21 +254,21 @@ fn SjTimeMachineMerge =
                 tempB = #()
                 tempC = 1;
 
-            --ƒoƒO‰ñ”ğ—p‚Étry catch
+            --ãƒã‚°å›é¿ç”¨ã«try catch
                 try (
                     case mergeTypeRdo.state of
                     (
-                        --’[‹l‚ß
+                        --ç«¯è©°ã‚
                         1:(
-                            tempName = readValue loadFileTemp;--1s–Ú
-                            tempValue = readValue loadFileTemp;--2s–Ú
+                            tempName = readValue loadFileTemp;--1è¡Œç›®
+                            tempValue = readValue loadFileTemp;--2è¡Œç›®
                             tempC = 1;
                             for i = 1 to 10 do
                             (
                                 tempC = 1;
                                 for k = 1 to 7 do
                                 (
-                                    --false‚¾‚Á‚½‚ç“Ç‚İ‚İ
+                                    --falseã ã£ãŸã‚‰èª­ã¿è¾¼ã¿
                                     if (not bookFmFlag[i][k]) then
                                     (
                                         bookFmFlag[i][k] = tempName[i][k];
@@ -284,12 +280,12 @@ fn SjTimeMachineMerge =
                             )
                         )
 
-                        --ƒ^ƒCƒ€ƒƒ‚’PˆÊ
+                        --ã‚¿ã‚¤ãƒ ãƒ¡ãƒ¢å˜ä½
                         2:(
-                            tempName = readValue loadFileTemp;--1s–Ú
-                            tempValue = readValue loadFileTemp;--2s–Ú
+                            tempName = readValue loadFileTemp;--1è¡Œç›®
+                            tempValue = readValue loadFileTemp;--2è¡Œç›®
 
-                            --æ‚É”z—ñ‚ğ’²‚×‚ÄŠm•Û
+                            --å…ˆã«é…åˆ—ã‚’èª¿ã¹ã¦ç¢ºä¿
                             for i = 1 to 10 do
                             (
                                 temp = 0;
@@ -298,7 +294,7 @@ fn SjTimeMachineMerge =
                                     if tempName[i][k] then temp += 1;
                                 )
 
-                                --ƒ^ƒCƒ€ƒƒ‚‚ªŠm”F‚Å‚«‚ê‚Î
+                                --ã‚¿ã‚¤ãƒ ãƒ¡ãƒ¢ãŒç¢ºèªã§ãã‚Œã°
                                 if (temp != 0) then
                                 (
                                     append tempA tempName[i];
@@ -314,7 +310,7 @@ fn SjTimeMachineMerge =
                                 (
                                     if bookFmFlag[i][k] then temp += 1;
                                 )
-                                --‹L˜^‚ª1‚Â‚à–³‚¯‚ê‚Î
+                                --è¨˜éŒ²ãŒ1ã¤ã‚‚ç„¡ã‘ã‚Œã°
                                 if (temp == 0) then
                                 (
                                     if tempA[tempC] != undefined then bookFmFlag[i] = tempA[tempC];
@@ -344,8 +340,8 @@ fn SjTimeMachineMerge =
                     if bookFmFlag[bookLN][6] then SjTimeMachineRol.bookBt06.caption = (bookFm[bookLN][11] as String) + "-" + (bookFm[bookLN][12] as String)
                     if bookFmFlag[bookLN][7] then SjTimeMachineRol.bookBt07.caption = (bookFm[bookLN][13] as String) + "-" + (bookFm[bookLN][14] as String)
                 ) catch (
-                    messageBox "–¢’m‚ÌŒ`®‚Å‚·\n“Ç‚İ‚ß‚Ü‚¹‚ñ‚Å‚µ‚½" title:"ƒGƒ‰[";
-                    --•œŒ³
+                    messageBox "æœªçŸ¥ã®å½¢å¼ã§ã™\nèª­ã¿è¾¼ã‚ã¾ã›ã‚“ã§ã—ãŸ" title:"ã‚¨ãƒ©ãƒ¼";
+                    --å¾©å…ƒ
                     bookFmFlag = bookFmFlagBack;
                     bookFm = bookFmBack;
                     bookFmFlagBack = #()
@@ -356,14 +352,14 @@ fn SjTimeMachineMerge =
             try (destroydialog sj_tm_merge_rol) catch()
 
         )
-        --ƒLƒƒƒ“ƒZƒ‹
+        --ã‚­ãƒ£ãƒ³ã‚»ãƒ«
         on cancelMergeBt pressed do
         (
             try(closeRolloutFloater sj_tm_merge_rol) catch()
             try (destroydialog sj_tm_merge_rol) catch()
         )
     )
-    --ƒ_ƒCƒAƒƒOƒNƒŠƒG[ƒg
+    --ãƒ€ã‚¤ã‚¢ãƒ­ã‚°ã‚¯ãƒªã‚¨ãƒ¼ãƒˆ
     CreateDialog sj_tm_merge_rol style:#(/*#style_border,  #style_sysmenu,*/ #style_titlebar, #style_minimizebox)
 )
 
@@ -373,29 +369,28 @@ fn SjTimeMachineMerge =
  */
 rollout SjTimeMachineRol nameAndVersion
 (
-    --////////////////////////////////////////////////
-    --ƒƒjƒ…[
+    --ãƒ¡ãƒ‹ãƒ¥ãƒ¼
     fn menus_Fn =
     (
         rcMenu menuBar
         (
             local modInst
-            menuItem maxPreviewMi "ƒvƒŒƒrƒ…[‚Ìİ’è";
-            menuItem createPreviewMi "ƒvƒŒƒrƒ…[‚ğì¬";
-            menuItem maxRenamePreviewMi "ƒvƒŒƒrƒ…[‚É–¼‘O‚ğ•t‚¯‚Ä•Û‘¶";
-            menuItem maxviewpreviewMi "ƒvƒŒƒrƒ…[‚ğ•\¦";
+            menuItem maxPreviewMi "ãƒ—ãƒ¬ãƒ“ãƒ¥ãƒ¼ã®è¨­å®š";
+            menuItem createPreviewMi "ãƒ—ãƒ¬ãƒ“ãƒ¥ãƒ¼ã‚’ä½œæˆ";
+            menuItem maxRenamePreviewMi "ãƒ—ãƒ¬ãƒ“ãƒ¥ãƒ¼ã«åå‰ã‚’ä»˜ã‘ã¦ä¿å­˜";
+            menuItem maxviewpreviewMi "ãƒ—ãƒ¬ãƒ“ãƒ¥ãƒ¼ã‚’è¡¨ç¤º";
             seperator sep01;
-            menuItem reduceKeysMi "ƒL[ƒŠƒ_ƒNƒVƒ‡ƒ“";
+            menuItem reduceKeysMi "ã‚­ãƒ¼ãƒªãƒ€ã‚¯ã‚·ãƒ§ãƒ³";
             seperator sep02;
-            menuItem setActiveKeyRangeMi "Œ»İ‚ÌƒIƒuƒWƒFƒNƒg‚ÌƒL[‚ÅƒŒƒ“ƒWİ’è";
+            menuItem setActiveKeyRangeMi "ç¾åœ¨ã®ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã®ã‚­ãƒ¼ã§ãƒ¬ãƒ³ã‚¸è¨­å®š";
             seperator sep03;
-            menuItem saveBookMi "ƒuƒbƒNƒ}[ƒN‚ğ•Û‘¶";
-            menuItem loadBookMi "ƒuƒbƒNƒ}[ƒN‚ğ“Ç‚İ‚İ"
-            menuItem mergeBookMi "ƒuƒbƒNƒ}[ƒN‚ğ‡¬"
-            menuItem resetBookMi "ƒuƒbƒNƒ}[ƒN‚ğƒŠƒZƒbƒg"
-            --menuItem offsetKeysMi "ƒL[ƒIƒtƒZƒbƒg"
+            menuItem saveBookMi "ãƒ–ãƒƒã‚¯ãƒãƒ¼ã‚¯ã‚’ä¿å­˜";
+            menuItem loadBookMi "ãƒ–ãƒƒã‚¯ãƒãƒ¼ã‚¯ã‚’èª­ã¿è¾¼ã¿"
+            menuItem mergeBookMi "ãƒ–ãƒƒã‚¯ãƒãƒ¼ã‚¯ã‚’åˆæˆ"
+            menuItem resetBookMi "ãƒ–ãƒƒã‚¯ãƒãƒ¼ã‚¯ã‚’ãƒªã‚»ãƒƒãƒˆ"
+            --menuItem offsetKeysMi "ã‚­ãƒ¼ã‚ªãƒ•ã‚»ãƒƒãƒˆ"
             seperator sep04;
-            menuItem helpMi "ƒwƒ‹ƒv!"
+            menuItem helpMi "ãƒ˜ãƒ«ãƒ—!"
             --menuItem aboutMi "About"
             --menuItem emailMi  "E-Mail"
 
@@ -427,9 +422,7 @@ rollout SjTimeMachineRol nameAndVersion
         return menuBar;
     )
 
-    --////////////////////////////////////////////////
-    --‹N“®‚ÌƒAƒbƒvƒf[ƒg
-    --////////////////////////////////////////////////
+    --èµ·å‹•æ™‚ã®ã‚¢ãƒƒãƒ—ãƒ‡ãƒ¼ãƒˆ
     fn Load_RangeUpdate_Fn =
     (
         SjTimeMachineRol.startRangeSp.value = animationRange.start;
@@ -437,17 +430,15 @@ rollout SjTimeMachineRol nameAndVersion
         SjTimeMachineRol.frameRateSp.value = frameRate;
         if editMode == 2 then SjTimeMachineRol.editTimeSp.value = animationRange.end - animationRange.start;
 
-        --ƒXƒsƒi[‚ª‚Â‚Ô‚ê‚éŒ»Û‚ğ‰ñ”ğ
+        --ã‚¹ãƒ”ãƒŠãƒ¼ãŒã¤ã¶ã‚Œã‚‹ç¾è±¡ã‚’å›é¿
         SjTimeMachineRol.backGroundImage.pos = [0,24];
-        SjTimeMachineRol.backGroundImage.pos = [0,0];
+        SjTimeMachineRol.backGroundImage.pos = [0, 0];
     )
 
-    --////////////////////////////////////////////////
     --load default
-    --////////////////////////////////////////////////
     fn loadDefault_Fn =
     (
-        --‚È‚ñ‚Æ‚È‚­ˆÃ†‰»
+        --ãªã‚“ã¨ãªãæš—å·åŒ–
         TimeMachineDefalutFile = openEncryptedFile "$Scripts/SJTools/SJTimeMachine/TimeMachineDefalut.dat" fileLockID
         tempName = #()
 
@@ -467,12 +458,10 @@ rollout SjTimeMachineRol nameAndVersion
         tempName = #()
     )
 
-    --////////////////////////////////////////////////
     --save default
-    --////////////////////////////////////////////////
     fn saveDefault_Fn =
     (
-        --‚È‚ñ‚Æ‚È‚­ˆÃ†‰»
+        --ãªã‚“ã¨ãªãæš—å·åŒ–
         TimeMachineDefalutFile = createFile "$Scripts/SJTools/SJTimeMachine/TimeMachineDefalut.tmp"
         format "%\n" bookFmFlag to:TimeMachineDefalutFile
         format "%\n" bookFm to:TimeMachineDefalutFile
@@ -480,15 +469,13 @@ rollout SjTimeMachineRol nameAndVersion
         encryptFile "$Scripts/SJTools/SJTimeMachine/TimeMachineDefalut.tmp" "$Scripts/SJTools/SJTimeMachine/TimeMachineDefalut.dat" fileLockID
     )
 
-    --////////////////////////////////////////////////
-    --save ƒuƒbƒNƒ}[ƒN
-    --////////////////////////////////////////////////
+    --save ãƒ–ãƒƒã‚¯ãƒãƒ¼ã‚¯
     fn save_Fn =
     (
-        local saveFile = getSaveFileName types:"ƒeƒLƒXƒg(*.txt)|*.txt|All(*.*)|*.*" caption:"ƒuƒbƒNƒ}[ƒN‚ğ•Û‘¶"
+        local saveFile = getSaveFileName types:"ãƒ†ã‚­ã‚¹ãƒˆ(*.txt)|*.txt|All(*.*)|*.*" caption:"ãƒ–ãƒƒã‚¯ãƒãƒ¼ã‚¯ã‚’ä¿å­˜"
         if saveFile != undefined do
         (
-            --‚È‚ñ‚Æ‚È‚­ˆÃ†‰»
+            --ãªã‚“ã¨ãªãæš—å·åŒ–
             saveFileTemp = createFile saveFile
             format "%\n" bookFmFlag to:saveFileTemp
             format "%\n" bookFm to:saveFileTemp
@@ -496,21 +483,19 @@ rollout SjTimeMachineRol nameAndVersion
         )
     )
 
-    --////////////////////////////////////////////////
-    --load ƒuƒbƒNƒ}[ƒN
-    --////////////////////////////////////////////////
+    --load ãƒ–ãƒƒã‚¯ãƒãƒ¼ã‚¯
     fn load_Fn =
     (
-        local loadFile = getOpenFileName types:"ƒeƒLƒXƒg(*.txt)|*.txt|All(*.*)|*.*" caption:"ƒuƒbƒNƒ}[ƒN‚ğ“Ç‚İ‚İ"
+        local loadFile = getOpenFileName types:"ãƒ†ã‚­ã‚¹ãƒˆ(*.txt)|*.txt|All(*.*)|*.*" caption:"ãƒ–ãƒƒã‚¯ãƒãƒ¼ã‚¯ã‚’èª­ã¿è¾¼ã¿"
 
-        --ƒoƒbƒNƒAƒbƒv
+        --ãƒãƒƒã‚¯ã‚¢ãƒƒãƒ—
         local bookFmFlagBack = bookFmFlag, bookFmBack = bookFm;
 
         if loadFile != undefined do
         (
             loadFileTemp = openFile loadFile;
             tempName = #()
-            --ƒoƒO‰ñ”ğ—p‚Étry catch
+            --ãƒã‚°å›é¿ç”¨ã«try catch
             try(
 
                 tempName = readValue loadFileTemp;
@@ -531,8 +516,8 @@ rollout SjTimeMachineRol nameAndVersion
                 bookFmFlagBack = #()
                 bookFmBack = #()
             ) catch (
-                messageBox "–¢’m‚ÌŒ`®‚Å‚·\n“Ç‚İ‚ß‚Ü‚¹‚ñ‚Å‚µ‚½" title:"ƒGƒ‰[";
-                --•œŒ³
+                messageBox "æœªçŸ¥ã®å½¢å¼ã§ã™\nèª­ã¿è¾¼ã‚ã¾ã›ã‚“ã§ã—ãŸ" title:"ã‚¨ãƒ©ãƒ¼";
+                --å¾©å…ƒ
                 bookFmFlag = bookFmFlagBack;
                 bookFm = bookFmBack;
                 bookFmFlagBack = #()
@@ -541,50 +526,44 @@ rollout SjTimeMachineRol nameAndVersion
         )
     )
 
-    --////////////////////////////////////////////////
-    --ƒuƒbƒNƒ}[ƒN‚ğƒŠƒZƒbƒg
-    --////////////////////////////////////////////////
+    --ãƒ–ãƒƒã‚¯ãƒãƒ¼ã‚¯ã‚’ãƒªã‚»ãƒƒãƒˆ
     fn resetBook_Fn =
     (
 
-        bookFm = #( #(0,0,0,0,0,0,0,0,0,0,0,0,0,0), #(0,0,0,0,0,0,0,0,0,0,0,0,0,0), #(0,0,0,0,0,0,0,0,0,0,0,0,0,0), #(0,0,0,0,0,0,0,0,0,0,0,0,0,0), #(0,0,0,0,0,0,0,0,0,0,0,0,0,0), #(0,0,0,0,0,0,0,0,0,0,0,0,0,0), #(0,0,0,0,0,0,0,0,0,0,0,0,0,0), #(0,0,0,0,0,0,0,0,0,0,0,0,0,0), #(0,0,0,0,0,0,0,0,0,0,0,0,0,0), #(0,0,0,0,0,0,0,0,0,0,0,0,0,0) )
+        bookFm = #( #(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0), #(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0), #(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0), #(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0), #(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0), #(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0), #(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0), #(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0), #(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0), #(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0) )
         bookFmFlag = #( #(false,false,false,false,false,false,false), #(false,false,false,false,false,false,false), #(false,false,false,false,false,false,false), #(false,false,false,false,false,false,false), #(false,false,false,false,false,false,false), #(false,false,false,false,false,false,false), #(false,false,false,false,false,false,false), #(false,false,false,false,false,false,false), #(false,false,false,false,false,false,false), #(false,false,false,false,false,false,false) )
 
-        SjTimeMachineRol.bookBt01.caption =  "–¢g—p";
-        SjTimeMachineRol.bookBt02.caption =  "–¢g—p";
-        SjTimeMachineRol.bookBt03.caption =  "–¢g—p";
-        SjTimeMachineRol.bookBt04.caption =  "–¢g—p";
-        SjTimeMachineRol.bookBt05.caption =  "–¢g—p";
+        SjTimeMachineRol.bookBt01.caption =  "æœªä½¿ç”¨";
+        SjTimeMachineRol.bookBt02.caption =  "æœªä½¿ç”¨";
+        SjTimeMachineRol.bookBt03.caption =  "æœªä½¿ç”¨";
+        SjTimeMachineRol.bookBt04.caption =  "æœªä½¿ç”¨";
+        SjTimeMachineRol.bookBt05.caption =  "æœªä½¿ç”¨";
 
-        SjTimeMachineRol.bookBt06.caption = "–¢g—p";
-        SjTimeMachineRol.bookBt07.caption = "–¢g—p";
+        SjTimeMachineRol.bookBt06.caption = "æœªä½¿ç”¨";
+        SjTimeMachineRol.bookBt07.caption = "æœªä½¿ç”¨";
     )
 
-    --////////////////////////////////////////////////
-    --ƒuƒbƒNƒ}[ƒNƒŠƒXƒg‚ğØ‚è‘Ö‚¦
-    --////////////////////////////////////////////////
+    --ãƒ–ãƒƒã‚¯ãƒãƒ¼ã‚¯ãƒªã‚¹ãƒˆã‚’åˆ‡ã‚Šæ›¿ãˆ
     fn changeListBook_Fn =
     (
         if bookFmFlag[bookLN][1] then SjTimeMachineRol.bookBt01.caption = (bookFm[bookLN][1] as String) + "-" + (bookFm[bookLN][2] as String)
-        else(SjTimeMachineRol.bookBt01.caption = "–¢g—p")
+        else (SjTimeMachineRol.bookBt01.caption = "æœªä½¿ç”¨")
         if bookFmFlag[bookLN][2] then SjTimeMachineRol.bookBt02.caption = (bookFm[bookLN][3] as String) + "-" + (bookFm[bookLN][4] as String)
-        else(SjTimeMachineRol.bookBt02.caption = "–¢g—p")
+        else (SjTimeMachineRol.bookBt02.caption = "æœªä½¿ç”¨")
         if bookFmFlag[bookLN][3] then SjTimeMachineRol.bookBt03.caption = (bookFm[bookLN][5] as String) + "-" + (bookFm[bookLN][6] as String)
-        else(SjTimeMachineRol.bookBt03.caption = "–¢g—p")
+        else (SjTimeMachineRol.bookBt03.caption = "æœªä½¿ç”¨")
         if bookFmFlag[bookLN][4] then SjTimeMachineRol.bookBt04.caption = (bookFm[bookLN][7] as String) + "-" + (bookFm[bookLN][8] as String)
-        else(SjTimeMachineRol.bookBt04.caption = "–¢g—p")
+        else (SjTimeMachineRol.bookBt04.caption = "æœªä½¿ç”¨")
         if bookFmFlag[bookLN][5] then SjTimeMachineRol.bookBt05.caption = (bookFm[bookLN][9] as String) + "-" + (bookFm[bookLN][10] as String)
-        else(SjTimeMachineRol.bookBt05.caption = "–¢g—p")
+        else (SjTimeMachineRol.bookBt05.caption = "æœªä½¿ç”¨")
 
         if bookFmFlag[bookLN][6] then SjTimeMachineRol.bookBt06.caption = (bookFm[bookLN][11] as String) + "-" + (bookFm[bookLN][12] as String)
-        else(SjTimeMachineRol.bookBt06.caption = "–¢g—p")
+        else (SjTimeMachineRol.bookBt06.caption = "æœªä½¿ç”¨")
         if bookFmFlag[bookLN][7] then SjTimeMachineRol.bookBt07.caption = (bookFm[bookLN][13] as String) + "-" + (bookFm[bookLN][14] as String)
-        else(SjTimeMachineRol.bookBt07.caption = "–¢g—p")
+        else (SjTimeMachineRol.bookBt07.caption = "æœªä½¿ç”¨")
     )
 
-    --////////////////////////////////////////////////
-    --ƒCƒ“ƒ^[ƒoƒ‹ƒZƒbƒg
-    --////////////////////////////////////////////////
+    --ã‚¤ãƒ³ã‚¿ãƒ¼ãƒãƒ«ã‚»ãƒƒãƒˆ
     fn IntervalSet_Fn s e =
     (
         if s < e do
@@ -596,17 +575,13 @@ rollout SjTimeMachineRol nameAndVersion
         )
     )
 
-    --////////////////////////////////////////////////
-    --Œ»İƒZƒbƒg
-    --////////////////////////////////////////////////
+    --ç¾åœ¨ã‚»ãƒƒãƒˆ
     fn currentTimeSet_Fn t =
     (
         sliderTime = t
     )
 
-    --////////////////////////////////////////////////
-    --editModeƒAƒbƒvƒf[ƒg
-    --////////////////////////////////////////////////
+    --editModeã‚¢ãƒƒãƒ—ãƒ‡ãƒ¼ãƒˆ
     fn editModeUpdateSet_Fn =
     (
         if editMode == 1 then SjTimeMachineRol.editTimeSp.value = 0;
@@ -614,52 +589,49 @@ rollout SjTimeMachineRol nameAndVersion
         if editMode == 3 then SjTimeMachineRol.editTimeSp.value = 0;
     )
 
-
-    --////////////////////////////////////////////////
-    --Œ»İ‚ÌƒAƒjƒ[ƒVƒ‡ƒ“ƒL[‚Å”ÍˆÍ‚ğİ’è
-    --////////////////////////////////////////////////
+    --ç¾åœ¨ã®ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³ã‚­ãƒ¼ã§ç¯„å›²ã‚’è¨­å®š
     fn setActiveKeyRange_Fn =
     (
-        messageBox("Œ»İ‚ÌƒIƒuƒWƒFƒNƒg‚ª‚Á‚Ä‚¢‚éƒgƒ‰ƒ“ƒXƒtƒH[ƒ€‚Ì\nƒL[”ÍˆÍ‚Åƒ^ƒCƒ€ƒŒƒ“ƒW‚ğİ’è‚µ‚Ü‚·\nBiped‚â‚»‚Ì‘¼‚ÌƒAƒjƒ[ƒVƒ‡ƒ“‚Í‘ÎÛŠO‚Å‚·\n‚²’ˆÓ‚­‚¾‚³‚¢\n ") title:"‚¨’m‚ç‚¹";
-        Local allKeysTime = #(), posKeys = #(), rotKeys = #(), scaKeys = #()
+        messageBox("ç¾åœ¨ã®ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆãŒæŒã£ã¦ã„ã‚‹ãƒˆãƒ©ãƒ³ã‚¹ãƒ•ã‚©ãƒ¼ãƒ ã®\nã‚­ãƒ¼ç¯„å›²ã§ã‚¿ã‚¤ãƒ ãƒ¬ãƒ³ã‚¸ã‚’è¨­å®šã—ã¾ã™\nBipedã‚„ãã®ä»–ã®ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³ã¯å¯¾è±¡å¤–ã§ã™\nã”æ³¨æ„ãã ã•ã„\n ") title:"ãŠçŸ¥ã‚‰ã›";
+        local allKeysTime = #(), posKeys = #(), rotKeys = #(), scaKeys = #()
         for i in objects do
         (
-            --ƒgƒ‰ƒ“ƒXƒtƒH[ƒ€ƒRƒ“ƒgƒ[ƒ‰[‚Íprs‚©?
-            --ƒvƒƒpƒeƒB‚É"Position"‚ª‚ ‚ê‚Îture
+            --ãƒˆãƒ©ãƒ³ã‚¹ãƒ•ã‚©ãƒ¼ãƒ ã‚³ãƒ³ãƒˆãƒ­ãƒ¼ãƒ©ãƒ¼ã¯prsã‹?
+            --ãƒ—ãƒ­ãƒ‘ãƒ†ã‚£ã«"Position"ãŒã‚ã‚Œã°ture
             if (isProperty i.controller "Position") then
             (
                 posKeys = for k in i.pos.controller.keys collect k.time;
                 rotKeys = for k in i.rotation.controller.keys collect k.time;
                 scaKeys = for k in i.scale.controller.keys collect k.time;
 
-                --”z—ñ‚ğ‚­‚Á‚Â‚¯‚é
+                --é…åˆ—ã‚’ãã£ã¤ã‘ã‚‹
                 join allKeysTime posKeys;
                 join allKeysTime rotKeys;
                 join allKeysTime scaKeys;
             )
         )
-        --ƒ\[ƒg
+        --ã‚½ãƒ¼ãƒˆ
         sort allKeysTime;
         makeUniqueArray allKeysTime;
-        --”z—ñ‚ÉŠÜ‚Ü‚ê‚½î•ñ‚Í2ˆÈã‚©?
-        --MakeUnique‚ğÀs‚µ‚Ä‚¢‚éˆÈã–Àã2ˆÈã‚ ‚ê‚ÎÅ¬‚ÆÅ‘å‚Å‚ ‚é
+        --é…åˆ—ã«å«ã¾ã‚ŒãŸæƒ…å ±ã¯2ä»¥ä¸Šã‹?
+        --MakeUniqueã‚’å®Ÿè¡Œã—ã¦ã„ã‚‹ä»¥ä¸Šäº‹å®Ÿä¸Š2ä»¥ä¸Šã‚ã‚Œã°æœ€å°ã¨æœ€å¤§ã§ã‚ã‚‹
         undo on (
             if (allKeysTime.count > 2 ) then
             (
-                --ƒCƒ“ƒ^[ƒoƒ‹‚ğİ’è
+                --ã‚¤ãƒ³ã‚¿ãƒ¼ãƒãƒ«ã‚’è¨­å®š
                 animationRange = interval (amin allKeysTime) (amax allKeysTime)
-                --Œ‹‰Ê‚ğƒc[ƒ‹‚É”½‰f
+                --çµæœã‚’ãƒ„ãƒ¼ãƒ«ã«åæ˜ 
                 SjTimeMachineRol.endRangeSp.value = (amax allKeysTime)
                 SjTimeMachineRol.startRangeSp.value = (amin allKeysTime)
                 if editMode == 2 then SjTimeMachineRol.editTimeSp.value = animationRange.end - animationRange.start;
             ) else (
-                messageBox "ŠÔ‚ğİ’è‚Å‚«‚Ü‚¹‚ñ!\nƒAƒjƒ[ƒVƒ‡ƒ“ƒL[‚ªŒ©‚Â‚è‚Ü‚¹‚ñ‚Å‚µ‚½" title:"‚¨’m‚ç‚¹";
+                messageBox "æ™‚é–“ã‚’è¨­å®šã§ãã¾ã›ã‚“!\nã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³ã‚­ãƒ¼ãŒè¦‹ã¤ã‚Šã¾ã›ã‚“ã§ã—ãŸ" title:"ãŠçŸ¥ã‚‰ã›";
             )
         )
     )
 
     --////////////////////////////////////////////////
-    --‘}“üAˆ³kA”½“]
+    --æŒ¿å…¥ã€åœ§ç¸®ã€åè»¢
     --////////////////////////////////////////////////
     fn editKeysTime_Fn time =
     (
@@ -668,8 +640,7 @@ rollout SjTimeMachineRol nameAndVersion
             if SjTimeMachineRol.selectedOnlyChk.checked then
             (obj = selection) else (obj = for i in objects collect i)
             if editMode == 1 then insertTime obj currentTime time
-            if editMode == 2 then
-            (
+            if editMode == 2 then (
                 scaleValue = (1.0*time)/(1.0*(animationRange.end - animationRange.start))
                 scaleTime obj animationRange.start animationRange.end scaleValue;
                 if not SjTimeMachineRol.selectedOnlyChk.checked then
@@ -684,54 +655,55 @@ rollout SjTimeMachineRol nameAndVersion
     )
 
     --////////////////////////////////////////////////
-    --ƒŒƒCƒAƒEƒg
+    --ãƒ¬ã‚¤ã‚¢ã‚¦ãƒˆ
     --////////////////////////////////////////////////
     local minRange = -1e+009, maxRange = 1e+009;
     local bgBitMap = openBitmap "$Scripts/SJTools/Images/SJ_timemachine_bg.png"
-    ImgTag backGroundImage "Bitmap" pos:[0,0] width:2400 height:28 enabled:false bitmap:bgBitMap
-    button closeBt "X" pos:[0,0] width:16 height:24 images:#("$Scripts/SJTools/Images//SJ_timemachine03.png", "undefined", 2, 1, 1, 2, 2) toolTip:"•Â‚¶‚é";
-    button helpBt "Menu" pos:[20,0] width:58 height:24 enabled:true images:#("$Scripts/SJTools/Images//SJ_timemachine02.png", "undefined", 1, 1, 1, 1, 1) toolTip:"ƒƒjƒ…[";
-    button preViewBt "Rec" pos:[82,0] width:24 height:24 enabled:true images:#("$Scripts/SJTools/Images//SJ_timemachine_rec.png", "undefined", 1, 1, 1, 1, 1) toolTip:"ƒvƒŒƒrƒ…[";
+    ImgTag backGroundImage "Bitmap" pos:[0, 0] width:2400 height:28 enabled:false bitmap:bgBitMap
+    button closeBt "X" pos:[0, 0] width:16 height:24 images:#("$Scripts/SJTools/Images//SJ_timemachine03.png", "undefined", 2, 1, 1, 2, 2) toolTip:"é–‰ã˜ã‚‹";
+    button helpBt "Menu" pos:[20, 0] width:50 height:24 enabled:true toolTip:"ãƒ¡ãƒ‹ãƒ¥ãƒ¼";
+    button preViewBt "Rec" pos:[80, 0] width:24 height:24 enabled:true images:#("$Scripts/SJTools/Images//SJ_timemachine_rec.png", "undefined", 1, 1, 1, 1, 1) toolTip:"ãƒ—ãƒ¬ãƒ“ãƒ¥ãƒ¼";
+	button preViewStBt "RecSetting" pos:[108, 0] width:24 height:24 enabled:true images:#("$Scripts/SJTools/Images//SJ_timemachine_st.png", "undefined", 1, 1, 1, 1, 1) toolTip:"ãƒ—ãƒ¬ãƒ“ãƒ¥ãƒ¼è¨­å®š";
+	button preViewCpBt "RecFileCopy" pos:[136, 0] width:24 height:24 enabled:true images:#("$Scripts/SJTools/Images//SJ_timemachine_cp.png", "undefined", 1, 1, 1, 1, 1) toolTip:"ãƒ—ãƒ¬ãƒ“ãƒ¥ãƒ¼å‹•ç”»ã‚³ãƒ”ãƒ¼";
 
-    spinner startRangeSp "" pos:[154,4] width:80 height:16 enabled:true range:[-1e+009,1e+009,0] type:#integer scale:1
-    spinner endRangeSp "" pos:[298,4] width:80 height:16 enabled:true range:[-1e+009,1e+009,0] type:#integer scale:1
-    spinner frameRateSp "" pos:[444,4] width:55 height:16 enabled:true range:[-1e+009,1e+009,0] type:#integer scale:1
-    button nowStartBt "now" pos:[238,4] width:32 height:16 --images:#("$Scripts/SJTools/Images//SJ_timemachine04.png", "undefined", 1, 1, 1, 2, 2)
-    button nowEndBt "now" pos:[382,4] width:32 height:16 --images:#("$Scripts/SJTools/Images//SJ_timemachine04.png", "undefined", 1, 1, 1, 2, 2)
+    spinner startRangeSp "Start" pos:[192, 4] width:68 height:16 enabled:true range:[-1e+009,1e+009, 0] type:#integer scale:1
+    button nowStartBt "now" pos:[264, 4] width:32 height:16 --images:#("$Scripts/SJTools/Images//SJ_timemachine04.png", "undefined", 1, 1, 1, 2, 2)
+    spinner endRangeSp "End" pos:[322, 4] width:68 height:16 enabled:true range:[-1e+009,1e+009, 0] type:#integer scale:1
+    button nowEndBt "now" pos:[394, 4] width:32 height:16 --images:#("$Scripts/SJTools/Images//SJ_timemachine04.png", "undefined", 1, 1, 1, 2, 2)
 
-    dropdownList bookListDdl "" pos:[521,2] width:90 height:22 items:#("ƒuƒbƒNƒ}[ƒN1", "ƒuƒbƒNƒ}[ƒN2", "ƒuƒbƒNƒ}[ƒN3", "ƒuƒbƒNƒ}[ƒN4", "ƒuƒbƒNƒ}[ƒN5", "ƒuƒbƒNƒ}[ƒN6", "ƒuƒbƒNƒ}[ƒN7", "ƒuƒbƒNƒ}[ƒN8", "ƒuƒbƒNƒ}[ƒN9", "ƒuƒbƒNƒ}[ƒN10")
+    spinner frameRateSp "fps" pos:[454, 4] width:42 height:16 enabled:true range:[-1e+009,1e+009, 0] type:#integer scale:1
 
-    button bookBt01 "–¢g—p" pos:[618,0] width:68 height:24 border:false enabled:true
-    button bookDelBt01 "X" pos:[686,0] width:16 height:24 border:false images:#("$Scripts/SJTools/Images//SJ_timemachine01.png", "undefined", 2, 1, 1, 2, 2)
+    dropdownList bookListDdl "" pos:[508, 2] width:100 height:22 items:#("ãƒ–ãƒƒã‚¯ãƒãƒ¼ã‚¯1", "ãƒ–ãƒƒã‚¯ãƒãƒ¼ã‚¯2", "ãƒ–ãƒƒã‚¯ãƒãƒ¼ã‚¯3", "ãƒ–ãƒƒã‚¯ãƒãƒ¼ã‚¯4", "ãƒ–ãƒƒã‚¯ãƒãƒ¼ã‚¯5", "ãƒ–ãƒƒã‚¯ãƒãƒ¼ã‚¯6", "ãƒ–ãƒƒã‚¯ãƒãƒ¼ã‚¯7", "ãƒ–ãƒƒã‚¯ãƒãƒ¼ã‚¯8", "ãƒ–ãƒƒã‚¯ãƒãƒ¼ã‚¯9", "ãƒ–ãƒƒã‚¯ãƒãƒ¼ã‚¯10")
 
-    button bookBt02 "–¢g—p" pos:[706,0] width:68 height:24 border:false  enabled:true
-    button bookDelBt02 "X" pos:[774,0] width:16 height:24 border:false images:#("$Scripts/SJTools/Images//SJ_timemachine01.png", "undefined", 2, 1, 1, 2, 2)
+    button bookBt01 "æœªä½¿ç”¨" pos:[618, 0] width:68 height:24 border:false enabled:true
+    button bookDelBt01 "X" pos:[686, 0] width:16 height:24 border:false images:#("$Scripts/SJTools/Images//SJ_timemachine01.png", "undefined", 2, 1, 1, 2, 2)
 
-    button bookBt03 "–¢g—p" pos:[794,0] width:68 height:24 border:false enabled:true
-    button bookDelBt03 "X" pos:[862,0] width:16 height:24 border:false images:#("$Scripts/SJTools/Images//SJ_timemachine01.png", "undefined", 2, 1, 1, 2, 2)
+    button bookBt02 "æœªä½¿ç”¨" pos:[706, 0] width:68 height:24 border:false  enabled:true
+    button bookDelBt02 "X" pos:[774, 0] width:16 height:24 border:false images:#("$Scripts/SJTools/Images//SJ_timemachine01.png", "undefined", 2, 1, 1, 2, 2)
 
-    button bookBt04 "–¢g—p" pos:[882,0] width:68 height:24 border:false enabled:true
-    button bookDelBt04 "X" pos:[950,0] width:16 height:24 border:false images:#("$Scripts/SJTools/Images//SJ_timemachine01.png", "undefined", 2, 1, 1, 2, 2)
+    button bookBt03 "æœªä½¿ç”¨" pos:[794, 0] width:68 height:24 border:false enabled:true
+    button bookDelBt03 "X" pos:[862, 0] width:16 height:24 border:false images:#("$Scripts/SJTools/Images//SJ_timemachine01.png", "undefined", 2, 1, 1, 2, 2)
 
-    button bookBt05 "–¢g—p" pos:[970,0] width:68 height:24 border:false enabled:true
-    button bookDelBt05 "X" pos:[1038,0] width:16 height:24 border:false images:#("$Scripts/SJTools/Images//SJ_timemachine01.png", "undefined", 2, 1, 1, 2, 2)
+    button bookBt04 "æœªä½¿ç”¨" pos:[882, 0] width:68 height:24 border:false enabled:true
+    button bookDelBt04 "X" pos:[950, 0] width:16 height:24 border:false images:#("$Scripts/SJTools/Images//SJ_timemachine01.png", "undefined", 2, 1, 1, 2, 2)
 
-    button bookBt06 "–¢g—p" pos:[1058,0] width:68 height:24 border:false enabled:true
-    button bookDelBt06 "X" pos:[1126,0] width:16 height:24 border:false images:#("$Scripts/SJTools/Images//SJ_timemachine01.png", "undefined", 2, 1, 1, 2, 2)
+    button bookBt05 "æœªä½¿ç”¨" pos:[970, 0] width:68 height:24 border:false enabled:true
+    button bookDelBt05 "X" pos:[1038, 0] width:16 height:24 border:false images:#("$Scripts/SJTools/Images//SJ_timemachine01.png", "undefined", 2, 1, 1, 2, 2)
 
-    button bookBt07 "–¢g—p" pos:[1146,0] width:68 height:24 border:false enabled:true
-    button bookDelBt07 "X" pos:[1214,0] width:16 height:24 border:false images:#("$Scripts/SJTools/Images//SJ_timemachine01.png", "undefined", 2, 1, 1, 2, 2)
+    button bookBt06 "æœªä½¿ç”¨" pos:[1058, 0] width:68 height:24 border:false enabled:true
+    button bookDelBt06 "X" pos:[1126, 0] width:16 height:24 border:false images:#("$Scripts/SJTools/Images//SJ_timemachine01.png", "undefined", 2, 1, 1, 2, 2)
 
-    spinner editTimeSp "" pos:[1280,4] width:56 height:16 enabled:true range:[-1e+009,1e+009,0] type:#integer scale:1
-    button editSetBt "Set!" pos:[1340,4] width:32 height:16 --images:#("$Scripts/SJTools/Images//SJ_timemachine05.png", "undefined", 1, 1, 1, 2, 2)
-    checkbox insertChk "" pos:[1378,4] width:15 height:15 checked:true
-    checkbox scaleChk "" pos:[1422,4] width:15 height:15 checked:false
-    checkbox reverseChk "" pos:[1468,4] width:15 height:15 checked:false
-    checkbox selectedOnlyChk "" pos:[1512,4] width:15 height:15 checked:true ight:15
+    button bookBt07 "æœªä½¿ç”¨" pos:[1146, 0] width:68 height:24 border:false enabled:true
+    button bookDelBt07 "X" pos:[1214, 0] width:16 height:24 border:false images:#("$Scripts/SJTools/Images//SJ_timemachine01.png", "undefined", 2, 1, 1, 2, 2)
 
-    --////////////////////////////////////////////////
-    --ƒAƒNƒVƒ‡ƒ“
-    --////////////////////////////////////////////////
+    spinner editTimeSp "" pos:[1280, 4] width:56 height:16 enabled:true range:[-1e+009,1e+009, 0] type:#integer scale:1
+    button editSetBt "Set!" pos:[1340, 4] width:32 height:16 --images:#("$Scripts/SJTools/Images//SJ_timemachine05.png", "undefined", 1, 1, 1, 2, 2)
+    checkbox insertChk "" pos:[1378, 4] width:15 height:15 checked:true
+    checkbox scaleChk "" pos:[1422, 4] width:15 height:15 checked:false
+    checkbox reverseChk "" pos:[1468, 4] width:15 height:15 checked:false
+    checkbox selectedOnlyChk "" pos:[1512, 4] width:15 height:15 checked:true ight:15
+
+    --ã‚¢ã‚¯ã‚·ãƒ§ãƒ³
     on closeBt pressed do
     (
         saveDefault_Fn()
@@ -745,7 +717,29 @@ rollout SjTimeMachineRol nameAndVersion
 
     on preViewBt pressed do
     (
-        createPreview()
+        createPreview();
+    )
+
+    on preViewStBt pressed do
+    (
+        max preview;
+    )
+
+    on preViewCpBt pressed do
+    (
+        if doesFileExist ((GetDir #preview) + "\\_scene.avi") == False do (
+            return false;
+        )
+        local pvfile = (GetDir #preview) + "\\_scene.avi"
+        dest = (getSaveFileName types:"File(*.avi)|*.avi" historyCategory:"RenamePreview")
+        if dest == undefined do (
+            return false;
+        )
+        f = copyFile pvfile dest;
+        if f == false do (
+            deleteFile dest
+            copyFile pvfile dest
+        )
     )
 
     on helpBt pressed do
@@ -756,7 +750,7 @@ rollout SjTimeMachineRol nameAndVersion
 
     on editSetBt pressed do
     (
-        if (queryBox "Biped‚âIK‚É‘Î‚µ‚ÄƒŠƒ_ƒNƒVƒ‡ƒ“‚ğÀs‚µ‚½Û\n‘½d‚ÉƒL[‚ğˆ—‚·‚éƒoƒO‚ğ‚ª‚ ‚è‚Ü‚·\ng—p‚É‚Í‚²’ˆÓ‚­‚¾‚³‚¢\nÀs‚µ‚Ü‚·‚©?\n " title:"Šm”F") then
+        if (queryBox "Bipedã‚„IKã«å¯¾ã—ã¦ãƒªãƒ€ã‚¯ã‚·ãƒ§ãƒ³ã‚’å®Ÿè¡Œã—ãŸéš›\nå¤šé‡ã«ã‚­ãƒ¼ã‚’å‡¦ç†ã™ã‚‹ãƒã‚°ã‚’ãŒã‚ã‚Šã¾ã™\nä½¿ç”¨ã«ã¯ã”æ³¨æ„ãã ã•ã„\nå®Ÿè¡Œã—ã¾ã™ã‹?\n " title:"ç¢ºèª") then
         (
             editKeysTime_Fn editTimeSp.value;
         )
@@ -783,9 +777,7 @@ rollout SjTimeMachineRol nameAndVersion
         IntervalSet_Fn startRangeSp.value endRangeSp.value
     )
 
-    --////////////////////////////////////////////////
-    --ƒ`ƒFƒbƒN
-    --////////////////////////////////////////////////
+    --ãƒã‚§ãƒƒã‚¯
     on insertChk changed state do
     (
         if state then
@@ -824,16 +816,14 @@ rollout SjTimeMachineRol nameAndVersion
         )
     )
 
-    --////////////////////////////////////////////////
-    --ƒuƒbƒNƒ}[ƒN
-    --////////////////////////////////////////////////
+    --ãƒ–ãƒƒã‚¯ãƒãƒ¼ã‚¯
     on bookListDdl selected state do
     (
         bookLN = state;
         changeListBook_Fn()
     )
 
-    --ƒuƒbƒN1
+    --ãƒ–ãƒƒã‚¯1
     on bookBt01 pressed do
     (
         if bookFmFlag[bookLN][1] then
@@ -852,11 +842,11 @@ rollout SjTimeMachineRol nameAndVersion
     )
     on bookDelBt01 pressed do
     (
-        bookBt01.caption = "–¢g—p";
+        bookBt01.caption = "æœªä½¿ç”¨";
         bookFmFlag[bookLN][1] = false;
     )
 
-    --ƒuƒbƒN2
+    --ãƒ–ãƒƒã‚¯2
     on bookBt02 pressed do
     (
         if bookFmFlag[bookLN][2] then
@@ -874,11 +864,11 @@ rollout SjTimeMachineRol nameAndVersion
     )
     on bookDelBt02 pressed do
     (
-        bookBt02.caption = "–¢g—p";
+        bookBt02.caption = "æœªä½¿ç”¨";
         bookFmFlag[bookLN][2] = false;
     )
 
-    --ƒuƒbƒN3
+    --ãƒ–ãƒƒã‚¯3
     on bookBt03 pressed do
     (
         if bookFmFlag[bookLN][3] then
@@ -896,11 +886,11 @@ rollout SjTimeMachineRol nameAndVersion
     )
     on bookDelBt03 pressed do
     (
-        bookBt03.caption = "–¢g—p";
+        bookBt03.caption = "æœªä½¿ç”¨";
         bookFmFlag[bookLN][3] = false;
     )
 
-    --ƒuƒbƒN4
+    --ãƒ–ãƒƒã‚¯4
     on bookBt04 pressed do
     (
         if bookFmFlag[bookLN][4] then
@@ -919,11 +909,11 @@ rollout SjTimeMachineRol nameAndVersion
 
     on bookDelBt04 pressed do
     (
-        bookBt04.caption = "–¢g—p";
+        bookBt04.caption = "æœªä½¿ç”¨";
         bookFmFlag[bookLN][4] = false;
     )
 
-    --ƒuƒbƒN5
+    --ãƒ–ãƒƒã‚¯5
     on bookBt05 pressed do
     (
         if bookFmFlag[bookLN][5] then
@@ -941,11 +931,11 @@ rollout SjTimeMachineRol nameAndVersion
     )
     on bookDelBt05 pressed do
     (
-        bookBt05.caption = "–¢g—p";
+        bookBt05.caption = "æœªä½¿ç”¨";
         bookFmFlag[bookLN][5] = false;
     )
 
-    --ƒuƒbƒN6
+    --ãƒ–ãƒƒã‚¯6
     on bookBt06 pressed do
     (
         if bookFmFlag[bookLN][6] then
@@ -963,11 +953,11 @@ rollout SjTimeMachineRol nameAndVersion
     )
     on bookDelBt06 pressed do
     (
-        bookBt06.caption = "–¢g—p";
+        bookBt06.caption = "æœªä½¿ç”¨";
         bookFmFlag[bookLN][6] = false;
     )
 
-    --ƒuƒbƒN7
+    --ãƒ–ãƒƒã‚¯7
     on bookBt07 pressed do
     (
         if bookFmFlag[bookLN][7] then
@@ -983,15 +973,14 @@ rollout SjTimeMachineRol nameAndVersion
             saveDefault_Fn()
         )
     )
+
     on bookDelBt07 pressed do
     (
-        bookBt07.caption = "–¢g—p";
+        bookBt07.caption = "æœªä½¿ç”¨";
         bookFmFlag[bookLN][7] = false;
     )
 
-    --////////////////////////////////////////////////
     --Open and Close
-    --////////////////////////////////////////////////
     on SjTimeMachineRol close do
     (
         saveDefault_Fn()
@@ -1004,14 +993,13 @@ rollout SjTimeMachineRol nameAndVersion
         startRangeSp.value = animationRange.start;
         endRangeSp.value = animationRange.end;
         frameRateSp.value = frameRate;
-        callbacks.removescripts id:#Load_RangeUpdate; ---ƒR[ƒ‹ƒoƒbƒN‚ªd•¡“o˜^‚³‚ê‚È‚¢‚æ‚¤‚ÉAˆÀ‘S‘Îô
-        --callbacks.removescripts id:#NewFile_RangeUpdate; ---ƒR[ƒ‹ƒoƒbƒN‚ªd•¡“o˜^‚³‚ê‚È‚¢‚æ‚¤‚ÉAˆÀ‘S‘Îô
-        callbacks.addScript #filePostOpenProcess "SjTimeMachineRol.Load_RangeUpdate_Fn()" id:#Load_RangeUpdate; --ƒ[ƒ‹ƒAƒEƒg“à‚Ìƒtƒ@ƒ“ƒNƒVƒ‡ƒ“‚ğ’¼Ú“o˜^
-        --callbacks.addScript #filePostOpen "SjTimeMachineRol.Load_RangeUpdate_Fn()" id:#NewFile_RangeUpdate; --ƒ[ƒ‹ƒAƒEƒg“à‚Ìƒtƒ@ƒ“ƒNƒVƒ‡ƒ“‚ğ’¼Ú“o˜^
+        callbacks.removescripts id:#Load_RangeUpdate; ---ã‚³ãƒ¼ãƒ«ãƒãƒƒã‚¯ãŒé‡è¤‡ç™»éŒ²ã•ã‚Œãªã„ã‚ˆã†ã«ã€å®‰å…¨å¯¾ç­–
+        --callbacks.removescripts id:#NewFile_RangeUpdate; ---ã‚³ãƒ¼ãƒ«ãƒãƒƒã‚¯ãŒé‡è¤‡ç™»éŒ²ã•ã‚Œãªã„ã‚ˆã†ã«ã€å®‰å…¨å¯¾ç­–
+        callbacks.addScript #filePostOpenProcess "SjTimeMachineRol.Load_RangeUpdate_Fn()" id:#Load_RangeUpdate; --ãƒ­ãƒ¼ãƒ«ã‚¢ã‚¦ãƒˆå†…ã®ãƒ•ã‚¡ãƒ³ã‚¯ã‚·ãƒ§ãƒ³ã‚’ç›´æ¥ç™»éŒ²
+        --callbacks.addScript #filePostOpen "SjTimeMachineRol.Load_RangeUpdate_Fn()" id:#NewFile_RangeUpdate; --ãƒ­ãƒ¼ãƒ«ã‚¢ã‚¦ãƒˆå†…ã®ãƒ•ã‚¡ãƒ³ã‚¯ã‚·ãƒ§ãƒ³ã‚’ç›´æ¥ç™»éŒ²
         saveDefault_Fn()
     )
 )
-
 --------------------------------------------------------------------------------
 -- End of rollout & Create Dialog / Floater
 --------------------------------------------------------------------------------
