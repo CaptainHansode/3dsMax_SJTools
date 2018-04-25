@@ -25,7 +25,6 @@ struct SJCollectTextures
     mainRolWidth = 210,
     mainRolheight = 450,
     iniFilePath = "SJCollectTextures.ini",
-    defaultIni = "",
 
     function GetMyDocPath =
     (
@@ -95,7 +94,6 @@ SJCltTex.SJCollectTexRol = (
         )
     )
 )
-
 
 /**-----------------------------------------------------------------------------
  * TODO:Executeになおす
