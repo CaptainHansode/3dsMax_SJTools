@@ -45,9 +45,10 @@ struct SJCollectTextures
                 + "\\config" \
                 + "\\SJCollectTextures" \
                 + "\\SJCollectTextures.ini";
+        defini = @"D:\sakai\SJTools\dcc\max\SJTools\scripts\SJTools\SJCollectTextures\SJCollectTextures.ini";
         if (doesFileExist iniFilePath) == False do (
             makeDir (getFilenamePath iniFilePath);
-            copyFile "SJCollectTextures.ini" iniFilePath;
+            copyFile defini iniFilePath;
         )
     ),
 
@@ -70,6 +71,7 @@ struct SJCollectTextures
     DEBUG = False;
 )
 
+-- 構造体とグローバル変数名を同じにしない
 global SJCltTex = SJCollectTextures();
 SJCltTex.init();
 
