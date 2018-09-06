@@ -1,5 +1,5 @@
 /*******************************************************
-System J Tools 
+System J Tools
 ********************************************************
 Name:SJ_Bio_Skin_Plus
 Created By:CaptainHansode
@@ -7,17 +7,17 @@ WEB:www.sakaiden.com
 E-Mail:sakaiden@live.jp
 *******************************************************/
 (
---ƒOƒ[ƒoƒ‹•Ï”éŒ¾ü‚è
+--ã‚°ãƒ­ãƒ¼ãƒãƒ«å¤‰æ•°å®£è¨€å‘¨ã‚Š
 global sj_bio_skin_plus_rol, sj_load_mapping_rol, sj_sj_load_verts_rol
 -----------------------------------------------------------------------------------------------------------
--- Œ¾Œê‰Šú‰»
+-- è¨€èªåˆæœŸåŒ–
 -----------------------------------------------------------------------------------------------------------
--- Œ¾Œê‰Šú‰»
-include "$scripts/SJTools/SJ_CommonLangSet.ms"
+-- è¨€èªåˆæœŸåŒ–
+include "$scripts/SJTools/SJOthers/SJ_CommonLangSet.ms"
 
---Version etc –¼‘O©‘Ì‚ÍSJTools.ini‚©‚ç
-Local nameAndVersion = (getINISetting("$scripts/SJTools/SJTools.ini") "SJToolsToolName" "SJBioSkinPlusToolName");
-
+--Version etc åå‰è‡ªä½“ã¯SJTools.iniã‹ã‚‰
+--Local nameAndVersion = (getINISetting("$scripts/SJTools/SJTools.ini") "SJToolsToolName" "SJBioSkinPlusToolName");
+Local nameAndVersion = "Bio"
 -----------------------------------------------------------------------------------------------------------
 local last_spin 	 	= "start" -- used to identify the last spinner used (radius spinner)
 local target_skin  	= undefined -- used when mirroring to a different skin then selected.
@@ -26,31 +26,31 @@ local feed_file		= undefined -- used to feed a file when using fetch
 local tagged_nodes	= #()
 local env_buffer		= #() -- used to store copied envelope data
 local biodef			= false
-local bonesinskin 	= #() -- ƒ{[ƒ“ƒŠƒXƒg‚Ìƒz[ƒ‹ƒhAƒy[ƒXƒg‚Ég—p
+local bonesinskin 	= #() -- ãƒœãƒ¼ãƒ³ãƒªã‚¹ãƒˆã®ãƒ›ãƒ¼ãƒ«ãƒ‰ã€ãƒšãƒ¼ã‚¹ãƒˆã«ä½¿ç”¨
 
 -----------------------------------------------------------------------------------------------------------
--- ƒ[ƒ‹ƒAƒEƒgƒAƒNƒVƒ‡ƒ“
+-- ãƒ­ãƒ¼ãƒ«ã‚¢ã‚¦ãƒˆã‚¢ã‚¯ã‚·ãƒ§ãƒ³
 -----------------------------------------------------------------------------------------------------------
 try(cui.FloatDialogBar sj_bio_skin_plus_rol)catch()
 try(cui.unRegisterDialogBar sj_bio_skin_plus_rol)catch()
-try (destroydialog sj_bio_skin_plus_rol) catch() --ƒhƒbƒLƒ“ƒO‚ğ‰ğœ‚µ‚Ü‚·
+try (destroydialog sj_bio_skin_plus_rol) catch() --ãƒ‰ãƒƒã‚­ãƒ³ã‚°ã‚’è§£é™¤ã—ã¾ã™
 -----------------------------------------------------------------------------------------------------------
---ƒƒjƒ…[
+--ãƒ¡ãƒ‹ãƒ¥ãƒ¼
 -----------------------------------------------------------------------------------------------------------
 --////////////////////////////////////////////////
---ƒƒjƒ…[
+--ãƒ¡ãƒ‹ãƒ¥ãƒ¼
 --////////////////////////////////////////////////
 rcMenu bio_skin_plusMenuBar
 (
-subMenu "ƒwƒ‹ƒv"
-( 
-menuItem helpMi "ƒwƒ‹ƒv"
+subMenu "ãƒ˜ãƒ«ãƒ—"
+(
+menuItem helpMi "ãƒ˜ãƒ«ãƒ—"
 menuItem aboutMi "About"
 menuItem emailMi "E-Mail"
 )
 
 --////////////////////////////////////////////////
---ƒAƒNƒVƒ‡ƒ“
+--ã‚¢ã‚¯ã‚·ãƒ§ãƒ³
 --////////////////////////////////////////////////
 on helpMi picked do shellLaunch "http://www.sakaiden.com/?page_id=5905" ""
 on aboutMi picked do sj_functions.sjtools_about_Fn();
@@ -66,1341 +66,1300 @@ rollout sj_bio_skin_plus_rol nameAndVersion width:634 height:372
 (
 
 -----------------------------------------------------------------------------------------------------------
--- ƒtƒ@ƒ“ƒNƒVƒ‡ƒ“
+-- ãƒ•ã‚¡ãƒ³ã‚¯ã‚·ãƒ§ãƒ³
 -----------------------------------------------------------------------------------------------------------
-include "$scripts/SJTools/SJScripts/SJ_Bio_Skin_Plus_Functions.ms"
+include "$scripts/SJTools/SJBioSkinPlus/SJ_Bio_Skin_Plus_Functions.ms"
 
 /*######################################################################*/
 -----------------------------------------------------------------------------------------------
---ƒ{ƒ^ƒ“ƒŒƒCƒAƒEƒgü‚è
+--ãƒœã‚¿ãƒ³ãƒ¬ã‚¤ã‚¢ã‚¦ãƒˆå‘¨ã‚Š
 -----------------------------------------------------------------------------------------------
 /*######################################################################*/
 -----------------------------------------
---ƒXƒLƒ“ƒ‚ƒfƒBƒtƒ@ƒCƒA
+--ã‚¹ã‚­ãƒ³ãƒ¢ãƒ‡ã‚£ãƒ•ã‚¡ã‚¤ã‚¢
 -----------------------------------------
-	GroupBox skingB1 "ƒXƒLƒ“ƒ‚ƒfƒBƒtƒ@ƒCƒA" pos:[8,8] width:200 height:224
-	
-	--Character size
-	label char_fatlbl "ƒLƒƒƒ‰ƒNƒ^[ƒTƒCƒY %:" pos:[16,24] width:104 height:16
-	spinner char_fat "" pos:[128,24] width:72 height:16 range:[0,100,100]
- 
-	--Apply Skin
-	button apply_skin_mod "ƒXƒLƒ“’Ç‰Á" pos:[16,48] width:184 height:24 toolTip:"•W€‚ÌƒXƒLƒ“ƒ‚ƒfƒBƒtƒ@ƒCƒA‚ğ’Ç‰Á‚µ‚Ü‚·"
-	button hold_bonelist "ƒŠƒXƒgƒRƒs[" pos:[16,80] width:88 height:24 toolTip:"ƒ{[ƒ“ƒŠƒXƒg‚ğƒRƒs[‚µ‚Ü‚·"
-	button paste_bonelist "ƒŠƒXƒgƒy[ƒXƒg" pos:[112,80] width:88 height:24 toolTip:"ƒ{[ƒ“ƒŠƒXƒg‚ğƒy[ƒXƒg‚µ‚Ü‚·"
-	 --Hold
-	button hold_all "‘S‚ÄØ‚èæ‚è" pos:[16,112] width:88 height:24 toolTip:"ƒXƒLƒ“ƒ‚ƒfƒBƒtƒ@ƒCƒA‚Ì“à—e‚ğ‘S‚ÄØ‚èæ‚è‚Ü‚·"
-	--Fetch
-	button fetch_all "‘S‚Äƒy[ƒXƒg" pos:[112,112] width:88 height:24 toolTip:"Ø‚èæ‚Á‚½“à—e‚ğ‘S‚Äƒy[ƒXƒg‚µ‚Ü‚·"
-	--ƒvƒ‰ƒXƒIƒŠƒWƒiƒ‹
-	button del_non_used_boneBt "–¢g—pƒ{[ƒ“‚ğƒŠƒXƒg‚©‚çíœ" pos:[16,144] width:184 height:24 toolTip:"‚Ç‚Ì’¸“_‚©‚ç‚àƒEƒFƒCƒg‚Ì‰e‹¿‚ª–³‚¢ƒ{[ƒ“‚ğƒŠƒXƒg‚©‚çíœ‚µ‚Ü‚·"
-	
-	--ƒvƒ‰ƒXƒIƒŠƒWƒiƒ‹
-	GroupBox skingB2 "Save / Load BoneList" pos:[16,176] width:184 height:48
+    GroupBox skingB1 "ã‚¹ã‚­ãƒ³ãƒ¢ãƒ‡ã‚£ãƒ•ã‚¡ã‚¤ã‚¢" pos:[8,8] width:200 height:224
 
-	--ƒvƒ‰ƒXƒIƒŠƒWƒiƒ‹
-	button save_boneListBt "ƒŠƒXƒg•Û‘¶" pos:[24,192] width:80 height:24 toolTip:"ƒ{[ƒ“ƒŠƒXƒg‚ğƒtƒ@ƒCƒ‹‚É•Û‘¶‚µ‚Ü‚·"
-	--ƒvƒ‰ƒXƒIƒŠƒWƒiƒ‹
-	button load_boneListBt "ƒŠƒXƒgŠJ‚­" pos:[112,192] width:80 height:24 toolTip:"ƒ{[ƒ“ƒŠƒXƒg‚ğƒtƒ@ƒCƒ‹‚©‚ç“Ç‚İ‚İ‚Ü‚·"
+    --Character size
+    label char_fatlbl "ã‚­ãƒ£ãƒ©ã‚¯ã‚¿ãƒ¼ã‚µã‚¤ã‚º %:" pos:[16,24] width:104 height:16
+    spinner char_fat "" pos:[128,24] width:72 height:16 range:[0,100,100]
 
------------------------------------------
---İ’è
------------------------------------------
-	GroupBox settinggB1 "İ’è" pos:[8,236] width:200 height:128
-	--Show Mirror Plane
-	checkbutton show_plane "ƒ~ƒ‰[•½–Ê‚ğ•\¦" pos:[16,252] width:184 height:24 toolTip:"ƒ~ƒ‰[•½–Ê‚Ì•\¦/”ñ•\¦"
-	--Mirror Plane offset:
-	label x_offsetLbl "ƒ~ƒ‰[•½–ÊƒIƒtƒZƒbƒg" pos:[16,284] width:112 height:16
-	spinner x_offset "" pos:[128,284] width:72 height:16 enabled:true range:[-9999,9999,0] type:#float
-	--Search Threshold:
-	label thresLbl "ƒXƒŒƒbƒVƒ‡ƒ‹ƒhŒŸõ" pos:[16,308] width:112 height:16
-	spinner thres "" pos:[128,308] width:72 height:16 range:[0,9999,1] type:#float
-	 --tar_skin
-	pickbutton tar_skin "ƒ^[ƒQƒbƒgƒXƒLƒ“‚ğ“Ç‚İ‚Ü‚È‚¢" pos:[16,332] width:184 height:24 toolTip:"•Ê‚ÌƒƒbƒVƒ…‚ğg‚¢ƒ~ƒ‰[‚ğs‚¤ê‡"
+    --Apply Skin
+    button apply_skin_mod "ã‚¹ã‚­ãƒ³è¿½åŠ " pos:[16,48] width:184 height:24 toolTip:"æ¨™æº–ã®ã‚¹ã‚­ãƒ³ãƒ¢ãƒ‡ã‚£ãƒ•ã‚¡ã‚¤ã‚¢ã‚’è¿½åŠ ã—ã¾ã™"
+    button hold_bonelist "ãƒªã‚¹ãƒˆã‚³ãƒ”ãƒ¼" pos:[16,80] width:88 height:24 toolTip:"ãƒœãƒ¼ãƒ³ãƒªã‚¹ãƒˆã‚’ã‚³ãƒ”ãƒ¼ã—ã¾ã™"
+    button paste_bonelist "ãƒªã‚¹ãƒˆãƒšãƒ¼ã‚¹ãƒˆ" pos:[112,80] width:88 height:24 toolTip:"ãƒœãƒ¼ãƒ³ãƒªã‚¹ãƒˆã‚’ãƒšãƒ¼ã‚¹ãƒˆã—ã¾ã™"
+     --Hold
+    button hold_all "å…¨ã¦åˆ‡ã‚Šå–ã‚Š" pos:[16,112] width:88 height:24 toolTip:"ã‚¹ã‚­ãƒ³ãƒ¢ãƒ‡ã‚£ãƒ•ã‚¡ã‚¤ã‚¢ã®å†…å®¹ã‚’å…¨ã¦åˆ‡ã‚Šå–ã‚Šã¾ã™"
+    --Fetch
+    button fetch_all "å…¨ã¦ãƒšãƒ¼ã‚¹ãƒˆ" pos:[112,112] width:88 height:24 toolTip:"åˆ‡ã‚Šå–ã£ãŸå†…å®¹ã‚’å…¨ã¦ãƒšãƒ¼ã‚¹ãƒˆã—ã¾ã™"
+    --ãƒ—ãƒ©ã‚¹ã‚ªãƒªã‚¸ãƒŠãƒ«
+    button del_non_used_boneBt "æœªä½¿ç”¨ãƒœãƒ¼ãƒ³ã‚’ãƒªã‚¹ãƒˆã‹ã‚‰å‰Šé™¤" pos:[16,144] width:184 height:24 toolTip:"ã©ã®é ‚ç‚¹ã‹ã‚‰ã‚‚ã‚¦ã‚§ã‚¤ãƒˆã®å½±éŸ¿ãŒç„¡ã„ãƒœãƒ¼ãƒ³ã‚’ãƒªã‚¹ãƒˆã‹ã‚‰å‰Šé™¤ã—ã¾ã™"
+
+    --ãƒ—ãƒ©ã‚¹ã‚ªãƒªã‚¸ãƒŠãƒ«
+    GroupBox skingB2 "Save / Load BoneList" pos:[16,176] width:184 height:48
+
+    --ãƒ—ãƒ©ã‚¹ã‚ªãƒªã‚¸ãƒŠãƒ«
+    button save_boneListBt "ãƒªã‚¹ãƒˆä¿å­˜" pos:[24,192] width:80 height:24 toolTip:"ãƒœãƒ¼ãƒ³ãƒªã‚¹ãƒˆã‚’ãƒ•ã‚¡ã‚¤ãƒ«ã«ä¿å­˜ã—ã¾ã™"
+    --ãƒ—ãƒ©ã‚¹ã‚ªãƒªã‚¸ãƒŠãƒ«
+    button load_boneListBt "ãƒªã‚¹ãƒˆé–‹ã" pos:[112,192] width:80 height:24 toolTip:"ãƒœãƒ¼ãƒ³ãƒªã‚¹ãƒˆã‚’ãƒ•ã‚¡ã‚¤ãƒ«ã‹ã‚‰èª­ã¿è¾¼ã¿ã¾ã™"
 
 -----------------------------------------
---’¸“_
+--è¨­å®š
 -----------------------------------------
-	Local empty_bitmap = (bitmap 1 1 color:(color 180 180 180));
-	
-	GroupBox vertexGB1 "’¸“_" pos:[216,8] width:200 height:356
-
-	--Fix All 0-Weigth
-	button fix_vert_weights "‘S‚ÄƒtƒBƒbƒNƒX" pos:[224,24] width:184 height:24 toolTip:"‘S‚Ä‚Ì’¸“_‚Ì’†‚É0ƒEƒFƒCƒg‚ª‡‚Á‚½ê‡AÅ‚à‹ß‚­‚Ìƒ{[ƒ“‚É100%ƒEƒFƒCƒg‚ğ‰Á‚¦‚Ü‚·" across:2
-	--Fix Sel Only
-	button fix_selvert_weights "‘I‘ğƒtƒBƒbƒNƒX" pos:[224,56] width:184 height:24 toolTip:"‘I‘ğ‚µ‚½’¸“_‚Ì’†‚É0ƒEƒFƒCƒg‚ª‡‚Á‚½ê‡AÅ‚à‹ß‚­‚Ìƒ{[ƒ“‚É100%ƒEƒFƒCƒg‚ğ‰Á‚¦‚Ü‚·"
-	--Adapt All
-	button adapt_all "‘S‚Ä“K‡" pos:[224,88] width:88 height:24 toolTip:"’¸“_‚ÌƒEƒFƒCƒg’l‚ğ‚à‚Á‚Æ‚à‹ß‚­‚Ìœ‚É100%‚ÌƒEƒFƒCƒg‚ğ—^‚¦Aè“®C³‚Éİ’è‚µ‚Ü‚·" across:2
-	--Adapt Sel
-	button adapt_sel "‘I‘ğ“K‡" pos:[320,88] width:88 height:24 toolTip:"‘I‘ğ’¸“_‚ÌƒEƒFƒCƒg’l‚ğ‚à‚Á‚Æ‚à‹ß‚­‚Ìœ‚É100%‚ÌƒEƒFƒCƒg‚ğ—^‚¦Aè“®C³‚Éİ’è‚µ‚Ü‚·"
-
-	--Is Vertex Modified?
-	label is_vert_mod "’¸“_‚Íè“®C³‚©?" pos:[232,120] width:112 height:32 toolTip:"©“®İ’è‚©è“®C³‚©‚ğ”»’è‚µ‚Ü‚·"
-	--‚µ‚½‚Ì•”•ª‚ª‹¶‚¤empty_bitmap
-	ImgTag is_mod_tag "" pos:[344,120] width:64 height:32 bitmap:empty_bitmap
-
-	--Mirror Sel
-	button mirror_sel_verts "‘I‘ğƒ~ƒ‰[" pos:[224,160] width:88 height:24 toolTip:"‘I‘ğ’¸“_‚Ìİ’è‚ğ‹¾–ÊƒRƒs[‚µ‚Ü‚·" across:2
-	--Mirror Mod
-	button mirror_mod_verts "‘S‚Äƒ~ƒ‰[" pos:[320,160] width:88 height:24 toolTip:"‘S‚Ä‚Ì’¸“_‚Ìİ’è‚ğ‹¾–ÊƒRƒs[‚µ‚Ü‚·"
-	--Paste Verts
-	button paste_verts "ƒy[ƒXƒg" pos:[224,192] width:88 height:24 toolTip:"ƒEƒFƒCƒg’l‚ğƒy[ƒXƒg‚µ‚Ü‚·" across:2
-	--Clean Verts
-	button clean_verts "ƒNƒŠ[ƒ“" pos:[320,192] width:88 height:24 toolTip:"ƒ{[ƒ“‚É‘Î‚µ‚ÄƒEƒFƒCƒg’l‚ª0‚Ìê‡Aƒ{[ƒ“‚É‘Î‚·‚é‰e‹¿‚ğíœ‚µ‚Ü‚·"
-
-	--Sel Af.Verts
-	button select_af_verts "‰e‹¿‘I‘ğ" pos:[224,224] width:88 height:24 toolTip:"‘I‘ğ‚µ‚½ƒ{[ƒ“‚É‰e‹¿‚·‚é’¸“_‚ğ‘I‘ğ‚µ‚Ü‚·" across:2
-	--Prnt Af.Bones
-	button print_af_bones "‰e‹¿ƒ{[ƒ“" pos:[320,224] width:88 height:24 toolTip:"‘I‘ğ’¸“_‚ª‰e‹¿‚·‚éƒ{[ƒ“–¼‚ğƒŠƒXƒi[‚É•\¦‚µ‚Ü‚·"
-	--Expand Sel. to Element
-	button expand_element "—v‘f‘S‚Ä‘I‘ğ" pos:[224,256] width:184 height:24 toolTip:"‘S‚Ä‚Ì’¸“_‚ğ‘I‘ğ‚µ‚Ü‚·"
-
-
-	GroupBox vertexgB2 "Save / Load Verts" pos:[224,288] width:184 height:48
-	button save_verts "’¸“_•Û‘¶" pos:[232,304] width:80 height:24 toolTip:"’¸“_î•ñ‚ğƒtƒ@ƒCƒ‹‚É•Û‘¶‚µ‚Ü‚·"
-	button load_verts "’¸“_ŠJ‚­" pos:[320,304] width:80 height:24 toolTip:"’¸“_î•ñ‚ğƒtƒ@ƒCƒ‹‚©‚ç“Ç‚İ‚İ‚Ü‚·"
-
+    GroupBox settinggB1 "è¨­å®š" pos:[8,236] width:200 height:128
+    --Show Mirror Plane
+    checkbutton show_plane "ãƒŸãƒ©ãƒ¼å¹³é¢ã‚’è¡¨ç¤º" pos:[16,252] width:184 height:24 toolTip:"ãƒŸãƒ©ãƒ¼å¹³é¢ã®è¡¨ç¤º/éè¡¨ç¤º"
+    --Mirror Plane offset:
+    label x_offsetLbl "ãƒŸãƒ©ãƒ¼å¹³é¢ã‚ªãƒ•ã‚»ãƒƒãƒˆ" pos:[16,284] width:112 height:16
+    spinner x_offset "" pos:[128,284] width:72 height:16 enabled:true range:[-9999,9999,0] type:#float
+    --Search Threshold:
+    label thresLbl "ã‚¹ãƒ¬ãƒƒã‚·ãƒ§ãƒ«ãƒ‰æ¤œç´¢" pos:[16,308] width:112 height:16
+    spinner thres "" pos:[128,308] width:72 height:16 range:[0,9999,1] type:#float
+     --tar_skin
+    pickbutton tar_skin "ã‚¿ãƒ¼ã‚²ãƒƒãƒˆã‚¹ã‚­ãƒ³ã‚’èª­ã¿è¾¼ã¾ãªã„" pos:[16,332] width:184 height:24 toolTip:"åˆ¥ã®ãƒ¡ãƒƒã‚·ãƒ¥ã‚’ä½¿ã„ãƒŸãƒ©ãƒ¼ã‚’è¡Œã†å ´åˆ"
 
 -----------------------------------------
---ƒGƒ“ƒxƒ[ƒv
+--é ‚ç‚¹
 -----------------------------------------
-	GroupBox envelopegB1 "ƒGƒ“ƒxƒ[ƒv" pos:[424,8] width:200 height:356
+    Local empty_bitmap = (bitmap 1 1 color:(color 180 180 180));
 
-	--Falloff:
-	label spn_gapLbl "ƒtƒH[ƒ‹ƒIƒt:" pos:[432,24] width:120 height:16
-	spinner spn_gap "" pos:[552,24] width:64 height:16 range:[0.001,99,4] type:#float
+    GroupBox vertexGB1 "é ‚ç‚¹" pos:[216,8] width:200 height:356
 
-	--Start Envelope
-	label in_radius_startLbl "ƒXƒ^[ƒgƒGƒ“ƒxƒ[ƒv:" pos:[432,48] width:120 height:16
-	spinner in_radius_start "" pos:[552,48] width:64 height:16 range:[0,99,4] type:#float ticks:2 across:2
+    --Fix All 0-Weigth
+    button fix_vert_weights "å…¨ã¦ãƒ•ã‚£ãƒƒã‚¯ã‚¹" pos:[224,24] width:184 height:24 toolTip:"å…¨ã¦ã®é ‚ç‚¹ã®ä¸­ã«0ã‚¦ã‚§ã‚¤ãƒˆãŒåˆã£ãŸå ´åˆã€æœ€ã‚‚è¿‘ãã®ãƒœãƒ¼ãƒ³ã«100%ã‚¦ã‚§ã‚¤ãƒˆã‚’åŠ ãˆã¾ã™" across:2
+    --Fix Sel Only
+    button fix_selvert_weights "é¸æŠãƒ•ã‚£ãƒƒã‚¯ã‚¹" pos:[224,56] width:184 height:24 toolTip:"é¸æŠã—ãŸé ‚ç‚¹ã®ä¸­ã«0ã‚¦ã‚§ã‚¤ãƒˆãŒåˆã£ãŸå ´åˆã€æœ€ã‚‚è¿‘ãã®ãƒœãƒ¼ãƒ³ã«100%ã‚¦ã‚§ã‚¤ãƒˆã‚’åŠ ãˆã¾ã™"
+    --Adapt All
+    button adapt_all "å…¨ã¦é©åˆ" pos:[224,88] width:88 height:24 toolTip:"é ‚ç‚¹ã®ã‚¦ã‚§ã‚¤ãƒˆå€¤ã‚’ã‚‚ã£ã¨ã‚‚è¿‘ãã®éª¨ã«100%ã®ã‚¦ã‚§ã‚¤ãƒˆã‚’ä¸ãˆã€æ‰‹å‹•ä¿®æ­£ã«è¨­å®šã—ã¾ã™" across:2
+    --Adapt Sel
+    button adapt_sel "é¸æŠé©åˆ" pos:[320,88] width:88 height:24 toolTip:"é¸æŠé ‚ç‚¹ã®ã‚¦ã‚§ã‚¤ãƒˆå€¤ã‚’ã‚‚ã£ã¨ã‚‚è¿‘ãã®éª¨ã«100%ã®ã‚¦ã‚§ã‚¤ãƒˆã‚’ä¸ãˆã€æ‰‹å‹•ä¿®æ­£ã«è¨­å®šã—ã¾ã™"
 
-	--End Envelope
-	label in_radius_endLbl "ƒGƒ“ƒhƒGƒ“ƒxƒ[ƒv:" pos:[432,72] width:120 height:16
-	spinner in_radius_end "" pos:[552,72] width:64 height:16 range:[0,99,4] type:#float ticks:2 across:2
+    --Is Vertex Modified?
+    label is_vert_mod "é ‚ç‚¹ã¯æ‰‹å‹•ä¿®æ­£ã‹?" pos:[232,120] width:112 height:32 toolTip:"è‡ªå‹•è¨­å®šã‹æ‰‹å‹•ä¿®æ­£ã‹ã‚’åˆ¤å®šã—ã¾ã™"
+    --ã—ãŸã®éƒ¨åˆ†ãŒç‹‚ã†empty_bitmap
+    ImgTag is_mod_tag "" pos:[344,120] width:64 height:32 bitmap:empty_bitmap
 
-	/*************************************************/
-	--ƒrƒWƒ…ƒAƒ‹ƒGƒfƒBƒ^‚Å•ÒW‚·‚é‚Æ‚µ‚½‚Ì•”•ª‚ª‹¶‚¤bitmap:empty_bitmap
-	--
-	/*************************************************/
-	ImgTag in_radius_stag "Bitmap" pos:[440,96] width:32 height:32 bitmap:empty_bitmap toolTip:"”¼Œaİ’è‚ğ“Ç‚İ‚İ1"
-	ImgTag in_radius_etag "Bitmap" pos:[480,96] width:32 height:32 bitmap:empty_bitmap toolTip:"”¼Œaİ’è‚ğ“Ç‚İ‚İ2"
-	checkbutton lock_radiuses "ƒƒbƒN" pos:[528,100] width:88 height:28 toolTip:"ƒXƒ^[ƒgƒGƒ“ƒhƒGƒ“ƒxƒ[ƒvA‚Ì”¼Œa‚ğƒƒbƒN‚µ‚Ü‚·"
+    --Mirror Sel
+    button mirror_sel_verts "é¸æŠãƒŸãƒ©ãƒ¼" pos:[224,160] width:88 height:24 toolTip:"é¸æŠé ‚ç‚¹ã®è¨­å®šã‚’é¡é¢ã‚³ãƒ”ãƒ¼ã—ã¾ã™" across:2
+    --Mirror Mod
+    button mirror_mod_verts "å…¨ã¦ãƒŸãƒ©ãƒ¼" pos:[320,160] width:88 height:24 toolTip:"å…¨ã¦ã®é ‚ç‚¹ã®è¨­å®šã‚’é¡é¢ã‚³ãƒ”ãƒ¼ã—ã¾ã™"
+    --Paste Verts
+    button paste_verts "ãƒšãƒ¼ã‚¹ãƒˆ" pos:[224,192] width:88 height:24 toolTip:"ã‚¦ã‚§ã‚¤ãƒˆå€¤ã‚’ãƒšãƒ¼ã‚¹ãƒˆã—ã¾ã™" across:2
+    --Clean Verts
+    button clean_verts "ã‚¯ãƒªãƒ¼ãƒ³" pos:[320,192] width:88 height:24 toolTip:"ãƒœãƒ¼ãƒ³ã«å¯¾ã—ã¦ã‚¦ã‚§ã‚¤ãƒˆå€¤ãŒ0ã®å ´åˆã€ãƒœãƒ¼ãƒ³ã«å¯¾ã™ã‚‹å½±éŸ¿ã‚’å‰Šé™¤ã—ã¾ã™"
 
-	button copy_env "ƒRƒs[" pos:[432,136] width:88 height:24 toolTip:"ƒGƒ“ƒxƒ[ƒv‚ğƒRƒs[‚µ‚Ü‚·" across:2
-	button paste_env "ƒy[ƒXƒg" pos:[528,136] width:88 height:24 toolTip:"ƒGƒ“ƒxƒ[ƒv‚ğƒy[ƒXƒg‚µ‚Ü‚·"
-	button tpaste_env "ƒ^[ƒQƒbƒgƒy[ƒXƒg" pos:[432,168] width:88 height:24 toolTip:"ƒGƒ“ƒxƒ[ƒvİ’è‚ğØ‚èæ‚èA‹¾–Ê‘¤‚Éƒy[ƒXƒg‚µ‚Ü‚·" across:2
-	button mirror_env "‘I‘ğ‚ğƒ~ƒ‰[" pos:[528,168] width:88 height:24 toolTip:"‘I‘ğ‚µ‚½ƒGƒ“ƒxƒ[ƒv‚ğ‹¾–ÊƒRƒs[‚µ‚Ü‚·"
+    --Sel Af.Verts
+    button select_af_verts "å½±éŸ¿é¸æŠ" pos:[224,224] width:88 height:24 toolTip:"é¸æŠã—ãŸãƒœãƒ¼ãƒ³ã«å½±éŸ¿ã™ã‚‹é ‚ç‚¹ã‚’é¸æŠã—ã¾ã™" across:2
+    --Prnt Af.Bones
+    button print_af_bones "å½±éŸ¿ãƒœãƒ¼ãƒ³" pos:[320,224] width:88 height:24 toolTip:"é¸æŠé ‚ç‚¹ãŒå½±éŸ¿ã™ã‚‹ãƒœãƒ¼ãƒ³åã‚’ãƒªã‚¹ãƒŠãƒ¼ã«è¡¨ç¤ºã—ã¾ã™"
+    --Expand Sel. to Element
+    button expand_element "è¦ç´ å…¨ã¦é¸æŠ" pos:[224,256] width:184 height:24 toolTip:"å…¨ã¦ã®é ‚ç‚¹ã‚’é¸æŠã—ã¾ã™"
 
-	checkbox mirror_excl "Excl. verts" pos:[440,200] width:80 height:16 checked:false across:2
-	checkbox mirror_gizmo "Gizmo's" pos:[536,200] width:80 height:16 enabled:false checked:false
 
-	GroupBox envelopegB2 "Save / Load Envelope" pos:[432,224] width:184 height:48
-	button save_env "Env•Û‘¶" pos:[440,240] width:80 height:24 toolTip:"ƒGƒ“ƒxƒ[ƒvİ’è‚ğƒtƒ@ƒCƒ‹‚É•Û‘¶‚µ‚Ü‚·"
-	button load_env "EnvŠJ‚­" pos:[528,240] width:80 height:24 toolTip:"ƒGƒ“ƒxƒ[ƒvİ’è‚ğƒtƒ@ƒCƒ‹‚©‚ç“Ç‚İ‚İ‚Ü‚·"
+    GroupBox vertexgB2 "Save / Load Verts" pos:[224,288] width:184 height:48
+    button save_verts "é ‚ç‚¹ä¿å­˜" pos:[232,304] width:80 height:24 toolTip:"é ‚ç‚¹æƒ…å ±ã‚’ãƒ•ã‚¡ã‚¤ãƒ«ã«ä¿å­˜ã—ã¾ã™"
+    button load_verts "é ‚ç‚¹é–‹ã" pos:[320,304] width:80 height:24 toolTip:"é ‚ç‚¹æƒ…å ±ã‚’ãƒ•ã‚¡ã‚¤ãƒ«ã‹ã‚‰èª­ã¿è¾¼ã¿ã¾ã™"
+
+
+-----------------------------------------
+--ã‚¨ãƒ³ãƒ™ãƒ­ãƒ¼ãƒ—
+-----------------------------------------
+    GroupBox envelopegB1 "ã‚¨ãƒ³ãƒ™ãƒ­ãƒ¼ãƒ—" pos:[424,8] width:200 height:356
+
+    --Falloff:
+    label spn_gapLbl "ãƒ•ã‚©ãƒ¼ãƒ«ã‚ªãƒ•:" pos:[432,24] width:120 height:16
+    spinner spn_gap "" pos:[552,24] width:64 height:16 range:[0.001,99,4] type:#float
+
+    --Start Envelope
+    label in_radius_startLbl "ã‚¹ã‚¿ãƒ¼ãƒˆã‚¨ãƒ³ãƒ™ãƒ­ãƒ¼ãƒ—:" pos:[432,48] width:120 height:16
+    spinner in_radius_start "" pos:[552,48] width:64 height:16 range:[0,99,4] type:#float ticks:2 across:2
+
+    --End Envelope
+    label in_radius_endLbl "ã‚¨ãƒ³ãƒ‰ã‚¨ãƒ³ãƒ™ãƒ­ãƒ¼ãƒ—:" pos:[432,72] width:120 height:16
+    spinner in_radius_end "" pos:[552,72] width:64 height:16 range:[0,99,4] type:#float ticks:2 across:2
+
+    /*************************************************/
+    --ãƒ“ã‚¸ãƒ¥ã‚¢ãƒ«ã‚¨ãƒ‡ã‚£ã‚¿ã§ç·¨é›†ã™ã‚‹ã¨ã—ãŸã®éƒ¨åˆ†ãŒç‹‚ã†bitmap:empty_bitmap
+    --
+    /*************************************************/
+    ImgTag in_radius_stag "Bitmap" pos:[440,96] width:32 height:32 bitmap:empty_bitmap toolTip:"åŠå¾„è¨­å®šã‚’èª­ã¿è¾¼ã¿1"
+    ImgTag in_radius_etag "Bitmap" pos:[480,96] width:32 height:32 bitmap:empty_bitmap toolTip:"åŠå¾„è¨­å®šã‚’èª­ã¿è¾¼ã¿2"
+    checkbutton lock_radiuses "ãƒ­ãƒƒã‚¯" pos:[528,100] width:88 height:28 toolTip:"ã‚¹ã‚¿ãƒ¼ãƒˆã‚¨ãƒ³ãƒ‰ã‚¨ãƒ³ãƒ™ãƒ­ãƒ¼ãƒ—ã€ã®åŠå¾„ã‚’ãƒ­ãƒƒã‚¯ã—ã¾ã™"
+
+    button copy_env "ã‚³ãƒ”ãƒ¼" pos:[432,136] width:88 height:24 toolTip:"ã‚¨ãƒ³ãƒ™ãƒ­ãƒ¼ãƒ—ã‚’ã‚³ãƒ”ãƒ¼ã—ã¾ã™" across:2
+    button paste_env "ãƒšãƒ¼ã‚¹ãƒˆ" pos:[528,136] width:88 height:24 toolTip:"ã‚¨ãƒ³ãƒ™ãƒ­ãƒ¼ãƒ—ã‚’ãƒšãƒ¼ã‚¹ãƒˆã—ã¾ã™"
+    button tpaste_env "ã‚¿ãƒ¼ã‚²ãƒƒãƒˆãƒšãƒ¼ã‚¹ãƒˆ" pos:[432,168] width:88 height:24 toolTip:"ã‚¨ãƒ³ãƒ™ãƒ­ãƒ¼ãƒ—è¨­å®šã‚’åˆ‡ã‚Šå–ã‚Šã€é¡é¢å´ã«ãƒšãƒ¼ã‚¹ãƒˆã—ã¾ã™" across:2
+    button mirror_env "é¸æŠã‚’ãƒŸãƒ©ãƒ¼" pos:[528,168] width:88 height:24 toolTip:"é¸æŠã—ãŸã‚¨ãƒ³ãƒ™ãƒ­ãƒ¼ãƒ—ã‚’é¡é¢ã‚³ãƒ”ãƒ¼ã—ã¾ã™"
+
+    checkbox mirror_excl "Excl. verts" pos:[440,200] width:80 height:16 checked:false across:2
+    checkbox mirror_gizmo "Gizmo's" pos:[536,200] width:80 height:16 enabled:false checked:false
+
+    GroupBox envelopegB2 "Save / Load Envelope" pos:[432,224] width:184 height:48
+    button save_env "Envä¿å­˜" pos:[440,240] width:80 height:24 toolTip:"ã‚¨ãƒ³ãƒ™ãƒ­ãƒ¼ãƒ—è¨­å®šã‚’ãƒ•ã‚¡ã‚¤ãƒ«ã«ä¿å­˜ã—ã¾ã™"
+    button load_env "Envé–‹ã" pos:[528,240] width:80 height:24 toolTip:"ã‚¨ãƒ³ãƒ™ãƒ­ãƒ¼ãƒ—è¨­å®šã‚’ãƒ•ã‚¡ã‚¤ãƒ«ã‹ã‚‰èª­ã¿è¾¼ã¿ã¾ã™"
 
 
 
 
 /*######################################################################*/
 -----------------------------------------
---ƒXƒLƒ“ƒ‚ƒfƒBƒtƒ@ƒCƒA
+--ã‚¹ã‚­ãƒ³ãƒ¢ãƒ‡ã‚£ãƒ•ã‚¡ã‚¤ã‚¢
 -----------------------------------------
 /*######################################################################*/
-/*ƒXƒLƒ“’Ç‰Á*/
-	on apply_skin_mod pressed do
-		(
-		sj_bio_skin_plus_rol.apply_default_skin_fn()
-		)
+/*ã‚¹ã‚­ãƒ³è¿½åŠ */
+    on apply_skin_mod pressed do
+        (
+        sj_bio_skin_plus_rol.apply_default_skin_fn()
+        )
 
-/*ƒRƒs[ƒ{[ƒ“ƒŠƒXƒg*/
-	on hold_bonelist pressed do
-		(
-		if (sj_bio_skin_plus_rol.validate_skin_fn() == true) then
-			(
-			bonesinskin = #()
-			for i=1 to (skinops.getnumberBones selection[1].modifiers["Skin"]) do
-				(
-				append bonesinskin (skinOps.getbonename selection[1].modifiers["Skin"] i 0)
-				)
-			)
-		)
+/*ã‚³ãƒ”ãƒ¼ãƒœãƒ¼ãƒ³ãƒªã‚¹ãƒˆ*/
+    on hold_bonelist pressed do (
+        if (sj_bio_skin_plus_rol.validate_skin_fn() == true) then (
+            bonesinskin = #()
+            for i=1 to (skinops.getnumberBones selection[1].modifiers["Skin"]) do (
+                append bonesinskin (skinOps.getbonename selection[1].modifiers["Skin"] i 0)
+            )
+        )
+    )
 
-/*ƒy[ƒXƒgƒ{[ƒ“ƒŠƒXƒg*/
-	on paste_bonelist pressed do
-		(
-		if (sj_bio_skin_plus_rol.validate_skin_fn() == true) then
-			(
-			for i=1 to bonesinskin.count do
-				(
-				bNode = (execute("$'" + bonesinskin[i] + "'"))
-				if (isvalidnode bNode) == true then
-					(
-					skinOps.addbone selection[1].modifiers["Skin"] bNode 0
-					)
-				else
-					(
-					print (bonesinskin[i] + " not found!")
-					)
-				)
-			)
-		)
+/*ãƒšãƒ¼ã‚¹ãƒˆãƒœãƒ¼ãƒ³ãƒªã‚¹ãƒˆ*/
+    on paste_bonelist pressed do (
+        if (sj_bio_skin_plus_rol.validate_skin_fn() == true) then (
+            for i=1 to bonesinskin.count do (
+                --bNode = (execute("$'" + bonesinskin[i] + "'"))
+                bNode = (getNodeByName rl exact:false ignoreCase:false all:false);
+                if bNode == undefined do (
+                    continue;
+                )
+                if (isvalidnode bNode) == true then (
+                    skinOps.addbone selection[1].modifiers["Skin"] bNode 0
+                ) else (
+                    print (bonesinskin[i] + " not found!")
+                )
+            )
+        )
+    )
 
-/*ƒ{ƒ^ƒ“Hold*/
-	on hold_all pressed do
-		(
-		max modify mode
-		for all in $* do
-			(
-			c = all.modifiers.count
-			for i=1 to c do
-				(
-				if (classof all.modifiers[i]) == Skin then
-					(
-					bone_array = #()
-					
-					select all
-					my_env_file = ((getdir #import) + "\\" + all.name) + ".tev"
-					sj_bio_skin_plus_rol.save_env_data_fn my_env_file 
+/*ãƒœã‚¿ãƒ³Hold*/
+    on hold_all pressed do
+    (
+        max modify mode
+        tagged_nodes = #()
+        for all in $* do (
+            c = all.modifiers.count
+            for i=1 to c do (
+                if (classof all.modifiers[i]) == Skin then (
+                    bone_array = #()
+                    select all
+                    my_env_file = ((getdir #import) + "\\" + all.name) + ".tev"
+                    sj_bio_skin_plus_rol.save_env_data_fn my_env_file
+                    my_vert_file = ((getdir #import) + "\\" + all.name) + ".tvw"
+                    sj_bio_skin_plus_rol.save_vert_data_fn my_vert_file
+                    bone_array = (sj_bio_skin_plus_rol.bones_in_skin_fn())
+                    insertItem all bone_array 1
+                    append tagged_nodes bone_array
+                    deleteModifier all all.modifiers["Skin"]
+                )
+            )
+        )
+    )
 
-					my_vert_file = ((getdir #import) + "\\" + all.name) + ".tvw"
-					sj_bio_skin_plus_rol.save_vert_data_fn my_vert_file
-					
-					bone_array = (sj_bio_skin_plus_rol.bones_in_skin_fn())
-					insertItem all bone_array 1
+/*fetch_allã‚¢ã‚¯ã‚·ãƒ§ãƒ³*/
+    on fetch_all pressed do
+    (
+        undo "Fetch" on (
+            silent = true -- makes sure the user doesn't need to pick a envelope file.
+            for i=1 to tagged_nodes.count do (
+                select tagged_nodes[i][1]
+                sj_bio_skin_plus_rol.apply_default_skin_fn addbones:false
+                feed_file = ((getdir #import) + "\\" + tagged_nodes[i][1].name) + ".tev"
+                for t=1 to (tagged_nodes[i].count - 1) do (
+                    skinOps.addbone selection[1].modifiers["Skin"] tagged_nodes[i][t+1] 0
+                )
+                sj_bio_skin_plus_rol.load_env.pressed()
+                sj_load_mapping_rol.exclude_vert_met.state = 2 -- restore excluded verts by index
+                sj_load_mapping_rol.transfer_env.pressed()
 
- 					append tagged_nodes bone_array
-
-					deleteModifier all all.modifiers["Skin"]
-					)
-				)--end for i
-			)--end for all 			gc light:true
-		)
-
-/*fetch_allƒAƒNƒVƒ‡ƒ“*/
-	on fetch_all pressed do
-		(
-		undo "Fetch" on
-			(
-			silent = true -- makes sure the user doesn't need to pick a envelope file.
-			for i=1 to tagged_nodes.count do
-				(
-				select tagged_nodes[i][1]
-				sj_bio_skin_plus_rol.apply_default_skin_fn addbones:false
-				feed_file = ((getdir #import) + "\\" + tagged_nodes[i][1].name) + ".tev"
-				for t=1 to (tagged_nodes[i].count - 1) do
-					(
-					skinOps.addbone selection[1].modifiers["Skin"] tagged_nodes[i][t+1] 0
-					)
-				sj_bio_skin_plus_rol.load_env.pressed()
-				sj_load_mapping_rol.exclude_vert_met.state = 2 -- restore excluded verts by index
-				sj_load_mapping_rol.transfer_env.pressed()
-	
-				feed_file = ((getdir #import) + "\\" + tagged_nodes[i][1].name) + ".tvw"
-				sj_bio_skin_plus_rol.load_verts.pressed()
-				sj_load_verts_rol.bone_ident.checked = true
-				sj_load_verts_rol.vert_met.state = 1 -- restore vertex weights by index
-				sj_load_verts_rol.set_weights.pressed()
-				) 	
-			try (destroydialog sj_load_mapping_rol) catch()
-			try (destroydialog sj_load_verts_rol) catch() 	
-			silent = false		
-			--gc light:true
-			)--end undo
-		)
+                feed_file = ((getdir #import) + "\\" + tagged_nodes[i][1].name) + ".tvw"
+                sj_bio_skin_plus_rol.load_verts.pressed()
+                sj_load_verts_rol.bone_ident.checked = true
+                sj_load_verts_rol.vert_met.state = 1 -- restore vertex weights by index
+                sj_load_verts_rol.set_weights.pressed()
+            )
+            try (destroydialog sj_load_mapping_rol) catch()
+            try (destroydialog sj_load_verts_rol) catch()
+            silent = false
+            --gc light:true
+            )
+        )
 
 /*******************************************************
-–¢g—pƒ{[ƒ“‚ğíœ
+æœªä½¿ç”¨ãƒœãƒ¼ãƒ³ã‚’å‰Šé™¤
 ********************************************************/
-	on del_non_used_boneBt pressed do
-	(
-	--ƒvƒƒOƒŒƒXˆ—
-	sj_functions.sj_progressBar_Fn();
-	sj_progressBar_rol.processInfo.caption = "‚µ‚Î‚ç‚­‚¨‘Ò‚¿‚­‚¾‚³‚¢";
-	
-	--ƒ{[ƒ“Ši”[—p‚âƒJƒEƒ“ƒg—p
-	local use_w = #(),use_bone_index = #(), boneCountA = 0, boneCountB = 0;
-	local non_used = #(), del_bone_num = 0, myObj = selection[1];
-	
-	if (sj_bio_skin_plus_rol.validate_skin_fn() == true) then --ƒ‚ƒaƒtƒ@ƒCƒA”»’è
-	(
-		--ƒ{[ƒ“‚Í‚ ‚é‚©?
-		if skinOps.GetNumberBones myObj.skin != 0 then
-		(
-		vert_count = myObj.verts.count;	
-		--’¸“_–ˆAƒEƒFƒC‚Æó‘Ô‚ğ’²¸
-			for i=1 to vert_count do
-			(
-				--‘I‘ğ‚³‚ê‚½’¸“_‚É‰e‹¿‚·‚éiè“®C³‚Å0‚Å‚àjƒ{[ƒ“”‚¾‚¯ŒJ‚è•Ô‚·
-		 		for u = 1 to (skinops.GetVertexWeightCount myObj.skin i) do
-				(
-					--Œ»İ‚Ì’¸“_‚É‰e‹¿‚·‚éƒ{[ƒ“‚ÌƒEƒFƒCƒg’l‚ª0‚æ‚è‘å‚«‚©‚Á‚½ê‡
-					if skinops.getVertexWeight myObj.skin i u > 0 do
-					(
-						--ƒ{[ƒ“ƒCƒ“ƒfƒbƒNƒX‚ğ”z—ñ‚É’Ç‰Á@i‚ÍŒ»İ‚Ì’¸“_Au‚Í‰e‹¿ƒ{[ƒ“”
-						append use_bone_index (skinops.getvertexweightboneID myObj.skin i u);
-					);--if end
-				);--for end
-			
-			--ƒvƒƒOƒŒƒXˆ—
-			sj_progressBar_rol.progbar.value = ((100.00/vert_count) * i);
-			
-			)--for end
-			
-		--‚±‚±‚©‚çíœì‹Æ
-			boneCountA = skinOps.GetNumberBones myObj.skin	--g—p‚µ‚Ä‚¢‚éƒ{[ƒ“”
-			boneCountB = skinOps.GetNumberBones myObj.skin	--ƒJƒEƒ“ƒg—p
-			
-			--I‚í‚è‚©‚ç‚È‚Ì‚ÅBoneID‚ª•ÏX‚³‚ê‚Ä‚à–â‘è‚Í‚È‚¢
-			while boneCountA > 0 do
-			(
-			
-			--ƒvƒƒOƒŒƒXˆ—
-			sj_progressBar_rol.progbar.value = (( 100.0/boneCountB ) * (boneCountB - boneCountA));
-			
-				if findItem use_bone_index (boneCountA) == 0 do	--”z—ñ‚©‚çboneID‚ªŒ©‚Â‚©‚ç‚È‚©‚Á‚½ê‡
-				(
-					append non_used (skinOps.getBoneName myObj.skin boneCountA 0)
-					skinOps.removebone myObj.skin boneCountA	--íœ
-					del_bone_num += 1
-				)--if end
-			
-			boneCountA -= 1
-	
-			)--while end
-			
-			if non_used.count == 0 then
-			(
-			messageBox ("–¢g—p‚Ìƒ{[ƒ“‚Í‚ ‚è‚Ü‚¹‚ñ‚Å‚µ‚½") title:"Œ‹‰Ê"
-			)else
-			(
-			messageBox ("–¢g—p‚Ìƒ{[ƒ“" + (del_bone_num as string) + "\n\n" + (non_used as string) + "\n\n" + "‚ğíœ‚µ‚Ü‚µ‚½") title:"Œ‹‰Ê";
-			);--if end
-		)else(messageBox ("ƒ{[ƒ“‚ª‚ ‚è‚Ü‚¹‚ñ") title:"Œ‹‰Ê");--if end
-		
-	)else()--ƒ‚ƒfƒBƒtƒ@ƒCƒA”»’èif end
-	
-		--ƒvƒƒOƒŒƒXˆ—
-		try(destroydialog sj_progressBar_rol)catch();
+    on del_non_used_boneBt pressed do
+    (
+    --ãƒ—ãƒ­ã‚°ãƒ¬ã‚¹å‡¦ç†
+    sj_functions.sj_progressBar_Fn();
+    sj_progressBar_rol.processInfo.caption = "ã—ã°ã‚‰ããŠå¾…ã¡ãã ã•ã„";
 
-	);--all end
+    --ãƒœãƒ¼ãƒ³æ ¼ç´ç”¨ã‚„ã‚«ã‚¦ãƒ³ãƒˆç”¨
+    local use_w = #(),use_bone_index = #(), boneCountA = 0, boneCountB = 0;
+    local non_used = #(), del_bone_num = 0, myObj = selection[1];
+
+    if (sj_bio_skin_plus_rol.validate_skin_fn() == true) then --ãƒ¢ãƒ‚ãƒ•ã‚¡ã‚¤ã‚¢åˆ¤å®š
+    (
+        --ãƒœãƒ¼ãƒ³ã¯ã‚ã‚‹ã‹?
+        if skinOps.GetNumberBones myObj.skin != 0 then
+        (
+        vert_count = myObj.verts.count;
+        --é ‚ç‚¹æ¯ã€ã‚¦ã‚§ã‚¤ã¨çŠ¶æ…‹ã‚’èª¿æŸ»
+            for i=1 to vert_count do
+            (
+                --é¸æŠã•ã‚ŒãŸé ‚ç‚¹ã«å½±éŸ¿ã™ã‚‹ï¼ˆæ‰‹å‹•ä¿®æ­£ã§0ã§ã‚‚ï¼‰ãƒœãƒ¼ãƒ³æ•°ã ã‘ç¹°ã‚Šè¿”ã™
+                 for u = 1 to (skinops.GetVertexWeightCount myObj.skin i) do
+                (
+                    --ç¾åœ¨ã®é ‚ç‚¹ã«å½±éŸ¿ã™ã‚‹ãƒœãƒ¼ãƒ³ã®ã‚¦ã‚§ã‚¤ãƒˆå€¤ãŒ0ã‚ˆã‚Šå¤§ãã‹ã£ãŸå ´åˆ
+                    if skinops.getVertexWeight myObj.skin i u > 0 do
+                    (
+                        --ãƒœãƒ¼ãƒ³ã‚¤ãƒ³ãƒ‡ãƒƒã‚¯ã‚¹ã‚’é…åˆ—ã«è¿½åŠ ã€€iã¯ç¾åœ¨ã®é ‚ç‚¹ã€uã¯å½±éŸ¿ãƒœãƒ¼ãƒ³æ•°
+                        append use_bone_index (skinops.getvertexweightboneID myObj.skin i u);
+                    );--if end
+                );--for end
+
+            --ãƒ—ãƒ­ã‚°ãƒ¬ã‚¹å‡¦ç†
+            sj_progressBar_rol.progbar.value = ((100.00/vert_count) * i);
+
+            )--for end
+
+        --ã“ã“ã‹ã‚‰å‰Šé™¤ä½œæ¥­
+            boneCountA = skinOps.GetNumberBones myObj.skin	--ä½¿ç”¨ã—ã¦ã„ã‚‹ãƒœãƒ¼ãƒ³æ•°
+            boneCountB = skinOps.GetNumberBones myObj.skin	--ã‚«ã‚¦ãƒ³ãƒˆç”¨
+
+            --çµ‚ã‚ã‚Šã‹ã‚‰ãªã®ã§BoneIDãŒå¤‰æ›´ã•ã‚Œã¦ã‚‚å•é¡Œã¯ãªã„
+            while boneCountA > 0 do
+            (
+
+            --ãƒ—ãƒ­ã‚°ãƒ¬ã‚¹å‡¦ç†
+            sj_progressBar_rol.progbar.value = (( 100.0/boneCountB ) * (boneCountB - boneCountA));
+
+                if findItem use_bone_index (boneCountA) == 0 do	--é…åˆ—ã‹ã‚‰boneIDãŒè¦‹ã¤ã‹ã‚‰ãªã‹ã£ãŸå ´åˆ
+                (
+                    append non_used (skinOps.getBoneName myObj.skin boneCountA 0)
+                    skinOps.removebone myObj.skin boneCountA	--å‰Šé™¤
+                    del_bone_num += 1
+                )--if end
+
+            boneCountA -= 1
+
+            )--while end
+
+            if non_used.count == 0 then
+            (
+            messageBox ("æœªä½¿ç”¨ã®ãƒœãƒ¼ãƒ³ã¯ã‚ã‚Šã¾ã›ã‚“ã§ã—ãŸ") title:"çµæœ"
+            )else
+            (
+            messageBox ("æœªä½¿ç”¨ã®ãƒœãƒ¼ãƒ³" + (del_bone_num as string) + "\n\n" + (non_used as string) + "\n\n" + "ã‚’å‰Šé™¤ã—ã¾ã—ãŸ") title:"çµæœ";
+            );--if end
+        )else(messageBox ("ãƒœãƒ¼ãƒ³ãŒã‚ã‚Šã¾ã›ã‚“") title:"çµæœ");--if end
+
+    )else()--ãƒ¢ãƒ‡ã‚£ãƒ•ã‚¡ã‚¤ã‚¢åˆ¤å®šif end
+
+        --ãƒ—ãƒ­ã‚°ãƒ¬ã‚¹å‡¦ç†
+        try(destroydialog sj_progressBar_rol)catch();
+
+    );--all end
 
 /*******************************************************
-ƒ{[ƒ“ƒŠƒXƒg‚ğ•Û‘¶‚·‚é
+ãƒœãƒ¼ãƒ³ãƒªã‚¹ãƒˆã‚’ä¿å­˜ã™ã‚‹
 ********************************************************/
-	on save_boneListBt pressed do
-	(
-		local save_bone_name
-		--ƒtƒ@ƒCƒ‹ƒtƒH[ƒ}ƒbƒg
-		local save_file = getSaveFileName caption:"ƒ{[ƒ“‚ğ•Û‘¶" types:"Bone List File(*.blf)|*.blf|Text(*.txt)|*.txt";
-		
-		if save_file != undefined do
-		(
-		print save_file
-		out_bonelist = createfile save_file --ƒtƒ@ƒCƒ‹‚ğì¬
-		print out_bonelist
-			for i=1 to (skinops.getnumberBones selection[1].modifiers["Skin"]) do --ƒXƒLƒ“ƒ‚ƒfƒBƒtƒ@ƒCƒA“à‚ÉŠÜ‚Ü‚ê‚éƒ{[ƒ“‚Ì”
-				(
-				save_bone_name = (skinOps.getbonename selection[1].modifiers["Skin"] i 0) --ƒXƒLƒ“ƒ‚ƒfƒBƒtƒ@ƒCƒA‚ÉŠÜ‚Ü‚ê‚éƒ{[ƒ“–¼‚ğ‘ã“üii‚Í”z—ñ”j
-				--append skinskin (skinOps.getbonename selection[1].modifiers["Skin"] i 0)
-				format "%\n" save_bone_name to:out_bonelist
-				--print Bname
-				);--for end
-		);--if end
-	);--all end
+    on save_boneListBt pressed do
+    (
+        if selection.count == 0 do (
+            messagebox("ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’é¸æŠã—ã¦ã‹ã‚‰å®Ÿè¡Œã—ã¦ãã ã•ã„")
+            return False;
+        )
+
+        local save_bone_name
+        --ãƒ•ã‚¡ã‚¤ãƒ«ãƒ•ã‚©ãƒ¼ãƒãƒƒãƒˆ
+        local save_file = getSaveFileName caption:"ãƒœãƒ¼ãƒ³ã‚’ä¿å­˜" types:"Bone List File(*.blf)|*.blf|Text(*.txt)|*.txt";
+        if save_file == undefined do
+        (
+            return False;
+        )
+
+        out_bonelist = createfile save_file --ãƒ•ã‚¡ã‚¤ãƒ«ã‚’ä½œæˆ
+        print out_bonelist
+        for i=1 to (skinops.getnumberBones selection[1].modifiers["Skin"]) do (--ã‚¹ã‚­ãƒ³ãƒ¢ãƒ‡ã‚£ãƒ•ã‚¡ã‚¤ã‚¢å†…ã«å«ã¾ã‚Œã‚‹ãƒœãƒ¼ãƒ³ã®æ•°
+            save_bone_name = (skinOps.getbonename selection[1].modifiers["Skin"] i 0) --ã‚¹ã‚­ãƒ³ãƒ¢ãƒ‡ã‚£ãƒ•ã‚¡ã‚¤ã‚¢ã«å«ã¾ã‚Œã‚‹ãƒœãƒ¼ãƒ³åã‚’ä»£å…¥ï¼ˆiã¯é…åˆ—æ•°ï¼‰
+            format "%\n" save_bone_name to:out_bonelist
+        )
+        close out_bonelist;
+    )
 
 /*******************************************************
-ƒ{[ƒ“ƒŠƒXƒg‚ğ“Ç‚İ‚Ş
+ãƒœãƒ¼ãƒ³ãƒªã‚¹ãƒˆã‚’èª­ã¿è¾¼ã‚€
 ********************************************************/
-	on load_boneListBt pressed do
-	(
-		local load_bone_name
-		 --ƒtƒ@ƒCƒ‹ƒtƒH[ƒ}ƒbƒg ƒtƒ@ƒCƒ‹‚ğ“Ç‚İæ‚é
-		local load_file = getOpenFileName caption:"ƒ{[ƒ“‚ğ“Ç‚İ‚İ" types:"Bone List File(*.blf)|*.blf|Text(*.txt)|*.txt";
-		
-		if load_file != undefined do
-		(
-		in_bonelist = openFile load_file --ƒtƒ@ƒCƒ‹‚Ì“à—e‚ğ—¬‚µ‚Ş
-			while not eof in_bonelist do --•¶š—ñ‚ªƒtƒ@ƒCƒ‹‚Éc‚Á‚Ä‚¢‚éê‡‚Ítrue‚ğ•Ô‚µ‚Ü‚·@eof‚Íƒtƒ@ƒCƒ‹‚Éƒf[ƒ^‚ªc‚Á‚Ä‚¢‚È‚¢ê‡‚Í trueAƒf[ƒ^‚ªc‚Á‚Ä‚¢‚éê‡‚Í false ‚ğ•Ô‚µ‚Ü‚·B
-				(
-				load_bone_name =  (execute("$'" + readLine in_bonelist + "'")) --ˆês‚¸‚Â•Ï”‚É‘ã“ü
-				print load_bone_name --load_bone_name‚Ì“à—e‚ğƒŠƒXƒi[‚É•\¦
-				skinOps.addbone selection[1].modifiers["Skin"] load_bone_name 0 --•Ï”“à‚Ì•¶š—ñ‚ğƒ{[ƒ“ƒŠƒXƒg‚É’Ç‰Á
-				--append numLine (execute("$'" + readLine in_bone + "'")) --”z—ñ‚É’Ç‰Á
-				);
-		);--if end
-	)--all end
+    on load_boneListBt pressed do
+    (
+        local load_bone_name
+         --ãƒ•ã‚¡ã‚¤ãƒ«ãƒ•ã‚©ãƒ¼ãƒãƒƒãƒˆ ãƒ•ã‚¡ã‚¤ãƒ«ã‚’èª­ã¿å–ã‚‹
+        local load_file = getOpenFileName caption:"ãƒœãƒ¼ãƒ³ã‚’èª­ã¿è¾¼ã¿" types:"Bone List File(*.blf)|*.blf|Text(*.txt)|*.txt";
+
+        if load_file != undefined do
+        (
+            in_bonelist = openFile load_file --ãƒ•ã‚¡ã‚¤ãƒ«ã®å†…å®¹ã‚’æµã—è¾¼ã‚€
+            -- rl = readline in_bonelist;
+            while not eof in_bonelist do (
+                rl = readline in_bonelist;
+                bn = (getNodeByName rl exact:false ignoreCase:false all:false);
+                if bn == undefined do (
+                    continue;
+                )
+                print(bn);  -- å†…å®¹ã‚’ãƒªã‚¹ãƒŠãƒ¼ã«è¡¨ç¤º
+                --å¤‰æ•°å†…ã®æ–‡å­—åˆ—ã‚’ãƒœãƒ¼ãƒ³ãƒªã‚¹ãƒˆã«è¿½åŠ 
+                skinOps.addbone selection[1].modifiers["Skin"] bn 0;
+            )
+        )
+    )
 
 /*######################################################################*/
 -----------------------------------------
---İ’è
+--è¨­å®š
 -----------------------------------------
 /*######################################################################*/
-/*show_planeƒAƒNƒVƒ‡ƒ“*/
-	on show_plane changed state do
-		(
-		if show_plane.checked == true then
-			(
-			if $'mirror_vert_plane' != undefined then
-				(
-				delete $'mirror_vert_plane'
-				)
-			p = plane()
-			p.name = "mirror_vert_plane"
-			p.wirecolor = (color 255 122 0)
-			p.boxmode = true
-			p.rotation = (eulerangles 0 90 0)
-			p.position = [sj_bio_skin_plus_rol.x_offset.value,0,100]
-			p.width = 100
-			p.length = 100
-			p.lengthsegs = 1
-			p.widthsegs = 1
-			)
-		else
-			(
-			if $'mirror_vert_plane' != undefined then
-				(
-				delete $'mirror_vert_plane'
-				)
-			)
-		
-		)
-
-/*x_offsetƒAƒNƒVƒ‡ƒ“*/
-	on x_offset changed val do
-		(
-		if $'mirror_vert_plane' != undefined then
-			(
-			$'mirror_vert_plane'.pos.x = sj_bio_skin_plus_rol.x_offset.value
-			)
-		)
-
-/*tar_skinƒAƒNƒVƒ‡ƒ“*/
-	on tar_skin picked obj do
-		(
-		target_skin = obj
-		tar_skin.text = obj.name
-		)
-
-/*######################################################################*/
------------------------------------------
---’¸“_
------------------------------------------
-/*######################################################################*/
-/*fix_vert_weightsƒAƒNƒVƒ‡ƒ“*/
-	on fix_vert_weights pressed do
-		(
-		undo "fix weights" on
-			(
-			sj_bio_skin_plus_rol.function_shell_fn sj_bio_skin_plus_rol.fix_not_weighted_verts_fn scheck:false
-			)
-		)
-
-/*fix_selvert_weightsƒAƒNƒVƒ‡ƒ“*/
-	on fix_selvert_weights pressed do
-		(
-		undo "fix sel weights" on
-			(
-			sj_bio_skin_plus_rol.function_shell_fn (sj_bio_skin_plus_rol.fix_not_weighted_verts_fn allverts:false) parms:true
-			)
-		)
-
-/*adapt_allƒAƒNƒVƒ‡ƒ“*/
- 	on adapt_all pressed do
-		(
-		undo "adapt all" on
-			(
-			sj_bio_skin_plus_rol.function_shell_fn (sj_bio_skin_plus_rol.adapt_verts_fn allverts:true) parms:true
-			)
-		)
-
-/*adapt_selƒAƒNƒVƒ‡ƒ“*/
-	on adapt_sel pressed do
-		(
-		undo "adapt selection" on
-			(
-			sj_bio_skin_plus_rol.function_shell_fn (sj_bio_skin_plus_rol.adapt_verts_fn allverts:false) parms:true
-			)
-		)
-
-/*is_mod_tagƒAƒNƒVƒ‡ƒ“*/
-	on is_mod_tag mouseover do
-		(
-		if selection.count > 0 then
-			(
-			if (selection[1].modifiers["Skin"]) != undefined and getcommandpaneltaskmode() == #modify then
-				(
-				skin_dex = (modPanel.getModifierIndex selection[1] selection[1].modifiers["Skin"])
-				if skin_dex == (modPanel.getModifierIndex selection[1] (modPanel.getCurrentObject())) and subobjectlevel == 1 then
-					(
-					local sel_verts = (sj_bio_skin_plus_rol.tact_skinselectedverts selection[1].modifiers["Skin"])
-					local vert_mode = undefined
-			
-					for i=1 to sel_verts.count do
-						(
-						if (skinOps.IsVertexModified selection[1].modifiers["Skin"] sel_verts[i]) == 1 then
-							(
-							if vert_mode == false then
-								(
-								is_vert_mod.text = "’¸“_‚Íè“®C³‚©?  ¬‡‚µ‚Ä‚¢‚Ü‚·"
-								)
-							if vert_mode == true or vert_mode == undefined then
-								(	
-								vert_mod = true
-								is_vert_mod.text = "’¸“_‚Íè“®C³‚©?  ‚Í‚¢"
-								)
-							)--end if
-						else
-							(
- 							if vert_mode == false  or vert_mode == undefined then
-								(
-								vert_mode = false
-								is_vert_mod.text = "’¸“_‚Íè“®C³‚©?  ‚¢‚¢‚¦"
-								)
-							else
-								(
-								is_vert_mod.text = "’¸“_‚Íè“®C³‚©?  ¬‡‚µ‚Ä‚¢‚Ü‚·"
-								)
-							)
-						)--end for i
-					)
-				)
-			)--end if
-		)
-
-/*mirror_sel_vertsƒAƒNƒVƒ‡ƒ“*/
-	on mirror_sel_verts pressed do
-		( 		
-		undo "mirror sel verts" on
-			(
-			if (sj_bio_skin_plus_rol.validate_skin_fn() == true) then
-				(
-				if target_skin != undefined then
-					(
-					sj_bio_skin_plus_rol.function_shell_fn (sj_bio_skin_plus_rol.mirror_sel_verts_fn oSkin:target_skin.modifiers["Skin"]) parms:true
-					)
-				else
-					(
-					sj_bio_skin_plus_rol.function_shell_fn (sj_bio_skin_plus_rol.mirror_sel_verts_fn oSkin:undefined) parms:true
-					)
-				)		
-			)--end undo
-		)
-
-/*mirror_mod_vertsƒAƒNƒVƒ‡ƒ“*/
-	on mirror_mod_verts pressed do
-		(
-		undo "mirror modified verts" on
-			(
-			if (sj_bio_skin_plus_rol.validate_skin_fn() == true) then
-				(
-				if target_skin != undefined then
-					(
-					sj_bio_skin_plus_rol.function_shell_fn (sj_bio_skin_plus_rol.mirror_sel_verts_fn mod_only:true oSkin:target_skin.modifiers["Skin"]) parms:true
-					)
-				else
-					(
-					sj_bio_skin_plus_rol.function_shell_fn (sj_bio_skin_plus_rol.mirror_sel_verts_fn mod_only:true oSkin:undefined) parms:true
-					)
-				)		
-			)--end undo
-		)
-
-/*paste_vertsƒAƒNƒVƒ‡ƒ“*/
-	on paste_verts pressed do
-		(
-		undo "paste verts" on
-			(
-			if (sj_bio_skin_plus_rol.validate_skin_fn() == true) then
-				(
-				if target_skin != undefined then
-					(
-					sj_bio_skin_plus_rol.function_shell_fn (sj_bio_skin_plus_rol.mirror_sel_verts_fn mod_only:false oSkin:target_skin.modifiers["Skin"] mirror:false) parms:true
-					)
-				else
-					(
-					sj_bio_skin_plus_rol.function_shell_fn (sj_bio_skin_plus_rol.mirror_sel_verts_fn mod_only:false oSkin:undefined mirror:false) parms:true
-					)
-				)		
-			)--end undo
-		)
-
-/*clean_vertsƒAƒNƒVƒ‡ƒ“*/
-	on clean_verts pressed do
-		(
-		sj_bio_skin_plus_rol.function_shell_fn (sj_bio_skin_plus_rol.clean_verts_fn) parms:false scheck:false
-		)
-
-/*select_af_vertsƒAƒNƒVƒ‡ƒ“*/
-	on select_af_verts pressed do
-		(
-		sj_bio_skin_plus_rol.function_shell_fn (sj_bio_skin_plus_rol.select_affected_verts_fn) parms:false
-		)
-
-/*print_af_bonesƒAƒNƒVƒ‡ƒ“*/
-	on print_af_bones pressed do
-		(
-		sj_bio_skin_plus_rol.function_shell_fn (sj_bio_skin_plus_rol.bones_affecting_vert_fn) parms:false
-		)
-
-/*expand_elementƒAƒNƒVƒ‡ƒ“*/
-	on expand_element pressed do
-		(
-		sj_bio_skin_plus_rol.function_shell_fn (sj_bio_skin_plus_rol.expand_element_fn) parms:false
-		)
-
-	------------------------------------------------------------
-	-- SAVE LOAD verts
-	------------------------------------------------------------
-/*save_vertsƒAƒNƒVƒ‡ƒ“*/
-	on save_verts pressed do
-		(
-		if (sj_bio_skin_plus_rol.validate_skin_fn subcheck:false) == true then
-			(
-			local my_file = getSaveFileName types:"Tact_VertexWeights(*.tvw)|*.tvw"
-			)
-
-		if my_file != undefined then
-			(
-			sj_bio_skin_plus_rol.function_shell_fn (sj_bio_skin_plus_rol.save_vert_data_fn my_file) parms:true
-			)
-		)
-
-
-/*load_vertsƒAƒNƒVƒ‡ƒ“*/
-	on load_verts pressed do
-		(
-		local vert_array = #()
-
-		if silent == false then
-			(
-			if (sj_bio_skin_plus_rol.validate_skin_fn subcheck:false) == true then
-				(
-				local my_file = getOpenFileName types:"Tact_VertexWeights(*.tvw)|*.tvw"
-				)
-			)
-		else
-			(
-			my_file = feed_file
-			)
-
-
-		if my_file != undefined then 			
-			(
-			vert_array = sj_bio_skin_plus_rol.load_vert_data_fn my_file
-
- 
-			global sj_load_verts_rol
-			try (destroydialog sj_load_verts_rol) catch()
-			
-			/*######################################################################*/
-			------------------------------------------------------------
-			-- Rollout /*’¸“_î•ñ“Ç‚İ‚İ‚Ìƒ}ƒbƒsƒ“ƒOƒ[ƒ‹ƒAƒEƒg*/
-			------------------------------------------------------------
-			/*######################################################################*/
-			rollout sj_load_verts_rol "Load Vertices"
-				(
-
-				local vert_array
-				local src_width=230
-
-				button del_from "Del ->" pos:[5,20] width:44
-
-				button save_fromlist "Save" pos:[5,50] width:44
-				button load_fromlist "Load" pos:[5,74] width:44
-
-				listbox source_list "FROM" pos:[55, 5] width:src_width height:24 -- source objects listview listbox target_list "TO" pos:[src_width+5+55, 5] width:src_width height:24 -- current objects listview		  			
-				listbox target_list "TO" pos:[src_width+5+55, 5] width:src_width height:24 -- current objects listview		  			
-
-				label source_num "(0 Bones)" pos:[55+150,5]
-				label target_num "(0 Bones)" pos:[src_width+5+55+150, 5]
-				
-				radiobuttons vert_met "“K‰•û–@:" labels:#("’¸“_ƒCƒ“ƒfƒbƒNƒX","ƒ[ƒ‹ƒhƒ|ƒWƒVƒ‡ƒ“","ƒ{[ƒ“‚©‚ç‚Ì‘Š‘Î‹——£") columns:4 default:1 align:#left pos:[55, 344] width:465 
-				label vert_count "0 ’¸“_“Ç‚İ‚İÏ‚İ" across:3
-				checkbox mod_only "ƒo[ƒeƒbƒNƒX‚Ìî•ñ‚Ì‚İ" checked:true
-				checkbox bone_ident "ƒ{[ƒ“ƒCƒ“ƒfƒbƒNƒXŠÜ‚Ş" checked:false
-
-				button set_weights "ƒZƒbƒgƒEƒFƒCƒgI" pos:[55, 404] width:465
-
-				button del_to "<- Del" pos:[475+50,20] width:44
-
-				button move_up "UP" pos:[475+50,64] width:44
-				button move_down "DOWN" pos:[475+50,86] width:44
-				button move_up10 "UP 10" pos:[475+50,128] width:44
-				button move_down10 "DWN10" pos:[475+50,150] width:44
-				
-				button save_tolist "Save" pos:[475+50,180] width:44
-				button load_tolist "Load"pos:[475+50,204] width:44
-
-				------------------------------------------------------------
-				-- Interface Events
-				------------------------------------------------------------
-
-
-				on sj_load_verts_rol open do
-					(
-					local the_array = #()
-					for each in sj_bio_skin_plus_rol.bones_in_skin_fn() do
-						(
-						append the_array each.name
-						)
-					the_array = sort the_array
-					target_list.items = the_array
- 					target_num.text = ("(" + target_list.items.count as string + " bones)")
-					)
-
-
-
-				on sj_load_verts_rol close do
-					(
-					sj_load_verts_rol = undefined
-					)
-
-
-				on save_tolist pressed do
-					(
-					sj_bio_skin_plus_rol.save_list_fn target_list.items
-					)
-
-				on load_tolist pressed do
-					(
-					target_list.items = (sj_bio_skin_plus_rol.load_list_fn target_list.items)
-					target_num.text = ("(" + target_list.items.count as string + " bones)")
-					)
-
-
-				on save_fromlist pressed do
-					(
-					sj_bio_skin_plus_rol.save_list_fn source_list.items
-					)
-
-				on load_fromlist pressed do
-					(
-					source_list.items = (sj_bio_skin_plus_rol.load_list_fn source_list.items)
-					source_num.text = ("(" + source_list.items.count as string + " bones)")
-					)
-
-
-				on del_from pressed do
-					(
-					deleteitem source_list.items source_list.selection
-					source_list.items = source_list.items
-					source_num.text = ("(" + source_list.items.count as string + " bones)")
-					)
-
-
-				on del_to pressed do
-					(
-					deleteitem target_list.items target_list.selection
-					target_list.items = target_list.items
-					target_num.text = ("(" + target_list.items.count as string + " bones)")
-					)
-
-
-
-				on move_down pressed do
-					(
-					if target_list.selection < target_list.items.count then
-						(
-						next = target_list.items[target_list.selection+1]
-						target_list.items[target_list.selection+1] = target_list.selected
-						target_list.items[target_list.selection] = next
-						target_list.items = target_list.items
-						target_list.selection += 1
-						source_list.selection = target_list.selection
-						)
-					)
-
-
-
-				on move_up pressed do
-					(
-					if target_list.selection > 1 then
-						(
-						next = target_list.items[target_list.selection-1]
-						target_list.items[target_list.selection-1] = target_list.selected
-						target_list.items[target_list.selection] = next
-						target_list.items = target_list.items
-						target_list.selection -= 1
-						source_list.selection = target_list.selection
-						)
-					)
-
-
-
-				on move_down10 pressed do
-					(
-					if target_list.selection < (target_list.items.count - 10) then
-						(
-						next = target_list.items[target_list.selection+10]
-						insertItem target_list.selected target_list.items (target_list.selection+10)
-						deleteItem target_list.items target_list.selection
-						target_list.items = target_list.items
-						target_list.selection += 9
-						source_list.selection = target_list.selection
-						)
-					)
-
-
-
-				on move_up10 pressed do
-					(
-					if target_list.selection > (1 + 10) then
-						(
-						next = target_list.items[target_list.selection-10]
-						insertItem target_list.selected target_list.items (target_list.selection-10)
-						deleteItem target_list.items (target_list.selection+1)
-						target_list.items = target_list.items
-						target_list.selection -= 9
-						source_list.selection = target_list.selection
-						)
-					)
-
-
-
-
-				on set_weights pressed do
-					(
-					--ƒvƒƒOƒŒƒXˆ—
-					sj_functions.sj_progressBar_Fn();					
-					sj_progressBar_rol.processInfo.caption = "‚µ‚Î‚ç‚­‚¨‘Ò‚¿‚­‚¾‚³‚¢";
-					
-					vert_pos_array = #()
-				
-					for c=1 to selection[1].verts.count do
-						(
-						p = (at time 0 selection[1].verts[c].pos)
-						append vert_pos_array p
-						)
-
-
-					for i=1 to vert_array.count do
-						(
-						local bn
-						if vert_array[i][4] == 1 or mod_only.checked == false then
-							( 							local first_bone
-							local vert_data = #()
-							for b=1 to vert_array[i][5].count do -- need to find the new bone name.
-								( 								local new_bone_name
-								new_bone_name = vert_array[i][6][b]
-								
-								-- We check wheter bone exists in list. If not, then we don't set the weights for that bone.
-								-- If a vertex is weighted to two or more bones, and one is missing from the list,
-								-- funny things might happen with the weights of that vertex though.
-								bn = finditem source_list.items new_bone_name
-								if bn != 0 then
-									(
-									new_bone_name = target_list.items[bn]
-									
-										
-									if b==1 then (first_bone = new_bone_name) -- used for relative to bone vertex searching
-	
-									if bone_ident.checked == false then -- find bone by name
-										(
-										bone_index = sj_bio_skin_plus_rol.tact_boneindex new_bone_name selection[1].modifiers["Skin"]
-										)
-									else
-										(
-										bone_index = vert_array[i][5][b] -- grab the bone index from the file.
-										)
-	
-									local w = #()
-									if bone_index != 0 then
-										(
-										append w bone_index
-										append w vert_array[i][7][b]
-										)
-									append vert_data w
-									)--end if bn
-								)--end b
-								
-							if bn != 0 then
-								(
- 								case vert_met.state of
-									(
-									-- Find verts by index
-									1:(
-										sj_bio_skin_plus_rol.set_vertex_data_fn vert_array[i][1] vert_data
-										)
-	
-									-- Find closest vert by world pos
-									2:(
- 										y = 99999
-										local c_index = 0
-										local t = distance [0,0,0] [(sj_bio_skin_plus_rol.thres.value/100) + sj_bio_skin_plus_rol.x_offset.value,(sj_bio_skin_plus_rol.thres.value/100),(sj_bio_skin_plus_rol.thres.value/100)]
-	
-										for d=1 to vert_pos_array.count do
-											(
-											g = distance vert_array[i][2] vert_pos_array[d]
-											if g < t then
-												(
-												if g < y then
-													(
-													y = g
-													c_index = d
-													)
-												)
-											)
-	
-										if c_index != 0 then
-											(
-											sj_bio_skin_plus_rol.set_vertex_data_fn c_index vert_data
-											)
-									
-										)--end 2 										
-									-- Find verts relative to bone pos.
-									
-									3:(
-									
-										y = 99999
-										local c_index = 0
-										local t = distance [0,0,0] [(sj_bio_skin_plus_rol.thres.value/100) + sj_bio_skin_plus_rol.x_offset.value,(sj_bio_skin_plus_rol.thres.value/100),(sj_bio_skin_plus_rol.thres.value/100)]
-	
-										m = execute("$'" + first_bone + "'")
-										for d=1 to vert_pos_array.count do
-											(
-											if classof m != Biped_Object then
-												g = distance (vert_array[i][3] + (at time 0 m.pos)) vert_pos_array[d]
-											else
-												g = distance (vert_array[i][3] + (at time 0 (biped.gettransform m #pos)) ) vert_pos_array[d]
-											if g < t then
-												(
-												if g < y then
-													(
-													y = g
-													c_index = d
-													)
-												)
-											)
-	
-										if c_index != 0 then
-											(
-											sj_bio_skin_plus_rol.set_vertex_data_fn c_index vert_data
-											)
-									
-										)--end 3
-										
-									)--end case of
-								)--end bn
-							)--end if
-						
-						--ƒvƒƒOƒŒƒXˆ—
-						sj_progressBar_rol.progbar.value = ((100.00/vert_array.count) * i)
-						)--end i
-					try (destroydialog sj_load_verts_rol) catch()
-					--gc light:true
-					--ƒvƒƒOƒŒƒXˆ—
-					try(destroydialog sj_progressBar_rol)catch();
-					)
-
-
-			------------------------------------------------------------
-			-- Create Dialog
-			------------------------------------------------------------
-				)--end rollout
-			CreateDialog sj_load_verts_rol width:574 height:430 pos:[250,50] \
-			style:#(#style_border, #style_titlebar, #style_sysmenu, #style_minimizebox)
-
-			sj_load_verts_rol.vert_array = vert_array
-			sj_load_verts_rol.vert_count.text = (vert_array.count as string + " Vertices Loaded")
-	
-			bone_array = #()
-			for i=1 to vert_array.count do
-				(
-				b = for each in vert_array[i][6] collect each
-				for each in b do 
-					(
-					if (finditem bone_array each) == 0 then append bone_array each
-					)
-				)
-			sort bone_array
-	
-			sj_load_verts_rol.source_list.items = (for each in bone_array collect each)
-			sj_load_verts_rol.source_num.text = ("(" + sj_load_verts_rol.source_list.items.count as string + " bones)")			
-	
-			--gc light:true
-			)--end my_file undefined
-
-		)--end button
+/*show_planeã‚¢ã‚¯ã‚·ãƒ§ãƒ³*/
+    on show_plane changed state do
+        (
+        if show_plane.checked == true then
+            (
+            if $'mirror_vert_plane' != undefined then
+                (
+                delete $'mirror_vert_plane'
+                )
+            p = plane()
+            p.name = "mirror_vert_plane"
+            p.wirecolor = (color 255 122 0)
+            p.boxmode = true
+            p.rotation = (eulerangles 0 90 0)
+            p.position = [sj_bio_skin_plus_rol.x_offset.value,0,100]
+            p.width = 100
+            p.length = 100
+            p.lengthsegs = 1
+            p.widthsegs = 1
+            )
+        else
+            (
+            if $'mirror_vert_plane' != undefined then
+                (
+                delete $'mirror_vert_plane'
+                )
+            )
+
+        )
+
+/*x_offsetã‚¢ã‚¯ã‚·ãƒ§ãƒ³*/
+    on x_offset changed val do
+        (
+        if $'mirror_vert_plane' != undefined then
+            (
+            $'mirror_vert_plane'.pos.x = sj_bio_skin_plus_rol.x_offset.value
+            )
+        )
+
+/*tar_skinã‚¢ã‚¯ã‚·ãƒ§ãƒ³*/
+    on tar_skin picked obj do
+        (
+        target_skin = obj
+        tar_skin.text = obj.name
+        )
 
 /*######################################################################*/
 -----------------------------------------
---ƒGƒ“ƒxƒ[ƒv
+--é ‚ç‚¹
 -----------------------------------------
 /*######################################################################*/
-/*in_radius_stagƒAƒNƒVƒ‡ƒ“*/
-	on in_radius_stag mouseover do
-		(
-		sj_bio_skin_plus_rol.update_radius_spinners_fn (sj_bio_skin_plus_rol.number_of_cross_fn())
-		)
+/*fix_vert_weightsã‚¢ã‚¯ã‚·ãƒ§ãƒ³*/
+    on fix_vert_weights pressed do
+        (
+        undo "fix weights" on
+            (
+            sj_bio_skin_plus_rol.function_shell_fn sj_bio_skin_plus_rol.fix_not_weighted_verts_fn scheck:false
+            )
+        )
 
-/*in_radius_stagƒAƒNƒVƒ‡ƒ“*/
-	on in_radius_etag mouseover do
-		(
-		sj_bio_skin_plus_rol.update_radius_spinners_fn 1
-		)
+/*fix_selvert_weightsã‚¢ã‚¯ã‚·ãƒ§ãƒ³*/
+    on fix_selvert_weights pressed do
+        (
+        undo "fix sel weights" on
+            (
+            sj_bio_skin_plus_rol.function_shell_fn (sj_bio_skin_plus_rol.fix_not_weighted_verts_fn allverts:false) parms:true
+            )
+        )
 
-/*in_radius_startƒAƒNƒVƒ‡ƒ“*/
-	on in_radius_start changed val do
-		(
-		last_spin = "start"
-		sj_bio_skin_plus_rol.update_radiuses_fn (sj_bio_skin_plus_rol.number_of_cross_fn()) val
-		)
+/*adapt_allã‚¢ã‚¯ã‚·ãƒ§ãƒ³*/
+     on adapt_all pressed do
+        (
+        undo "adapt all" on
+            (
+            sj_bio_skin_plus_rol.function_shell_fn (sj_bio_skin_plus_rol.adapt_verts_fn allverts:true) parms:true
+            )
+        )
 
-/*in_radius_endƒAƒNƒVƒ‡ƒ“*/
-	on in_radius_end changed val do
-		(
-		last_spin = "end"
-		sj_bio_skin_plus_rol.update_radiuses_fn 1 val
-		)
+/*adapt_selã‚¢ã‚¯ã‚·ãƒ§ãƒ³*/
+    on adapt_sel pressed do
+        (
+        undo "adapt selection" on
+            (
+            sj_bio_skin_plus_rol.function_shell_fn (sj_bio_skin_plus_rol.adapt_verts_fn allverts:false) parms:true
+            )
+        )
 
-/*spn_gapƒAƒNƒVƒ‡ƒ“*/
-	on spn_gap changed val do
-		(
-		if last_spin == "end" then
-			(
-			sj_bio_skin_plus_rol.update_radiuses_fn 1 sj_bio_skin_plus_rol.in_radius_end.value
-			)
-		else
-			(
-			sj_bio_skin_plus_rol.update_radiuses_fn (sj_bio_skin_plus_rol.number_of_cross_fn()) sj_bio_skin_plus_rol.in_radius_start.value
-			)
-		)
+/*is_mod_tagã‚¢ã‚¯ã‚·ãƒ§ãƒ³*/
+    on is_mod_tag mouseover do
+        (
+        if selection.count > 0 then
+            (
+            if (selection[1].modifiers["Skin"]) != undefined and getcommandpaneltaskmode() == #modify then
+                (
+                skin_dex = (modPanel.getModifierIndex selection[1] selection[1].modifiers["Skin"])
+                if skin_dex == (modPanel.getModifierIndex selection[1] (modPanel.getCurrentObject())) and subobjectlevel == 1 then
+                    (
+                    local sel_verts = (sj_bio_skin_plus_rol.tact_skinselectedverts selection[1].modifiers["Skin"])
+                    local vert_mode = undefined
 
-/*copy_envƒAƒNƒVƒ‡ƒ“*/
-	on copy_env pressed do
-		(
-		if (sj_bio_skin_plus_rol.validate_skin_fn() == true) then
-			(
-			bdex = (skinOps.getSelectedBone selection[1].modifiers["Skin"])
-			env_buffer = #(bdex, (sj_bio_skin_plus_rol.gather_enveloppe_data_fn bdex selection[1].modifiers["Skin"] exclude:false))
-			)
-		)
+                    for i=1 to sel_verts.count do
+                        (
+                        if (skinOps.IsVertexModified selection[1].modifiers["Skin"] sel_verts[i]) == 1 then
+                            (
+                            if vert_mode == false then
+                                (
+                                is_vert_mod.text = "é ‚ç‚¹ã¯æ‰‹å‹•ä¿®æ­£ã‹?  æ··åˆã—ã¦ã„ã¾ã™"
+                                )
+                            if vert_mode == true or vert_mode == undefined then
+                                (
+                                vert_mod = true
+                                is_vert_mod.text = "é ‚ç‚¹ã¯æ‰‹å‹•ä¿®æ­£ã‹?  ã¯ã„"
+                                )
+                            )--end if
+                        else
+                            (
+                             if vert_mode == false  or vert_mode == undefined then
+                                (
+                                vert_mode = false
+                                is_vert_mod.text = "é ‚ç‚¹ã¯æ‰‹å‹•ä¿®æ­£ã‹?  ã„ã„ãˆ"
+                                )
+                            else
+                                (
+                                is_vert_mod.text = "é ‚ç‚¹ã¯æ‰‹å‹•ä¿®æ­£ã‹?  æ··åˆã—ã¦ã„ã¾ã™"
+                                )
+                            )
+                        )--end for i
+                    )
+                )
+            )--end if
+        )
 
-/*paste_envƒAƒNƒVƒ‡ƒ“*/
-	on paste_env pressed do
-		(
-		undo "paste envelope" on
-			(
-			if (sj_bio_skin_plus_rol.validate_skin_fn() == true) then
-				(
-				sj_bio_skin_plus_rol.set_envelope_data_fn env_buffer[2] env_buffer[1] (skinOps.getSelectedBone selection[1].modifiers["Skin"]) selection[1].modifiers["Skin"] mirror:false
-				)
-			)--end undo
-		)
+/*mirror_sel_vertsã‚¢ã‚¯ã‚·ãƒ§ãƒ³*/
+    on mirror_sel_verts pressed do
+        (
+        undo "mirror sel verts" on
+            (
+            if (sj_bio_skin_plus_rol.validate_skin_fn() == true) then
+                (
+                if target_skin != undefined then
+                    (
+                    sj_bio_skin_plus_rol.function_shell_fn (sj_bio_skin_plus_rol.mirror_sel_verts_fn oSkin:target_skin.modifiers["Skin"]) parms:true
+                    )
+                else
+                    (
+                    sj_bio_skin_plus_rol.function_shell_fn (sj_bio_skin_plus_rol.mirror_sel_verts_fn oSkin:undefined) parms:true
+                    )
+                )
+            )--end undo
+        )
 
-/*tpaste_envƒAƒNƒVƒ‡ƒ“*/
-	on tpaste_env pressed do
-		(
-		undo "paste envelope" on
-			(
-			if (sj_bio_skin_plus_rol.validate_skin_fn() == true) then
-				(
-				if target_skin == undefined then
-					(
-					sj_bio_skin_plus_rol.function_shell_fn (sj_bio_skin_plus_rol.mirror_env_fn mirror:false) parms:true garbage:false
-					)
-				else
-					(
-					sj_bio_skin_plus_rol.function_shell_fn (sj_bio_skin_plus_rol.mirror_env_fn oSkin:target_skin.modifiers["Skin"] mirror:false) parms:true garbage:false
-					)
-				)
-			)--end undo
-		)
+/*mirror_mod_vertsã‚¢ã‚¯ã‚·ãƒ§ãƒ³*/
+    on mirror_mod_verts pressed do
+        (
+        undo "mirror modified verts" on
+            (
+            if (sj_bio_skin_plus_rol.validate_skin_fn() == true) then
+                (
+                if target_skin != undefined then
+                    (
+                    sj_bio_skin_plus_rol.function_shell_fn (sj_bio_skin_plus_rol.mirror_sel_verts_fn mod_only:true oSkin:target_skin.modifiers["Skin"]) parms:true
+                    )
+                else
+                    (
+                    sj_bio_skin_plus_rol.function_shell_fn (sj_bio_skin_plus_rol.mirror_sel_verts_fn mod_only:true oSkin:undefined) parms:true
+                    )
+                )
+            )--end undo
+        )
 
-/*mirror_envƒAƒNƒVƒ‡ƒ“*/
-	on mirror_env pressed do
-		(
-		undo "mirror envelope" on
-			(
-			if (sj_bio_skin_plus_rol.validate_skin_fn() == true) then
-				(
-				if target_skin == undefined then
-					(
-					sj_bio_skin_plus_rol.function_shell_fn (sj_bio_skin_plus_rol.mirror_env_fn) parms:false garbage:false
-					)
-				else
-					(
-					sj_bio_skin_plus_rol.function_shell_fn (sj_bio_skin_plus_rol.mirror_env_fn oSkin:target_skin.modifiers["Skin"]) parms:true garbage:false
-					)
-				)
-			)--end undo
-		)
+/*paste_vertsã‚¢ã‚¯ã‚·ãƒ§ãƒ³*/
+    on paste_verts pressed do
+        (
+        undo "paste verts" on
+            (
+            if (sj_bio_skin_plus_rol.validate_skin_fn() == true) then
+                (
+                if target_skin != undefined then
+                    (
+                    sj_bio_skin_plus_rol.function_shell_fn (sj_bio_skin_plus_rol.mirror_sel_verts_fn mod_only:false oSkin:target_skin.modifiers["Skin"] mirror:false) parms:true
+                    )
+                else
+                    (
+                    sj_bio_skin_plus_rol.function_shell_fn (sj_bio_skin_plus_rol.mirror_sel_verts_fn mod_only:false oSkin:undefined mirror:false) parms:true
+                    )
+                )
+            )--end undo
+        )
 
-/*ƒGƒ“ƒxƒ[ƒv•Û‘¶A“Ç‚İ‚İ‚Ìƒ[ƒ‹ƒAƒEƒg*/
-	------------------------------------------------------------
-	-- SAVE LOAD Envelopes
-	------------------------------------------------------------
-/*save_envƒAƒNƒVƒ‡ƒ“*/
-	on save_env pressed do
-		(
-		if (sj_bio_skin_plus_rol.validate_skin_fn subcheck:false) == true then
-			(
-			local my_file = getSaveFileName types:"Tact_Envelope(*.tev)|*.tev"
- 			if my_file != undefined then
-				(
-				sj_bio_skin_plus_rol.save_env_data_fn my_file
-				--gc light:true
-				)--if my file end
-			)--if end
-		)--Pressed end
+/*clean_vertsã‚¢ã‚¯ã‚·ãƒ§ãƒ³*/
+    on clean_verts pressed do
+        (
+        sj_bio_skin_plus_rol.function_shell_fn (sj_bio_skin_plus_rol.clean_verts_fn) parms:false scheck:false
+        )
 
-/*load_envƒAƒNƒVƒ‡ƒ“*/
-	on load_env pressed do
-		(
-		if silent == false then
-			(
-			if (sj_bio_skin_plus_rol.validate_skin_fn subcheck:false) == true then
-				(
+/*select_af_vertsã‚¢ã‚¯ã‚·ãƒ§ãƒ³*/
+    on select_af_verts pressed do
+    (
+        sj_bio_skin_plus_rol.function_shell_fn (sj_bio_skin_plus_rol.select_affected_verts_fn) parms:false
+        completeRedraw()
+    )
 
- 				local my_file = getOpenFileName types:"Tact_Envelope(*.tev)|*.tev"
-				)
-			else
-				(
-				messagebox "Pick Skin first"
-				my_file = undefined
-				)--if sj_bio_skin_plus_rol.... end
-			)
-		else 
-			( 
-			my_file = feed_file
-			)--if silent end
+/*print_af_bonesã‚¢ã‚¯ã‚·ãƒ§ãƒ³*/
+    on print_af_bones pressed do
+    (
+        sj_bio_skin_plus_rol.function_shell_fn (sj_bio_skin_plus_rol.bones_affecting_vert_fn) parms:false
+    )
 
-		if my_file != undefined then
-			(
+/*expand_elementã‚¢ã‚¯ã‚·ãƒ§ãƒ³*/
+    on expand_element pressed do
+        (
+        sj_bio_skin_plus_rol.function_shell_fn (sj_bio_skin_plus_rol.expand_element_fn) parms:false
+        )
 
-			global sj_load_mapping_rol
-			try (destroydialog sj_load_mapping_rol) catch()
-			
-			/*######################################################################*/
-			------------------------------------------------------------
-			-- Rollout
-			------------------------------------------------------------
-			/*######################################################################*/
-			rollout sj_load_mapping_rol "Load Envelopes"
-				(
+    ------------------------------------------------------------
+    -- SAVE LOAD verts
+    ------------------------------------------------------------
+    on save_verts pressed do
+    (
+        if (sj_bio_skin_plus_rol.validate_skin_fn subcheck:false) == true then (
+            local my_file = getSaveFileName types:"Tact_VertexWeights(*.tvw)|*.tvw"
+        )
+        if my_file != undefined then (
+            sj_bio_skin_plus_rol.function_shell_fn (sj_bio_skin_plus_rol.save_vert_data_fn my_file) parms:true;
+            --close my_file;
+        )
+    )
 
-				local src_width=230
-				local my_env_data = #()
+/*load_vertsã‚¢ã‚¯ã‚·ãƒ§ãƒ³*/
+    on load_verts pressed do
+    (
+        local vert_array = #()
+        if silent == false then (
+            if (sj_bio_skin_plus_rol.validate_skin_fn subcheck:false) == true then (
+                local my_file = getOpenFileName types:"Tact_VertexWeights(*.tvw)|*.tvw"
+            )
+        ) else (
+            my_file = feed_file
+        )
 
-				button del_from "Del ->" pos:[5,20] width:44
+        if my_file == undefined then (
+            return False;
+        )
 
-				button save_fromlist "Save" pos:[5,50] width:44
-				button load_fromlist "Load" pos:[5,74] width:44
+        vert_array = sj_bio_skin_plus_rol.load_vert_data_fn my_file
+        global sj_load_verts_rol
+        try (destroydialog sj_load_verts_rol) catch()
+        ------------------------------------------------------------
+        -- Rollout /*é ‚ç‚¹æƒ…å ±èª­ã¿è¾¼ã¿æ™‚ã®ãƒãƒƒãƒ”ãƒ³ã‚°ãƒ­ãƒ¼ãƒ«ã‚¢ã‚¦ãƒˆ*/
+        ------------------------------------------------------------
+        rollout sj_load_verts_rol "Load Vertices"
+        (
+            local vert_array
+            local src_width=230
 
-				listbox source_list "FROM" pos:[55, 5] width:src_width height:24 -- source objects listview
- 				listbox target_list "TO" pos:[src_width+5+55, 5] width:src_width height:24 -- current objects listview		  			
+            button del_from "Del ->" pos:[5,20] width:44
+            button save_fromlist "Save" pos:[5,50] width:44
+            button load_fromlist "Load" pos:[5,74] width:44
+            listbox source_list "FROM" pos:[55, 5] width:src_width height:24 -- source objects listview listbox target_list "TO" pos:[src_width+5+55, 5] width:src_width height:24 -- current objects listview
+            listbox target_list "TO" pos:[src_width+5+55, 5] width:src_width height:24 -- current objects listview
+            label source_num "(0 Bones)" pos:[55+150,5]
+            label target_num "(0 Bones)" pos:[src_width+5+55+150, 5]
 
-				label source_num "(0 Bones)" pos:[55+150,5]
-				label target_num "(0 Bones)" pos:[src_width+5+55+150, 5]
-				
-				radiobuttons exclude_vert_met "’¸“_‚Ì“K‰•û–@" labels:#("“K‰‚µ‚È‚¢","’¸“_ƒCƒ“ƒfƒbƒNƒX","ƒ[ƒ‹ƒhƒ|ƒWƒVƒ‡ƒ“","ƒ{[ƒ“‚©‚ç‚Ì‘Š‘Î‹——£") columns:4 default:1 align:#left 	pos:[55, 344] width:465
+            radiobuttons vert_met "é©å¿œæ–¹æ³•:" labels:#("é ‚ç‚¹ã‚¤ãƒ³ãƒ‡ãƒƒã‚¯ã‚¹","ãƒ¯ãƒ¼ãƒ«ãƒ‰ãƒã‚¸ã‚·ãƒ§ãƒ³","ãƒœãƒ¼ãƒ³ã‹ã‚‰ã®ç›¸å¯¾è·é›¢") columns:4 default:1 align:#left pos:[55, 344] width:465
+            label vert_count "0 é ‚ç‚¹èª­ã¿è¾¼ã¿æ¸ˆã¿" across:3
+            checkbox mod_only "ãƒãƒ¼ãƒ†ãƒƒã‚¯ã‚¹ã®æƒ…å ±ã®ã¿" checked:true
+            checkbox bone_ident "ãƒœãƒ¼ãƒ³ã‚¤ãƒ³ãƒ‡ãƒƒã‚¯ã‚¹å«ã‚€" checked:false
+            button set_weights "ã‚»ãƒƒãƒˆã‚¦ã‚§ã‚¤ãƒˆï¼" pos:[55, 404] width:465
+            button del_to "<- Del" pos:[475+50,20] width:44
 
-				radiobuttons load_gizmo_met "’¸“_ƒMƒYƒ‚" labels:#("“K‰‚µ‚È‚¢","’¸“_ƒCƒ“ƒfƒbƒNƒX","ƒ[ƒ‹ƒhƒ|ƒWƒVƒ‡ƒ“","ƒoƒEƒ“ƒfƒBƒ“ƒOƒ{ƒbƒNƒX") columns:4 default:1 align:#left 	pos:[55, 384] width:465 enabled:false
+            button move_up "UP" pos:[475+50,64] width:44
+            button move_down "DOWN" pos:[475+50,86] width:44
+            button move_up10 "UP 10" pos:[475+50,128] width:44
+            button move_down10 "DWN10" pos:[475+50,150] width:44
 
-				button transfer_env "ƒGƒ“ƒxƒ[ƒv“K‰" pos:[55, 424] width:465
+            button save_tolist "Save" pos:[475+50,180] width:44
+            button load_tolist "Load"pos:[475+50,204] width:44
+            ------------------------------------------------------------
+            -- Interface Events
+            ------------------------------------------------------------
+            on sj_load_verts_rol open do
+                (
+                local the_array = #()
+                for each in sj_bio_skin_plus_rol.bones_in_skin_fn() do
+                    (
+                    append the_array each.name
+                    )
+                the_array = sort the_array
+                target_list.items = the_array
+                    target_num.text = ("(" + target_list.items.count as string + " bones)")
+                )
 
-				button del_to "<- Del" pos:[475+50,20] width:44
+                on sj_load_verts_rol close do
+                    (
+                    sj_load_verts_rol = undefined
+                    )
 
-				button move_up "UP" pos:[475+50,64] width:44
-				button move_down "DOWN" pos:[475+50,86] width:44
-				button move_up10 "UP 10" pos:[475+50,128] width:44
-				button move_down10 "DWN10" pos:[475+50,150] width:44
+                on save_tolist pressed do
+                    (
+                    sj_bio_skin_plus_rol.save_list_fn target_list.items
+                    )
 
-				button save_tolist "Save"pos:[475+50,180] width:44
-				button load_tolist "Load"pos:[475+50,204] width:44
+                on load_tolist pressed do
+                    (
+                    target_list.items = (sj_bio_skin_plus_rol.load_list_fn target_list.items)
+                    target_num.text = ("(" + target_list.items.count as string + " bones)")
+                    )
+
+                on save_fromlist pressed do
+                    (
+                    sj_bio_skin_plus_rol.save_list_fn source_list.items
+                    )
+
+                on load_fromlist pressed do
+                    (
+                    source_list.items = (sj_bio_skin_plus_rol.load_list_fn source_list.items)
+                    source_num.text = ("(" + source_list.items.count as string + " bones)")
+                    )
+
+                on del_from pressed do
+                    (
+                    deleteitem source_list.items source_list.selection
+                    source_list.items = source_list.items
+                    source_num.text = ("(" + source_list.items.count as string + " bones)")
+                    )
+
+                on del_to pressed do
+                    (
+                    deleteitem target_list.items target_list.selection
+                    target_list.items = target_list.items
+                    target_num.text = ("(" + target_list.items.count as string + " bones)")
+                    )
+
+                on move_down pressed do
+                    (
+                    if target_list.selection < target_list.items.count then
+                        (
+                        next = target_list.items[target_list.selection+1]
+                        target_list.items[target_list.selection+1] = target_list.selected
+                        target_list.items[target_list.selection] = next
+                        target_list.items = target_list.items
+                        target_list.selection += 1
+                        source_list.selection = target_list.selection
+                        )
+                    )
+
+                on move_up pressed do
+                    (
+                    if target_list.selection > 1 then
+                        (
+                        next = target_list.items[target_list.selection-1]
+                        target_list.items[target_list.selection-1] = target_list.selected
+                        target_list.items[target_list.selection] = next
+                        target_list.items = target_list.items
+                        target_list.selection -= 1
+                        source_list.selection = target_list.selection
+                        )
+                    )
+
+                on move_down10 pressed do
+                    (
+                    if target_list.selection < (target_list.items.count - 10) then
+                        (
+                        next = target_list.items[target_list.selection+10]
+                        insertItem target_list.selected target_list.items (target_list.selection+10)
+                        deleteItem target_list.items target_list.selection
+                        target_list.items = target_list.items
+                        target_list.selection += 9
+                        source_list.selection = target_list.selection
+                        )
+                    )
+
+                on move_up10 pressed do
+                    (
+                    if target_list.selection > (1 + 10) then
+                        (
+                        next = target_list.items[target_list.selection-10]
+                        insertItem target_list.selected target_list.items (target_list.selection-10)
+                        deleteItem target_list.items (target_list.selection+1)
+                        target_list.items = target_list.items
+                        target_list.selection -= 9
+                        source_list.selection = target_list.selection
+                        )
+                    )
+
+                on set_weights pressed do
+                    (
+                    --ãƒ—ãƒ­ã‚°ãƒ¬ã‚¹å‡¦ç†
+                    sj_functions.sj_progressBar_Fn();
+                    sj_progressBar_rol.processInfo.caption = "ã—ã°ã‚‰ããŠå¾…ã¡ãã ã•ã„";
+
+                    vert_pos_array = #()
+
+                    for c=1 to selection[1].verts.count do (
+                        p = (at time 0 selection[1].verts[c].pos)
+                        append vert_pos_array p
+                    )
+
+                    for i=1 to vert_array.count do (
+                        try (
+                            _test_cnt = vert_array[i].count;
+                        ) catch (
+                            print("Eof");
+                            continue;
+                        )
+
+                        local bn
+                        if vert_array[i][4] == 1 or mod_only.checked == false then (
+                            local first_bone
+                            local vert_data = #()
+                            -- need to find the new bone name.
+                            for b=1 to vert_array[i][5].count do (
+                                local new_bone_name
+                                new_bone_name = vert_array[i][6][b]
+
+                                -- We check wheter bone exists in list. If not, then we don't set the weights for that bone.
+                                -- If a vertex is weighted to two or more bones, and one is missing from the list,
+                                -- funny things might happen with the weights of that vertex though.
+                                bn = finditem source_list.items new_bone_name
+                                if bn != 0 then
+                                    (
+                                    new_bone_name = target_list.items[bn]
+                                    if b==1 then (
+                                        first_bone = new_bone_name
+                                    ) -- used for relative to bone vertex searching
+
+                                    if bone_ident.checked == false then -- find bone by name
+                                        (
+                                        bone_index = sj_bio_skin_plus_rol.tact_boneindex new_bone_name selection[1].modifiers["Skin"]
+                                        )
+                                    else
+                                        (
+                                        bone_index = vert_array[i][5][b] -- grab the bone index from the file.
+                                        )
+
+                                    local w = #()
+                                    if bone_index != 0 then
+                                        (
+                                        append w bone_index
+                                        append w vert_array[i][7][b]
+                                        )
+                                    append vert_data w
+                                    )--end if bn
+                                )--end b
+
+                            if bn != 0 then
+                                (
+                                 case vert_met.state of
+                                    (
+                                    -- Find verts by index
+                                    1:(
+                                        sj_bio_skin_plus_rol.set_vertex_data_fn vert_array[i][1] vert_data
+                                        )
+
+                                    -- Find closest vert by world pos
+                                    2:(
+                                         y = 99999
+                                        local c_index = 0
+                                        local t = distance [0,0,0] [(sj_bio_skin_plus_rol.thres.value/100) + sj_bio_skin_plus_rol.x_offset.value,(sj_bio_skin_plus_rol.thres.value/100),(sj_bio_skin_plus_rol.thres.value/100)]
+
+                                        for d=1 to vert_pos_array.count do
+                                            (
+                                            g = distance vert_array[i][2] vert_pos_array[d]
+                                            if g < t then
+                                                (
+                                                if g < y then
+                                                    (
+                                                    y = g
+                                                    c_index = d
+                                                    )
+                                                )
+                                            )
+
+                                        if c_index != 0 then
+                                            (
+                                            sj_bio_skin_plus_rol.set_vertex_data_fn c_index vert_data
+                                            )
+
+                                        )--end 2
+                                    -- Find verts relative to bone pos.
+
+                                    3:(
+
+                                        y = 99999
+                                        local c_index = 0
+                                        local t = distance [0,0,0] [(sj_bio_skin_plus_rol.thres.value/100) + sj_bio_skin_plus_rol.x_offset.value,(sj_bio_skin_plus_rol.thres.value/100),(sj_bio_skin_plus_rol.thres.value/100)]
+
+                                        m = execute("$'" + first_bone + "'")
+                                        for d=1 to vert_pos_array.count do
+                                            (
+                                            if classof m != Biped_Object then
+                                                g = distance (vert_array[i][3] + (at time 0 m.pos)) vert_pos_array[d]
+                                            else
+                                                g = distance (vert_array[i][3] + (at time 0 (biped.gettransform m #pos)) ) vert_pos_array[d]
+                                            if g < t then
+                                                (
+                                                if g < y then
+                                                    (
+                                                    y = g
+                                                    c_index = d
+                                                    )
+                                                )
+                                            )
+
+                                        if c_index != 0 then
+                                            (
+                                            sj_bio_skin_plus_rol.set_vertex_data_fn c_index vert_data
+                                            )
+
+                                        )--end 3
+
+                                    )--end case of
+                                )--end bn
+                            )--end if
+
+                        --ãƒ—ãƒ­ã‚°ãƒ¬ã‚¹å‡¦ç†
+                        sj_progressBar_rol.progbar.value = ((100.00/vert_array.count) * i)
+                        )--end i
+                    try (destroydialog sj_load_verts_rol) catch()
+                    --gc light:true
+                    --ãƒ—ãƒ­ã‚°ãƒ¬ã‚¹å‡¦ç†
+                    try(destroydialog sj_progressBar_rol)catch();
+                    )
+
+            ------------------------------------------------------------
+            -- Create Dialog
+            ------------------------------------------------------------
+            )
+
+            CreateDialog sj_load_verts_rol width:574 height:430 pos:[250,50] \
+            style:#(#style_border, #style_titlebar, #style_sysmenu, #style_minimizebox)
+
+            sj_load_verts_rol.vert_array = vert_array
+            sj_load_verts_rol.vert_count.text = (vert_array.count as string + " Vertices Loaded")
+
+            bone_array = #()
+            for i=1 to vert_array.count do (
+                try (
+                    _test_cnt = vert_array[i].count
+                ) catch (
+                    print("Eof")
+                    continue;
+                )
+                bn = vert_array[i][6][1];
+                if (finditem bone_array bn) == 0 then (
+                    append bone_array bn;
+                )
+            )
+            sort bone_array
+
+            sj_load_verts_rol.source_list.items = (for each in bone_array collect each)
+            sj_load_verts_rol.source_num.text = ("(" + sj_load_verts_rol.source_list.items.count as string + " bones)")
+        )
+
+/*######################################################################*/
+-----------------------------------------
+--ã‚¨ãƒ³ãƒ™ãƒ­ãƒ¼ãƒ—
+-----------------------------------------
+/*######################################################################*/
+/*in_radius_stagã‚¢ã‚¯ã‚·ãƒ§ãƒ³*/
+    on in_radius_stag mouseover do
+        (
+        sj_bio_skin_plus_rol.update_radius_spinners_fn (sj_bio_skin_plus_rol.number_of_cross_fn())
+        )
+
+/*in_radius_stagã‚¢ã‚¯ã‚·ãƒ§ãƒ³*/
+    on in_radius_etag mouseover do
+        (
+        sj_bio_skin_plus_rol.update_radius_spinners_fn 1
+        )
+
+/*in_radius_startã‚¢ã‚¯ã‚·ãƒ§ãƒ³*/
+    on in_radius_start changed val do
+        (
+        last_spin = "start"
+        sj_bio_skin_plus_rol.update_radiuses_fn (sj_bio_skin_plus_rol.number_of_cross_fn()) val
+        )
+
+/*in_radius_endã‚¢ã‚¯ã‚·ãƒ§ãƒ³*/
+    on in_radius_end changed val do
+        (
+        last_spin = "end"
+        sj_bio_skin_plus_rol.update_radiuses_fn 1 val
+        )
+
+/*spn_gapã‚¢ã‚¯ã‚·ãƒ§ãƒ³*/
+    on spn_gap changed val do
+        (
+        if last_spin == "end" then
+            (
+            sj_bio_skin_plus_rol.update_radiuses_fn 1 sj_bio_skin_plus_rol.in_radius_end.value
+            )
+        else
+            (
+            sj_bio_skin_plus_rol.update_radiuses_fn (sj_bio_skin_plus_rol.number_of_cross_fn()) sj_bio_skin_plus_rol.in_radius_start.value
+            )
+        )
+
+/*copy_envã‚¢ã‚¯ã‚·ãƒ§ãƒ³*/
+    on copy_env pressed do
+        (
+        if (sj_bio_skin_plus_rol.validate_skin_fn() == true) then
+            (
+            bdex = (skinOps.getSelectedBone selection[1].modifiers["Skin"])
+            env_buffer = #(bdex, (sj_bio_skin_plus_rol.gather_enveloppe_data_fn bdex selection[1].modifiers["Skin"] exclude:false))
+            )
+        )
+
+/*paste_envã‚¢ã‚¯ã‚·ãƒ§ãƒ³*/
+    on paste_env pressed do
+        (
+        undo "paste envelope" on
+            (
+            if (sj_bio_skin_plus_rol.validate_skin_fn() == true) then
+                (
+                sj_bio_skin_plus_rol.set_envelope_data_fn env_buffer[2] env_buffer[1] (skinOps.getSelectedBone selection[1].modifiers["Skin"]) selection[1].modifiers["Skin"] mirror:false
+                )
+            )--end undo
+        )
+
+/*tpaste_envã‚¢ã‚¯ã‚·ãƒ§ãƒ³*/
+    on tpaste_env pressed do
+        (
+        undo "paste envelope" on
+            (
+            if (sj_bio_skin_plus_rol.validate_skin_fn() == true) then
+                (
+                if target_skin == undefined then
+                    (
+                    sj_bio_skin_plus_rol.function_shell_fn (sj_bio_skin_plus_rol.mirror_env_fn mirror:false) parms:true garbage:false
+                    )
+                else
+                    (
+                    sj_bio_skin_plus_rol.function_shell_fn (sj_bio_skin_plus_rol.mirror_env_fn oSkin:target_skin.modifiers["Skin"] mirror:false) parms:true garbage:false
+                    )
+                )
+            )--end undo
+        )
+
+/*mirror_envã‚¢ã‚¯ã‚·ãƒ§ãƒ³*/
+    on mirror_env pressed do
+        (
+        undo "mirror envelope" on
+            (
+            if (sj_bio_skin_plus_rol.validate_skin_fn() == true) then
+                (
+                if target_skin == undefined then
+                    (
+                    sj_bio_skin_plus_rol.function_shell_fn (sj_bio_skin_plus_rol.mirror_env_fn) parms:false garbage:false
+                    )
+                else
+                    (
+                    sj_bio_skin_plus_rol.function_shell_fn (sj_bio_skin_plus_rol.mirror_env_fn oSkin:target_skin.modifiers["Skin"]) parms:true garbage:false
+                    )
+                )
+            )--end undo
+        )
+
+/*ã‚¨ãƒ³ãƒ™ãƒ­ãƒ¼ãƒ—ä¿å­˜ã€èª­ã¿è¾¼ã¿æ™‚ã®ãƒ­ãƒ¼ãƒ«ã‚¢ã‚¦ãƒˆ*/
+    ------------------------------------------------------------
+    -- SAVE LOAD Envelopes
+    ------------------------------------------------------------
+/*save_envã‚¢ã‚¯ã‚·ãƒ§ãƒ³*/
+    on save_env pressed do
+        (
+        if (sj_bio_skin_plus_rol.validate_skin_fn subcheck:false) == true then
+            (
+            local my_file = getSaveFileName types:"Tact_Envelope(*.tev)|*.tev"
+             if my_file != undefined then
+                (
+                sj_bio_skin_plus_rol.save_env_data_fn my_file
+                --gc light:true
+                )--if my file end
+            )--if end
+        )--Pressed end
+
+/*load_envã‚¢ã‚¯ã‚·ãƒ§ãƒ³*/
+    on load_env pressed do
+        (
+        if silent == false then
+            (
+            if (sj_bio_skin_plus_rol.validate_skin_fn subcheck:false) == true then
+                (
+
+                 local my_file = getOpenFileName types:"Tact_Envelope(*.tev)|*.tev"
+                )
+            else
+                (
+                messagebox "Pick Skin first"
+                my_file = undefined
+                )--if sj_bio_skin_plus_rol.... end
+            )
+        else
+            (
+            my_file = feed_file
+            )--if silent end
+
+        if my_file != undefined then
+            (
+
+            global sj_load_mapping_rol
+            try (destroydialog sj_load_mapping_rol) catch()
+
+            /*######################################################################*/
+            ------------------------------------------------------------
+            -- Rollout
+            ------------------------------------------------------------
+            /*######################################################################*/
+            rollout sj_load_mapping_rol "Load Envelopes"
+                (
+
+                local src_width=230
+                local my_env_data = #()
+
+                button del_from "Del ->" pos:[5,20] width:44
+
+                button save_fromlist "Save" pos:[5,50] width:44
+                button load_fromlist "Load" pos:[5,74] width:44
+
+                listbox source_list "FROM" pos:[55, 5] width:src_width height:24 -- source objects listview
+                 listbox target_list "TO" pos:[src_width+5+55, 5] width:src_width height:24 -- current objects listview
+
+                label source_num "(0 Bones)" pos:[55+150,5]
+                label target_num "(0 Bones)" pos:[src_width+5+55+150, 5]
+
+                radiobuttons exclude_vert_met "é ‚ç‚¹ã®é©å¿œæ–¹æ³•" labels:#("é©å¿œã—ãªã„","é ‚ç‚¹ã‚¤ãƒ³ãƒ‡ãƒƒã‚¯ã‚¹","ãƒ¯ãƒ¼ãƒ«ãƒ‰ãƒã‚¸ã‚·ãƒ§ãƒ³","ãƒœãƒ¼ãƒ³ã‹ã‚‰ã®ç›¸å¯¾è·é›¢") columns:4 default:1 align:#left 	pos:[55, 344] width:465
+
+                radiobuttons load_gizmo_met "é ‚ç‚¹ã‚®ã‚ºãƒ¢" labels:#("é©å¿œã—ãªã„","é ‚ç‚¹ã‚¤ãƒ³ãƒ‡ãƒƒã‚¯ã‚¹","ãƒ¯ãƒ¼ãƒ«ãƒ‰ãƒã‚¸ã‚·ãƒ§ãƒ³","ãƒã‚¦ãƒ³ãƒ‡ã‚£ãƒ³ã‚°ãƒœãƒƒã‚¯ã‚¹") columns:4 default:1 align:#left 	pos:[55, 384] width:465 enabled:false
+
+                button transfer_env "ã‚¨ãƒ³ãƒ™ãƒ­ãƒ¼ãƒ—é©å¿œ" pos:[55, 424] width:465
+
+                button del_to "<- Del" pos:[475+50,20] width:44
+
+                button move_up "UP" pos:[475+50,64] width:44
+                button move_down "DOWN" pos:[475+50,86] width:44
+                button move_up10 "UP 10" pos:[475+50,128] width:44
+                button move_down10 "DWN10" pos:[475+50,150] width:44
+
+                button save_tolist "Save"pos:[475+50,180] width:44
+                button load_tolist "Load"pos:[475+50,204] width:44
 
 
-				------------------------------------------------------------
-				-- Interface Events
-				------------------------------------------------------------
+                ------------------------------------------------------------
+                -- Interface Events
+                ------------------------------------------------------------
 
 
-				on sj_load_mapping_rol open do
-					( 
-					local the_array = #()
-					for each in sj_bio_skin_plus_rol.bones_in_skin_fn() do
-						(
-						append the_array each.name
-						)
-					the_array = sort the_array
-					target_list.items = the_array
-					target_num.text = ("(" + target_list.items.count as string + " bones)")
-					)
-
-
-
-				on sj_load_mapping_rol close do
-					(
-					sj_load_mapping_rol = undefined
-					)
-
-
-				on save_tolist pressed do
-					(
-					sj_bio_skin_plus_rol.save_list_fn target_list.items
-					)
-
-				on load_tolist pressed do
-					(
-					target_list.items = (sj_bio_skin_plus_rol.load_list_fn target_list.items)
-					target_num.text = ("(" + target_list.items.count as string + " bones)")
-					)
-
-
-				on save_fromlist pressed do
-					(
-					sj_bio_skin_plus_rol.save_list_fn source_list.items
-					)
-
-				on load_fromlist pressed do
-					(
-					source_list.items = (sj_bio_skin_plus_rol.load_list_fn source_list.items)
-					source_num.text = ("(" + source_list.items.count as string + " bones)")
-					)
-
-
-				on del_from pressed do
-					(
-					deleteitem source_list.items source_list.selection
-					source_list.items = source_list.items
-
- 					source_num.text = ("(" + source_list.items.count as string + " bones)")
-					)
-
- 
-				on del_to pressed do
-					(
-					deleteitem target_list.items target_list.selection
-					target_list.items = target_list.items
-					target_num.text = ("(" + target_list.items.count as string + " bones)")
-					)
-
-
-				on move_down pressed do
-					(
-					if target_list.selection < target_list.items.count then
-						(
-						next = target_list.items[target_list.selection+1]
-						target_list.items[target_list.selection+1] = target_list.selected
-						target_list.items[target_list.selection] = next
-						target_list.items = target_list.items
-						target_list.selection += 1
-						source_list.selection = target_list.selection
-						)
-					)
+                on sj_load_mapping_rol open do
+                    (
+                    local the_array = #()
+                    for each in sj_bio_skin_plus_rol.bones_in_skin_fn() do
+                        (
+                        append the_array each.name
+                        )
+                    the_array = sort the_array
+                    target_list.items = the_array
+                    target_num.text = ("(" + target_list.items.count as string + " bones)")
+                    )
 
 
 
-				on move_up pressed do
-					(
-					if target_list.selection > 1 then
-						(
-						next = target_list.items[target_list.selection-1]
-						target_list.items[target_list.selection-1] = target_list.selected
-						target_list.items[target_list.selection] = next
-						target_list.items = target_list.items
-						target_list.selection -= 1
-						source_list.selection = target_list.selection
-						)
-					)
-				
+                on sj_load_mapping_rol close do
+                    (
+                    sj_load_mapping_rol = undefined
+                    )
 
 
-				on move_down10 pressed do
-					(
-					if target_list.selection < (target_list.items.count - 10) then
-						(
-						next = target_list.items[target_list.selection+10]
-						insertItem target_list.selected target_list.items (target_list.selection+10)
-						deleteItem target_list.items target_list.selection
-						target_list.items = target_list.items
-						target_list.selection += 9
-						source_list.selection = target_list.selection
-						)
-					)
+                on save_tolist pressed do
+                    (
+                    sj_bio_skin_plus_rol.save_list_fn target_list.items
+                    )
+
+                on load_tolist pressed do
+                    (
+                    target_list.items = (sj_bio_skin_plus_rol.load_list_fn target_list.items)
+                    target_num.text = ("(" + target_list.items.count as string + " bones)")
+                    )
+
+
+                on save_fromlist pressed do
+                    (
+                    sj_bio_skin_plus_rol.save_list_fn source_list.items
+                    )
+
+                on load_fromlist pressed do
+                    (
+                    source_list.items = (sj_bio_skin_plus_rol.load_list_fn source_list.items)
+                    source_num.text = ("(" + source_list.items.count as string + " bones)")
+                    )
+
+
+                on del_from pressed do
+                    (
+                    deleteitem source_list.items source_list.selection
+                    source_list.items = source_list.items
+
+                     source_num.text = ("(" + source_list.items.count as string + " bones)")
+                    )
+
+
+                on del_to pressed do
+                    (
+                    deleteitem target_list.items target_list.selection
+                    target_list.items = target_list.items
+                    target_num.text = ("(" + target_list.items.count as string + " bones)")
+                    )
+
+
+                on move_down pressed do
+                    (
+                    if target_list.selection < target_list.items.count then
+                        (
+                        next = target_list.items[target_list.selection+1]
+                        target_list.items[target_list.selection+1] = target_list.selected
+                        target_list.items[target_list.selection] = next
+                        target_list.items = target_list.items
+                        target_list.selection += 1
+                        source_list.selection = target_list.selection
+                        )
+                    )
 
 
 
-				on move_up10 pressed do
-					(
-					if target_list.selection > (1 + 10) then
-						(
-						next = target_list.items[target_list.selection-10]
-						insertItem target_list.selected target_list.items (target_list.selection-10)
-						deleteItem target_list.items (target_list.selection+1)
-						target_list.items = target_list.items
-						target_list.selection -= 10
-						source_list.selection = target_list.selection
-						)
-					)
+                on move_up pressed do
+                    (
+                    if target_list.selection > 1 then
+                        (
+                        next = target_list.items[target_list.selection-1]
+                        target_list.items[target_list.selection-1] = target_list.selected
+                        target_list.items[target_list.selection] = next
+                        target_list.items = target_list.items
+                        target_list.selection -= 1
+                        source_list.selection = target_list.selection
+                        )
+                    )
 
 
- 				on transfer_env pressed do
-					(
-					--ƒvƒƒOƒŒƒX					
-					sj_functions.sj_progressBar_Fn();
-					sj_progressBar_rol.processInfo.caption = "‚µ‚Î‚ç‚­‚¨‘Ò‚¿‚­‚¾‚³‚¢";
-					--transfer envelope data from my_env_data to the envelopes in the target list.
-					-- Make sure to transfer the data in the right order.
-					x = subobjectlevel
-					for i=1 to my_env_data[1].count do --source_list.items.count do
-						(
-						bis = (finditem source_list.items my_env_data[1][i])
-						--check wheter bone exists in from_list or not
-						if bis != 0 then
-							(
-							tar_bone = (sj_bio_skin_plus_rol.tact_boneindex target_list.items[bis] selection[1].modifiers["Skin"])
-							if tar_bone != 0 then
-								(
-								sj_bio_skin_plus_rol.set_envelope_data_fn (execute(my_env_data[2][i])) tar_bone tar_bone selection[1].modifiers["Skin"] mirror:false -- src_bone = trg_bone in this case
-								)--end if
-							)
-						
-						--ƒvƒƒOƒŒƒXˆ—
-						sj_progressBar_rol.progbar.value = ((100.00/source_list.items.count) * i)
-						)--end for
-						
-					if load_gizmo_met.state != 1 then
-						(
-						 -- transfer gizmos:
-						giz_dat = execute(my_env_data[3])
-						
-						--ƒvƒƒOƒŒƒXˆ—
-						sj_progressBar_rol.progbar.value = 0;
 
-						for g=1 to 1 do -- giz_dat.count do
-							(
-							sj_bio_skin_plus_rol.set_gizmo_data_fn giz_dat[g] selection[1].modifiers["Skin"] method:load_gizmo_met.state;
-							
-							--ƒvƒƒOƒŒƒXˆ—
-							sj_progressBar_rol.progbar.value = ((100.00/giz_dat.count) * g);
-							)
-						skinOps.Invalidate selection[1].modifiers["Skin"] 1
-						)
-					
-					--ƒvƒƒOƒŒƒXˆ—					
-					sj_progressBar_rol.progbar.value = 0;
-					try(destroydialog sj_load_mapping_rol)catch();
-					try(destroydialog sj_progressBar_rol)catch();
-					subobjectlevel = x
-					)
+                on move_down10 pressed do
+                    (
+                    if target_list.selection < (target_list.items.count - 10) then
+                        (
+                        next = target_list.items[target_list.selection+10]
+                        insertItem target_list.selected target_list.items (target_list.selection+10)
+                        deleteItem target_list.items target_list.selection
+                        target_list.items = target_list.items
+                        target_list.selection += 9
+                        source_list.selection = target_list.selection
+                        )
+                    )
 
 
-			------------------------------------------------------------
-			-- Create Dialog
-			------------------------------------------------------------
-				)--end rollout
-			CreateDialog sj_load_mapping_rol width:574 height:450 pos:[50,50] \ 
-			style:#(#style_border, #style_titlebar, #style_sysmenu, #style_minimizebox)
 
-			local my_env_data = (sj_bio_skin_plus_rol.load_env_data_fn my_file)
-			sj_load_mapping_rol.my_env_data = my_env_data
-			sj_load_mapping_rol.source_list.items = (for each in my_env_data[1] collect each) -- be sure to re-create the array, or it will be a instance of the array, which will screw things up when you delete nodes from the list.
-			sj_load_mapping_rol.source_num.text = ("(" + sj_load_mapping_rol.source_list.items.count as string + " bones)")			
-			
-			)--end if my_file undefined
-			
-		)--load_env end button
+                on move_up10 pressed do
+                    (
+                    if target_list.selection > (1 + 10) then
+                        (
+                        next = target_list.items[target_list.selection-10]
+                        insertItem target_list.selected target_list.items (target_list.selection-10)
+                        deleteItem target_list.items (target_list.selection+1)
+                        target_list.items = target_list.items
+                        target_list.selection -= 10
+                        source_list.selection = target_list.selection
+                        )
+                    )
+
+
+                 on transfer_env pressed do
+                    (
+                    --ãƒ—ãƒ­ã‚°ãƒ¬ã‚¹
+                    sj_functions.sj_progressBar_Fn();
+                    sj_progressBar_rol.processInfo.caption = "ã—ã°ã‚‰ããŠå¾…ã¡ãã ã•ã„";
+                    --transfer envelope data from my_env_data to the envelopes in the target list.
+                    -- Make sure to transfer the data in the right order.
+                    x = subobjectlevel
+                    for i=1 to my_env_data[1].count do --source_list.items.count do
+                        (
+                        bis = (finditem source_list.items my_env_data[1][i])
+                        --check wheter bone exists in from_list or not
+                        if bis != 0 then
+                            (
+                            tar_bone = (sj_bio_skin_plus_rol.tact_boneindex target_list.items[bis] selection[1].modifiers["Skin"])
+                            if tar_bone != 0 then
+                                (
+                                sj_bio_skin_plus_rol.set_envelope_data_fn (execute(my_env_data[2][i])) tar_bone tar_bone selection[1].modifiers["Skin"] mirror:false -- src_bone = trg_bone in this case
+                                )--end if
+                            )
+
+                        --ãƒ—ãƒ­ã‚°ãƒ¬ã‚¹å‡¦ç†
+                        sj_progressBar_rol.progbar.value = ((100.00/source_list.items.count) * i)
+                        )--end for
+
+                    if load_gizmo_met.state != 1 then
+                        (
+                         -- transfer gizmos:
+                        giz_dat = execute(my_env_data[3])
+
+                        --ãƒ—ãƒ­ã‚°ãƒ¬ã‚¹å‡¦ç†
+                        sj_progressBar_rol.progbar.value = 0;
+
+                        for g=1 to 1 do -- giz_dat.count do
+                            (
+                            sj_bio_skin_plus_rol.set_gizmo_data_fn giz_dat[g] selection[1].modifiers["Skin"] method:load_gizmo_met.state;
+
+                            --ãƒ—ãƒ­ã‚°ãƒ¬ã‚¹å‡¦ç†
+                            sj_progressBar_rol.progbar.value = ((100.00/giz_dat.count) * g);
+                            )
+                        skinOps.Invalidate selection[1].modifiers["Skin"] 1
+                        )
+
+                    --ãƒ—ãƒ­ã‚°ãƒ¬ã‚¹å‡¦ç†
+                    sj_progressBar_rol.progbar.value = 0;
+                    try(destroydialog sj_load_mapping_rol)catch();
+                    try(destroydialog sj_progressBar_rol)catch();
+                    subobjectlevel = x
+                    )
+
+
+            ------------------------------------------------------------
+            -- Create Dialog
+            ------------------------------------------------------------
+                )--end rollout
+            CreateDialog sj_load_mapping_rol width:574 height:450 pos:[50,50] \
+            style:#(#style_border, #style_titlebar, #style_sysmenu, #style_minimizebox)
+
+            local my_env_data = (sj_bio_skin_plus_rol.load_env_data_fn my_file)
+            sj_load_mapping_rol.my_env_data = my_env_data
+            sj_load_mapping_rol.source_list.items = (for each in my_env_data[1] collect each) -- be sure to re-create the array, or it will be a instance of the array, which will screw things up when you delete nodes from the list.
+            sj_load_mapping_rol.source_num.text = ("(" + sj_load_mapping_rol.source_list.items.count as string + " bones)")
+
+            )--end if my_file undefined
+
+        )--load_env end button
 
 
 )--end bio_ski_Plus_Rol (Main) rollout
