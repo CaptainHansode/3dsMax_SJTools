@@ -20,30 +20,33 @@
 global sj_pbake_rol
 global sj_pbake_selset_rol
 
------------------------------------------------------------------------------------------------------------
 -- 言語初期化
------------------------------------------------------------------------------------------------------------
-local MesseTitleInfoStr = "お知らせ";
-local MesseTitleWngStr = "警告";
-local MesseTitleCtnStr = "注意";
-local MesseTitleErrStr = "エラー";
-local MesseTitleChkStr = "確認";
+Local MesseTitleInfoStr = "お知らせ";
+Local MesseTitleWngStr = "警告";
+Local MesseTitleCtnStr = "注意";
+Local MesseTitleErrStr = "エラー";
+Local MesseTitleChkStr = "確認";
 
-local MesseCmnErrStr = "失敗しました";
-local MesseCmnChkStr = "実行しますか";
-local MesseCmnFileErrStr = "読み込みに失敗しました\n未知の形式のファイルです";
-local MesseCmnProgStr = "しばらくお待ちください";
+--iniの改行コードを使いたい場合はexecuteをつかい、さらにiniは"を二重に設置する
+Local MesseCmnErrStr = "失敗しました";
+Local MesseCmnChkStr = "実行しますか";
+Local MesseCmnFileErrStr = "読み込みに失敗しました\n未知の形式のファイルです";
+Local MesseCmnProgStr = "しばらくお待ちください";
 
 --Version etc 名前自体はSJTools.iniから
-local nameAndVersion = "SJ Pbake";
-local fileLockID = 8558132647868;
+Local nameAndVersion = "SJ Pbake";
+
+--Version etc
+Local fileLockID = 8558132647868;
+
+--Local sjLangageFile"D:/Test.ini"
 
 --なんか超いっぱい用
-local pbake_bakeType = 1, sByS = 0, bakeFm = #(), f, s, startFmTm, endFmTm, posKeys = #(), rotKeys = #(), scaKeys = #()
-local newObj = undefined, lListObj = undefined, rListObj = undefined, tempObj = undefined, bakedSel = #(), itemCount, newObjName = "_Baked", bakeLayer = undefined;
+Local pbake_bakeType = 1, sByS = 0, bakeFm = #(), f, s, startFmTm, endFmTm, posKeys = #(), rotKeys = #(), scaKeys = #();
+Local newObj = undefined, lListObj = undefined, rListObj = undefined, tempObj = undefined, bakedSel = #(), itemCount, newObjName = "_Baked", bakeLayer = undefined;
 
 --重複チェック用
-local doubleNameCheck = false;
+Local doubleNameCheck = false;
 
 /*
 pbake_bakeType
@@ -58,83 +61,40 @@ pbake_bakeType
 --IK格納用
 --ikObjに全て格納する、hdikObjはコントローラー削除用
 --ikObjContはコントローラー処理中のカウント
-local ikCheck = false, ikObjQuery = false, ikObj = #(), hdikObj = #(), ikObjEff = #(), ikObjIndex = #(), ikBakeObj = #(), ikObjCont = 1,ikdependObj = #()
+Local ikCheck = false, ikObjQuery = false, ikObj = #(), hdikObj = #(), ikObjEff = #(), ikObjIndex = #(), ikBakeObj = #(), ikObjCont = 1,ikdependObj = #();
+
 --レイヤー名周り
-local newLayer = undefined, numberStr, layerNameStr = "ベイクオブジェクト";
+Local newLayer = undefined, numberStr, layerNameStr = "ベイクオブジェクト";
+
 --初期設定、ini内容を上から順に並べている
-local iniSetting = #(true,false,true,true,true)
+Local iniSetting = #(true,false,true,true,true)
 --端から順に、タイプ、オプション、ミラー、スタート、エンド、ステップ、バイステップ、位置キー、回転キー、スケールキー
-local toolSetting = #(1,1,false,0,100,1,false,true,true,true)
+Local toolSetting = #(1,1,false,0,100,1,false,true,true,true);
 
 --ミラーリング
-local mT = #(1,-1,-1,-1,1,1,-1,1,1,-1,1,1), mirrorMenu = #(true,false,false,false,false,false,false,false,false)
+Local mT = #(1,-1,-1,-1,1,1,-1,1,1,-1,1,1), mirrorMenu = #(true,false,false,false,false,false,false,false,false);
+
 --オフセット設定
-local offsetNum = 1, offsetMenu = #(true,false,false), offsetSetting = #(1,2,3)
+Local offsetNum = 1, offsetMenu = #(true,false,false), offsetSetting = #(1,2,3);
 
 -----------------------------------------------------------------------------------------------------------
 -- ロールアウト周り
 -----------------------------------------------------------------------------------------------------------
-try(cui.FloatDialogBar sj_pbake_rol)catch()
-try(cui.unRegisterDialogBar sj_pbake_rol)catch()
-try(closeRolloutFloater sj_pbake_rol) catch()
-try(destroydialog sj_pbake_rol)catch()
-try(destroydialog SjPBakeProg)catch()
+try(cui.FloatDialogBar sj_pbake_rol)catch()	--PBakeダイアログのフロート化を試みます
+try(cui.unRegisterDialogBar sj_pbake_rol)catch()		--ドッキング可能な MAXScript ウィンドウを未登録にします
+try(closeRolloutFloater sj_pbake_rol) catch()	--ロールアウトフローターが開いていたら一端閉じる
+try(destroydialog sj_pbake_rol)catch()		--ダイアログが既に開いていた場合は一度閉じるを試みます
+try(destroydialog sj_progressBar_rol)catch()
 
-
-function SjPBakeSetDefLayerName =
-(
-    global sj_pbake_layerName_rol
-    try (destroydialog sj_pbake_layerName_rol) catch()
-    rollout sj_pbake_layerName_rol "レイヤー名を設定してください" width:200 height:52
-    (
-        --////////////////////////////////////////////////
-        --レイアウト
-        edittext newNameEdt "" pos:[4,8] width:188 height:16
-        button okBt "OK" pos:[8,28] width:88 height:20 toolTip:"名前を設定します"
-        button closeBt "キャンセル" pos:[104,28] width:88 height:20 toolTip:"このウィンドウを閉じます"
-        --アクション
-        on sj_pbake_layerName_rol open do --ロールアウトが開いたとき
-        (
-            --変数に適応
-            newNameEdt.text = layerNameStr;
-        )--open do end
-        on okBt pressed do
-        (
-            layerNameStr = newNameEdt.text;
-            --INIに書き込み
-            setINISetting ((getDir #scripts) + "\SJTools\SJTools.ini") "SJPBake" "BakedLayerName" newNameEdt.text;
-            try (destroydialog sj_pbake_layerName_rol) catch() --ダイアログを閉じる
-        )
-        on closeBt pressed do
-        (
-            try (destroydialog sj_pbake_layerName_rol) catch() --ダイアログを閉じる
-        )
-    )
-)
-
---////////////////////////////////////////////////
---ダイアログクリエート
-CreateDialog sj_pbake_layerName_rol style:#(#style_border, #style_titlebar, #style_sysmenu, #style_minimizebox, #style_resizing, #style_toolwindow)
-
---////////////////////////////////////////////////
---プログレスバー
-fn SjPBakeProg =
-(
-    try (destroydialog SjPBakeProg) catch ();
-    global SjPBakeProg
-    rollout SjPBakeProg "" width:416 height:56
-    (
-        progressBar progbar "" pos:[8,8] width:400 height:24 color:(color 30 10 190);
-        label processInfo "" pos:[8,36] width:400 height:16;
-    )
-    CreateDialog SjPBakeProg style:#(/*#style_border, #style_titlebar, #style_sysmenu, #style_resizing,*/ #style_toolwindow, #style_minimizebox) --pos:[50,50]
-)
-
+-----------------------------------------------------------------------------------------------------------
+--メニュー
+-----------------------------------------------------------------------------------------------------------
 --////////////////////////////////////////////////
 --メニュー
 --////////////////////////////////////////////////
 rcMenu pbakeMenuBar
 (
+
     subMenu "ファイル"
     (
         menuItem saveFileMi "リスト保存" enabled:true
@@ -161,6 +121,33 @@ rcMenu pbakeMenuBar
         menuItem mirrorYFripYMi "XZ平面 フリップY" checked:false
         menuItem mirrorZFripYMi "XY平面 フリップY" checked:false
     )
+    /*
+    subMenu "オフセット設定"
+    (
+    menuItem posHoldMi "現在位置を保持" enabled:false
+
+    seperator offsetSep01
+    menuItem axisHoldMi "現在軸を保持" checked:true
+    menuItem axisReplaceiXYMi "軸リプレイス X-->Y" checked:false
+    menuItem axisReplaceiXZMi "軸リプレイス X-->Z" checked:false
+    */
+    /*
+    menuItem mirrorXYaplaneMi "XY平面ミラー" checked:false
+    seperator sep02
+    menuItem mirrorXaaFripZMi "X軸ミラーフリップZ" checked:false
+    menuItem mirrorYaaFripZMi "Y軸ミラーフリップZ" checked:false
+    menuItem mirrorZaaFripZMi "Z軸ミラーフリップZ" checked:false
+    seperator sep03
+    menuItem mirrorXaaFripYMi "X軸ミラーフリップY" checked:false
+    menuItem mirrorYaaFripYMi "Y軸ミラーフリップY" checked:false
+    menuItem mirrorZaaFripYMi "Z軸ミラーフリップY" checked:false
+    )
+    */
+    subMenu "ビヨンド"
+    (
+        menuItem fkBeyond "FKコンバート" enabled:false;
+    )
+
     subMenu "初期設定"
     (
         menuItem loadListMi "前回起動時のリストを維持" enabled:true checked:true;
@@ -173,6 +160,7 @@ rcMenu pbakeMenuBar
         seperator sep07
         menuItem bakedLayerNameMi "作成するレイヤー名を設定" enabled:true
     )
+
     subMenu "ヘルプ"
     (
         menuItem helpMi "ヘルプ"
@@ -192,131 +180,157 @@ rcMenu pbakeMenuBar
     on saveFileMi picked do sj_pbake_rol.saveListFile_Fn sj_pbake_rol.pb_listL.items sj_pbake_rol.pb_listR.items
     on loadFileMi picked do sj_pbake_rol.loadListFile_Fn true;
 
-    on saveSettingFileMi picked do sj_pbake_rol.saveSettingFile_Fn()
-    on loadSettingFileMi picked do sj_pbake_rol.loadSettingFile_Fn()
+    on saveSettingFileMi picked do sj_pbake_rol.saveSettingFile_Fn();
+    on loadSettingFileMi picked do sj_pbake_rol.loadSettingFile_Fn();
 
     on mergeFileMi picked do sj_pbake_rol.loadListFile_Fn false;
     on mergePoseFileMi picked do sj_pbake_rol.loadPoseFile_Fn false
     on helpMi picked do shellLaunch "http://www.sakaiden.com/?page_id=4163" ""
-    on aboutMi picked do sj_functions.sjtools_about_Fn()
+    on aboutMi picked do sj_functions.sjtools_about_Fn();
     on emailMi picked do shellLaunch "mailTo:sakaiden@live.jp" ""
 
     --ミラーリング設定変更
     on mirrorYZplaneMi picked do (
-        mT = #(1,-1,-1,-1,1,1,-1,1,1,-1,1,1)
-        mirrorMenu = #(true,false,false,false,false,false,false,false,false)
-    )
+    mT = #(1,-1,-1,-1,1,1,-1,1,1,-1,1,1)
+    mirrorMenu = #(true,false,false,false,false,false,false,false,false))
     on mirrorXZplaneMi picked do (
-        mT = #(-1,1,-1,1,-1,1,1,-1,1,1,-1,1)
-        mirrorMenu = #(false,true,false,false,false,false,false,false,false)
-    )
+    mT = #(-1,1,-1,1,-1,1,1,-1,1,1,-1,1)
+    mirrorMenu = #(false,true,false,false,false,false,false,false,false))
     on mirrorXYplaneMi picked do (
-        mT = #(-1,-1,1,1,1,-1,1,1,-1,1,1,-1)
-        mirrorMenu = #(false,false,true,false,false,false,false,false,false)
-    )
+    mT = #(-1,-1,1,1,1,-1,1,1,-1,1,1,-1)
+    mirrorMenu = #(false,false,true,false,false,false,false,false,false))
     on mirrorXFripZMi picked do (
-        mT = #(-1,1,1,-1,1,1,1,-1,-1,-1,1,1)
-        mirrorMenu = #(false,false,false,true,false,false,false,false,false)
-    )
+    mT = #(-1,1,1,-1,1,1,1,-1,-1,-1,1,1)
+    mirrorMenu = #(false,false,false,true,false,false,false,false,false))
     on mirrorYFripZMi picked do (
-        mT = #(1,-1,1,1,-1,1,-1,1,-1,1,-1,1)
-        mirrorMenu = #(false,false,false,false,true,false,false,false,false)
-    )
+    mT = #(1,-1,1,1,-1,1,-1,1,-1,1,-1,1)
+    mirrorMenu = #(false,false,false,false,true,false,false,false,false))
     on mirrorZFripZMi picked do (
-        mT = #(1,1,-1,1,1,-1,-1,-1,1,1,1,-1)
-        mirrorMenu = #(false,false,false,false,false,true,false,false,false)
-    )
+    mT = #(1,1,-1,1,1,-1,-1,-1,1,1,1,-1)
+    mirrorMenu = #(false,false,false,false,false,true,false,false,false))
     on mirrorXFripYMi picked do (
-        mT = #(-1,1,1,1,-1,-1,-1,1,1,-1,1,1)
-        mirrorMenu = #(false,false,false,false,false,false,true,false,false)
-    )
+    mT = #(-1,1,1,1,-1,-1,-1,1,1,-1,1,1)
+    mirrorMenu = #(false,false,false,false,false,false,true,false,false))
     on mirrorYFripYMi picked do (
-        mT = #(1,-1,1,-1,1,-1,1,-1,1,1,-1,1)
-        mirrorMenu = #(false,false,false,false,false,false,false,true,false)
-    )
+    mT = #(1,-1,1,-1,1,-1,1,-1,1,1,-1,1)
+    mirrorMenu = #(false,false,false,false,false,false,false,true,false))
     on mirrorZFripYMi picked do (
-        mT = #(1,1,-1,-1,-1,1,1,1,-1,1,1,-1)
-        mirrorMenu = #(false,false,false,false,false,false,false,false,true)
-    )
+    mT = #(1,1,-1,-1,-1,1,1,1,-1,1,1,-1)
+    mirrorMenu = #(false,false,false,false,false,false,false,false,true))
 
     --初期設定部
-    on loadListMi picked do (
-        if iniSetting[1] then iniSetting[1] = false else iniSetting[1] = true;
-        sj_pbake_rol.saveIni_Fn()
-    )
-    on loadSettingMi picked do (
-        if iniSetting[2] then iniSetting[2] = false else iniSetting[2] = true;
-        sj_pbake_rol.saveIni_Fn()
-    )
-    on pBakedSelectMi picked do (
-        if iniSetting[3] then iniSetting[3] = false else iniSetting[3] = true;
-        sj_pbake_rol.saveIni_Fn()
-    )
-    on bakedLayerMi picked do (
-        if iniSetting[4] then iniSetting[4] = false else iniSetting[4] = true;
-        sj_pbake_rol.saveIni_Fn()
-    )
-    on bBakedSelectMi picked do (
-        if iniSetting[5] then iniSetting[5] = false else iniSetting[5] = true;
-        sj_pbake_rol.saveIni_Fn()
-    )
+    on loadListMi picked do (if iniSetting[1] then iniSetting[1] = false else iniSetting[1] = true;
+        sj_pbake_rol.saveIni_Fn());
+    on loadSettingMi picked do (if iniSetting[2] then iniSetting[2] = false else iniSetting[2] = true;
+        sj_pbake_rol.saveIni_Fn());
+    on pBakedSelectMi picked do (if iniSetting[3] then iniSetting[3] = false else iniSetting[3] = true;
+        sj_pbake_rol.saveIni_Fn());
+    on bakedLayerMi picked do (if iniSetting[4] then iniSetting[4] = false else iniSetting[4] = true;
+        sj_pbake_rol.saveIni_Fn());
+    on bBakedSelectMi picked do (if iniSetting[5] then iniSetting[5] = false else iniSetting[5] = true;
+        sj_pbake_rol.saveIni_Fn());
+
+
+
+
+
+
+
+
+
+
+
     on bakedLayerNameMi picked do
     (
-        SjPBakeSetDefLayerName()
-    )
+        --ロールアウトを作成
+        global sj_pbake_layerName_rol
+        try (destroydialog sj_pbake_layerName_rol) catch()
+
+            rollout sj_pbake_layerName_rol "レイヤー名を設定してください" width:200 height:52
+            (
+                --////////////////////////////////////////////////
+                --レイアウト
+                edittext newNameEdt "" pos:[4,8] width:188 height:16
+                button okBt "OK" pos:[8,28] width:88 height:20 toolTip:"名前を設定します"
+                button closeBt "キャンセル" pos:[104,28] width:88 height:20 toolTip:"このウィンドウを閉じます"
+                --local resizeBitMap = openBitmap "$Scripts/SJTools/Images/SJ_button_resize.png"
+                --ImgTag resizeImg "Bitmap" pos:[190,326] width:10 height:10 enabled:false bitmap:resizeBitMap transparent:(color 255 255 255);
+                --////////////////////////////////////////////////
+                --アクション
+                on sj_pbake_layerName_rol open do --ロールアウトが開いたとき
+                (
+                    --変数に適応
+                    newNameEdt.text = layerNameStr;
+                )--open do end
+                on okBt pressed do
+                (
+                    layerNameStr = newNameEdt.text;
+                    --INIに書き込み
+                    setINISetting ((getDir #scripts) + "\SJTools\SJTools.ini") "SJPBake" "BakedLayerName" newNameEdt.text;
+                    try (destroydialog sj_pbake_layerName_rol) catch() --ダイアログを閉じる
+                )--end
+                on closeBt pressed do
+                (
+                    try (destroydialog sj_pbake_layerName_rol) catch() --ダイアログを閉じる
+                )--end
+            );--rollout rs_hitobj_rol
+            --////////////////////////////////////////////////
+            --ダイアログクリエート
+            CreateDialog sj_pbake_layerName_rol /*pos:[sj_renamer_rol.pos[1],sj_renamer_rol.pos[2]]*/ style:#(#style_border, #style_titlebar, #style_sysmenu, #style_minimizebox, #style_resizing, #style_toolwindow) --pos:[50,50]
+    );
 
     --offset
     on axisHoldMi picked do (
         offsetNum = 1;
-        offsetMenu = #(true,false,false)
-        offsetSetting =  #(1,2,3)
+        offsetMenu = #(true,false,false);
+        offsetSetting =  #(1,2,3);
     )
     on axisReplaceiXYMi picked do (
         offsetNum = 2;
-        offsetMenu = #(false,true,false)
-        offsetSetting =  #(2,3,1)
+        offsetMenu = #(false,true,false);
+        offsetSetting =  #(2,3,1);
     )
     on axisReplaceiXZMi picked do (
         offsetNum = 3;
-        offsetMenu = #(false,false,true)
-        offsetSetting = #(3,1,2)
+        offsetMenu = #(false,false,true);
+        offsetSetting = #(3,1,2);
     )
 
     --メニューを開くたびに実行されるアップデート
     on pbakeMenuBar update do
     (
-        --ミラー設定
-        pbakeMenuBar.mirrorYZplaneMi.checked = mirrorMenu[1]
-        pbakeMenuBar.mirrorXZplaneMi.checked = mirrorMenu[2]
-        pbakeMenuBar.mirrorXYplaneMi.checked = mirrorMenu[3]
-        pbakeMenuBar.mirrorXFripZMi.checked = mirrorMenu[4]
-        pbakeMenuBar.mirrorYFripZMi.checked = mirrorMenu[5]
-        pbakeMenuBar.mirrorZFripZMi.checked = mirrorMenu[6]
-        pbakeMenuBar.mirrorXFripYMi.checked = mirrorMenu[7]
-        pbakeMenuBar.mirrorYFripYMi.checked = mirrorMenu[8]
-        pbakeMenuBar.mirrorZFripYMi.checked = mirrorMenu[9]
+    --ミラー設定
+    pbakeMenuBar.mirrorYZplaneMi.checked = mirrorMenu[1]
+    pbakeMenuBar.mirrorXZplaneMi.checked = mirrorMenu[2]
+    pbakeMenuBar.mirrorXYplaneMi.checked = mirrorMenu[3]
+    pbakeMenuBar.mirrorXFripZMi.checked = mirrorMenu[4]
+    pbakeMenuBar.mirrorYFripZMi.checked = mirrorMenu[5]
+    pbakeMenuBar.mirrorZFripZMi.checked = mirrorMenu[6]
+    pbakeMenuBar.mirrorXFripYMi.checked = mirrorMenu[7]
+    pbakeMenuBar.mirrorYFripYMi.checked = mirrorMenu[8]
+    pbakeMenuBar.mirrorZFripYMi.checked = mirrorMenu[9]
 
 
-        --初期設定
-        pbakeMenuBar.loadListMi.checked = iniSetting[1];
-        pbakeMenuBar.loadSettingMi.checked = iniSetting[2];
-        pbakeMenuBar.pBakedSelectMi.checked = iniSetting[3];
-        pbakeMenuBar.bakedLayerMi.checked = iniSetting[4];
-        pbakeMenuBar.bBakedSelectMi.checked = iniSetting[5];
+    --初期設定
+    pbakeMenuBar.loadListMi.checked = iniSetting[1];
+    pbakeMenuBar.loadSettingMi.checked = iniSetting[2];
+    pbakeMenuBar.pBakedSelectMi.checked = iniSetting[3];
+    pbakeMenuBar.bakedLayerMi.checked = iniSetting[4];
+    pbakeMenuBar.bBakedSelectMi.checked = iniSetting[5];
 
-        --offset
-        /*
-        pbakeMenuBar.axisHoldMi.checked = offsetMenu[1];
-        pbakeMenuBar.axisReplaceiXYMi.checked = offsetMenu[2];
-        pbakeMenuBar.axisReplaceiXZMi.checked = offsetMenu[3];
-        */
+    --offset
+    /*
+    pbakeMenuBar.axisHoldMi.checked = offsetMenu[1];
+    pbakeMenuBar.axisReplaceiXYMi.checked = offsetMenu[2];
+    pbakeMenuBar.axisReplaceiXZMi.checked = offsetMenu[3];
+    */
 
-        --saveFileMi.caption = "a";
-        /*
-        pbakeMenuBar.saveBodyBoneMi.enabled = rcMenuFlag
-        pbakeMenuBar.loadBodyBoneMi.enabled = rcMenuFlag
-        pbakeMenuBar.closeMi.enabled = not rcMenuFlag
-        */
+    --saveFileMi.caption = "a";
+    /*
+    pbakeMenuBar.saveBodyBoneMi.enabled = rcMenuFlag
+    pbakeMenuBar.loadBodyBoneMi.enabled = rcMenuFlag
+    pbakeMenuBar.closeMi.enabled = not rcMenuFlag
+    */
     )
 )--rcMenu end
 
@@ -325,535 +339,786 @@ rcMenu pbakeMenuBar
 -----------------------------------------------------------------------------------------------------------
 rollout sj_pbake_rol nameAndVersion width:452 height:404
 (
-    --////////////////////////////////////////////////
-    --初期化
-    fn initialize_Fn = (
-        --初期設定をiniから読み込む
-        inifile = (getDir #scripts) + "\SJTools\SJPBake\SJPBake.ini";
-        iniSetting[1] = execute(getINISetting (inifile "SJPBake" "LoadList"))
-        iniSetting[2] = execute(getINISetting (inifile "SJPBake" "LoadSetting"))
-        iniSetting[3] = execute(getINISetting (inifile "SJPBake" "PBakedSelect"))
-        iniSetting[4] = execute(getINISetting (inifile "SJPBake" "BakedLayer"))
-        iniSetting[5] = execute(getINISetting (inifile "SJPBake" "BBakedSelect"))
 
-        --変数に適応
-        layerNameStr = (getINISetting ((getDir #scripts) + "\SJTools\SJTools.ini") "SJPBake" "BakedLayerName")
+-----------------------------------------------------------------------------------------------------------
+-- ファンクション
+-----------------------------------------------------------------------------------------------------------
+--////////////////////////////////////////////////
+--load default
+--////////////////////////////////////////////////
+fn loadDefault_Fn =
+(
+--なんとなく暗号化
+TimeMachineDefalutFile = openEncryptedFile "$Scripts/SJTools//TimeMachineDefalut.dat" fileLockID
+tempName = #();
+--tempValue = #();
+--temp = #();
 
-        if iniSetting[1] then (
-            --Iniファイルから前回起動時の状態を取得
-            sj_pbake_rol.pb_listL.items = execute(getINISetting (inifile "SJPBake" "ListL"))
-            sj_pbake_rol.pb_listR.items = execute(getINISetting (inifile "SJPBake" "ListR"))
-        )
+    --バグ回避用にtry catch
+    --try(
 
-        --変数に適応
-        toolSetting = execute(getINISetting (inifile "SJPBake" "ToolSetting"))
+    tempName = readValue TimeMachineDefalutFile
+    bookFmFlag = tempName;
 
-        if iniSetting[2] then (
-            sj_pbake_rol.pbTypeRb.state = toolSetting[1];
-            sj_pbake_rol.pbOpRb.state = toolSetting[2];
-            sj_pbake_rol.mirrorChk.checked = toolSetting[3];
-            sj_pbake_rol.startFm.value = toolSetting[4];
-            sj_pbake_rol.endFm.value = toolSetting[5];
-            sj_pbake_rol.stepFm.value = toolSetting[6];
-            sj_pbake_rol.sBySCb.checked = toolSetting[7];
-            sj_pbake_rol.posCb.checked = toolSetting[8];
-            sj_pbake_rol.rotCb.checked = toolSetting[9];
-            sj_pbake_rol.scaleCb.checked = toolSetting[10];
-        )
+    tempName = readValue TimeMachineDefalutFile
+    bookFm = tempName;
 
-        sj_pbake_rol.bakeTypeCheck_Fn()
-        sj_pbake_rol.bakeKeyCheck_Fn()
-        sj_pbake_rol.listCntL.caption = (sj_pbake_rol.pb_listL.items.count as String)
-        sj_pbake_rol.listCntR.caption = (sj_pbake_rol.pb_listR.items.count as String)
-    )
+            if bookFmFlag[bookLN][1] then sj_Time_Machine_rol.bookBt01.caption = (bookFm[bookLN][1] as String) + "-" + (bookFm[bookLN][2] as String)
+            if bookFmFlag[bookLN][2] then sj_Time_Machine_rol.bookBt02.caption = (bookFm[bookLN][3] as String) + "-" + (bookFm[bookLN][4] as String)
+            if bookFmFlag[bookLN][3] then sj_Time_Machine_rol.bookBt03.caption = (bookFm[bookLN][5] as String) + "-" + (bookFm[bookLN][6] as String)
+            if bookFmFlag[bookLN][4] then sj_Time_Machine_rol.bookBt04.caption = (bookFm[bookLN][7] as String) + "-" + (bookFm[bookLN][8] as String)
+            if bookFmFlag[bookLN][5] then sj_Time_Machine_rol.bookBt05.caption = (bookFm[bookLN][9] as String) + "-" + (bookFm[bookLN][10] as String)
 
-    --////////////////////////////////////////////////
-    --初期値保存
-    fn saveIni_Fn = (
-        inifile = (getDir #scripts) + "\SJTools\SJPBake\SJPBake.ini";
-        toolSetting[1] = sj_pbake_rol.pbTypeRb.state;
-        toolSetting[2] = sj_pbake_rol.pbOpRb.state;
-        toolSetting[3] = sj_pbake_rol.mirrorChk.checked;
-        toolSetting[4] = sj_pbake_rol.startFm.value;
-        toolSetting[5] = sj_pbake_rol.endFm.value;
-        toolSetting[6] = sj_pbake_rol.stepFm.value;
-        toolSetting[7] = sj_pbake_rol.sBySCb.checked;
-        toolSetting[8] = sj_pbake_rol.posCb.checked;
-        toolSetting[9] = sj_pbake_rol.rotCb.checked;
-        toolSetting[10] = sj_pbake_rol.scaleCb.checked;
+            if bookFmFlag[bookLN][6] then sj_Time_Machine_rol.bookBt06.caption = (bookFm[bookLN][11] as String) + "-" + (bookFm[bookLN][12] as String)
+            if bookFmFlag[bookLN][7] then sj_Time_Machine_rol.bookBt07.caption = (bookFm[bookLN][13] as String) + "-" + (bookFm[bookLN][14] as String)
 
-        setINISetting (inifile "SJPBake" "LoadList" (iniSetting[1] as String)
-        setINISetting (inifile "SJPBake" "LoadSetting" (iniSetting[2] as String)
-        setINISetting (inifile "SJPBake" "PBakedSelect" (iniSetting[3] as String)
-        setINISetting (inifile "SJPBake" "BakedLayer" (iniSetting[4] as String)
-        setINISetting (inifile "SJPBake" "BBakedSelect" (iniSetting[5] as String)
-        setINISetting (inifile "SJPBake" "ToolSetting" (toolSetting as String)
+    close TimeMachineDefalutFile
+    tempName = #();
 
-        --配列を文字列化
-        local arrayStr = "#("
-        for i in sj_pbake_rol.pb_listL.items do arrayStr += "\"" + i + "\",";  --\"でダブルクォーテーションのエスケープシーケンス
-        if (arrayStr != "#(") then arrayStr = replace arrayStr (arrayStr.count) 1 ")" else arrayStr = "#()";
-        setINISetting (inifile "SJPBake" "ListL" arrayStr;
+)--fn end
 
-        arrayStr = "#("
-        for i in sj_pbake_rol.pb_listR.items do arrayStr += "\"" + i + "\",";--\"でダブルクォーテーションのエスケープシーケンス
-        if (arrayStr != "#(") then arrayStr = replace arrayStr (arrayStr.count) 1 ")" else arrayStr = "#()";
-        setINISetting (inifile "SJPBake" "ListR" arrayStr;
-    )
+--////////////////////////////////////////////////
+--save default
+--////////////////////////////////////////////////
+fn saveDefault_Fn =
+(
+--なんとなく暗号化
+--print "保存します"
+PbakeDefalutFile = createFile "$Scripts/SJTools//PbakeDefalut.tmp"
+format "%"  to:PbakeDefalutFile;
+close PbakeDefalutFile;
 
-    --////////////////////////////////////////////////
-    --ベイクタイプ判定
-    fn bakeTypeCheck_Fn =
+--encryptFile "$Scripts/SJTools//TimeMachineDefalut.tmp" "$Scripts/SJTools//TimeMachineDefalut.dat" fileLockID
+--deleteFile "$Scripts/SJTools//TimeMachineDefalut.tmp"
+)--fn end
+
+-----------------------------------------------------------------------------------------------------------
+--初期化
+-----------------------------------------------------------------------------------------------------------
+--////////////////////////////////////////////////
+--初期化
+--////////////////////////////////////////////////
+fn initialize_Fn = (
+    --初期設定をiniから読み込む
+    /*
+    ini = ini
+    iniSetting[1] = execute(getINISetting ((getDir #scripts) + "\SJTools\SJTools.ini") "SJPBake" "LoadList");
+    iniSetting[2] = execute(getINISetting ((getDir #scripts) + "\SJTools\SJTools.ini") "SJPBake" "LoadSetting");
+    iniSetting[3] = execute(getINISetting ((getDir #scripts) + "\SJTools\SJTools.ini") "SJPBake" "PBakedSelect");
+    iniSetting[4] = execute(getINISetting ((getDir #scripts) + "\SJTools\SJTools.ini") "SJPBake" "BakedLayer");
+    iniSetting[5] = execute(getINISetting ((getDir #scripts) + "\SJTools\SJTools.ini") "SJPBake" "BBakedSelect");
+
+    --変数に適応
+    layerNameStr = (getINISetting ((getDir #scripts) + "\SJTools\SJTools.ini") "SJPBake" "BakedLayerName");
+
+    if iniSetting[1] then (
+    --Iniファイルから前回起動時の状態を取得
+        --print (getINISetting ((getDir #scripts) + "\SJTools\SJTools.ini") "SJPBake" "ListL")
+    sj_pbake_rol.pb_listL.items = execute(getINISetting ((getDir #scripts) + "\SJTools\SJTools.ini") "SJPBake" "ListL");
+    sj_pbake_rol.pb_listR.items = execute(getINISetting ((getDir #scripts) + "\SJTools\SJTools.ini") "SJPBake" "ListR");
+    );--if end
+    */
+    --変数に適応
+    /*
+    toolSetting = execute(getINISetting ((getDir #scripts) + "\SJTools\SJPBake\SJTools.ini") "SJPBake" "ToolSetting");
+    if iniSetting[2] then (
+    sj_pbake_rol.pbTypeRb.state = toolSetting[1];
+    sj_pbake_rol.pbOpRb.state = toolSetting[2];
+    sj_pbake_rol.mirrorChk.checked = toolSetting[3];
+    sj_pbake_rol.startFm.value = toolSetting[4];
+    sj_pbake_rol.endFm.value = toolSetting[5];
+    sj_pbake_rol.stepFm.value = toolSetting[6];
+    sj_pbake_rol.sBySCb.checked = toolSetting[7];
+    sj_pbake_rol.posCb.checked = toolSetting[8];
+    sj_pbake_rol.rotCb.checked = toolSetting[9];
+    sj_pbake_rol.scaleCb.checked = toolSetting[10];
+    );--if end
+    */
+
+    /*
+    sj_pbake_rol.bakeTypeCheck_Fn();
+    sj_pbake_rol.bakeKeyCheck_Fn();
+    */
+    /*
+    sj_pbake_rol.listCntL.caption = (sj_pbake_rol.pb_listL.items.count as String);
+    sj_pbake_rol.listCntR.caption = (sj_pbake_rol.pb_listR.items.count as String);
+    */
+
+);--end
+
+--////////////////////////////////////////////////
+--初期値保存
+--////////////////////////////////////////////////
+fn saveIni_Fn = (
+    toolSetting[1] = sj_pbake_rol.pbTypeRb.state;
+    toolSetting[2] = sj_pbake_rol.pbOpRb.state;
+    toolSetting[3] = sj_pbake_rol.mirrorChk.checked;
+    toolSetting[4] = sj_pbake_rol.startFm.value;
+    toolSetting[5] = sj_pbake_rol.endFm.value;
+    toolSetting[6] = sj_pbake_rol.stepFm.value;
+    toolSetting[7] = sj_pbake_rol.sBySCb.checked;
+    toolSetting[8] = sj_pbake_rol.posCb.checked;
+    toolSetting[9] = sj_pbake_rol.rotCb.checked;
+    toolSetting[10] = sj_pbake_rol.scaleCb.checked;
+
+setINISetting ((getDir #scripts) + "\SJTools\SJTools.ini") "SJPBake" "LoadList" (iniSetting[1] as String)
+setINISetting ((getDir #scripts) + "\SJTools\SJTools.ini") "SJPBake" "LoadSetting" (iniSetting[2] as String)
+setINISetting ((getDir #scripts) + "\SJTools\SJTools.ini") "SJPBake" "PBakedSelect" (iniSetting[3] as String)
+setINISetting ((getDir #scripts) + "\SJTools\SJTools.ini") "SJPBake" "BakedLayer" (iniSetting[4] as String)
+setINISetting ((getDir #scripts) + "\SJTools\SJTools.ini") "SJPBake" "BBakedSelect" (iniSetting[5] as String)
+setINISetting ((getDir #scripts) + "\SJTools\SJTools.ini") "SJPBake" "ToolSetting" (toolSetting as String)
+
+--配列を文字列化
+local arrayStr = "#("
+for i in sj_pbake_rol.pb_listL.items do arrayStr += "\"" + i + "\",";--\"でダブルクォーテーションのエスケープシーケンス
+if (arrayStr != "#(") then arrayStr = replace arrayStr (arrayStr.count) 1 ")" else arrayStr = "#()";
+setINISetting ((getDir #scripts) + "\SJTools\SJTools.ini") "SJPBake" "ListL" arrayStr;
+arrayStr = "#("
+for i in sj_pbake_rol.pb_listR.items do arrayStr += "\"" + i + "\",";--\"でダブルクォーテーションのエスケープシーケンス
+if (arrayStr != "#(") then arrayStr = replace arrayStr (arrayStr.count) 1 ")" else arrayStr = "#()";
+setINISetting ((getDir #scripts) + "\SJTools\SJTools.ini") "SJPBake" "ListR" arrayStr;
+
+);--end
+
+
+-----------------------------------------------------------------------------------------------------------
+-- チェッカーファンクション
+-----------------------------------------------------------------------------------------------------------
+--////////////////////////////////////////////////
+--ベイクタイプ判定
+--////////////////////////////////////////////////
+fn bakeTypeCheck_Fn =
+(
+local checkTemp = #()
+    case sj_pbake_rol.pbTypeRb.state of
     (
-        local checkTemp = #()
-        case sj_pbake_rol.pbTypeRb.state of
-        (
-            1:( checkTemp = #(true,false,false))
-            2:( checkTemp = #(false,true,true))
-            3:( checkTemp = #(false,false,true))
-        )
+        1:( checkTemp = #(true,false,false));
 
-        sj_pbake_rol.mirrorChk.enabled = checkTemp[3];
-        --sj_pbake_rol.offsetChk.enabled = checkTemp[1];
+        2:( checkTemp = #(false,true,true));
 
-        sj_pbake_rol.pbOpRb.enabled = checkTemp[2];
-        sj_pbake_rol.pb_listR.enabled = checkTemp[1];
-        sj_pbake_rol.addListBtR.enabled = checkTemp[1];
-        sj_pbake_rol.upListBtR.enabled = checkTemp[1];
-        sj_pbake_rol.downListBtR.enabled = checkTemp[1];
-        sj_pbake_rol.sortBtR.enabled = checkTemp[1];
-        sj_pbake_rol.pSortBtR.enabled = checkTemp[1];
-        sj_pbake_rol.delBtR.enabled = checkTemp[1];
-        sj_pbake_rol.clearBtR.enabled = checkTemp[1];
-        sj_pbake_rol.allSelListBtR.enabled = checkTemp[1];
-        sj_pbake_rol.listCntR.enabled = checkTemp[1];
-    )
+        3:( checkTemp = #(false,false,true));
+    ) --case end
 
-    --////////////////////////////////////////////////
-    --ベイクキーキー判定
-    fn bakeKeyCheck_Fn =
+    sj_pbake_rol.mirrorChk.enabled = checkTemp[3];
+    --sj_pbake_rol.offsetChk.enabled = checkTemp[1];
+
+    sj_pbake_rol.pbOpRb.enabled = checkTemp[2];
+    sj_pbake_rol.pb_listR.enabled = checkTemp[1];
+    sj_pbake_rol.addListBtR.enabled = checkTemp[1];
+    sj_pbake_rol.upListBtR.enabled = checkTemp[1];
+    sj_pbake_rol.downListBtR.enabled = checkTemp[1];
+    sj_pbake_rol.sortBtR.enabled = checkTemp[1];
+    sj_pbake_rol.pSortBtR.enabled = checkTemp[1];
+    sj_pbake_rol.delBtR.enabled = checkTemp[1];
+    sj_pbake_rol.clearBtR.enabled = checkTemp[1];
+    sj_pbake_rol.allSelListBtR.enabled = checkTemp[1];
+    sj_pbake_rol.listCntR.enabled = checkTemp[1];
+)
+
+--////////////////////////////////////////////////
+--ベイクキーキー判定
+--////////////////////////////////////////////////
+fn bakeKeyCheck_Fn =
+(
+    if sj_pbake_rol.posCb.checked == true then
     (
-        if sj_pbake_rol.posCb.checked == true then
+        if sj_pbake_rol.rotCb.checked == true then
         (
-            if sj_pbake_rol.rotCb.checked == true then
+            if sj_pbake_rol.scaleCb.checked == true then
             (
-                if sj_pbake_rol.scaleCb.checked == true then
-                (
-                    --全てにキー
-                    pbake_bakeType = 0
-                    sj_pbake_rol.pBakeBt.enabled = true
-                ) else (
-                    --位置、回転
-                    pbake_bakeType = 1
-                    sj_pbake_rol.pBakeBt.enabled = true
-                )
-            ) else (
-                if sj_pbake_rol.scaleCb.checked == true then
-                (
-                    --位置、スケール
-                    pbake_bakeType = 2
-                    sj_pbake_rol.pBakeBt.enabled = true
-                ) else (
-                    --位置のみ
-                    pbake_bakeType = 3
-                    sj_pbake_rol.pBakeBt.enabled = true
-                )
+            --全てにキー
+                pbake_bakeType = 0
+                sj_pbake_rol.pBakeBt.enabled = true
+                --sj_pbake_rol.offsetChk.checked = true;
+                --sj_pbake_rol.offsetChk.enabled = true
             )
-        ) else (
-            if sj_pbake_rol.rotCb.checked == true then
+            else
             (
-                if sj_pbake_rol.scaleCb.checked == true then
-                (
-                    --回転、スケール
-                    pbake_bakeType = 4
-                    sj_pbake_rol.pBakeBt.enabled = true
-                ) else (
-                    --回転のみ
-                    pbake_bakeType = 5
-                    sj_pbake_rol.pBakeBt.enabled = true
-                )
-            ) else (
-                if sj_pbake_rol.scaleCb.checked == true then
-                (
-                    --スケールのみ
-                    pbake_bakeType = 6
-                    sj_pbake_rol.pBakeBt.enabled = true
-                ) else (
-                    --pBake無効
-                    pbake_bakeType = 0
-                    sj_pbake_rol.pBakeBt.enabled = false
-                )
+            --位置、回転
+                pbake_bakeType = 1
+                sj_pbake_rol.pBakeBt.enabled = true
+                --sj_pbake_rol.offsetChk.checked = false;
+                --sj_pbake_rol.offsetChk.enabled = false;
             )
-        )
-    )
-
-    --////////////////////////////////////////////////
-    --Step by Step　チェック
-    fn sBySCheck_Fn stateTm =
-    (
-        if stateTm != true then
-        (
-            sj_pbake_rol.stepFm.enabled = true
-            sj_pbake_rol.stepLbl.enabled = true
-            sByS = 0
-        ) else (
-            sj_pbake_rol.stepFm.enabled = false
-            sj_pbake_rol.stepLbl.enabled = false
-            sByS = 1
-        )
-    )
-
-    --////////////////////////////////////////////////
-    --リストは空か？
-    fn bakeListCheck_Fn checkList =
-    (
-        if checkList.count != 0 then
-        (
-            return true
         )
         else
         (
-            messageBox("リストが空ですぅ!") title:MesseTitleInfoStr;
-            return false
-        )
-    )
-
-    --////////////////////////////////////////////////
-    --オブジェクトがあるかどうか判定
-    fn bakeListSelectCheck_Fn =
-    (
-        SjPBakeProg.processInfo.caption = "リストをチェック中"
-        local checkListTag = sj_pbake_rol.pb_listL.items;--左のアイテム
-        local errorFlag = 0, progCount = 1;
-        tempObj = undefined;
-        local getNodeTemp = undefined;
-        local getNodeTempCount = 0;
-        --リストはからか？
-        if checkListTag.count == 0 do
-        (
-            messageBox("リストが空です！") title:MesseTitleInfoStr;
-            return false;
-        )
-        --PBake用リスト判定
-        if(sj_pbake_rol.pbTypeRb.state == 1)do
-        (
-            --アイテム数が超えていないか？
-            if (sj_pbake_rol.pb_listL.items.count > sj_pbake_rol.pb_listR.items.count) do
+            if sj_pbake_rol.scaleCb.checked == true then
             (
-                messageBox("ベイクターゲットがありません!\n右リストにターゲットを設定してください") title:MesseTitleInfoStr;
-                return false;
+            --位置、スケール
+                pbake_bakeType = 2
+                sj_pbake_rol.pBakeBt.enabled = true
+                --sj_pbake_rol.offsetChk.checked = false;
+                --sj_pbake_rol.offsetChk.enabled = false;
+            )
+            else
+            (
+            --位置のみ
+                pbake_bakeType = 3
+                sj_pbake_rol.pBakeBt.enabled = true
+                --sj_pbake_rol.offsetChk.checked = false;
+                --sj_pbake_rol.offsetChk.enabled = false;
             )
         )
+    )
+    else
+    (
+        if sj_pbake_rol.rotCb.checked == true then
+        (
+            if sj_pbake_rol.scaleCb.checked == true then
+            (
+            --回転、スケール
+                pbake_bakeType = 4
+                sj_pbake_rol.pBakeBt.enabled = true
+                --sj_pbake_rol.offsetChk.checked = false;
+                --sj_pbake_rol.offsetChk.enabled = false;
+            )
+            else
+            (
+            --回転のみ
+                pbake_bakeType = 5
+                sj_pbake_rol.pBakeBt.enabled = true
+                --sj_pbake_rol.offsetChk.checked = false;
+                --sj_pbake_rol.offsetChk.enabled = false;
+            )
+        )
+        else
+        (
+            if sj_pbake_rol.scaleCb.checked == true then
+            (
+            --スケールのみ
+                pbake_bakeType = 6
+                sj_pbake_rol.pBakeBt.enabled = true
+                --sj_pbake_rol.offsetChk.checked = false;
+                --sj_pbake_rol.offsetChk.enabled = false;
+            )
+            else
+            (
+            --pBake無効
+                pbake_bakeType = 0
+                sj_pbake_rol.pBakeBt.enabled = false
+                --sj_pbake_rol.offsetChk.checked = false;
+                --sj_pbake_rol.offsetChk.enabled = false;
+            )
+        )
+    )
+)--fn end
+
+--////////////////////////////////////////////////
+--Step by Step　チェック
+--////////////////////////////////////////////////
+fn sBySCheck_Fn stateTm =
+(
+    if stateTm != true then
+    (
+        sj_pbake_rol.stepFm.enabled = true
+        sj_pbake_rol.stepLbl.enabled = true
+        sByS = 0
+    )
+    else
+    (
+        sj_pbake_rol.stepFm.enabled = false
+        sj_pbake_rol.stepLbl.enabled = false
+        sByS = 1
+    )
+)
+
+--////////////////////////////////////////////////
+--リストは空か？
+--////////////////////////////////////////////////
+fn bakeListCheck_Fn checkList =
+(
+    if checkList.count != 0 then
+    (
+        return true
+    )
+    else
+    (
+        messageBox("リストが空ですぅ!") title:MesseTitleInfoStr;
+        return false
+    )
+)--fn end
+
+--////////////////////////////////////////////////
+--オブジェクトがあるかどうか判定
+--////////////////////////////////////////////////
+fn bakeListSelectCheck_Fn =
+(
+sj_progressBar_rol.processInfo.caption = "リストをチェック中"
+Local checkListTag = sj_pbake_rol.pb_listL.items;--左のアイテム
+Local errorFlag = 0, progCount = 1;
+
+tempObj = undefined;
+
+Local getNodeTemp = undefined;
+Local getNodeTempCount = 0;
+
+    --リストはからか？
+    if checkListTag.count == 0 do
+    (
+        messageBox("リストが空です！") title:MesseTitleInfoStr;
+        return false;
+    );
+
+    --////////////////////////////////////////////////
+    --PBake用リスト判定
+    --////////////////////////////////////////////////
+    if(sj_pbake_rol.pbTypeRb.state == 1)do
+    (
+        --アイテム数が超えていないか？
+        if (sj_pbake_rol.pb_listL.items.count > sj_pbake_rol.pb_listR.items.count) do
+        (
+            messageBox("ベイクターゲットがありません!\n右リストにターゲットを設定してください") title:MesseTitleInfoStr;
+            return false;
+        )
+    );--Pbake用リスト判定
+
+     for i in checkListTag do--選択テスト開始
+     (
+        --オブジェクトを確保--大文字小文字判定あり
+         getNodeTemp = (getNodeByName i exact:false ignoreCase:false all:true);
+         --上のgetNodeBynameは配列が返されるので注意！
+
+        --オブジェクトはあるか?配列の数が0ならば
+        if (getNodeTemp.count == 0) do
+        (
+            messageBox("以下のオブジェクトがシーン上にありません\n" + i) title:MesseTitleInfoStr;
+            return false;
+        );--if end
+
+        --同じ名前のオブジェクトがあるか?配列で格納しているので、2以上なら重複名あり
+        if (getNodeTemp.count >= 2) do doubleNameCheck = true;
+
+        --Plotの場合の確認bipかどうか確認
+        if (sj_pbake_rol.pbTypeRb.state == 3) then
+        (
+            tempObj = getNodeByName i;
+            if ((classOf tempObj) == Biped_Object) or ((classOf tempObj.controller) == BipSlave_Control) then
+            (
+            --messageBox("PBakeとPlotはBipedに対応していません。\n" + i) title:MesseTitleInfoStr;
+            messageBox("PlotはBipedに対応していません。\n" + i) title:MesseTitleInfoStr;
+            return false;
+            );--if end
+        );--if end
+
+    --プログレス処理
+    progCount += 1;
+    sj_progressBar_rol.progbar.color = (color 190 10 30);
+    sj_progressBar_rol.progbar.value = ((100.00/checkListTag.count) * progCount) as Integer;
+
+    )--for end
+
+    getNodeTempCount = 0;
+
+    --pbakeの場合は右リストも検索
+    if (sj_pbake_rol.pbTypeRb.state == 1) do
+    (
+    --一端初期化、左側リストの重複用のフラグはすでに処理済み
+    getNodeTemp = undefined;
+
+    checkListTag = sj_pbake_rol.pb_listR.items;
+    progCount = 1;
 
         for i in checkListTag do--選択テスト開始
-        (
-            --オブジェクトを確保--大文字小文字判定あり
-            getNodeTemp = (getNodeByName i exact:false ignoreCase:false all:true)
+         (
+            --オブジェクトを確保
+            getNodeTemp = (getNodeByName i exact:false ignoreCase:false all:true);
             --上のgetNodeBynameは配列が返されるので注意！
+
             --オブジェクトはあるか?配列の数が0ならば
             if (getNodeTemp.count == 0) do
             (
                 messageBox("以下のオブジェクトがシーン上にありません\n" + i) title:MesseTitleInfoStr;
                 return false;
-            )
-            --同じ名前のオブジェクトがあるか?配列で格納しているので、2以上なら重複名あり
-            if (getNodeTemp.count >= 2) do doubleNameCheck = true;
-            --Plotの場合の確認bipかどうか確認
-            if (sj_pbake_rol.pbTypeRb.state == 3) then
-            (
-                tempObj = getNodeByName i;
-                if ((classOf tempObj) == Biped_Object) or ((classOf tempObj.controller) == BipSlave_Control) then
-                (
-                    messageBox("PlotはBipedに対応していません。\n" + i) title:MesseTitleInfoStr;
-                    return false;
-                )
-            )
-            --プログレス処理
-            progCount += 1;
-            SjPBakeProg.progbar.color = (color 190 10 30)
-            SjPBakeProg.progbar.value = ((100.00/checkListTag.count) * progCount) as Integer;
-        )
+            );--if end
 
-        getNodeTempCount = 0;
-        --pbakeの場合は右リストも検索
-        if (sj_pbake_rol.pbTypeRb.state == 1) do
+            --同じ名前のオブジェクトがあるか?
+            if (getNodeTemp.count > 1) do doubleNameCheck = true;
+
+        --プログレス
+        progCount += 1;
+        sj_progressBar_rol.progbar.color = (color 190 10 30);
+        sj_progressBar_rol.progbar.value = ((100.00/checkListTag.count) * progCount) as Integer;
+    );--for end
+    );--if end
+
+    --プログレス処理
+    sj_progressBar_rol.progbar.color = (color 30 10 190);
+    sj_progressBar_rol.progbar.value = 0;
+
+    tempObj = undefined;
+
+    return true;
+);
+
+
+--////////////////////////////////////////////////
+--IKオブジェクトを確認して格納する
+--////////////////////////////////////////////////
+fn bakeListIKCheck_Fn =
+(
+    sj_progressBar_rol.processInfo.caption = "リストチェック中";
+    Local checkListTag = sj_pbake_rol.pb_listL.items;
+    Local progCount = 1, k = undefined;
+
+    --初期化
+    ikCheck = false;
+    ikObjQuery = false;
+    ikObj = #();
+    hdikObj = #();
+    ikObjEff = #();
+    ikObjIndex = #();
+    ikBakeObj = #();
+    ikObjCont = 1;
+    ikdependObj = #();
+
+     for i in checkListTag do--選択テスト開始
+     (
+        k = (getNodeByName i);
+
+        --Kのオブジェクトがシーンにあるか？
+        if (k != undefined ) do
         (
-        --一端初期化、左側リストの重複用のフラグはすでに処理済み
-        getNodeTemp = undefined;
+        --IK関連のオブジェクトなら回収
+        if ((classOf k.controller) == IKControl) then
+        (
+            append ikObj k;
+            --そのindexを回収progCountはLsitのIDと一致している
+            append ikObjIndex progCount;
+            ikCheck = true;
+        );--if end
 
-        checkListTag = sj_pbake_rol.pb_listR.items;
-        progCount = 1;
+        --HDIKを回収
+        if ((classOf k.controller) == IK_ControllerMatrix3Controller) then
+         (
+            append ikObj k;
+            append hdikObj k;
+            --そのindexを回収progCountはLsitのIDと一致している
+            append ikObjIndex progCount;
+            ikCheck = true;
+         );--if end
 
-            for i in checkListTag do--選択テスト開始
-            (
-                --オブジェクトを確保
-                getNodeTemp = (getNodeByName i exact:false ignoreCase:false all:true)
-                --オブジェクトはあるか?配列の数が0ならば
-                if (getNodeTemp.count == 0) do
-                (
-                    messageBox("以下のオブジェクトがシーン上にありません\n" + i) title:MesseTitleInfoStr;
-                    return false;
-                )
-                --同じ名前のオブジェクトがあるか?
-                if (getNodeTemp.count > 1) do doubleNameCheck = true;
+        --こっちはエフェクタ
+        if ((classOf k) == IK_Chain_Object) then
+        (
+            append ikObj k;
+            append ikObjEff k;
+            --そのindexを回収progCountはLsitのIDと一致している
+            append ikObjIndex progCount;
+            ikCheck = true;
+            --append ikObjIndex progCount;
+        );--if end
 
-                --プログレス
-                progCount += 1;
-                SjPBakeProg.progbar.color = (color 190 10 30)
-                SjPBakeProg.progbar.value = ((100.00/checkListTag.count) * progCount) as Integer;
-            )
-        )
-        --プログレス処理
-        SjPBakeProg.progbar.color = (color 30 10 190)
-        SjPBakeProg.progbar.value = 0;
+        );--if end
+
+        --progCountはLsitのIDと一致している
+        progCount += 1;
+        --sj_progressBar_rol.progbar.color = (color 190 10 30);
+        sj_progressBar_rol.progbar.value = ((100.00/sj_pbake_rol.pb_listL.items.count) * progCount) as Integer;
+    );--for end
+
+);--fn end
+
+
+
+-----------------------------------------------------------------------------------------------------------
+--リストをいじるファンクション
+-----------------------------------------------------------------------------------------------------------
+--////////////////////////////////////////////////
+--リストに追加ファンクション
+--////////////////////////////////////////////////
+fn addList_Fn =
+(
+    Local addList = #();
+    for i in selection do
+    (
+        append addList i.name;
+    )
+    return addList;
+    --sort addList --ソートします
+)
+
+--////////////////////////////////////////////////
+--削除ファンクション 短いけどまぁ、練習のために
+--////////////////////////////////////////////////
+fn deleteList_Fn delList delSel =
+(
+    if delList.count != 0 then deleteItem delList delSel --削除
+
+)
+
+--////////////////////////////////////////////////
+--アップダウン
+--////////////////////////////////////////////////
+fn selUp_Fn selUpList selUpIndex =
+(
+    next = selUpList[ selUpIndex - 1 ]
+    selUpList[ selUpIndex - 1 ] = selUpList[selUpIndex]
+    selUpList[selUpIndex] = next
+)
+
+fn selDown_Fn selDownList selDownIndex =
+(
+    next = selDownList[ selDownIndex + 1 ]
+    selDownList[ selDownIndex + 1 ] = selDownList[selDownIndex]
+    selDownList[selDownIndex] = next
+)
+
+--////////////////////////////////////////////////
+--ソートファンクション　ファンクション化する必要はないけど練習に
+--////////////////////////////////////////////////
+fn sortList_Fn sortList =
+(
+    local sortTemp =#()
+    sortTemp = sortList
+    sort sortTemp
+)
+
+--////////////////////////////////////////////////
+--親子順にソートする
+--////////////////////////////////////////////////
+fn parentSort_Fn sortList =
+(
+    --変数を準備
+    Local selObj = #();
+    Local myObjAll = #();
+    Local addList = #();
+    Local delName = #();
+    Local delNameAll = "";
+    tempObj = undefined;
+
+    --ソートリストから一端取得する
+    for i in sortList do
+    (
+        tempObj = (getNodeByName i ignoreCase:false all:false);
+        --存在してなかったら、警告を出す様に名前を回収
+        if (tempObj != undefined) then (append selObj tempObj)else(append delName i );
+    );--for end
         tempObj = undefined;
-        return true;
-    )
-
-
-    --////////////////////////////////////////////////
-    --IKオブジェクトを確認して格納する
-    fn bakeListIKCheck_Fn =
+    --確保できたならば
+    if selObj.count != 0 then
     (
-        SjPBakeProg.processInfo.caption = "リストチェック中";
-        local checkListTag = sj_pbake_rol.pb_listL.items;
-        local progCount = 1, k = undefined;
+        myObjAll = (sj_functions.sj_sortByBranch_Fn selObj);--ソート関数に送る
+        addList = for i in myObjAll collect i.name;--名前を回収
+    --数が減っていたら警告を出す
+    if (sortList.count > addList.count) then
+    (
+        for i in delName do delNameAll += i + ", ";
+        messageBox("シーンに存在しかなった以下の項目を削除しました\n"+ delNameAll + "\n ")title:MesseTitleInfoStr;
+    );--if end
+    --初期化してgc、一応メモリを開放
+    selObj = #();
+    myObjAll = #();
+    delName = #();
+    gc();
 
-        --初期化
-        ikCheck = false;
-        ikObjQuery = false;
-        ikObj = #()
-        hdikObj = #()
-        ikObjEff = #()
-        ikObjIndex = #()
-        ikBakeObj = #()
-        ikObjCont = 1;
-        ikdependObj = #()
+    return addList;
 
-        for i in checkListTag do--選択テスト開始
+    )else(messageBox("リスト上のオブジェクトがシーン上にありません\n ")title:MesseTitleInfoStr);--if end
+
+    --オブジェクトが無ければそのままリターン
+    tempObj = undefined;
+    return sortList;
+);--fn end
+
+
+/*
+--////////////////////////////////////////////////
+--選択セットから
+--////////////////////////////////////////////////
+fn getSelSet_Fn =
+(
+    global selset_rol
+    try (destroydialog selset_rol) catch()
+
+        rollout selset_rol "Selection Set"
         (
-            k = (getNodeByName i)
-            --Kのオブジェクトがシーンにあるか？
-            if (k != undefined ) do
+
+            --////////////////////////////////////////////////
+            --レイアウト
+            --////////////////////////////////////////////////
+                dropDownList selsetDl "" pos:[8,8] width:132 height:22
+                button okBt "OK" pos:[8,36] width:64 height:20
+                button cancelBt "キャンセル" pos:[76,36] width:64 height:20
+
+            --////////////////////////////////////////////////
+            --アクション
+            --////////////////////////////////////////////////
+            on selset_rol open do --ロールアウトが開いたとき
             (
-                --IK関連のオブジェクトなら回収
-                if ((classOf k.controller) == IKControl) then
+                local selSetTempA = #()
+                if selectionSets.count != 0 do --選択セットがあった場合
                 (
-                    append ikObj k;
-                    --そのindexを回収progCountはLsitのIDと一致している
-                    append ikObjIndex progCount;
-                    ikCheck = true;
-                )
+                    for i = 1 to selectionSets.count do
+                    (
+                    append selSetTempA ( getNamedSelSetName i ) --選択セットから選択セット名を取得 getNamedSelSetとかは選択セットがらみ
+                    )--for end
+                    selsetDl.items = selSetTempA
+                )--if end
+            ) --end
 
-                --HDIKを回収
-                if ((classOf k.controller) == IK_ControllerMatrix3Controller) then
+            --////////////////////////////////////////////////
+            --OKボタン
+            --////////////////////////////////////////////////
+            on okBt pressed do
+            (
+                local selsetTempB = #()
+                if selsetDl.selection != 0 do --ドロップダウンで選択していたら
                 (
-                    append ikObj k;
-                    append hdikObj k;
-                    --そのindexを回収progCountはLsitのIDと一致している
-                    append ikObjIndex progCount;
-                    ikCheck = true;
-                )
+                    for i=1 to getNamedSelSetItemCount selsetDl.selection do
+                    (
+                        s = ( getNamedSelSetItem selsetDl.selection i )
+                        append selsetTempB s.name
+                    )
 
-                --こっちはエフェクタ
-                if ((classOf k) == IK_Chain_Object) then
-                (
-                    append ikObj k;
-                    append ikObjEff k;
-                    --そのindexを回収progCountはLsitのIDと一致している
-                    append ikObjIndex progCount;
-                    ikCheck = true;
-                    --append ikObjIndex progCount;
-                )
-            )
-            --progCountはLsitのIDと一致している
-            progCount += 1;
-            SjPBakeProg.progbar.value = ((100.00/sj_pbake_rol.pb_listL.items.count) * progCount) as Integer;
-        )
-    )
+                        if pbake_tagListNum == true then --入力先を選択
+                        (
+                            sj_pbake_rol.pb_listR.items = selsetTempB
+                            sj_pbake_rol.listCntR.caption = (sj_pbake_rol.pb_listR.items.count as String)
+                        )
+                        else
+                        (
+                            sj_pbake_rol.pb_listL.items = selsetTempB
+                            sj_pbake_rol.listCntL.caption = (sj_pbake_rol.pb_listL.items.count as String)
+                        )--if end
 
-    --////////////////////////////////////////////////
-    --リストに追加ファンクション
-    fn addList_Fn =
+                )--if end
+                try (destroydialog selset_rol) catch() --ダイアログを閉じる
+            )--end
+
+            --////////////////////////////////////////////////
+            --キャンセルボタン
+            --////////////////////////////////////////////////
+            on cancelBt pressed do
+            (
+                try (destroydialog selset_rol) catch() --ダイアログを閉じる
+            )--end
+
+        )--rollout selset_rol
+
+        --////////////////////////////////////////////////
+        --ダイアログクリエート
+        --////////////////////////////////////////////////
+        CreateDialog selset_rol 144 64 style:#(#style_border, #style_titlebar, #style_sysmenu, #style_minimizebox, #style_resizing) --pos:[50,50]
+)--fn end
+*/
+
+--////////////////////////////////////////////////
+--全選択
+--////////////////////////////////////////////////
+fn allSelList_Fn selList =
+(
+clearSelection()
+sj_progressBar_rol.processInfo.caption = "選択中"
+    if (bakeListCheck_Fn selList) == true do
     (
-        local addList = #()
-        for i in selection do
+         for i=1 to selList.count do--選択テスト開始
+         (
+            try(
+            selectMore (getNodeByName selList[i])
+            )
+            catch
+            (
+            messageBox("以下のオブジェクトがシーン上にありません\n" + (selList[i]))title:MesseTitleInfoStr;
+            )
+        sj_progressBar_rol.progbar.value = ((100.00/sj_pbake_rol.pb_listL.items.count) * i)
+        )--for end
+    )--if end
+)--fn end
+
+--////////////////////////////////////////////////
+--save
+--////////////////////////////////////////////////
+fn saveListFile_Fn saveListL saveListR =
+(
+    if saveListL.count != 0 then
+    (
+        local saveFile = getSaveFileName types:"Bake List File (*.blf)|*.blf|All(*.*)|*.*" caption:"リストを保存"
+
+        if saveFile != undefined do
         (
-            append addList i.name;
-        )
-        return addList;
+            saveFileList = createFile saveFile
+            format "%\n" saveListL.count to:saveFileList
+            for i in saveListL do
+            (
+            format "%\n" i to:saveFileList
+            )
+            format "%\n" saveListR.count to:saveFileList
+            for i in saveListR do
+            (
+            format "%\n" i to:saveFileList
+            )
+            close saveFileList
+        )--if end
+        --encryptFile "$Scripts/SJTools//temp.tmp" saveName fileLockID
+        --deleteFile "$Scripts/SJTools//temp.tmp"
     )
-
-    --////////////////////////////////////////////////
-    --削除ファンクション 短いけどまぁ、練習のために
-    fn deleteList_Fn delList delSel =
+    else
     (
-        if delList.count != 0 then deleteItem delList delSel --削除
-    )
+        messageBox("リストが空です!")title:MesseTitleInfoStr;
+    )--if end
+)
 
-    --////////////////////////////////////////////////
-    --アップダウン
-    fn selUp_Fn selUpList selUpIndex =
+--////////////////////////////////////////////////
+--load
+--////////////////////////////////////////////////
+fn loadListFile_Fn isClear =
+(
+    Local itemName = #(), loadItemCount = 0
+    local loadFile = getOpenFileName types:"Bake List File (*.blf)|*.blf|All(*.*)|*.*" caption:"リストを読み込み"
+
+    if loadFile != undefined do
     (
-        next = selUpList[ selUpIndex - 1 ]
-        selUpList[ selUpIndex - 1 ] = selUpList[selUpIndex]
-        selUpList[selUpIndex] = next
-    )
-
-    fn selDown_Fn selDownList selDownIndex =
-    (
-        next = selDownList[ selDownIndex + 1 ]
-        selDownList[ selDownIndex + 1 ] = selDownList[selDownIndex]
-        selDownList[selDownIndex] = next
-    )
-
-    --////////////////////////////////////////////////
-    --ソートファンクション　ファンクション化する必要はないけど練習に
-    fn sortList_Fn sortList =
-    (
-        local sortTemp =#()
-        sortTemp = sortList
-        sort sortTemp
-    )
-
-    --////////////////////////////////////////////////
-    --親子順にソートする
-    fn parentSort_Fn sortList =
-    (
-        --変数を準備
-        local selObj = #()
-        local myObjAll = #()
-        local addList = #()
-        local delName = #()
-        local delNameAll = "";
-        tempObj = undefined;
-
-        --ソートリストから一端取得する
-        for i in sortList do
+        loadFileList = openFile loadFile;
+        loadItemCount = readValue loadFileList;
+        for i=1 to loadItemCount do
         (
-            tempObj = (getNodeByName i ignoreCase:false all:false)
-            --存在してなかったら、警告を出す様に名前を回収
-            if (tempObj != undefined) then (append selObj tempObj)else(append delName i )
-        )
-            tempObj = undefined;
-        --確保できたならば
-        if selObj.count != 0 then
+            append itemName (( readLine loadFileList ) as String)
+        )--for end
+        if isClear then
         (
-            myObjAll = (sj_functions.sj_sortByBranch_Fn selObj)--ソート関数に送る
-            addList = for i in myObjAll collect i.name;--名前を回収
-        --数が減っていたら警告を出す
-            if (sortList.count > addList.count) then
-            (
-                for i in delName do delNameAll += i + ", ";
-                messageBox("シーンに存在しかなった以下の項目を削除しました\n"+ delNameAll + "\n ")title:MesseTitleInfoStr;
-            )
-            --初期化してgc、一応メモリを開放
-            selObj = #()
-            myObjAll = #()
-            delName = #()
-            gc()
+        sj_pbake_rol.pb_listL.items = itemName
+        )else	(
+        sj_pbake_rol.pb_listL.items += itemName
+        );--if end
 
-            return addList;
-        ) else (
-            messageBox("リスト上のオブジェクトがシーン上にありません\n ")title:MesseTitleInfoStr
-        )
-
-        --オブジェクトが無ければそのままリターン
-        tempObj = undefined;
-        return sortList;
-    )
-
-    --////////////////////////////////////////////////
-    --全選択
-    fn allSelList_Fn selList =
-    (
-        clearSelection()
-        SjPBakeProg();
-        SjPBakeProg.processInfo.caption = "選択中"
-        if (bakeListCheck_Fn selList) == true do
+        itemName = #()
+        loadItemCount = readValue loadFileList
+        for i=1 to loadItemCount do
         (
-            for i=1 to selList.count do--選択テスト開始
-            (
-                try(
-                    selectMore (getNodeByName selList[i])
-                ) catch (
-                    messageBox("以下のオブジェクトがシーン上にありません\n" + (selList[i]))title:MesseTitleInfoStr;
-                )
-                SjPBakeProg.progbar.value = ((100.00/sj_pbake_rol.pb_listL.items.count) * i)
-            )
-        )
-    )
+            append itemName (( readLine loadFileList ) as String)
+        )--for end
 
-    --////////////////////////////////////////////////
-    --save
-    fn saveListFile_Fn saveListL saveListR =
-    (
-        if saveListL.count != 0 then
+        if isClear then
         (
-            local saveFile = getSaveFileName types:"Bake List File (*.blf)|*.blf|All(*.*)|*.*" caption:"リストを保存"
+        sj_pbake_rol.pb_listR.items = itemName
+        )else	(
+        sj_pbake_rol.pb_listR.items += itemName
+        );--if end
 
-            if saveFile != undefined do
-            (
-                saveFileList = createFile saveFile
-                format "%\n" saveListL.count to:saveFileList
-                for i in saveListL do
-                (
-                    format "%\n" i to:saveFileList
-                )
 
-                format "%\n" saveListR.count to:saveFileList
-                for i in saveListR do
-                (
-                    format "%\n" i to:saveFileList
-                )
-                close saveFileList
-            )
-        ) else (
-            messageBox("リストが空です!")title:MesseTitleInfoStr;
-        )
-    )
-
-    --////////////////////////////////////////////////
-    --load
-    fn loadListFile_Fn isClear =
-    (
-        local itemName = #(), loadItemCount = 0
-        local loadFile = getOpenFileName types:"Bake List File (*.blf)|*.blf|All(*.*)|*.*" caption:"リストを読み込み"
-
-        if loadFile != undefined do
+        sj_pbake_rol.listCntL.caption = (sj_pbake_rol.pb_listL.items.count as String)
+        sj_pbake_rol.listCntR.caption = (sj_pbake_rol.pb_listR.items.count as String)
+        /*
+        while not eof in_List do
         (
-            loadFileList = openFile loadFile;
-            loadItemCount = readValue loadFileList;
-            for i=1 to loadItemCount do
-            (
-                append itemName (( readLine loadFileList ) as String)
-            )
-            if isClear then
-            (
-                sj_pbake_rol.pb_listL.items = itemName
-            ) else (
-                sj_pbake_rol.pb_listL.items += itemName
-            )
+            append itemName (( readLine in_List ) as String)
+            print itemName
+        )--while end
 
-            itemName = #()
-            loadItemCount = readValue loadFileList
-            for i=1 to loadItemCount do
-            (
-                append itemName (( readLine loadFileList ) as String)
-            )
-
-            if isClear then
-            (
-                sj_pbake_rol.pb_listR.items = itemName
-            ) else (
-                sj_pbake_rol.pb_listR.items += itemName
-            )
-
-            sj_pbake_rol.listCntL.caption = (sj_pbake_rol.pb_listL.items.count as String)
-            sj_pbake_rol.listCntR.caption = (sj_pbake_rol.pb_listR.items.count as String)
-            close loadFileList
+        if pbake_tagListNum == true then --入力先を選択
+        (
+            sj_pbake_rol.pb_listR.items = itemName
         )
-    )
+        else
+        (
+            sj_pbake_rol.pb_listL.items = itemName
+        )--if end
+        */
+        close loadFileList
+    )--if end
+
+)
 
 --////////////////////////////////////////////////
 --save
@@ -867,7 +1132,7 @@ fn saveSettingFile_Fn =
             saveSetting = createFile saveFile
             format "%" toolSetting to:saveSetting
             close saveSetting
-        )
+        )--if end
 )
 
 --////////////////////////////////////////////////
@@ -880,7 +1145,7 @@ fn loadSettingFile_Fn =
     if loadSettingFile != undefined do
     (
         loadSetting = openFile loadSettingFile;
-        toolSetting = execute(readLine loadSetting)
+        toolSetting = execute(readLine loadSetting);
 
     sj_pbake_rol.pbTypeRb.state = toolSetting[1];
     sj_pbake_rol.pbOpRb.state = toolSetting[2];
@@ -894,10 +1159,10 @@ fn loadSettingFile_Fn =
     sj_pbake_rol.scaleCb.checked = toolSetting[10];
 
         close loadSetting
-    )
+    )--if end
 
-    sj_pbake_rol.bakeTypeCheck_Fn()
-    sj_pbake_rol.bakeKeyCheck_Fn()
+    sj_pbake_rol.bakeTypeCheck_Fn();
+    sj_pbake_rol.bakeKeyCheck_Fn();
 )
 
 --////////////////////////////////////////////////
@@ -905,7 +1170,7 @@ fn loadSettingFile_Fn =
 --////////////////////////////////////////////////
 fn createNewLayer_Fn layerNameStr =
 (
-local i = 1
+Local i = 1
 numberStr = "01"
 newLayer = layerNameStr+numberStr
 while (layermanager.getLayerFromName newLayer) != undefined do
@@ -933,15 +1198,15 @@ fn getKeyArray_Fn lListObj bakeFm =
 
     try(
     for k in lListObj.pos.controller.keys do
-    (if k.time >= startFmTm and k.time <= endFmTm do append posKeys k.time)
+    (if k.time >= startFmTm and k.time <= endFmTm do append posKeys k.time)--for end
     )catch( posKeys = bakeFm )
     try(
     for k in lListObj.rotation.controller.keys do
-    (if k.time >= startFmTm and k.time <= endFmTm do append rotKeys k.time)
+    (if k.time >= startFmTm and k.time <= endFmTm do append rotKeys k.time)--for end
     )catch( rotKeys = bakeFm )
     try(
     for k in lListObj.scale.controller.keys do
-    (if k.time >= startFmTm and k.time <= endFmTm do append scaKeys k.time)
+    (if k.time >= startFmTm and k.time <= endFmTm do append scaKeys k.time)--for end
     )catch( scaKeys = bakeFm )
 
     return posKeys
@@ -953,7 +1218,7 @@ fn getKeyArray_Fn lListObj bakeFm =
 --アニメーションキー処理
 --////////////////////////////////////////////////
 --Type0 all key
-fn allKeyCreate_Fn sel tag frame = ( undo off( for i in frame do animate on (at time i sel.transform = tag.transform) ) )
+fn allKeyCreate_Fn sel tag frame = ( undo off( for i in frame do animate on (at time i sel.transform = tag.transform) ) )--fn end
 
 --Type1 pos rot
 fn keyCreateTypeOne_Fn sel tag frame =
@@ -972,9 +1237,9 @@ undo off
             sel.rotation.Z_Rotation = (in coordsys world tag.rotation.Z_Rotation)
             )
         )
-    )
+    )--for end
 )--undo off end
-)
+)--fn end
 
 --Type2 pos sca
 fn keyCreateTypeTwo_Fn sel tag frame =
@@ -991,12 +1256,12 @@ undo off
             sel.scale = tag.scale
             )
         )
-    )
+    )--for end
 )--undo off end
-)
+)--fn end
 
 --Type3 pos
-fn keyCreateTypeThree_Fn sel tag frame = ( undo off( for i in frame do animate on (at time i sel.pos = tag.pos) ) )
+fn keyCreateTypeThree_Fn sel tag frame = ( undo off( for i in frame do animate on (at time i sel.pos = tag.pos) ) )--fn end
 
 --Type4 rot sca
 fn keyCreateTypeFore_Fn sel tag frame =
@@ -1016,9 +1281,9 @@ undo off
             )
         )
 
-    )
+    )--for end
 )--undo off end
-)
+)--fn end
 
 --Type5 rot
 fn keyCreateTypeFive_Fn sel tag frame =
@@ -1036,15 +1301,15 @@ undo off
             sel.rotation.Z_Rotation = (in coordsys world tag.rotation.Z_Rotation)
             )
         )
-    )
+    )--for end
 )--undo off end
-)
+)--fn end
 
 --Type6 sca
-fn keyCreateTypeSix_Fn sel tag frame = ( undo off( for i in frame do animate on (at time i sel.scale = tag.scale) ) )
+fn keyCreateTypeSix_Fn sel tag frame = ( undo off( for i in frame do animate on (at time i sel.scale = tag.scale) ) )--fn end
 
 --step by step
-fn keyPosCreate_Fn sel tag frame = ( undo off( for i in frame do animate on at time i sel.pos = tag.pos ) )
+fn keyPosCreate_Fn sel tag frame = ( undo off( for i in frame do animate on at time i sel.pos = tag.pos ) )--Fn end
 
 --step by step
 fn keyRotCreate_Fn sel tag frame =
@@ -1062,12 +1327,12 @@ undo off
             sel.rotation.Z_Rotation = (in coordsys world tag.rotation.Z_Rotation)
             )
         )
-    )
+    )--for end
 )--undo off end
-)
+)--fn end
 
 --step by step
-fn keyScaCreate_Fn sel tag frame = ( undo off( for i in frame do animate on at time i sel.scale = tag.scale ) )
+fn keyScaCreate_Fn sel tag frame = ( undo off( for i in frame do animate on at time i sel.scale = tag.scale ) )--fn end
 
 --////////////////////////////////////////////////
 --アニメーションキー処理ミラー
@@ -1092,9 +1357,9 @@ undo off
             )
             )
         )
-    )
+    )--for end
 )--undo off end
-)
+);
 
 --////////////////////////////////////////////////
 --アニメーションキー処理オフセット
@@ -1111,12 +1376,12 @@ undo off
                 (
                 sel.transform =
                 (matrix3 tag.transform[offsetSetting[1]] tag.transform[offsetSetting[2]] tag.transform[offsetSetting[3]] tag.transform[4])
-                )--at time
-        )--animate
-    )
-)-- un do end
+                );--at time
+        );--animate
+    )--for end
+);-- un do end
 
-)
+)--fn end
 
 --////////////////////////////////////////////////
 --アニメーションキー処理BIP
@@ -1145,18 +1410,18 @@ undo off
                 if (pbake_bakeType != 4) or (pbake_bakeType != 5) or (pbake_bakeType != 6) then
                 (
                 biped.setTransform sel #pos (tag.transform.translationpart) true;
-                )
+                );--if end
 
                 if (pbake_bakeType != 2) or (pbake_bakeType != 3) or (pbake_bakeType != 6) then
                 (
                 biped.setTransform sel #rotation (tag.transform.rotationpart) true;
-                )
+                );--if end
 
-                )--at time end
-        )--animate end
-    )
+                );--at time end
+        );--animate end
+    );--for end
 )--undo off end
-)
+)--Fn end
 
 
 -----------------------------------------------------------------------------------------------------------
@@ -1225,7 +1490,7 @@ undo off
 
 
     local resizeBitMap = openBitmap "$Scripts/SJTools/Images/SJ_button_resize.png"
-    ImgTag resizeImg "Bitmap" pos:[442,394] width:10 height:10 enabled:false bitmap:resizeBitMap transparent:(color 255 255 255)
+    ImgTag resizeImg "Bitmap" pos:[442,394] width:10 height:10 enabled:false bitmap:resizeBitMap transparent:(color 255 255 255);
 
 -----------------------------------------------------------------------------------------------------------
 -- 設定
@@ -1244,8 +1509,8 @@ undo off
 --////////////////////////////////////////////////
 --キー判定処理
 --////////////////////////////////////////////////
-    on posCb changed state do (bakeKeyCheck_Fn())
-    on rotCb changed state do bakeKeyCheck_Fn()
+    on posCb changed state do (bakeKeyCheck_Fn());
+    on rotCb changed state do bakeKeyCheck_Fn();
     on scaleCb changed state do bakeKeyCheck_Fn()	;
     on sBySCb changed state do sBySCheck_Fn state
 
@@ -1253,8 +1518,8 @@ undo off
     (
         if state then(
         pbake_bakeType = 7;
-        )else(bakeKeyCheck_Fn())
-    )
+        )else(bakeKeyCheck_Fn());--if end
+    );--end
 
 -------------------------------------------------------------------------------------------------------
 -- リスト処理
@@ -1336,23 +1601,23 @@ undo off
     on sortBtR pressed do
     (
         pb_listR.items = sortList_Fn pb_listR.items;
-        listCntR.caption = (pb_listR.items.count as String)
-    )
+        listCntR.caption = (pb_listR.items.count as String);
+    );
     on sortBtL pressed do
     (
         pb_listL.items = sortList_Fn pb_listL.items;
-        listCntL.caption = (pb_listL.items.count as String)
-    )
+        listCntL.caption = (pb_listL.items.count as String);
+    );
     on pSortBtR pressed do
     (
         pb_listR.items = parentSort_Fn pb_listR.items;
-        listCntR.caption = (pb_listR.items.count as String)
-    )
+        listCntR.caption = (pb_listR.items.count as String);
+    );
     on pSortBtL pressed do
     (
         pb_listL.items = parentSort_Fn pb_listL.items;
-        listCntL.caption = (pb_listL.items.count as String)
-    )
+        listCntL.caption = (pb_listL.items.count as String);
+    );
 
 --delete
     on delBtR pressed do
@@ -1390,11 +1655,11 @@ undo off
     on allSelListBtR pressed do
     (sj_functions.sj_progressBar_Fn()
     allSelList_Fn pb_listR.items
-    try(destroydialog SjPBakeProg)catch())
+    try(destroydialog sj_progressBar_rol)catch())
     on allSelListBtL pressed do
     (sj_functions.sj_progressBar_Fn()
     allSelList_Fn pb_listL.items
-    try(destroydialog SjPBakeProg)catch())
+    try(destroydialog sj_progressBar_rol)catch())
 
 --Save
     on saveListBtR pressed do
@@ -1431,7 +1696,7 @@ undo off
     --////////////////////////////////////////////////
     sj_functions.sj_progressBar_Fn()
     --フレーム用
-    startFmTm = startFm.value; endFmTm = endFm.value; posKeys = #() rotKeys = #() scaKeys = #()
+    startFmTm = startFm.value; endFmTm = endFm.value; posKeys = #(); rotKeys = #(); scaKeys = #()
     --オブジェクト用
     newObj = undefined; lListObj = undefined; rListObj = undefined; bakedSel = #()
     itemCount = pb_listL.items.count --forループ回数
@@ -1444,14 +1709,14 @@ undo off
 
         --------------------------------------------
         --フレームを取得
-        bakeFm = #()
+        bakeFm = #();
         f = ( endFm.value - ( startFm.value ) ) / stepFm.value; --回数
         s = stepFm.value --ステップ数
 
         --最初のフレームを挿入
         append bakeFm startFm.value;
         --回収
-        for i=1 to f do append bakeFm (startFm.value + (i*s))
+        for i=1 to f do append bakeFm (startFm.value + (i*s));
         --最後のフレームが無ければ挿入
         if (findItem bakeFm endFm.value) == 0 then append bakeFm endFm.value;
 
@@ -1471,8 +1736,8 @@ undo off
     else
     (
         messageBox("エンドフレームをスタートフレームより大きい時間で設定してください!")title:MesseTitleInfoStr;
-        return ()--リターンで終了
-    )-- ifエンドフレーム判定
+        return ();--リターンで終了
+    );-- ifエンドフレーム判定
 
     --リストのオブジェクトはシーン上にあるか?
     --リストの中身をチェック
@@ -1480,9 +1745,9 @@ undo off
     (
         if doubleNameCheck do messageBox("シーン内のオブジェクトの名前が重複しています\n誤動作をする可能性がありますので\nご注意ください\n ")title:MesseTitleChkStr;
     )else(
-        try(destroydialog SjPBakeProg)catch()
-        return ()--リターンで処理終了
-    ) リストのオブジェクト存在チェック
+        try(destroydialog sj_progressBar_rol)catch();
+        return ();--リターンで処理終了
+    );--if end リストのオブジェクト存在チェック
 
 
     case pbTypeRb.state of
@@ -1493,21 +1758,21 @@ undo off
         --////////////////////////////////////////////////
         1:(
                 --IKオブジェクトをチェック
-                bakeListIKCheck_Fn()
+                bakeListIKCheck_Fn();
 
                 if ikCheck then
                 (
                 --IKが見つかったら警告を出す
                 if not (queryBox("IKコントローラーが適応されたオブジェクトがあります\n破損する可能性がありますが続行しますか?\n(この作業はアンドゥ出来ません)")title:MesseTitleChkStr) then
                 (
-                    resumeEditing()--再びアクティブに
-                    try(destroydialog SjPBakeProg)catch()
+                    resumeEditing();--再びアクティブに
+                    try(destroydialog sj_progressBar_rol)catch();
 
                     --リターンで処理終了
-                    return ()
+                    return ();
                     --)--with redraw end
-                )--IKチェックend
-                )--IKcountend
+                );--IKチェックend
+                );--IKcountend
 
                 undo off
                 (
@@ -1519,7 +1784,7 @@ undo off
 
                 lListObj = (getNodeByName pb_listL.items[n])
                 rListObj = (getNodeByName pb_listR.items[n])
-                SjPBakeProg.processInfo.caption = (floor(((100.00/itemCount) * (n - 1))) as String) + "% 完了" + pb_listL.items[n] + "を処理中   ";
+                sj_progressBar_rol.processInfo.caption = (floor(((100.00/itemCount) * (n - 1))) as String) + "% 完了" + pb_listL.items[n] + "を処理中   ";
 
                 if sByS == 0 then --step by step か？
                 (
@@ -1540,11 +1805,11 @@ undo off
                         6:(keyCreateTypeSix_Fn lListObj rListObj bakeFm)
                 --------------------------------------------
                 --オフセット
-                        7:(keyOffsetCreate_Fn lListObj rListObj bakeFm)
-                    )
+                        7:(keyOffsetCreate_Fn lListObj rListObj bakeFm);--end
+                    );--case end
                 )else(
                     keyBipCreate_Fn lListObj  rListObj bakeFm;
-                )--bip if end
+                );--bip if end
 
                 --下はbyStepの分岐
                 )else
@@ -1563,45 +1828,45 @@ undo off
                             keyPosCreate_Fn lListObj rListObj posKeys;
                             keyRotCreate_Fn lListObj rListObj rotKeys;
                             keyScaCreate_Fn lListObj rListObj scaKeys;
-                        )
+                        )--case0 end
                         1:(
                             keyPosCreate_Fn lListObj rListObj posKeys;
                             keyRotCreate_Fn lListObj rListObj rotKeys;
-                        )
+                        )--calse1 end
                         2:(
                             keyPosCreate_Fn lListObj rListObj posKeys;
                             keyScaCreate_Fn lListObj rListObj scaKeys;
-                        )
+                        )--case2 end
                         3:(
                             keyPosCreate_Fn lListObj rListObj posKeys;
-                        )
+                        )--case3 end
                         4:(
                             keyRotCreate_Fn lListObj rListObj rotKeys;
                             keyScaCreate_Fn lListObj rListObj scaKeys;
-                        )
+                        )--case4 end
                         5:(
                             keyRotCreate_Fn lListObj rListObj rotKeys;
-                        )
+                        )--case5 end
                         6:(
                             keyScaCreate_Fn lListObj rListObj scaKeys;
-                        )
-                    )
+                        )--case6 end
+                    )--case end
                 )else(
                     keyBipCreate_Fn lListObj  rListObj posKeys;
                     keyBipCreate_Fn lListObj  rListObj rotKeys;
-                )--bip if end
+                );--bip if end
 
-                )
+                )--if end
 
-                SjPBakeProg.progbar.value = ((100.00/itemCount) * n)
+                sj_progressBar_rol.progbar.value = ((100.00/itemCount) * n)
 
-                )
+                )--for end
 
-            ) undo off
+            );--end undo off
 
-        if iniSetting[3] do clearSelection()
+        if iniSetting[3] do clearSelection();
 
-        )
+        );--case 1 end
 
 
         --////////////////////////////////////////////////
@@ -1620,7 +1885,7 @@ undo off
                 --ESCキーを押した場合にforloopを中断します
                 --if keyboard.escPressed do (exit)-- if keyboard End
 
-                SjPBakeProg.processInfo.caption = (floor(((100.00/itemCount) * (n - 1))) as String) + "% 完了" + pb_listL.items[n] + "を処理中   ";
+                sj_progressBar_rol.processInfo.caption = (floor(((100.00/itemCount) * (n - 1))) as String) + "% 完了" + pb_listL.items[n] + "を処理中   ";
                 lListObj = (getNodeByName pb_listL.items[n])
                     case pbOpRb.state of
                     (
@@ -1640,7 +1905,7 @@ undo off
                         --newObj.rotation.controller = Euler_XYZ () --標準コントローラーに変換
                         --newObj.scale.controller = bezier_scale () --標準コントローラーに変換
                         )
-                    )
+                    ) --case end
                     append bakedSel newObj
 
                     if sByS == 0 then --step by step か？
@@ -1667,13 +1932,33 @@ undo off
                         deleteKeys newObj.pos.controller #allKeys
                         deleteKeys newObj.rotation.controller #allKeys
                         )
-                    )
+                    )--case end
 
                     )else
                     (
                 --------------------------------------------
                 --キーを取得
                 getKeyArray_Fn lListObj bakeFm
+                /*
+                posKeys = #()
+                rotKeys = #()
+                scaKeys = #()
+                    try(
+                    for k in lListObj.pos.controller.keys do
+                    (if k.time >= startFmTm and k.time <= endFmTm do append posKeys k.time)--for end
+                    )catch( posKeys = bakeFm )
+
+                    try(
+                    for k in lListObj.rotation.controller.keys do
+                    (if k.time >= startFmTm and k.time <= endFmTm do append rotKeys k.time)--for end
+                    )catch( rotKeys = bakeFm )
+
+                    try(
+                    for k in lListObj.scale.controller.keys do
+                    (if k.time >= startFmTm and k.time <= endFmTm do append scaKeys k.time)--for end
+                    )catch( scaKeys = bakeFm )
+                */
+
                     if not mirrorChk.checked then --Mirror?
                     (
                     keyPosCreate_Fn newObj lListObj posKeys
@@ -1702,21 +1987,21 @@ undo off
                         deleteKeys newObj.scale.controller #allKeys)
                         6:(deleteKeys newObj.pos.controller #allKeys
                         deleteKeys newObj.rotation.controller #allKeys)
-                    )
-                    )
+                    )--case end
+                    )--if end
 
-                SjPBakeProg.progbar.value = ((100.00/itemCount) * n)
+                sj_progressBar_rol.progbar.value = ((100.00/itemCount) * n)
 
-                )
+                )--for end
 
 
-                )--undo off end
+                );--undo off end
 
-            SjPBakeProg.progbar.value = 0
+            sj_progressBar_rol.progbar.value = 0
 
             if iniSetting[5] do select bakedSel;
 
-        )
+        )--case2 end
 
 
 
@@ -1727,7 +2012,7 @@ undo off
         3:(
 
             --IK対策を初期化,IKを確認
-            bakeListIKCheck_Fn()
+            bakeListIKCheck_Fn();
 
                 undo off
                 (
@@ -1747,10 +2032,10 @@ IK間接の一部だけをPlotするとアニメーションが破綻します
 
                     for n in ikObjIndex do
                     (
-                        lListObj = (getNodeByName pb_listL.items[n])
+                        lListObj = (getNodeByName pb_listL.items[n]);
 
-                        SjPBakeProg.progbar.value = ((100.00/ikObjIndex.count) * n)
-                        SjPBakeProg.processInfo.caption = "IKオブジェクトが確認されました 対処処理を行っています";
+                        sj_progressBar_rol.progbar.value = ((100.00/ikObjIndex.count) * n);
+                        sj_progressBar_rol.processInfo.caption = "IKオブジェクトが確認されました 対処処理を行っています";
                         --ポイントを作成して変数に格納、格納先はikBakeObj
                         tempObj = Point pos:[0,0,0];
                         tempObj.name = lListObj.name + "_IKBaked";
@@ -1760,28 +2045,28 @@ IK間接の一部だけをPlotするとアニメーションが破綻します
                         --ミラーか？
                         if not mirrorChk.checked then
                         (allKeyCreate_Fn tempObj lListObj bakeFm)
-                        else(keyMirrorCreate_Fn tempObj lListObj bakeFm)
+                        else(keyMirrorCreate_Fn tempObj lListObj bakeFm);
 
                         --キーを作成しする
                         if not mirrorChk.checked then
                         (allKeyCreate_Fn tempObj lListObj bakeFm)
-                        else(keyMirrorCreate_Fn tempObj lListObj bakeFm)
+                        else(keyMirrorCreate_Fn tempObj lListObj bakeFm);
 
-                    )
+                    );--for end
 
                         --コントローラーを削除する
                         for n in hdikObj do
                         (
                             --削除
-                            try(HDIKSys.RemoveChain n)catch()
-                        )
+                            try(HDIKSys.RemoveChain n)catch();
+                        );--if end
 
                         --コントローラーを無効にする
                         for n in ikObjEff do
                         (
                             --なぜかfloat値で設定している
                             n.transform.controller.enabled = 0;
-                        )
+                        );--for end
 
                         --コントローラーを無効にする
                         --ただし、最後の間接と最初の間接だけ対応
@@ -1794,11 +2079,11 @@ IK間接の一部だけをPlotするとアニメーションが破綻します
                             (
                             --IK設定オブジェクトならコントローラーを無効
                             if ((classOf j)==IK_Chain_Object) then j.transform.controller.enabled = 0;
-                            )--forend
-                        )
-                    )
+                            );--forend
+                        );--for end
+                    );--if end
 
-                    )
+                    );--if end
 
 
 
@@ -1815,8 +2100,8 @@ IK間接の一部だけをPlotするとアニメーションが破綻します
                 --ESCキーを押した場合にforloopを中断します
                 --if keyboard.escPressed do (exit)-- if keyboard End
 
-                    SjPBakeProg.progbar.value = ((100.00/itemCount) * n)
-                    SjPBakeProg.processInfo.caption = (floor (((100.00/itemCount) * (n - 1))) as String) + "% 完了" + pb_listL.items[n] + "を処理中   ";
+                    sj_progressBar_rol.progbar.value = ((100.00/itemCount) * n);
+                    sj_progressBar_rol.processInfo.caption = (floor (((100.00/itemCount) * (n - 1))) as String) + "% 完了" + pb_listL.items[n] + "を処理中   ";
                     lListObj = (getNodeByName pb_listL.items[n])
 
                     newObj = snapshot lListObj at time startFmTm--スナップショット このとき自動的に親子構造が結ばれる
@@ -1831,12 +2116,12 @@ IK間接の一部だけをPlotするとアニメーションが破綻します
                     for k in scaKeys do if (findItem scaKeys k) == 0 then append posKeys k
                     sort posKeys
                     bakeFm = posKeys
-                    )
+                    );--if end
 
                         --ミラーか？
                         if not mirrorChk.checked then
                         (allKeyCreate_Fn newObj lListObj bakeFm)
-                        else(keyMirrorCreate_Fn newObj lListObj bakeFm)
+                        else(keyMirrorCreate_Fn newObj lListObj bakeFm);
 
                     case pbake_bakeType of
                     (
@@ -1844,7 +2129,7 @@ IK間接の一部だけをPlotするとアニメーションが破綻します
                             try(
                             lListObj.Transform.controller = prs ()
                             lListObj.controller = copy newObj.controller
-                            )catch(messageBox("コントローラーを変更できませんでした\n"+lListObj.name) title:MesseTitleInfoStr)
+                            )catch(messageBox("コントローラーを変更できませんでした\n"+lListObj.name) title:MesseTitleInfoStr);
                         )
                         1:(
                             try(
@@ -1852,7 +2137,7 @@ IK間接の一部だけをPlotするとアニメーションが破綻します
                             lListObj.rotation.controller = Euler_XYZ () --標準コントローラーに変換
                             lListObj.pos.controller = copy newObj.pos.controller
                             lListObj.rotation.controller = copy newObj.rotation.controller
-                            )catch(messageBox("コントローラーを変更できませんでした\n"+lListObj.name) title:MesseTitleInfoStr)
+                            )catch(messageBox("コントローラーを変更できませんでした\n"+lListObj.name) title:MesseTitleInfoStr);
                         )
                         2:(
                             try(
@@ -1860,13 +2145,13 @@ IK間接の一部だけをPlotするとアニメーションが破綻します
                             lListObj.scale.controller = bezier_scale () --標準コントローラーに変換
                             lListObj.pos.controller = copy newObj.pos.controller
                             lListObj.scale.controller = copy newObj.scale.controller
-                            )catch(messageBox("コントローラーを変更できませんでした\n"+lListObj.name) title:MesseTitleInfoStr)
+                            )catch(messageBox("コントローラーを変更できませんでした\n"+lListObj.name) title:MesseTitleInfoStr);
                         )
                         3:(
                             try(
                             lListObj.pos.controller = Position_XYZ () --標準コントローラーに変換
                             lListObj.pos.controller = copy newObj.pos.controller
-                            )catch(messageBox("コントローラーを変更できませんでした\n"+lListObj.name) title:MesseTitleInfoStr)
+                            )catch(messageBox("コントローラーを変更できませんでした\n"+lListObj.name) title:MesseTitleInfoStr);
                         )
                         4:(
                             try(
@@ -1886,7 +2171,7 @@ IK間接の一部だけをPlotするとアニメーションが破綻します
                             lListObj.scale.controller = bezier_scale () --標準コントローラーに変換
                             lListObj.scale.controller = copy newObj.scale.controller
                         )
-                    )
+                    )--case end
 
                     delete newObj;
 
@@ -1898,9 +2183,9 @@ IK間接の一部だけをPlotするとアニメーションが破綻します
                     --処理にOKが出ていれば
                     if ikObjQuery then
                     (
-                    SjPBakeProg.progbar.value = ((100.00/itemCount) * n)
-                    SjPBakeProg.processInfo.caption = (floor (((100.00/itemCount) * (n - 1))) as String) + "% 完了" + pb_listL.items[n] + "を処理中   "
-                    lListObj = (getNodeByName pb_listL.items[n])
+                    sj_progressBar_rol.progbar.value = ((100.00/itemCount) * n);
+                    sj_progressBar_rol.processInfo.caption = (floor (((100.00/itemCount) * (n - 1))) as String) + "% 完了" + pb_listL.items[n] + "を処理中   "
+                    lListObj = (getNodeByName pb_listL.items[n]);
 
                     case pbake_bakeType of
                     (
@@ -1909,26 +2194,26 @@ IK間接の一部だけをPlotするとアニメーションが破綻します
                             if ((classOf lListObj.controller) == IKControl) then
                             (
                             try(
-                            lListObj.controller.FK_Sub_Control.controller = prs ()
+                            lListObj.controller.FK_Sub_Control.controller = prs ();
                             lListObj.controller.FK_Sub_Control.controller = copy ikBakeObj[ikObjCont].controller;
-                            )catch(messageBox("コントローラーを変更できませんでした\n" + lListObj.name) title:MesseTitleInfoStr)
-                            )
+                            )catch(messageBox("コントローラーを変更できませんでした\n" + lListObj.name) title:MesseTitleInfoStr);
+                            );--if end
                             --IKのコントローラーか?
                             if ((classOf lListObj) == IK_Chain_Object) then
                             (
                             try(
-                            lListObj.controller.IK_goal.controller = prs ()
+                            lListObj.controller.IK_goal.controller = prs ();
                             lListObj.controller.IK_goal.controller = copy ikBakeObj[ikObjCont].controller;
-                            )catch(messageBox("コントローラーを変更できませんでした\n" + lListObj.name) title:MesseTitleInfoStr)
-                            )
+                            )catch(messageBox("コントローラーを変更できませんでした\n" + lListObj.name) title:MesseTitleInfoStr);
+                            );--if end
                             --それ以外(HDIK),これは通常のコントローラーとみなす
                             if (not ((classOf lListObj) == IK_Chain_Object)) and (not ((classOf lListObj.controller) == IKControl)) then
                             (
                             try(
                             lListObj.Transform.controller = prs ()
                             lListObj.controller = copy ikBakeObj[ikObjCont].controller
-                            )catch(messageBox("コントローラーを変更できませんでした\n" + lListObj.name) title:MesseTitleInfoStr)
-                            )
+                            )catch(messageBox("コントローラーを変更できませんでした\n" + lListObj.name) title:MesseTitleInfoStr);
+                            );--if end
                         )
                         1:(
                             --位置回転
@@ -1936,32 +2221,32 @@ IK間接の一部だけをPlotするとアニメーションが破綻します
                             if ((classOf lListObj.controller) == IKControl) then
                             (
                             try(
-                            lListObj.controller.FK_Sub_Control.controller.Pos.controller = Position_XYZ ()
-                            lListObj.controller.FK_Sub_Control.controller.Rotation.controller = Euler_XYZ ()
+                            lListObj.controller.FK_Sub_Control.controller.Pos.controller = Position_XYZ ();
+                            lListObj.controller.FK_Sub_Control.controller.Rotation.controller = Euler_XYZ ();
                             lListObj.controller.FK_Sub_Control.controller.Pos.controller = copy ikBakeObj[ikObjCont].pos.controller;
                             lListObj.controller.FK_Sub_Control.controller.Rotation.controller = copy ikBakeObj[ikObjCont].rotation.controller;
-                            )catch(messageBox("コントローラーを変更できませんでした\n" + lListObj.name) title:MesseTitleInfoStr)
-                            )
+                            )catch(messageBox("コントローラーを変更できませんでした\n" + lListObj.name) title:MesseTitleInfoStr);
+                            );--if end
                             --IKのコントローラーか?
                             if ((classOf lListObj) == IK_Chain_Object) then
                             (
                             try(
-                            lListObj.controller.IK_goal.controller.Pos.controller = Position_XYZ ()
-                            lListObj.controller.IK_goal.controller.Rotation.controller = Euler_XYZ ()
+                            lListObj.controller.IK_goal.controller.Pos.controller = Position_XYZ ();
+                            lListObj.controller.IK_goal.controller.Rotation.controller = Euler_XYZ ();
                             lListObj.controller.IK_goal.controller.Pos.controller = copy ikBakeObj[ikObjCont].pos.controller;
                             lListObj.controller.IK_goal.controller.Rotation.controller = copy ikBakeObj[ikObjCont].rotation.controller;
-                            )catch(messageBox("コントローラーを変更できませんでした\n" + lListObj.name) title:MesseTitleInfoStr)
-                            )
+                            )catch(messageBox("コントローラーを変更できませんでした\n" + lListObj.name) title:MesseTitleInfoStr);
+                            );--if end
                             --それ以外(HDIK),これは通常のコントローラーとみなす
                             if (not ((classOf lListObj) == IK_Chain_Object)) and (not ((classOf lListObj.controller) == IKControl)) then
                             (
                             try(
-                            lListObj.pos.controller = Position_XYZ ()
-                            lListObj.rotation.controller = Euler_XYZ ()
+                            lListObj.pos.controller = Position_XYZ ();
+                            lListObj.rotation.controller = Euler_XYZ ();
                             lListObj.pos.controller = copy ikBakeObj[ikObjCont].pos.controller;
                             lListObj.rotation.controller = copy ikBakeObj[ikObjCont].rotation.controller;
-                            )catch(messageBox("コントローラーを変更できませんでした\n" + lListObj.name) title:MesseTitleInfoStr)
-                            )
+                            )catch(messageBox("コントローラーを変更できませんでした\n" + lListObj.name) title:MesseTitleInfoStr);
+                            );--if end
                         )
                         2:(
                             --位置スケール
@@ -1969,32 +2254,32 @@ IK間接の一部だけをPlotするとアニメーションが破綻します
                             if ((classOf lListObj.controller) == IKControl) then
                             (
                             try(
-                            lListObj.controller.FK_Sub_Control.controller.Pos.controller = Position_XYZ ()
-                            lListObj.controller.FK_Sub_Control.controller.Scale.controller = bezier_scale ()
+                            lListObj.controller.FK_Sub_Control.controller.Pos.controller = Position_XYZ ();
+                            lListObj.controller.FK_Sub_Control.controller.Scale.controller = bezier_scale ();
                             lListObj.controller.FK_Sub_Control.controller.Pos.controller = copy ikBakeObj[ikObjCont].pos.controller;
                             lListObj.controller.FK_Sub_Control.controller.Scale.controller = copy ikBakeObj[ikObjCont].scale.controller
-                            )catch(messageBox("コントローラーを変更できませんでした\n" + lListObj.name) title:MesseTitleInfoStr)
-                            )
+                            )catch(messageBox("コントローラーを変更できませんでした\n" + lListObj.name) title:MesseTitleInfoStr);
+                            );--if end
                             --IKのコントローラーか?
                             if ((classOf lListObj) == IK_Chain_Object) then
                             (
                             try(
-                            lListObj.controller.IK_goal.controller.Pos.controller = Position_XYZ ()
-                            lListObj.controller.IK_goal.controller.Scale.controller = bezier_scale ()
+                            lListObj.controller.IK_goal.controller.Pos.controller = Position_XYZ ();
+                            lListObj.controller.IK_goal.controller.Scale.controller = bezier_scale ();
                             lListObj.controller.IK_goal.controller.Pos.controller = copy ikBakeObj[ikObjCont].pos.controller;
                             lListObj.controller.IK_goal.controller.Scale.controller = copy ikBakeObj[ikObjCont].scale.controller;
-                            )catch(messageBox("コントローラーを変更できませんでした\n" + lListObj.name) title:MesseTitleInfoStr)
-                            )
+                            )catch(messageBox("コントローラーを変更できませんでした\n" + lListObj.name) title:MesseTitleInfoStr);
+                            );--if end
                             --それ以外(HDIK),これは通常のコントローラーとみなす
                             if (not ((classOf lListObj) == IK_Chain_Object)) and (not ((classOf lListObj.controller) == IKControl)) then
                             (
                             try(
-                            lListObj.pos.controller = Position_XYZ ()
-                            lListObj.scale.controller = bezier_scale ()
+                            lListObj.pos.controller = Position_XYZ ();
+                            lListObj.scale.controller = bezier_scale ();
                             lListObj.pos.controller = copy ikBakeObj[ikObjCont].pos.controller;
                             lListObj.scale.controller = copy ikBakeObj[ikObjCont].scale.controller;
-                            )catch(messageBox("コントローラーを変更できませんでした\n" + lListObj.name) title:MesseTitleInfoStr)
-                            )
+                            )catch(messageBox("コントローラーを変更できませんでした\n" + lListObj.name) title:MesseTitleInfoStr);
+                            );--if end
                         )
                         3:(
                             --位置
@@ -2002,26 +2287,26 @@ IK間接の一部だけをPlotするとアニメーションが破綻します
                             if ((classOf lListObj.controller) == IKControl) then
                             (
                             try(
-                            lListObj.controller.FK_Sub_Control.controller.Pos.controller = Position_XYZ ()
+                            lListObj.controller.FK_Sub_Control.controller.Pos.controller = Position_XYZ ();
                             lListObj.controller.FK_Sub_Control.controller.Pos.controller = copy ikBakeObj[ikObjCont].pos.controller;
-                            )catch(messageBox("コントローラーを変更できませんでした\n" + lListObj.name) title:MesseTitleInfoStr)
-                            )
+                            )catch(messageBox("コントローラーを変更できませんでした\n" + lListObj.name) title:MesseTitleInfoStr);
+                            );--if end
                             --IKのコントローラーか?
                             if ((classOf lListObj) == IK_Chain_Object) then
                             (
                             try(
-                            lListObj.controller.IK_goal.controller.Pos.controller = Position_XYZ ()
+                            lListObj.controller.IK_goal.controller.Pos.controller = Position_XYZ ();
                             lListObj.controller.IK_goal.controller.Pos.controller = copy ikBakeObj[ikObjCont].pos.controller;
-                            )catch(messageBox("コントローラーを変更できませんでした\n" + lListObj.name) title:MesseTitleInfoStr)
-                            )
+                            )catch(messageBox("コントローラーを変更できませんでした\n" + lListObj.name) title:MesseTitleInfoStr);
+                            );--if end
                             --それ以外(HDIK),これは通常のコントローラーとみなす
                             if (not ((classOf lListObj) == IK_Chain_Object)) and (not ((classOf lListObj.controller) == IKControl)) then
                             (
                             try(
-                            lListObj.pos.controller = Position_XYZ ()
+                            lListObj.pos.controller = Position_XYZ ();
                             lListObj.pos.controller = copy ikBakeObj[ikObjCont].pos.controller;
-                            )catch(messageBox("コントローラーを変更できませんでした\n" + lListObj.name) title:MesseTitleInfoStr)
-                            )
+                            )catch(messageBox("コントローラーを変更できませんでした\n" + lListObj.name) title:MesseTitleInfoStr);
+                            );--if end
 
                         )
                         4:(
@@ -2030,32 +2315,32 @@ IK間接の一部だけをPlotするとアニメーションが破綻します
                             if ((classOf lListObj.controller) == IKControl) then
                             (
                             try(
-                            lListObj.controller.FK_Sub_Control.controller.Rotation.controller = Euler_XYZ ()
-                            lListObj.controller.FK_Sub_Control.controller.Scale.controller = bezier_scale ()
+                            lListObj.controller.FK_Sub_Control.controller.Rotation.controller = Euler_XYZ ();
+                            lListObj.controller.FK_Sub_Control.controller.Scale.controller = bezier_scale ();
                             lListObj.controller.FK_Sub_Control.controller.Rotation.controller = copy ikBakeObj[ikObjCont].rotation.controller;
                             lListObj.controller.FK_Sub_Control.controller.Scale.controller = copy ikBakeObj[ikObjCont].scale.controller
-                            )catch(messageBox("コントローラーを変更できませんでした\n" + lListObj.name) title:MesseTitleInfoStr)
-                            )
+                            )catch(messageBox("コントローラーを変更できませんでした\n" + lListObj.name) title:MesseTitleInfoStr);
+                            );--if end
                             --IKのコントローラーか?
                             if ((classOf lListObj) == IK_Chain_Object) then
                             (
                             try(
-                            lListObj.controller.IK_goal.controller.Rotation.controller = Euler_XYZ ()
-                            lListObj.controller.IK_goal.controller.Scale.controller = bezier_scale ()
+                            lListObj.controller.IK_goal.controller.Rotation.controller = Euler_XYZ ();
+                            lListObj.controller.IK_goal.controller.Scale.controller = bezier_scale ();
                             lListObj.controller.IK_goal.controller.Rotation.controller = copy ikBakeObj[ikObjCont].rotation.controller;
                             lListObj.controller.IK_goal.controller.Scale.controller = copy ikBakeObj[ikObjCont].scale.controller;
-                            )catch(messageBox("コントローラーを変更できませんでした\n" + lListObj.name) title:MesseTitleInfoStr)
-                            )
+                            )catch(messageBox("コントローラーを変更できませんでした\n" + lListObj.name) title:MesseTitleInfoStr);
+                            );--if end
                             --それ以外(HDIK),これは通常のコントローラーとみなす
                             if (not ((classOf lListObj) == IK_Chain_Object)) and (not ((classOf lListObj.controller) == IKControl)) then
                             (
                             try(
-                            lListObj.rotation.controller = Euler_XYZ ()
-                            lListObj.scale.controller = bezier_scale ()
+                            lListObj.rotation.controller = Euler_XYZ ();
+                            lListObj.scale.controller = bezier_scale ();
                             lListObj.rotation.controller = copy ikBakeObj[ikObjCont].rotation.controller;
                             lListObj.scale.controller = copy ikBakeObj[ikObjCont].scale.controller;
-                            )catch(messageBox("コントローラーを変更できませんでした\n" + lListObj.name) title:MesseTitleInfoStr)
-                            )
+                            )catch(messageBox("コントローラーを変更できませんでした\n" + lListObj.name) title:MesseTitleInfoStr);
+                            );--if end
                         )
                         5:(
                             --回転
@@ -2063,26 +2348,26 @@ IK間接の一部だけをPlotするとアニメーションが破綻します
                             if ((classOf lListObj.controller) == IKControl) then
                             (
                             try(
-                            lListObj.controller.FK_Sub_Control.controller.Rotation.controller = Euler_XYZ ()
+                            lListObj.controller.FK_Sub_Control.controller.Rotation.controller = Euler_XYZ ();
                             lListObj.controller.FK_Sub_Control.controller.Rotation.controller = copy ikBakeObj[ikObjCont].rotation.controller;
-                            )catch(messageBox("コントローラーを変更できませんでした\n" + lListObj.name) title:MesseTitleInfoStr)
-                            )
+                            )catch(messageBox("コントローラーを変更できませんでした\n" + lListObj.name) title:MesseTitleInfoStr);
+                            );--if end
                             --IKのコントローラーか?
                             if ((classOf lListObj) == IK_Chain_Object) then
                             (
                             try(
-                            lListObj.controller.IK_goal.controller.Rotation.controller = Euler_XYZ ()
+                            lListObj.controller.IK_goal.controller.Rotation.controller = Euler_XYZ ();
                             lListObj.controller.IK_goal.controller.Rotation.controller = copy ikBakeObj[ikObjCont].rotation.controller;
-                            )catch(messageBox("コントローラーを変更できませんでした\n" + lListObj.name) title:MesseTitleInfoStr)
-                            )
+                            )catch(messageBox("コントローラーを変更できませんでした\n" + lListObj.name) title:MesseTitleInfoStr);
+                            );--if end
                             --それ以外(HDIK),これは通常のコントローラーとみなす
                             if (not ((classOf lListObj) == IK_Chain_Object)) and (not ((classOf lListObj.controller) == IKControl)) then
                             (
                             try(
-                            lListObj.rotation.controller = Euler_XYZ ()
+                            lListObj.rotation.controller = Euler_XYZ ();
                             lListObj.rotation.controller = copy ikBakeObj[ikObjCont].rotation.controller;
-                            )catch(messageBox("コントローラーを変更できませんでした\n" + lListObj.name) title:MesseTitleInfoStr)
-                            )
+                            )catch(messageBox("コントローラーを変更できませんでした\n" + lListObj.name) title:MesseTitleInfoStr);
+                            );--if end
                         )
                         6:(
                             --スケール
@@ -2090,75 +2375,91 @@ IK間接の一部だけをPlotするとアニメーションが破綻します
                             if ((classOf lListObj.controller) == IKControl) then
                             (
                             try(
-                            lListObj.controller.FK_Sub_Control.controller.Scale.controller = bezier_scale ()
+                            lListObj.controller.FK_Sub_Control.controller.Scale.controller = bezier_scale ();
                             lListObj.controller.FK_Sub_Control.controller.Scale.controller = copy ikBakeObj[ikObjCont].scale.controller
-                            )catch(messageBox("コントローラーを変更できませんでした\n" + lListObj.name) title:MesseTitleInfoStr)
-                            )
+                            )catch(messageBox("コントローラーを変更できませんでした\n" + lListObj.name) title:MesseTitleInfoStr);
+                            );--if end
                             --IKのコントローラーか?
                             if ((classOf lListObj) == IK_Chain_Object) then
                             (
                             try(
-                            lListObj.controller.IK_goal.controller.Scale.controller = bezier_scale ()
+                            lListObj.controller.IK_goal.controller.Scale.controller = bezier_scale ();
                             lListObj.controller.IK_goal.controller.Scale.controller = copy ikBakeObj[ikObjCont].scale.controller;
-                            )catch(messageBox("コントローラーを変更できませんでした\n" + lListObj.name) title:MesseTitleInfoStr)
-                            )
+                            )catch(messageBox("コントローラーを変更できませんでした\n" + lListObj.name) title:MesseTitleInfoStr);
+                            );--if end
                             --それ以外(HDIK),これは通常のコントローラーとみなす
                             if (not ((classOf lListObj) == IK_Chain_Object)) and (not ((classOf lListObj.controller) == IKControl)) then
                             (
                             try(
-                            lListObj.scale.controller = bezier_scale ()
+                            lListObj.scale.controller = bezier_scale ();
                             lListObj.scale.controller = copy ikBakeObj[ikObjCont].scale.controller;
-                            )catch(messageBox("コントローラーを変更できませんでした\n" + lListObj.name) title:MesseTitleInfoStr)
-                            )
+                            )catch(messageBox("コントローラーを変更できませんでした\n" + lListObj.name) title:MesseTitleInfoStr);
+                            );--if end
                         )
-                    )
+                    );--case end
 
                     ikObjCont += 1;
 
-                    )
+                    );--if end
 
-                ) IK確認
+                );--if end IK確認
 
-                )
+                );--for end
 
-                )--undo off end
+                );--undo off end
 
-                SjPBakeProg.progbar.value = 0
+                sj_progressBar_rol.progbar.value = 0
                 delete ikBakeObj;
 
-        clearSelection()
+        clearSelection();
 
-        )
+        )--case3 end
 
-        )
+        );--case end
 
     --////////////////////////////////////////////////
     --復帰
     --////////////////////////////////////////////////
     )--with redraw end
     resumeEditing()--再びアクティブに
-    try(destroydialog SjPBakeProg)catch()
+    try(destroydialog sj_progressBar_rol)catch()
 
     try( gc light:false delayed:false)catch()--メモリーを解放する
 
-    )--pbake end
+    );--pbake end
 
     on sj_pbake_rol open do(
-        initialize_Fn()
+        initialize_Fn();
         bakeKeyCheck_Fn()
-    )
+    );--end
 
-    on sj_pbake_rol close do saveIni_Fn()
-
+    on sj_pbake_rol close do saveIni_Fn();
     --////////////////////////////////////////////////
     --リサイズイベント
     --////////////////////////////////////////////////
     on sj_pbake_rol resized val do
     (
+    --width:452 height:404
+        /*
+            GroupBox grp_list "リスト" pos:[8,92] width:436 height:272;
+    listbox pb_listR "" pos:[228,132] width:208 height:16;
+    button addListBtR "" pos:[228,108] width:20 height:20 images:#("$Scripts/SJTools/Images//SJ_button_add.png", "$Scripts/SJTools/Images//SJ_button_add_a.png", 2, 1, 1, 2, 2) toolTip:"選択を追加";
+    button allSelListBtR "" pos:[252,108] width:20 height:20 images:#("$Scripts/SJTools/Images//SJ_button_allsel.png", "$Scripts/SJTools/Images//SJ_button_allsel_a.png", 2, 1, 1, 2, 2) toolTip:"全選択";
+    button upListBtR "" pos:[276,108] width:20 height:20 images:#("$Scripts/SJTools/Images//SJ_button_up.png", "$Scripts/SJTools/Images//SJ_button_up_a.png", 2, 1, 1, 2, 2) toolTip:"Up";
+    button downListBtR "" pos:[300,108] width:20 height:20 images:#("$Scripts/SJTools/Images//SJ_button_down.png", "$Scripts/SJTools/Images//SJ_button_down_a.png", 2, 1, 1, 2, 2) toolTip:"Down";
+    button sortBtR "ソート" pos:[324,108] width:20 height:20 images:#("$Scripts/SJTools/Images//SJ_button_sort.png", "$Scripts/SJTools/Images//SJ_button_sort_a.png", 2, 1, 1, 2, 2) toolTip:"名前順でソートする";
+    button pSortBtR "ソート" pos:[348,108] width:20 height:20 images:#("$Scripts/SJTools/Images//SJ_button_parentsort.png", "$Scripts/SJTools/Images//SJ_button_parentsort_a.png", 2, 1, 1, 2, 2) toolTip:"親子構造順にソートする";
+    button delBtR "" pos:[372,108] width:20 height:20 images:#("$Scripts/SJTools/Images//SJ_button_delete.png", "$Scripts/SJTools/Images//SJ_button_delete_a.png", 2, 1, 1, 2, 2) toolTip:"削除";
+    button clearBtR "" pos:[396,108] width:20 height:20 images:#("$Scripts/SJTools/Images//SJ_button_clear.png", "$Scripts/SJTools/Images//SJ_button_clear_a.png", 2, 1, 1, 2, 2) toolTip:"クリア";
+    label listCntR "0" pos:[232,348] width:204 height:13;
+        */
+        --valがリサイズ時の大きさ
+        --1が幅
+
         --大きさが元の大きさを超えていれば
         if ((sj_pbake_rol.width >= 452) and (sj_pbake_rol.height >= 404)) then
         (
-            widthVal = (val[1] as float / 2.0)
+            widthVal = (val[1] as float / 2.0);
 
             grp_list.width = val[1] - 16;
             grp_list.height = val[2] - 132;
@@ -2187,15 +2488,20 @@ IK間接の一部だけをPlotするとアニメーションが破綻します
             --リサイズイメージの位置
             resizeImg.pos = [(val[1]-10),(val[2]-10)];
 
-        ) else (
+        )else
+        (
             sj_pbake_rol.width = 452;
             sj_pbake_rol.height = 404;
-        )
-    )
-)
+        );--if end
+
+    );--event end
+
+
+);--rollout end
+
 -----------------------------------------------------------------------------------------------------------
 --ロールアウト
 -----------------------------------------------------------------------------------------------------------
-CreateDialog sj_pbake_rol pos:[50,50] menu:pbakeMenuBar style:#(#style_border, #style_toolwindow, #style_sysmenu, #style_resizing, #style_minimizebox) menu:CanvasMenu
+CreateDialog sj_pbake_rol pos:[50,50] menu:pbakeMenuBar style:#(#style_border, /*#style_titlebar,*/#style_toolwindow, #style_sysmenu, #style_resizing, #style_minimizebox) menu:CanvasMenu
 
-)
+)--end macroscript

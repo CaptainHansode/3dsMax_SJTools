@@ -16,10 +16,10 @@ global sj_poser_rol
 -- Œ¾Œê‰Šú‰»
 -----------------------------------------------------------------------------------------------------------
 -- Œ¾Œê‰Šú‰»
-include "$scripts/SJTools/SJ_CommonLangSet.ms"
+include "$scripts/SJTools/SJOthers/SJ_CommonLangSet.ms"
 
 --Version etc –¼‘O©‘Ì‚ÍSJTools.ini‚©‚ç
-Local nameAndVersion = (getINISetting("$scripts/SJTools/SJTools.ini")  "SJToolsToolName" "SJPoserToolName");
+Local nameAndVersion = "poser"
 -----------------------------------------------------------------------------------------------------------
 --Main
 Local poseListName = #(), poseValue = #(), MasterNodes = undefined, allNodes = #(), customNodes = #(), custom_RNodes = #(), custom_LNodes = #()
