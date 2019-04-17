@@ -52,4 +52,20 @@
         filein "$scripts/SJTools/SJRendPathEdit/SJRendPathEdit.ms"
         -- include "$scripts/SJTools/SJRendPathEdit/SJRendPathEdit.ms"
     )
+
+    macroScript SJPBake
+    category:"SJTools"
+    toolTip:"SJPBake"
+    buttonText:"SJPBake"
+    (
+        include "$scripts/SJTools/SJPBake/SJPBake.ms"
+    )
+
+    macroScript SJBioSkinPlus
+    category:"SJTools"
+    toolTip:"SJBioSkinPlus"
+    buttonText:"SJBioSkinPlus"
+    (
+        include "$scripts/SJTools/SJBioSkinPlus/SJBioSkinPlus.ms"
+    )
 )
