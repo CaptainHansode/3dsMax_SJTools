@@ -19,7 +19,7 @@
 
 /**---------------------------------------------------------------
  *
- * 汎用ユーティリティ 自前のものを転用
+ * プログレスバー
  *
  */
 function SjProgbar()
@@ -34,7 +34,7 @@ function SjProgbar()
         var title = title || "Progress";
         var value = value || 0;
         var message = message || "Progress";
-    // var show = show || true;
+        // var show = show || true;
 
         if (show){
             uDlg = new Window('window', title, undefined);
@@ -42,7 +42,7 @@ function SjProgbar()
             uDlg.messagetext = uDlg.add('statictext', [10,30,10+384,30+15], message);
             uDlg.pBar.value = value;
             uDlg.show();
-        }else if (!show){
+        } else if (!show){
             uDlg.close();
         }
     }
@@ -83,7 +83,7 @@ function SjPsCommonLib()
         var log = "";
         var flag = logobj.open("r");
 
-        if (flag == true){
+        if (flag == true) {
             log = logobj.read();
             log = log + text;
             logobj.close();
@@ -91,13 +91,12 @@ function SjPsCommonLib()
 
         flag = logobj.open("w");
 
-        if (flag == true)
-        {
+        if (flag == true) {
             logobj.writeln(log);
-    //  logobj.write(text);
+            // logobj.write(text);
             logobj.close();
-        }else{
-    //  alert("ファイルが開けませんでした");
+        } else {
+            // alert("ファイルが開けませんでした");
         }
     }
 
@@ -112,21 +111,10 @@ function SjPsCommonLib()
         var flag = fpath.exists;
         var result = true;
         if (!flag) {
-            // alert("フォルダがありません！");
             result = false;
         }
         return result;
     }
-
-    /**--------------------------------------------------------------------------------
-     * フォルダのファイルを取得
-    */
-    this.GetFileOnFolder = function(folderpath)
-    {
-        var fpath = folderpath || "C:\\";
-        alert(fpath);
-    }
-
 
     /**--------------------------------------------------------------------------------
      * ファイルの種類
@@ -168,7 +156,6 @@ function SjPsCommonLib()
     */
     this.GetFileOptions = function(type)
     {
-
         var ret = null;
         switch (type) {
             case "psd":
@@ -314,13 +301,13 @@ function SjImageResizer()
     this.AUTHOR = "Captain Hansode";
 
     this.SUPPORT_TYPES = {
-        psd: "psd!",
-        bmp: "bitmap!",
-        gif: "gif!",
-        png: "png!",
-        tga: "taga!",
-        tif: "tiff!",
-        jpg: "jpeg!"
+        bmp: "*.bmp",
+        gif: "*.gif",
+        png: "*.png",
+        psd: "*.psd",
+        tga: "*.tga",
+        tif: "*.tif",
+        jpg: "*.jpg"
     };
 
     this.Scml = new SjPsCommonLib();  // 汎用ライブラリ
@@ -354,37 +341,23 @@ function SjImageResizer()
      * イメージリサイズ
      * @param {string} folderpath
      */
-    this.ImageResize = function(folderpath, indexstr, imgsize, doact, actname)
+    this.ImageResize = function(fpath, files, indexstr, imgsize, doact, actname)
     {
         // 引数の基本値
-        var fpath = folderpath || "";  // ファイルパス
+        var fpath = fpath || "";
         var indexstr = indexstr || "copy_";  // プレフィックス
         var doact = doact || false;  // アクション実行フラグ
         var actname = actname || "";  // アクション実行名
-        // var ffilter = [
-        //     "*.psd", "*.tif", "*.jpg", "*.gif", "*.png", "*.tag", "*.bmp"]
-        var ffilter = [
-            "*.psd", "*.tif", "*.jpg", "*.gif", "*.png", "*.tga", "*.bmp"]
-
-        // ファイル取得
-        var filelist = [];
-        var folderobj = Folder(fpath);
-        for (var ftype in ffilter) {
-            filelist = filelist.concat(folderobj.getFiles(ffilter[ftype]));
-        }
-        // var filelist = folderobj.getFiles("*.*");
-
         var filetype = "";
         var fileopt = null;
         var tempfile  = null;
 
-        alert(filelist.length + " のファイルを処理します");
         // プログレス
-        Prog.Progress(filelist.length, "のぞいちゃダメ!",　0, "開始!", true);
+        Prog.Progress(files.length, "のぞいちゃダメ!",　0, "開始!", true);
 
-        for (var f in filelist) {
+        for (var f in files) {
             // ファイルタイプ
-            filetype = Scml.GetFileType(filelist[f]);
+            filetype = Scml.GetFileType(files[f]);
             // 拡張子が対応していれば継続
             if (SUPPORT_TYPES[filetype] == undefined) {
                 continue;
@@ -392,19 +365,11 @@ function SjImageResizer()
             fileopt = Scml.GetFileOptions(filetype);
 
             // ファイル開く
-            if (filelist[f] instanceof File) {
-                open(filelist[f]);
+            if (files[f] instanceof File) {
+                open(files[f]);
             }
 
             Prog.ProgressUpdate(f, activeDocument.name);
-
-            // 開いたファイルを確保する
-            originalfile = activeDocument;
-
-            // 一時ファイルを確保
-            tempfile = fpath + "/" + "temp_ajustfilesize" + "." + filetype;
-
-            newfileobj = new File(tempfile);
 
             // アクション実行
             if (doact) {
@@ -429,6 +394,7 @@ function SjImageResizer()
         }
 
         Prog.Progress(100, "おわり!", 100, "おわり!", false);
+        return true;
     }
 
     /**
@@ -436,7 +402,7 @@ function SjImageResizer()
      */
     // folderObj = new File(app.path);
     // これでデスクトップを指定する
-    folderObj = new File("~/Desktop/Test/");
+    folderObj = new File("~/Desktop/");
     fsname = folderObj.fsName;
 
     var dig = new Window('dialog', TOOLNAME + " " + VERSION);
@@ -493,7 +459,7 @@ function SjImageResizer()
     dig.indexstr = dig.plindex.add('edittext', [0,0,394,24], "Resize_");
 
     // パネル追加
-    dig.pldoact = dig.add('panel', undefined, "保存時に実行するアクション");
+    dig.pldoact = dig.add('panel', undefined, "リサイズ時に実行するアクション");
     dig.pldoact.orientation = "column";
     dig.pldoact.alignChildren = "fill";
 
@@ -529,6 +495,7 @@ function SjImageResizer()
 
     dig.btrun = dig.plRun.add("button", [0,0,193,36], "実行", {name:"ok"});
     dig.btcancel = dig.plRun.add("button", [0,0,193,36], "閉じる", {name:"cancel"});
+    dig.bthint = dig.plRun.add("button", [0,0,36,36], "ヒント", {name:"hint"});
 
     /**
      * Events
@@ -570,7 +537,7 @@ function SjImageResizer()
 
     dig.btrun.onClick = function()
     {
-        var folderpath = dig.fpath.text;
+        var fpath = dig.fpath.text;
         var sval = parseInt(dig.plfsize.grpfs.fsize.text);
         // if (Number.isNaN(sval)) {
         if (isNaN(sval)) {
@@ -584,14 +551,29 @@ function SjImageResizer()
         }
 
         // パスを確認
-        if (Scml.ExistsPath(folderpath) == false) {
+        if (Scml.ExistsPath(fpath) == false) {
             alert("フォルダがありません！");
             return false;
         }
 
+        // ファイル取得
+        var files = [];
+        var fobj = Folder(fpath);
+        for (var st in SUPPORT_TYPES) {
+            files = files.concat(fobj.getFiles(SUPPORT_TYPES[st]));
+        }
+
+        if (files.length == 0) {
+            alert("ファイルがありません");
+            return true;
+        }
+
+        alert(files.length + " のファイルを処理します");
+
         doact = dig.pldoact.grpactck.doactchk.value;
         aname = dig.pldoact.grpactList.actlist.selection;
-        ImageResize(folderpath, dig.indexstr.text, sval, doact, aname);
+        ImageResize(fpath, files, dig.indexstr.text, sval, doact, aname);
+
         alert("終了しました!");
         return true;
     }
