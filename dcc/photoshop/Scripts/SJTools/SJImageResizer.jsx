@@ -502,8 +502,7 @@ function SjImageResizer()
      */
     dig.btfolder.onClick = function() {
         foldername = Folder.selectDialog("フォルダを指定してください");
-        if (foldername)
-        {
+        if (foldername) {
             folderObj = new File(foldername);
             fsname = folderObj.fsName;
             dig.fpath.text = fsname;
