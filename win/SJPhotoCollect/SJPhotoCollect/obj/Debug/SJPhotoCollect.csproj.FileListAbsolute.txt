@@ -1,0 +1,9 @@
+D:\sakai\SJTools\win\SJPhotoCollect\SJPhotoCollect\bin\Debug\SJPhotoCollect.exe.config
+D:\sakai\SJTools\win\SJPhotoCollect\SJPhotoCollect\bin\Debug\SJPhotoCollect.exe
+D:\sakai\SJTools\win\SJPhotoCollect\SJPhotoCollect\bin\Debug\SJPhotoCollect.pdb
+D:\sakai\SJTools\win\SJPhotoCollect\SJPhotoCollect\obj\Debug\SJPhotoCollect.csprojAssemblyReference.cache
+D:\sakai\SJTools\win\SJPhotoCollect\SJPhotoCollect\obj\Debug\SJPhotoCollect.MainForm.resources
+D:\sakai\SJTools\win\SJPhotoCollect\SJPhotoCollect\obj\Debug\SJPhotoCollect.Properties.Resources.resources
+D:\sakai\SJTools\win\SJPhotoCollect\SJPhotoCollect\obj\Debug\SJPhotoCollect.csproj.GenerateResource.cache
+D:\sakai\SJTools\win\SJPhotoCollect\SJPhotoCollect\obj\Debug\SJPhotoCollect.exe
+D:\sakai\SJTools\win\SJPhotoCollect\SJPhotoCollect\obj\Debug\SJPhotoCollect.pdb

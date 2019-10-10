@@ -562,6 +562,14 @@ function SJSaveInFileSize()
     dig.opacity = 1.0;
 
     // パネル追加
+    dig.menubar = dig.add('panel', undefined, "フォルダを指定");
+    dig.menubar.orientation = "row";
+    dig.menubar.alignChildren = "fill";
+
+    dig.menu1 = dig.menubar.add('edittext', [0,0,356,24], fsname);
+    dig.menu2 = dig.menubar.add("button", [0,0,30,24], "...", {name:"folder"});
+
+    // パネル追加
     dig.plfolder = dig.add('panel', undefined, "フォルダを指定");
     dig.plfolder.orientation = "row";
     dig.plfolder.alignChildren = "fill";
@@ -575,7 +583,7 @@ function SJSaveInFileSize()
     dig.plfsize.alignChildren = "fill";
 
     // 一行目
-    dig.plfsize.grpfs = dig.plfsize.add('group', undefined );
+    dig.plfsize.grpfs = dig.plfsize.add('group', undefined);
     dig.plfsize.grpfs.orientation='row';
     dig.plfsize.grpfs.alignChildren="fill";
 
@@ -614,14 +622,14 @@ function SJSaveInFileSize()
     dig.pldoact.alignChildren = "fill";
 
     // 一行目
-    dig.pldoact.grpactck = dig.pldoact.add('group', undefined );
+    dig.pldoact.grpactck = dig.pldoact.add('group', undefined);
     dig.pldoact.grpactck.orientation='row';
     dig.pldoact.grpactck.alignChildren="fill";
 
-    dig.pldoact.grpactck.doactchk = dig.pldoact.grpactck.add('checkdig', [0,0,394,24], "実行する");
+    dig.pldoact.grpactck.doactchk = dig.pldoact.grpactck.add('checkbox', [0,0,394,24], "実行する");
     dig.pldoact.grpactck.doactchk.value = true;
 
-    dig.pldoact.grpactList = dig.pldoact.add('group', undefined );
+    dig.pldoact.grpactList = dig.pldoact.add('group', undefined);
     dig.pldoact.grpactList.orientation='row';
     dig.pldoact.grpactList.alignChildren="fill";
 
@@ -635,7 +643,7 @@ function SJSaveInFileSize()
     }
 
     // alert(actions);
-    dig.pldoact.grpactList.actlist = dig.pldoact.grpactList.add("dropdownlist",[0,0,394,24], actionItems);
+    dig.pldoact.grpactList.actlist = dig.pldoact.grpactList.add("dropdownlist", [0,0,394,24], actionItems);
     dig.pldoact.grpactList.actlist.selection = 0;
 
     // パネル追加
@@ -685,7 +693,6 @@ function SJSaveInFileSize()
     }
 
     dig.show();
-
 }
 
 /**

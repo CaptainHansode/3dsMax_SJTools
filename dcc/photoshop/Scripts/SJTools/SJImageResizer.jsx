@@ -410,6 +410,15 @@ function SjImageResizer()
     dig.opacity = 1.0;
 
     // パネル追加
+    dig.menubar = dig.add('panel', undefined, "");
+    dig.menubar.orientation = "row";
+    // dig.menubar.alignChildren = "fill";
+    dig.menubar.alignChildren = "right";
+
+    // dig.menu1 = dig.menubar.add('edittext', [0,0,356,24], fsname);
+    dig.menu2 = dig.menubar.add("button", [0,0,30,24], "...", {name:"folder"});
+
+    // パネル追加
     dig.plfolder = dig.add('panel', undefined, "フォルダを指定");
     dig.plfolder.orientation = "row";
     dig.plfolder.alignChildren = "fill";
@@ -495,7 +504,7 @@ function SjImageResizer()
 
     dig.btrun = dig.plRun.add("button", [0,0,193,36], "実行", {name:"ok"});
     dig.btcancel = dig.plRun.add("button", [0,0,193,36], "閉じる", {name:"cancel"});
-    dig.bthint = dig.plRun.add("button", [0,0,36,36], "ヒント", {name:"hint"});
+    // dig.bthint = dig.plRun.add("button", [0,0,36,36], "ヒント", {name:"hint"});
 
     /**
      * Events
