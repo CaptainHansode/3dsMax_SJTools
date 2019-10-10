@@ -29,16 +29,15 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
             this.leftListView = new System.Windows.Forms.ListView();
             this.leftButton = new System.Windows.Forms.Button();
             this.leftTextBox = new System.Windows.Forms.TextBox();
             this.imgPanel = new System.Windows.Forms.Panel();
-            this.rightTextBox = new System.Windows.Forms.TextBox();
-            this.rightButton = new System.Windows.Forms.Button();
             this.backButton = new System.Windows.Forms.Button();
             this.nextButton = new System.Windows.Forms.Button();
             this.copyButton = new System.Windows.Forms.Button();
+            this.rightTextBox = new System.Windows.Forms.TextBox();
+            this.rightButton = new System.Windows.Forms.Button();
             this.rightListView = new System.Windows.Forms.ListView();
             this.tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
             this.tableLayoutPanel3 = new System.Windows.Forms.TableLayoutPanel();
@@ -75,7 +74,7 @@
             this.leftListView.Dock = System.Windows.Forms.DockStyle.Fill;
             this.leftListView.Location = new System.Drawing.Point(3, 39);
             this.leftListView.Name = "leftListView";
-            this.leftListView.Size = new System.Drawing.Size(128, 623);
+            this.leftListView.Size = new System.Drawing.Size(128, 622);
             this.leftListView.TabIndex = 3;
             this.leftListView.UseCompatibleStateImageBehavior = false;
             this.leftListView.SelectedIndexChanged += new System.EventHandler(this.leftListView_SelectedIndexChanged);
@@ -108,8 +107,7 @@
             // 
             // imgPanel
             // 
-            this.imgPanel.BackColor = System.Drawing.Color.Gray;
-            this.imgPanel.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("imgPanel.BackgroundImage")));
+            this.imgPanel.BackColor = System.Drawing.Color.Black;
             this.imgPanel.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
             this.imgPanel.Controls.Add(this.backButton);
             this.imgPanel.Controls.Add(this.nextButton);
@@ -117,8 +115,50 @@
             this.imgPanel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.imgPanel.Location = new System.Drawing.Point(0, 0);
             this.imgPanel.Name = "imgPanel";
-            this.imgPanel.Size = new System.Drawing.Size(1021, 665);
+            this.imgPanel.Size = new System.Drawing.Size(1021, 664);
             this.imgPanel.TabIndex = 0;
+            // 
+            // backButton
+            // 
+            this.backButton.BackColor = System.Drawing.Color.Transparent;
+            this.backButton.Dock = System.Windows.Forms.DockStyle.Left;
+            this.backButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.backButton.ForeColor = System.Drawing.SystemColors.Control;
+            this.backButton.Location = new System.Drawing.Point(0, 0);
+            this.backButton.Name = "backButton";
+            this.backButton.Size = new System.Drawing.Size(43, 635);
+            this.backButton.TabIndex = 5;
+            this.backButton.Text = "<";
+            this.backButton.UseVisualStyleBackColor = false;
+            this.backButton.Click += new System.EventHandler(this.backButton_Click);
+            // 
+            // nextButton
+            // 
+            this.nextButton.BackColor = System.Drawing.Color.Transparent;
+            this.nextButton.Dock = System.Windows.Forms.DockStyle.Right;
+            this.nextButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.nextButton.ForeColor = System.Drawing.SystemColors.Control;
+            this.nextButton.Location = new System.Drawing.Point(978, 0);
+            this.nextButton.Name = "nextButton";
+            this.nextButton.Size = new System.Drawing.Size(43, 635);
+            this.nextButton.TabIndex = 6;
+            this.nextButton.Text = ">";
+            this.nextButton.UseVisualStyleBackColor = false;
+            this.nextButton.Click += new System.EventHandler(this.nextButton_Click);
+            // 
+            // copyButton
+            // 
+            this.copyButton.BackColor = System.Drawing.Color.Transparent;
+            this.copyButton.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.copyButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.copyButton.ForeColor = System.Drawing.SystemColors.Control;
+            this.copyButton.Location = new System.Drawing.Point(0, 635);
+            this.copyButton.Name = "copyButton";
+            this.copyButton.Size = new System.Drawing.Size(1021, 29);
+            this.copyButton.TabIndex = 7;
+            this.copyButton.Text = "Copy";
+            this.copyButton.UseVisualStyleBackColor = false;
+            this.copyButton.Click += new System.EventHandler(this.copyButton_Click);
             // 
             // rightTextBox
             // 
@@ -145,54 +185,12 @@
             this.rightButton.UseVisualStyleBackColor = true;
             this.rightButton.Click += new System.EventHandler(this.rightButton_Click);
             // 
-            // backButton
-            // 
-            this.backButton.BackColor = System.Drawing.Color.Transparent;
-            this.backButton.Dock = System.Windows.Forms.DockStyle.Left;
-            this.backButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.backButton.ForeColor = System.Drawing.SystemColors.Control;
-            this.backButton.Location = new System.Drawing.Point(0, 0);
-            this.backButton.Name = "backButton";
-            this.backButton.Size = new System.Drawing.Size(43, 636);
-            this.backButton.TabIndex = 5;
-            this.backButton.Text = "<";
-            this.backButton.UseVisualStyleBackColor = false;
-            this.backButton.Click += new System.EventHandler(this.backButton_Click);
-            // 
-            // nextButton
-            // 
-            this.nextButton.BackColor = System.Drawing.Color.Transparent;
-            this.nextButton.Dock = System.Windows.Forms.DockStyle.Right;
-            this.nextButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.nextButton.ForeColor = System.Drawing.SystemColors.Control;
-            this.nextButton.Location = new System.Drawing.Point(978, 0);
-            this.nextButton.Name = "nextButton";
-            this.nextButton.Size = new System.Drawing.Size(43, 636);
-            this.nextButton.TabIndex = 6;
-            this.nextButton.Text = ">";
-            this.nextButton.UseVisualStyleBackColor = false;
-            this.nextButton.Click += new System.EventHandler(this.nextButton_Click);
-            // 
-            // copyButton
-            // 
-            this.copyButton.BackColor = System.Drawing.Color.Transparent;
-            this.copyButton.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.copyButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.copyButton.ForeColor = System.Drawing.SystemColors.Control;
-            this.copyButton.Location = new System.Drawing.Point(0, 636);
-            this.copyButton.Name = "copyButton";
-            this.copyButton.Size = new System.Drawing.Size(1021, 29);
-            this.copyButton.TabIndex = 7;
-            this.copyButton.Text = "Copy";
-            this.copyButton.UseVisualStyleBackColor = false;
-            this.copyButton.Click += new System.EventHandler(this.copyButton_Click);
-            // 
             // rightListView
             // 
             this.rightListView.Dock = System.Windows.Forms.DockStyle.Fill;
             this.rightListView.Location = new System.Drawing.Point(3, 39);
             this.rightListView.Name = "rightListView";
-            this.rightListView.Size = new System.Drawing.Size(135, 623);
+            this.rightListView.Size = new System.Drawing.Size(135, 622);
             this.rightListView.TabIndex = 5;
             this.rightListView.UseCompatibleStateImageBehavior = false;
             this.rightListView.SelectedIndexChanged += new System.EventHandler(this.rightListView_SelectedIndexChanged);
@@ -209,7 +207,7 @@
             this.tableLayoutPanel2.Name = "tableLayoutPanel2";
             this.tableLayoutPanel2.RowCount = 1;
             this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30F));
             this.tableLayoutPanel2.Size = new System.Drawing.Size(128, 30);
             this.tableLayoutPanel2.TabIndex = 4;
             // 
@@ -225,7 +223,7 @@
             this.tableLayoutPanel3.Name = "tableLayoutPanel3";
             this.tableLayoutPanel3.RowCount = 1;
             this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30F));
             this.tableLayoutPanel3.Size = new System.Drawing.Size(135, 30);
             this.tableLayoutPanel3.TabIndex = 5;
             // 
@@ -241,7 +239,7 @@
             this.tableLayoutPanel4.RowCount = 2;
             this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 36F));
             this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanel4.Size = new System.Drawing.Size(141, 665);
+            this.tableLayoutPanel4.Size = new System.Drawing.Size(141, 664);
             this.tableLayoutPanel4.TabIndex = 4;
             // 
             // tableLayoutPanel5
@@ -256,13 +254,13 @@
             this.tableLayoutPanel5.RowCount = 2;
             this.tableLayoutPanel5.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 36F));
             this.tableLayoutPanel5.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanel5.Size = new System.Drawing.Size(134, 665);
+            this.tableLayoutPanel5.Size = new System.Drawing.Size(134, 664);
             this.tableLayoutPanel5.TabIndex = 5;
             // 
             // splitContainer1
             // 
             this.splitContainer1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.splitContainer1.Location = new System.Drawing.Point(3, 24);
+            this.splitContainer1.Location = new System.Drawing.Point(3, 25);
             this.splitContainer1.Name = "splitContainer1";
             // 
             // splitContainer1.Panel1
@@ -272,7 +270,7 @@
             // splitContainer1.Panel2
             // 
             this.splitContainer1.Panel2.Controls.Add(this.splitContainer2);
-            this.splitContainer1.Size = new System.Drawing.Size(1304, 665);
+            this.splitContainer1.Size = new System.Drawing.Size(1304, 664);
             this.splitContainer1.SplitterDistance = 134;
             this.splitContainer1.TabIndex = 7;
             // 
@@ -289,7 +287,7 @@
             // splitContainer2.Panel2
             // 
             this.splitContainer2.Panel2.Controls.Add(this.tableLayoutPanel4);
-            this.splitContainer2.Size = new System.Drawing.Size(1166, 665);
+            this.splitContainer2.Size = new System.Drawing.Size(1166, 664);
             this.splitContainer2.SplitterDistance = 1021;
             this.splitContainer2.TabIndex = 0;
             // 
@@ -299,7 +297,7 @@
             this.menuToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
-            this.menuStrip1.Size = new System.Drawing.Size(1310, 21);
+            this.menuStrip1.Size = new System.Drawing.Size(1310, 22);
             this.menuStrip1.TabIndex = 9;
             this.menuStrip1.Text = "menuStrip1";
             // 
@@ -308,14 +306,14 @@
             this.menuToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.copyToolStripMenuItem1});
             this.menuToolStripMenuItem.Name = "menuToolStripMenuItem";
-            this.menuToolStripMenuItem.Size = new System.Drawing.Size(50, 17);
+            this.menuToolStripMenuItem.Size = new System.Drawing.Size(50, 18);
             this.menuToolStripMenuItem.Text = "Menu";
             // 
             // copyToolStripMenuItem1
             // 
             this.copyToolStripMenuItem1.Name = "copyToolStripMenuItem1";
             this.copyToolStripMenuItem1.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.C)));
-            this.copyToolStripMenuItem1.Size = new System.Drawing.Size(180, 22);
+            this.copyToolStripMenuItem1.Size = new System.Drawing.Size(141, 22);
             this.copyToolStripMenuItem1.Text = "Copy";
             this.copyToolStripMenuItem1.Click += new System.EventHandler(this.copyToolStripMenuItem1_Click);
             // 
