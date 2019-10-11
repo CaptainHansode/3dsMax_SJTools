@@ -51,6 +51,13 @@
             this.copyToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
+            this.updateToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.nextToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.backToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.pathExchangeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.pictureBox = new System.Windows.Forms.PictureBox();
+            this.pictureBox1 = new System.Windows.Forms.PictureBox();
+            this.infoLabel = new System.Windows.Forms.Label();
             this.imgPanel.SuspendLayout();
             this.tableLayoutPanel2.SuspendLayout();
             this.tableLayoutPanel3.SuspendLayout();
@@ -67,17 +74,24 @@
             this.menuStrip1.SuspendLayout();
             this.contextMenuStrip1.SuspendLayout();
             this.tableLayoutPanel1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.SuspendLayout();
             // 
             // leftListView
             // 
+            this.leftListView.BackColor = System.Drawing.Color.Black;
             this.leftListView.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.leftListView.Font = new System.Drawing.Font("Yu Gothic UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(128)));
+            this.leftListView.ForeColor = System.Drawing.SystemColors.Control;
             this.leftListView.Location = new System.Drawing.Point(3, 39);
             this.leftListView.Name = "leftListView";
-            this.leftListView.Size = new System.Drawing.Size(128, 622);
+            this.leftListView.Size = new System.Drawing.Size(128, 624);
             this.leftListView.TabIndex = 3;
             this.leftListView.UseCompatibleStateImageBehavior = false;
             this.leftListView.SelectedIndexChanged += new System.EventHandler(this.leftListView_SelectedIndexChanged);
+            this.leftListView.DoubleClick += new System.EventHandler(this.leftListView_DoubleClick);
+            this.leftListView.KeyDown += new System.Windows.Forms.KeyEventHandler(this.leftListView_KeyDown);
             // 
             // leftButton
             // 
@@ -94,39 +108,46 @@
             // 
             // leftTextBox
             // 
-            this.leftTextBox.BackColor = System.Drawing.SystemColors.MenuHighlight;
+            this.leftTextBox.BackColor = System.Drawing.Color.Black;
             this.leftTextBox.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.leftTextBox.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.leftTextBox.ForeColor = System.Drawing.SystemColors.Menu;
+            this.leftTextBox.Font = new System.Drawing.Font("Yu Gothic UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(128)));
+            this.leftTextBox.ForeColor = System.Drawing.Color.LightGray;
             this.leftTextBox.Location = new System.Drawing.Point(5, 5);
             this.leftTextBox.Margin = new System.Windows.Forms.Padding(5);
             this.leftTextBox.Name = "leftTextBox";
-            this.leftTextBox.Size = new System.Drawing.Size(98, 12);
+            this.leftTextBox.Size = new System.Drawing.Size(98, 16);
             this.leftTextBox.TabIndex = 1;
             this.leftTextBox.TextChanged += new System.EventHandler(this.leftTextBox_TextChanged);
+            this.leftTextBox.DoubleClick += new System.EventHandler(this.leftTextBox_DoubleClick);
             // 
             // imgPanel
             // 
             this.imgPanel.BackColor = System.Drawing.Color.Black;
             this.imgPanel.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
-            this.imgPanel.Controls.Add(this.backButton);
+            this.imgPanel.Controls.Add(this.infoLabel);
+            this.imgPanel.Controls.Add(this.pictureBox1);
             this.imgPanel.Controls.Add(this.nextButton);
+            this.imgPanel.Controls.Add(this.backButton);
             this.imgPanel.Controls.Add(this.copyButton);
+            this.imgPanel.Controls.Add(this.pictureBox);
             this.imgPanel.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.imgPanel.ForeColor = System.Drawing.SystemColors.Control;
             this.imgPanel.Location = new System.Drawing.Point(0, 0);
             this.imgPanel.Name = "imgPanel";
-            this.imgPanel.Size = new System.Drawing.Size(1021, 664);
+            this.imgPanel.Size = new System.Drawing.Size(1021, 666);
             this.imgPanel.TabIndex = 0;
             // 
             // backButton
             // 
             this.backButton.BackColor = System.Drawing.Color.Transparent;
-            this.backButton.Dock = System.Windows.Forms.DockStyle.Left;
+            this.backButton.FlatAppearance.BorderSize = 0;
             this.backButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.backButton.Font = new System.Drawing.Font("Yu Gothic UI", 63.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(128)));
             this.backButton.ForeColor = System.Drawing.SystemColors.Control;
-            this.backButton.Location = new System.Drawing.Point(0, 0);
+            this.backButton.Location = new System.Drawing.Point(358, 228);
             this.backButton.Name = "backButton";
-            this.backButton.Size = new System.Drawing.Size(43, 635);
+            this.backButton.Size = new System.Drawing.Size(80, 196);
             this.backButton.TabIndex = 5;
             this.backButton.Text = "<";
             this.backButton.UseVisualStyleBackColor = false;
@@ -135,12 +156,13 @@
             // nextButton
             // 
             this.nextButton.BackColor = System.Drawing.Color.Transparent;
-            this.nextButton.Dock = System.Windows.Forms.DockStyle.Right;
+            this.nextButton.FlatAppearance.BorderSize = 0;
             this.nextButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.nextButton.Font = new System.Drawing.Font("Yu Gothic UI", 63.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(128)));
             this.nextButton.ForeColor = System.Drawing.SystemColors.Control;
-            this.nextButton.Location = new System.Drawing.Point(978, 0);
+            this.nextButton.Location = new System.Drawing.Point(867, 228);
             this.nextButton.Name = "nextButton";
-            this.nextButton.Size = new System.Drawing.Size(43, 635);
+            this.nextButton.Size = new System.Drawing.Size(62, 196);
             this.nextButton.TabIndex = 6;
             this.nextButton.Text = ">";
             this.nextButton.UseVisualStyleBackColor = false;
@@ -149,12 +171,14 @@
             // copyButton
             // 
             this.copyButton.BackColor = System.Drawing.Color.Transparent;
-            this.copyButton.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.copyButton.FlatAppearance.BorderSize = 0;
             this.copyButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.copyButton.Font = new System.Drawing.Font("Yu Gothic UI", 36F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(128)));
             this.copyButton.ForeColor = System.Drawing.SystemColors.Control;
-            this.copyButton.Location = new System.Drawing.Point(0, 635);
+            this.copyButton.ImageAlign = System.Drawing.ContentAlignment.TopCenter;
+            this.copyButton.Location = new System.Drawing.Point(464, 485);
             this.copyButton.Name = "copyButton";
-            this.copyButton.Size = new System.Drawing.Size(1021, 29);
+            this.copyButton.Size = new System.Drawing.Size(182, 57);
             this.copyButton.TabIndex = 7;
             this.copyButton.Text = "Copy";
             this.copyButton.UseVisualStyleBackColor = false;
@@ -162,15 +186,17 @@
             // 
             // rightTextBox
             // 
-            this.rightTextBox.BackColor = System.Drawing.SystemColors.MenuHighlight;
+            this.rightTextBox.BackColor = System.Drawing.Color.Black;
             this.rightTextBox.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.rightTextBox.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.rightTextBox.ForeColor = System.Drawing.SystemColors.Menu;
+            this.rightTextBox.Font = new System.Drawing.Font("Yu Gothic UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(128)));
+            this.rightTextBox.ForeColor = System.Drawing.Color.Transparent;
             this.rightTextBox.Location = new System.Drawing.Point(3, 3);
             this.rightTextBox.Name = "rightTextBox";
-            this.rightTextBox.Size = new System.Drawing.Size(108, 12);
+            this.rightTextBox.Size = new System.Drawing.Size(108, 16);
             this.rightTextBox.TabIndex = 0;
             this.rightTextBox.TextChanged += new System.EventHandler(this.rightTextBox_TextChanged);
+            this.rightTextBox.DoubleClick += new System.EventHandler(this.rightTextBox_DoubleClick);
             // 
             // rightButton
             // 
@@ -187,13 +213,17 @@
             // 
             // rightListView
             // 
+            this.rightListView.BackColor = System.Drawing.Color.Black;
             this.rightListView.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.rightListView.Font = new System.Drawing.Font("Yu Gothic UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(128)));
+            this.rightListView.ForeColor = System.Drawing.SystemColors.Control;
             this.rightListView.Location = new System.Drawing.Point(3, 39);
             this.rightListView.Name = "rightListView";
-            this.rightListView.Size = new System.Drawing.Size(135, 622);
+            this.rightListView.Size = new System.Drawing.Size(135, 624);
             this.rightListView.TabIndex = 5;
             this.rightListView.UseCompatibleStateImageBehavior = false;
             this.rightListView.SelectedIndexChanged += new System.EventHandler(this.rightListView_SelectedIndexChanged);
+            this.rightListView.DoubleClick += new System.EventHandler(this.rightListView_DoubleClick);
             // 
             // tableLayoutPanel2
             // 
@@ -239,7 +269,7 @@
             this.tableLayoutPanel4.RowCount = 2;
             this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 36F));
             this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanel4.Size = new System.Drawing.Size(141, 664);
+            this.tableLayoutPanel4.Size = new System.Drawing.Size(141, 666);
             this.tableLayoutPanel4.TabIndex = 4;
             // 
             // tableLayoutPanel5
@@ -254,13 +284,13 @@
             this.tableLayoutPanel5.RowCount = 2;
             this.tableLayoutPanel5.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 36F));
             this.tableLayoutPanel5.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanel5.Size = new System.Drawing.Size(134, 664);
+            this.tableLayoutPanel5.Size = new System.Drawing.Size(134, 666);
             this.tableLayoutPanel5.TabIndex = 5;
             // 
             // splitContainer1
             // 
             this.splitContainer1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.splitContainer1.Location = new System.Drawing.Point(3, 25);
+            this.splitContainer1.Location = new System.Drawing.Point(3, 23);
             this.splitContainer1.Name = "splitContainer1";
             // 
             // splitContainer1.Panel1
@@ -270,7 +300,7 @@
             // splitContainer1.Panel2
             // 
             this.splitContainer1.Panel2.Controls.Add(this.splitContainer2);
-            this.splitContainer1.Size = new System.Drawing.Size(1304, 664);
+            this.splitContainer1.Size = new System.Drawing.Size(1304, 666);
             this.splitContainer1.SplitterDistance = 134;
             this.splitContainer1.TabIndex = 7;
             // 
@@ -287,7 +317,7 @@
             // splitContainer2.Panel2
             // 
             this.splitContainer2.Panel2.Controls.Add(this.tableLayoutPanel4);
-            this.splitContainer2.Size = new System.Drawing.Size(1166, 664);
+            this.splitContainer2.Size = new System.Drawing.Size(1166, 666);
             this.splitContainer2.SplitterDistance = 1021;
             this.splitContainer2.TabIndex = 0;
             // 
@@ -297,23 +327,27 @@
             this.menuToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
-            this.menuStrip1.Size = new System.Drawing.Size(1310, 22);
+            this.menuStrip1.Size = new System.Drawing.Size(1310, 20);
             this.menuStrip1.TabIndex = 9;
             this.menuStrip1.Text = "menuStrip1";
             // 
             // menuToolStripMenuItem
             // 
             this.menuToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.copyToolStripMenuItem1});
+            this.updateToolStripMenuItem,
+            this.copyToolStripMenuItem1,
+            this.backToolStripMenuItem,
+            this.nextToolStripMenuItem,
+            this.pathExchangeToolStripMenuItem});
             this.menuToolStripMenuItem.Name = "menuToolStripMenuItem";
-            this.menuToolStripMenuItem.Size = new System.Drawing.Size(50, 18);
+            this.menuToolStripMenuItem.Size = new System.Drawing.Size(50, 16);
             this.menuToolStripMenuItem.Text = "Menu";
             // 
             // copyToolStripMenuItem1
             // 
             this.copyToolStripMenuItem1.Name = "copyToolStripMenuItem1";
             this.copyToolStripMenuItem1.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.C)));
-            this.copyToolStripMenuItem1.Size = new System.Drawing.Size(141, 22);
+            this.copyToolStripMenuItem1.Size = new System.Drawing.Size(180, 22);
             this.copyToolStripMenuItem1.Text = "Copy";
             this.copyToolStripMenuItem1.Click += new System.EventHandler(this.copyToolStripMenuItem1_Click);
             // 
@@ -333,17 +367,83 @@
             // tableLayoutPanel1
             // 
             this.tableLayoutPanel1.ColumnCount = 1;
-            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tableLayoutPanel1.Controls.Add(this.menuStrip1, 0, 0);
             this.tableLayoutPanel1.Controls.Add(this.splitContainer1, 0, 1);
             this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tableLayoutPanel1.Location = new System.Drawing.Point(0, 0);
             this.tableLayoutPanel1.Name = "tableLayoutPanel1";
             this.tableLayoutPanel1.RowCount = 2;
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 3.179191F));
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 96.82081F));
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tableLayoutPanel1.Size = new System.Drawing.Size(1310, 692);
             this.tableLayoutPanel1.TabIndex = 11;
+            // 
+            // updateToolStripMenuItem
+            // 
+            this.updateToolStripMenuItem.Name = "updateToolStripMenuItem";
+            this.updateToolStripMenuItem.ShortcutKeys = System.Windows.Forms.Keys.F5;
+            this.updateToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.updateToolStripMenuItem.Text = "Update";
+            this.updateToolStripMenuItem.Click += new System.EventHandler(this.updateToolStripMenuItem_Click);
+            // 
+            // nextToolStripMenuItem
+            // 
+            this.nextToolStripMenuItem.Name = "nextToolStripMenuItem";
+            this.nextToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.N)));
+            this.nextToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.nextToolStripMenuItem.Text = "Next";
+            this.nextToolStripMenuItem.Click += new System.EventHandler(this.nextToolStripMenuItem_Click);
+            // 
+            // backToolStripMenuItem
+            // 
+            this.backToolStripMenuItem.Name = "backToolStripMenuItem";
+            this.backToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.B)));
+            this.backToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.backToolStripMenuItem.Text = "Back";
+            this.backToolStripMenuItem.Click += new System.EventHandler(this.backToolStripMenuItem_Click);
+            // 
+            // pathExchangeToolStripMenuItem
+            // 
+            this.pathExchangeToolStripMenuItem.Name = "pathExchangeToolStripMenuItem";
+            this.pathExchangeToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.pathExchangeToolStripMenuItem.Text = "Path Exchange";
+            this.pathExchangeToolStripMenuItem.Click += new System.EventHandler(this.pathExchangeToolStripMenuItem_Click);
+            // 
+            // pictureBox
+            // 
+            this.pictureBox.BackColor = System.Drawing.Color.Transparent;
+            this.pictureBox.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.pictureBox.Location = new System.Drawing.Point(0, 0);
+            this.pictureBox.Name = "pictureBox";
+            this.pictureBox.Size = new System.Drawing.Size(1021, 666);
+            this.pictureBox.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
+            this.pictureBox.TabIndex = 9;
+            this.pictureBox.TabStop = false;
+            // 
+            // pictureBox1
+            // 
+            this.pictureBox1.BackColor = System.Drawing.Color.Transparent;
+            this.pictureBox1.Dock = System.Windows.Forms.DockStyle.Left;
+            this.pictureBox1.Image = global::SJPhotoCollect.Properties.Resources.test_img;
+            this.pictureBox1.Location = new System.Drawing.Point(0, 0);
+            this.pictureBox1.Name = "pictureBox1";
+            this.pictureBox1.Size = new System.Drawing.Size(184, 666);
+            this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.CenterImage;
+            this.pictureBox1.TabIndex = 10;
+            this.pictureBox1.TabStop = false;
+            this.pictureBox1.Click += new System.EventHandler(this.pictureBox1_Click);
+            this.pictureBox1.MouseLeave += new System.EventHandler(this.pictureBox1_MouseLeave);
+            this.pictureBox1.MouseHover += new System.EventHandler(this.pictureBox1_MouseHover);
+            // 
+            // infoLabel
+            // 
+            this.infoLabel.Font = new System.Drawing.Font("Yu Gothic UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(128)));
+            this.infoLabel.Location = new System.Drawing.Point(293, 57);
+            this.infoLabel.Name = "infoLabel";
+            this.infoLabel.Size = new System.Drawing.Size(100, 23);
+            this.infoLabel.TabIndex = 11;
+            this.infoLabel.Text = "label1";
             // 
             // MainForm
             // 
@@ -355,7 +455,10 @@
             this.MainMenuStrip = this.menuStrip1;
             this.Name = "MainForm";
             this.Text = "SJ Photo Collect";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.MainForm_FormClosing);
             this.Load += new System.EventHandler(this.MainForm_Load);
+            this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.MainForm_KeyDown);
+            this.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.MainForm_KeyPress);
             this.imgPanel.ResumeLayout(false);
             this.tableLayoutPanel2.ResumeLayout(false);
             this.tableLayoutPanel2.PerformLayout();
@@ -376,6 +479,8 @@
             this.contextMenuStrip1.ResumeLayout(false);
             this.tableLayoutPanel1.ResumeLayout(false);
             this.tableLayoutPanel1.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -403,6 +508,13 @@
         private System.Windows.Forms.ToolStripMenuItem copyToolStripMenuItem;
         private System.Windows.Forms.ContextMenuStrip contextMenuStrip1;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
+        private System.Windows.Forms.ToolStripMenuItem updateToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem backToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem nextToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem pathExchangeToolStripMenuItem;
+        private System.Windows.Forms.PictureBox pictureBox;
+        private System.Windows.Forms.PictureBox pictureBox1;
+        private System.Windows.Forms.Label infoLabel;
     }
 }
 

@@ -10,7 +10,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
 [assembly: AssemblyProduct("SJPhotoCollect")]
-[assembly: AssemblyCopyright("Copyright ©  2019")]
+[assembly: AssemblyCopyright("Copyright ©  2019 CaptainHansode And SAKAIDEN")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 

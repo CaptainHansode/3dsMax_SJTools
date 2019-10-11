@@ -3,23 +3,111 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.Drawing.Imaging;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.IO;
+using System.Diagnostics;
+using System.Runtime.InteropServices;
+
 
 namespace SJPhotoCollect
 {
     public partial class MainForm : Form
     {
+        Dictionary<String, bool> imgTypes = new Dictionary<String, bool>();
+
+        /// <summary>
+        /// ファイル情報を取得
+        /// </summary>
+        /// <param name="pszPath"></param>
+        /// <param name="dwFileAttributes"></param>
+        /// <param name="psfi"></param>
+        /// <param name="cbFileInfo"></param>
+        /// <param name="uFlags"></param>
+        /// <returns></returns>
+        [DllImport("shell32.dll", CharSet = CharSet.Auto)]
+        private static extern IntPtr SHGetFileInfo(string pszPath, uint dwFileAttributes, out SHFILEINFO psfi, uint cbFileInfo, uint uFlags);
+
+        /// <summary>
+        /// イメージリストを登録
+        /// </summary>
+        /// <param name="hWnd"></param>
+        /// <param name="Msg"></param>
+        /// <param name="wParam"></param>
+        /// <param name="lParam"></param>
+        /// <returns></returns>
+        [DllImport("user32.dll", CharSet = CharSet.Auto)]
+        private static extern IntPtr SendMessage(IntPtr hWnd, uint Msg, IntPtr wParam, IntPtr lParam);
+
+        /// <summary>
+        /// SHGetFileInfo関数で使用する構造体
+        /// </summary>
+        [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Auto)]
+        private struct SHFILEINFO
+        {
+            public IntPtr hIcon;
+            public int iIcon;
+            public uint dwAttributes;
+            [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 260)]
+            public string szDisplayName;
+            [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 80)]
+            public string szTypeName;
+        };
+
+        // ファイル情報用
+        private const int SHGFI_LARGEICON = 0x00000000;
+        private const int SHGFI_SMALLICON = 0x00000001;
+        private const int SHGFI_USEFILEATTRIBUTES = 0x00000010;
+        private const int SHGFI_OVERLAYINDEX = 0x00000040;
+        private const int SHGFI_ICON = 0x00000100;
+        private const int SHGFI_SYSICONINDEX = 0x00004000;
+        private const int SHGFI_TYPENAME = 0x000000400;
+
+        // TreeView用
+        private const int TVSIL_NORMAL = 0x0000;
+        private const int TVSIL_STATE = 0x0002;
+        private const int TVM_SETIMAGELIST = 0x1109;
+
+        // ListView用
+        private const int LVSIL_NORMAL = 0;
+        private const int LVSIL_SMALL = 1;
+        private const int LVM_SETIMAGELIST = 0x1003;
+
+        // 選択された項目を保持
+        private String selectedItem = "";
+
         public MainForm()
         {
             InitializeComponent();
-            setDefPath();
-            setList(this.leftTextBox.Text, this.leftListView);
-            setList(this.rightTextBox.Text, this.rightListView);
-            // addDirListToTreeView();
+            setImgTypes();
+            // イメージリストの設定
+            SHFILEINFO shFileInfo = new SHFILEINFO();
+            IntPtr imageListHandle = SHGetFileInfo(String.Empty, 0, out shFileInfo, (uint)Marshal.SizeOf(shFileInfo), SHGFI_SMALLICON | SHGFI_SYSICONINDEX);
+            // ListView
+            SendMessage(this.leftListView.Handle, LVM_SETIMAGELIST, new IntPtr(LVSIL_SMALL), imageListHandle);
+            SendMessage(this.rightListView.Handle, LVM_SETIMAGELIST, new IntPtr(LVSIL_SMALL), imageListHandle);
+
+            this.pictureBox1.Parent = this.pictureBox;
+            this.pictureBox.Image = SJPhotoCollect.Properties.Resources.test_img;
+
+            System.Reflection.Assembly asm = System.Reflection.Assembly.GetExecutingAssembly();
+            //バージョンの取得
+            this.Text = String.Format("{0} Ver.{1}", this.Text, asm.GetName().Version);
+        }
+
+        private void setImgTypes()
+        {
+            imgTypes.Add(".jpg", true);
+            imgTypes.Add(".png", true);
+            imgTypes.Add(".gif", true);
+            imgTypes.Add(".bmp", true);
+            imgTypes.Add(".tif", true);
+            // imgTypes.Add(".raw", true);
+            // imgTypes.Add(".psd", true);
+            // imgTypes.Add(".tga", true);
         }
 
         private void setImage(String imgPaht)
@@ -28,15 +116,31 @@ namespace SJPhotoCollect
             {
                 return;
             }
-            Image img = Image.FromFile(imgPaht); // UI用の画像
-            this.imgPanel.BackgroundImage = img;
+            // Image img = 
+            Image oldImage = this.pictureBox.Image;
+            this.pictureBox.Image = Image.FromFile(imgPaht); // UI用の画像
+            oldImage.Dispose();
+            // this.imgPanel.BackgroundImage = img;
+            // img.Dispose();
         }
 
         private void setDefPath()
         {
-            String ret = Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory);
-            leftTextBox.Text = ret;
-            rightTextBox.Text = ret;
+            String deskTopPath = Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory);
+            String lPath = Properties.Settings.Default.leftPath;
+            String rPath = Properties.Settings.Default.rightPath;
+            this.leftTextBox.Text = deskTopPath;
+            this.rightTextBox.Text = deskTopPath;
+            if (Directory.Exists(lPath))
+            {
+                this.leftTextBox.Text = lPath;
+            }
+            if (Directory.Exists(rPath))
+            {
+                this.rightTextBox.Text = rPath;
+            }
+            setList(this.leftTextBox.Text, this.leftListView);
+            setList(this.rightTextBox.Text, this.rightListView);
         }
 
         /// <summary>
@@ -64,11 +168,12 @@ namespace SJPhotoCollect
         }
 
 
-        private bool isJpg(String fname)
+        private bool isImgeFile(String fname)
         {
             bool result = false;
-            String ext = Path.GetExtension(fname);
-            if (ext == ".jpg")
+            String ext = Path.GetExtension(fname).ToLower();
+            // 拡張子から判断
+            if (imgTypes.ContainsKey(ext))
             {
                 result = true;
             }
@@ -102,12 +207,27 @@ namespace SJPhotoCollect
                 List<String> files = Directory.GetFiles(filePath).ToList<String>();
                 foreach (String file in files)
                 {
-                    if (isJpg(file) == false)
+                    if (isImgeFile(file) == false)
                     {
                         continue;
                     }
+
                     FileInfo info = new FileInfo(file);
                     ListViewItem item = new ListViewItem(info.Name);
+
+                    // ファイル種類、アイコンの取得
+                    String type = "";
+                    int iconIndex = 0;
+                    SHFILEINFO shinfo = new SHFILEINFO();
+                    IntPtr hSuccess = SHGetFileInfo(info.FullName, 0, out shinfo, (uint)Marshal.SizeOf(shinfo), SHGFI_ICON | SHGFI_LARGEICON | SHGFI_SMALLICON | SHGFI_SYSICONINDEX | SHGFI_TYPENAME);
+                    if (hSuccess != IntPtr.Zero)
+                    {
+                        type = shinfo.szTypeName;
+                        iconIndex = shinfo.iIcon;
+                    }
+
+                    item.ImageIndex = iconIndex;  // アイコン
+
                     item.SubItems.Add(String.Format("{0:yyyy/MM/dd HH:mm:ss}", info.LastAccessTime));
                     item.SubItems.Add(getFileSize(info.Length));
                     lv.Items.Add(item);
@@ -130,65 +250,31 @@ namespace SJPhotoCollect
         private String getDirPathDialog(String defpath= @"C:\Windows")
         {
             String result = "";
-            //FolderBrowserDialogクラスのインスタンスを作成
             FolderBrowserDialog fbd = new FolderBrowserDialog();
-
-            //上部に表示する説明テキストを指定する
             fbd.Description = "フォルダを指定してください。";
-            //ルートフォルダを指定する
-            //デフォルトでDesktop
             fbd.RootFolder = Environment.SpecialFolder.Desktop;
-            //最初に選択するフォルダを指定する
-            //RootFolder以下にあるフォルダである必要がある
             fbd.SelectedPath = defpath;
-            
-            //ユーザーが新しいフォルダを作成できるようにする
-            //デフォルトでTrue
             fbd.ShowNewFolderButton = true;
-
-            //ダイアログを表示する
             if (fbd.ShowDialog(this) == DialogResult.OK)
             {
                 result = fbd.SelectedPath;
-                // 選択されたフォルダを表示する
-                // Console.WriteLine(fbd.SelectedPath);
             }
             return result;
         }
 
         private String getFilePathDialog()
         {
-            //OpenFileDialogクラスのインスタンスを作成
             OpenFileDialog ofd = new OpenFileDialog();
-
-            //はじめのファイル名を指定する
-            //はじめに「ファイル名」で表示される文字列を指定する
             ofd.FileName = "default.html";
-            //はじめに表示されるフォルダを指定する
-            //指定しない（空の文字列）の時は、現在のディレクトリが表示される
-            // ofd.InitialDirectory = @"C:\";
-
-            //[ファイルの種類]に表示される選択肢を指定する
-            //指定しないとすべてのファイルが表示される
             ofd.Filter = "HTMLファイル(*.html;*.htm)|*.html;*.htm|すべてのファイル(*.*)|*.*";
-            //[ファイルの種類]ではじめに選択されるものを指定する
-            //2番目の「すべてのファイル」が選択されているようにする
             ofd.FilterIndex = 2;
-            //タイトルを設定する
             ofd.Title = "開くファイルを選択してください";
-            //ダイアログボックスを閉じる前に現在のディレクトリを復元するようにする
             ofd.RestoreDirectory = true;
-            //存在しないファイルの名前が指定されたとき警告を表示する
-            //デフォルトでTrueなので指定する必要はない
             ofd.CheckFileExists = true;
-            //存在しないパスが指定されたとき警告を表示する
-            //デフォルトでTrueなので指定する必要はない
             ofd.CheckPathExists = true;
 
-            //ダイアログを表示する
             if (ofd.ShowDialog() == DialogResult.OK)
             {
-                //OKボタンがクリックされたとき、選択されたファイル名を表示する
                 Console.WriteLine(ofd.FileName);
             }
             return "";
@@ -199,8 +285,6 @@ namespace SJPhotoCollect
             // ドライブ一覧を走査してツリーに追加
             foreach (String drive in Environment.GetLogicalDrives())
             {
-                // 新規ノード作成
-                // プラスボタンを表示するため空のノードを追加しておく
                 TreeNode node = new TreeNode(drive);
                 node.Nodes.Add(new TreeNode());
                 // leftTreeView.Nodes.Add(node);
@@ -256,10 +340,6 @@ namespace SJPhotoCollect
             rightTextBox.Text = ret;
         }
 
-        private void MainForm_Load(object sender, EventArgs e)
-        {
-
-        }
 
         private void runCopy()
         {
@@ -272,7 +352,16 @@ namespace SJPhotoCollect
 
             String fromPath = String.Format("{0}\\{1}", this.leftTextBox.Text, itemx.Text);
             String toPath = String.Format("{0}\\{1}", this.rightTextBox.Text, itemx.Text);
+
+            // コピー先が同じ
+            if (fromPath == toPath)
+            {
+                MessageBox.Show("The path is the same.");
+                return;
+            }
+
             File.Copy(fromPath, toPath, true);
+           
             setList(this.rightTextBox.Text, this.rightListView);
         }
 
@@ -282,27 +371,71 @@ namespace SJPhotoCollect
             
         }
 
-        private void nextButton_Click(object sender, EventArgs e)
+        private void selNextItem()
         {
-            if (this.leftListView.SelectedItems.Count == 0)
+            if (this.leftListView.Items.Count == 0)
             {
                 return;
             }
+
+            if (this.leftListView.SelectedItems.Count == 0)
+            {
+                this.leftListView.Items[0].Selected = true;
+                this.leftListView.Focus();
+                return;
+            }
+
             int idx = 0;
             idx = this.leftListView.SelectedItems[0].Index;
+            int next_idx = idx + 1;
+            if (next_idx < this.leftListView.Items.Count)
+            {
+                this.leftListView.SelectedItems.Clear();
+                this.leftListView.Items[next_idx].Selected = true;
+            }
 
-            this.leftListView.Items[0].Selected = true;
-            // this.leftListView.Focus();
+            this.leftListView.Focus();
+            this.leftListView.Refresh();
+            this.leftListView.Update();
+        }
 
-            //MessageBox.Show(this.leftListView.Items.Count.ToString());
+        private void selBackItem()
+        {
+            if (this.leftListView.Items.Count == 0)
+            {
+                return;
+            }
 
-            //listView1.Items[idx + 1].Selected = true;
-            // this.leftListView.SelectNextControl
+            if (this.leftListView.SelectedItems.Count == 0)
+            {
+                this.leftListView.Items[0].Selected = true;
+                this.leftListView.Focus();
+                return;
+            }
+
+            int idx = 0;
+            idx = this.leftListView.SelectedItems[0].Index;
+            if (idx == 0)
+            {
+                this.leftListView.Focus();
+                return;
+            }
+            int back_idx = idx - 1;
+            this.leftListView.SelectedItems.Clear();
+            this.leftListView.Items[back_idx].Selected = true;
+            this.leftListView.Focus();
+            this.leftListView.Refresh();
+            this.leftListView.Update();
+        }
+
+        private void nextButton_Click(object sender, EventArgs e)
+        {
+            selNextItem();
         }
 
         private void backButton_Click(object sender, EventArgs e)
         {
-
+            selBackItem();
         }
 
         private void leftTextBox_TextChanged(object sender, EventArgs e)
@@ -323,11 +456,21 @@ namespace SJPhotoCollect
             }
             ListViewItem itemx = new ListViewItem();
             itemx = this.leftListView.SelectedItems[0];
+            String fpath = String.Format("{0}\\{1}", this.leftTextBox.Text, itemx.Text);
 
-            //選択されているアイテムを取得する
-            // string msg
-            setImage(String.Format("{0}\\{1}", this.leftTextBox.Text, itemx.Text));
-            //MessageBox.Show(msg);
+            setImage(fpath);
+
+            // ラベル設定
+            Image img = Image.FromFile(fpath);
+            String InfoMsg = String.Format(
+                "Name:{0}\nSize:{1} x {2}\nUpdate:{3}\nFileSize:{4}",
+                itemx.Text,
+                img.Width.ToString(),
+                img.Height.ToString(),
+                itemx.SubItems[1].Text,
+                itemx.SubItems[2].Text);
+            img.Dispose();
+            this.infoLabel.Text = InfoMsg;
         }
 
         private void rightListView_SelectedIndexChanged(object sender, EventArgs e)
@@ -338,13 +481,161 @@ namespace SJPhotoCollect
             }
             ListViewItem itemx = new ListViewItem();
             itemx = this.rightListView.SelectedItems[0];
+            String fpath = String.Format("{0}\\{1}", this.rightTextBox.Text, itemx.Text);
 
-            setImage(String.Format("{0}\\{1}", this.rightListView.Text, itemx.Text));
+            if (File.Exists(fpath) == false)
+            {
+                MessageBox.Show("Not Found Image File.");
+                setList(this.rightTextBox.Text, this.rightListView);
+                return;
+            }
+
+            setImage(fpath);
+
+            // ラベル設定
+            Image img = Image.FromFile(fpath);
+            String InfoMsg = String.Format(
+                "Name:{0}\nSize:{1} x {2}\nUpdate:{3}\nFileSize:{4}",
+                itemx.Text,
+                img.Width.ToString(),
+                img.Height.ToString(),
+                itemx.SubItems[1].Text,
+                itemx.SubItems[2].Text);
+            img.Dispose();
+            this.infoLabel.Text = InfoMsg;
         }
 
         private void copyToolStripMenuItem1_Click(object sender, EventArgs e)
         {
             runCopy();
+        }
+
+        private void updateToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            setList(this.leftTextBox.Text, this.leftListView);
+            setList(this.rightTextBox.Text, this.rightListView);
+        }
+
+        private void leftTextBox_DoubleClick(object sender, EventArgs e)
+        {
+            Process.Start(this.leftTextBox.Text);
+        }
+
+        private void rightTextBox_DoubleClick(object sender, EventArgs e)
+        {
+            Process.Start(this.rightTextBox.Text);
+        }
+
+        private void MainForm_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            MessageBox.Show(e.KeyChar.ToString());
+            /*
+            if (e.KeyChar == Keys.F1)
+            {
+                MessageBox.Show("F1キーが押されました。");
+            }
+            */
+        }
+
+        private void MainForm_KeyDown(object sender, KeyEventArgs e)
+        {
+            MessageBox.Show("F1キーが押されました。");
+            if (e.KeyCode == Keys.F1)
+            {
+                MessageBox.Show("F1キーが押されました。");
+            }
+        }
+
+        private void backToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            selBackItem();
+        }
+
+        private void nextToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            selNextItem();
+        }
+
+        private void leftListView_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Left)
+            {
+                selBackItem();
+            }
+            if (e.KeyCode == Keys.Right)
+            {
+                selNextItem();
+            }
+            if (e.KeyCode == Keys.Space)
+            {
+                // runCopy();
+            }
+        }
+
+        private void pathExchangeToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            String leftPath = this.leftTextBox.Text;
+            this.leftTextBox.Text = this.rightTextBox.Text;
+            this.rightTextBox.Text = leftPath;
+            setList(this.leftTextBox.Text, this.leftListView);
+            setList(this.rightTextBox.Text, this.rightListView);
+        }
+
+        private void MainForm_Load(object sender, EventArgs e)
+        {
+            setDefPath();
+        }
+
+        private void MainForm_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            Properties.Settings.Default.leftPath = this.leftTextBox.Text;
+            Properties.Settings.Default.rightPath = this.rightTextBox.Text;
+            Properties.Settings.Default.Save();
+        }
+
+        private void richTextBox1_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void infoLabel_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void leftListView_DoubleClick(object sender, EventArgs e)
+        {
+            ListViewItem itemx = new ListViewItem();
+            itemx = this.leftListView.SelectedItems[0];
+            String fpath = String.Format("{0}\\{1}", this.leftTextBox.Text, itemx.Text);
+            Process.Start(fpath);
+        }
+
+        private void rightListView_DoubleClick(object sender, EventArgs e)
+        {
+            ListViewItem itemx = new ListViewItem();
+            itemx = this.rightListView.SelectedItems[0];
+            String fpath = String.Format("{0}\\{1}", this.rightTextBox.Text, itemx.Text);
+            Process.Start(fpath);
+        }
+
+        private void pictureBox1_Click(object sender, EventArgs e)
+        {
+            selBackItem();
+        }
+
+        private void pictureBox1_MouseHover(object sender, EventArgs e)
+        {
+            // Image.
+            
+            // this.pictureBox1.Image = Image.FromFile(@"D:\sakai\SJTools\win\SJPhotoCollect\SJPhotoCollect\test_img2.png"); // UI用の画像
+            this.pictureBox1.Image = SJPhotoCollect.Properties.Resources.test_img2;
+        }
+
+        private void pictureBox1_MouseLeave(object sender, EventArgs e)
+        {
+            this.pictureBox1.Image = SJPhotoCollect.Properties.Resources.test_img;
+            // this.pictureBox1.Image = Image.FromFile(@"D:\sakai\SJTools\win\SJPhotoCollect\SJPhotoCollect\test_img.png"); // UI用の画像
         }
     }
 }
