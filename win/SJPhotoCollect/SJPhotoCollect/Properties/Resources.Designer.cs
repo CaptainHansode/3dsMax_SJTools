@@ -63,9 +63,9 @@ namespace SJPhotoCollect.Properties {
         /// <summary>
         ///   型 System.Drawing.Bitmap のローカライズされたリソースを検索します。
         /// </summary>
-        internal static System.Drawing.Bitmap test_img {
+        internal static System.Drawing.Bitmap copyBt_hover {
             get {
-                object obj = ResourceManager.GetObject("test_img", resourceCulture);
+                object obj = ResourceManager.GetObject("copyBt_hover", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -73,9 +73,59 @@ namespace SJPhotoCollect.Properties {
         /// <summary>
         ///   型 System.Drawing.Bitmap のローカライズされたリソースを検索します。
         /// </summary>
-        internal static System.Drawing.Bitmap test_img2 {
+        internal static System.Drawing.Bitmap copyBt_nom {
             get {
-                object obj = ResourceManager.GetObject("test_img2", resourceCulture);
+                object obj = ResourceManager.GetObject("copyBt_nom", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   型 System.Drawing.Bitmap のローカライズされたリソースを検索します。
+        /// </summary>
+        internal static System.Drawing.Bitmap empty {
+            get {
+                object obj = ResourceManager.GetObject("empty", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   型 System.Drawing.Bitmap のローカライズされたリソースを検索します。
+        /// </summary>
+        internal static System.Drawing.Bitmap leftBt_hover {
+            get {
+                object obj = ResourceManager.GetObject("leftBt_hover", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   型 System.Drawing.Bitmap のローカライズされたリソースを検索します。
+        /// </summary>
+        internal static System.Drawing.Bitmap leftBt_nom {
+            get {
+                object obj = ResourceManager.GetObject("leftBt_nom", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   型 System.Drawing.Bitmap のローカライズされたリソースを検索します。
+        /// </summary>
+        internal static System.Drawing.Bitmap rightBt_hover {
+            get {
+                object obj = ResourceManager.GetObject("rightBt_hover", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   型 System.Drawing.Bitmap のローカライズされたリソースを検索します。
+        /// </summary>
+        internal static System.Drawing.Bitmap rightBt_nom {
+            get {
+                object obj = ResourceManager.GetObject("rightBt_nom", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

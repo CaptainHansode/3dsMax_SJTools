@@ -90,8 +90,9 @@ namespace SJPhotoCollect
             SendMessage(this.leftListView.Handle, LVM_SETIMAGELIST, new IntPtr(LVSIL_SMALL), imageListHandle);
             SendMessage(this.rightListView.Handle, LVM_SETIMAGELIST, new IntPtr(LVSIL_SMALL), imageListHandle);
 
-            this.pictureBox1.Parent = this.pictureBox;
-            this.pictureBox.Image = SJPhotoCollect.Properties.Resources.test_img;
+            this.leftPBox.Parent = this.pictureBox;
+            this.rightPBox.Parent = this.pictureBox;
+            this.copyPBox.Parent = this.pictureBox;
 
             System.Reflection.Assembly asm = System.Reflection.Assembly.GetExecutingAssembly();
             //バージョンの取得
@@ -463,7 +464,7 @@ namespace SJPhotoCollect
             // ラベル設定
             Image img = Image.FromFile(fpath);
             String InfoMsg = String.Format(
-                "Name:{0}\nSize:{1} x {2}\nUpdate:{3}\nFileSize:{4}",
+                "Name:{0}  Size:{1} x {2}  Update:{3}  FileSize:{4}",
                 itemx.Text,
                 img.Width.ToString(),
                 img.Height.ToString(),
@@ -495,7 +496,7 @@ namespace SJPhotoCollect
             // ラベル設定
             Image img = Image.FromFile(fpath);
             String InfoMsg = String.Format(
-                "Name:{0}\nSize:{1} x {2}\nUpdate:{3}\nFileSize:{4}",
+                "Name:{0}  Size:{1} x {2}  Update:{3}  FileSize:{4}",
                 itemx.Text,
                 img.Width.ToString(),
                 img.Height.ToString(),
@@ -619,23 +620,39 @@ namespace SJPhotoCollect
             Process.Start(fpath);
         }
 
-        private void pictureBox1_Click(object sender, EventArgs e)
+        private void leftPBox_Click(object sender, EventArgs e)
         {
             selBackItem();
         }
 
-        private void pictureBox1_MouseHover(object sender, EventArgs e)
+        private void leftPBox_MouseHover(object sender, EventArgs e)
         {
-            // Image.
-            
-            // this.pictureBox1.Image = Image.FromFile(@"D:\sakai\SJTools\win\SJPhotoCollect\SJPhotoCollect\test_img2.png"); // UI用の画像
-            this.pictureBox1.Image = SJPhotoCollect.Properties.Resources.test_img2;
+            this.leftPBox.Image = SJPhotoCollect.Properties.Resources.leftBt_hover;
         }
 
-        private void pictureBox1_MouseLeave(object sender, EventArgs e)
+        private void leftPBox_MouseLeave(object sender, EventArgs e)
         {
-            this.pictureBox1.Image = SJPhotoCollect.Properties.Resources.test_img;
-            // this.pictureBox1.Image = Image.FromFile(@"D:\sakai\SJTools\win\SJPhotoCollect\SJPhotoCollect\test_img.png"); // UI用の画像
+            this.leftPBox.Image = SJPhotoCollect.Properties.Resources.leftBt_nom;
+        }
+
+        private void rightPBox_MouseHover(object sender, EventArgs e)
+        {
+            this.rightPBox.Image = SJPhotoCollect.Properties.Resources.rightBt_hover;
+        }
+
+        private void rightPBox_MouseLeave(object sender, EventArgs e)
+        {
+            this.rightPBox.Image = SJPhotoCollect.Properties.Resources.rightBt_nom;
+        }
+
+        private void copyPBox_MouseHover(object sender, EventArgs e)
+        {
+            this.copyPBox.Image = SJPhotoCollect.Properties.Resources.copyBt_hover;
+        }
+
+        private void copyPBox_MouseLeave(object sender, EventArgs e)
+        {
+            this.copyPBox.Image = SJPhotoCollect.Properties.Resources.copyBt_nom;
         }
     }
 }
