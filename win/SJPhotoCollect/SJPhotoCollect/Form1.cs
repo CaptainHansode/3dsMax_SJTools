@@ -567,9 +567,33 @@ namespace SJPhotoCollect
             {
                 selNextItem();
             }
-            if (e.KeyCode == Keys.Space)
+            if (e.KeyCode == Keys.Delete)
             {
-                // runCopy();
+                String fpath = "";
+                if (this.leftListView.SelectedItems.Count == 0)
+                {
+                    return;
+                }
+                DialogResult ret = MessageBox.Show("Delete selected files?", "Question", MessageBoxButtons.YesNo);
+                if (ret == DialogResult.No)
+                {
+                    return;
+                }
+
+                Image oldImage = this.pictureBox.Image;
+                this.pictureBox.Image = Properties.Resources.empty;
+                oldImage.Dispose();
+
+                foreach (ListViewItem itemx in this.leftListView.SelectedItems)
+                {
+                    fpath = String.Format("{0}\\{1}", this.leftTextBox.Text, itemx.Text);
+                    if (File.Exists(fpath) == false)
+                    {
+                        continue;
+                    }
+                    File.Delete(fpath);
+                }
+                setList(this.leftTextBox.Text, this.leftListView);
             }
         }
 
@@ -653,6 +677,43 @@ namespace SJPhotoCollect
         private void copyPBox_MouseLeave(object sender, EventArgs e)
         {
             this.copyPBox.Image = SJPhotoCollect.Properties.Resources.copyBt_nom;
+        }
+
+        private void rightListView_KeyPress(object sender, KeyPressEventArgs e)
+        {
+
+        }
+
+        private void rightListView_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Delete)
+            {
+                String fpath = "";
+                if (this.rightListView.SelectedItems.Count == 0)
+                {
+                    return;
+                }
+                DialogResult ret = MessageBox.Show("Delete selected files?", "Question", MessageBoxButtons.YesNo);
+                if (ret == DialogResult.No)
+                {
+                    return;
+                }
+
+                Image oldImage = this.pictureBox.Image;
+                this.pictureBox.Image = Properties.Resources.empty;
+                oldImage.Dispose();
+
+                foreach (ListViewItem itemx in this.rightListView.SelectedItems)
+                {
+                    fpath = String.Format("{0}\\{1}", this.rightTextBox.Text, itemx.Text);
+                    if (File.Exists(fpath) == false)
+                    {
+                        continue;
+                    }
+                    File.Delete(fpath);
+                }
+                setList(this.rightTextBox.Text, this.rightListView);
+            }
         }
     }
 }

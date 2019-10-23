@@ -29,6 +29,7 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
             this.leftListView = new System.Windows.Forms.ListView();
             this.leftButton = new System.Windows.Forms.Button();
             this.leftTextBox = new System.Windows.Forms.TextBox();
@@ -245,6 +246,8 @@
             this.rightListView.UseCompatibleStateImageBehavior = false;
             this.rightListView.SelectedIndexChanged += new System.EventHandler(this.rightListView_SelectedIndexChanged);
             this.rightListView.DoubleClick += new System.EventHandler(this.rightListView_DoubleClick);
+            this.rightListView.KeyDown += new System.Windows.Forms.KeyEventHandler(this.rightListView_KeyDown);
+            this.rightListView.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.rightListView_KeyPress);
             // 
             // tableLayoutPanel2
             // 
@@ -439,6 +442,7 @@
             this.BackColor = System.Drawing.Color.Black;
             this.ClientSize = new System.Drawing.Size(1260, 687);
             this.Controls.Add(this.tableLayoutPanel1);
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MainMenuStrip = this.menuStrip1;
             this.Name = "MainForm";
             this.Text = "SJ Photo Collect";
