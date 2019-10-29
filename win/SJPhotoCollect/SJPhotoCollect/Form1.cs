@@ -202,7 +202,7 @@ namespace SJPhotoCollect
                     item.SubItems.Add("");
                     lv.Items.Add(item);
                 }
-                */
+                */  
 
                 // ファイル一覧
                 List<String> files = Directory.GetFiles(filePath).ToList<String>();
