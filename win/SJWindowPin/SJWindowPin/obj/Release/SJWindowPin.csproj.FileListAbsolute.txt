@@ -1,0 +1,8 @@
+F:\Project_SJTools\SJTools\win\SJWindowPin\SJWindowPin\bin\Release\SJWindowPin.exe.config
+F:\Project_SJTools\SJTools\win\SJWindowPin\SJWindowPin\bin\Release\SJWindowPin.exe
+F:\Project_SJTools\SJTools\win\SJWindowPin\SJWindowPin\bin\Release\SJWindowPin.pdb
+F:\Project_SJTools\SJTools\win\SJWindowPin\SJWindowPin\obj\Release\SJWindowPin.MainForm.resources
+F:\Project_SJTools\SJTools\win\SJWindowPin\SJWindowPin\obj\Release\SJWindowPin.Properties.Resources.resources
+F:\Project_SJTools\SJTools\win\SJWindowPin\SJWindowPin\obj\Release\SJWindowPin.csproj.GenerateResource.cache
+F:\Project_SJTools\SJTools\win\SJWindowPin\SJWindowPin\obj\Release\SJWindowPin.exe
+F:\Project_SJTools\SJTools\win\SJWindowPin\SJWindowPin\obj\Release\SJWindowPin.pdb

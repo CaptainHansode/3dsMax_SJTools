@@ -108,6 +108,7 @@
             this.winListView.Dock = System.Windows.Forms.DockStyle.Fill;
             this.winListView.Font = new System.Drawing.Font("Yu Gothic UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(128)));
             this.winListView.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(228)))), ((int)(((byte)(228)))), ((int)(((byte)(228)))));
+            this.winListView.HideSelection = false;
             this.winListView.Location = new System.Drawing.Point(6, 34);
             this.winListView.Name = "winListView";
             this.winListView.Size = new System.Drawing.Size(146, 293);
