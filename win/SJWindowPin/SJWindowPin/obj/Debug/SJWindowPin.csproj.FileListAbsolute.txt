@@ -1,0 +1,9 @@
+D:\sakai\SJTools\win\SJWindowPin\SJWindowPin\bin\Debug\SJWindowPin.exe.config
+D:\sakai\SJTools\win\SJWindowPin\SJWindowPin\bin\Debug\SJWindowPin.exe
+D:\sakai\SJTools\win\SJWindowPin\SJWindowPin\bin\Debug\SJWindowPin.pdb
+D:\sakai\SJTools\win\SJWindowPin\SJWindowPin\obj\Debug\SJWindowPin.csprojAssemblyReference.cache
+D:\sakai\SJTools\win\SJWindowPin\SJWindowPin\obj\Debug\SJWindowPin.MainForm.resources
+D:\sakai\SJTools\win\SJWindowPin\SJWindowPin\obj\Debug\SJWindowPin.Properties.Resources.resources
+D:\sakai\SJTools\win\SJWindowPin\SJWindowPin\obj\Debug\SJWindowPin.csproj.GenerateResource.cache
+D:\sakai\SJTools\win\SJWindowPin\SJWindowPin\obj\Debug\SJWindowPin.exe
+D:\sakai\SJTools\win\SJWindowPin\SJWindowPin\obj\Debug\SJWindowPin.pdb
