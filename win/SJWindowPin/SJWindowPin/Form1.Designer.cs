@@ -33,7 +33,6 @@
             this.runButton = new System.Windows.Forms.Button();
             this.imageList1 = new System.Windows.Forms.ImageList(this.components);
             this.titleEditBox = new System.Windows.Forms.TextBox();
-            this.renameButton = new System.Windows.Forms.Button();
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
             this.winListView = new System.Windows.Forms.ListView();
             this.tableLayoutPanel1.SuspendLayout();
@@ -69,30 +68,15 @@
             this.titleEditBox.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(229)))), ((int)(((byte)(229)))), ((int)(((byte)(229)))));
             this.titleEditBox.Location = new System.Drawing.Point(3, 3);
             this.titleEditBox.Name = "titleEditBox";
-            this.titleEditBox.Size = new System.Drawing.Size(92, 16);
+            this.titleEditBox.Size = new System.Drawing.Size(140, 16);
             this.titleEditBox.TabIndex = 2;
-            // 
-            // renameButton
-            // 
-            this.renameButton.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(89)))), ((int)(((byte)(89)))), ((int)(((byte)(89)))));
-            this.renameButton.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.renameButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.renameButton.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(182)))), ((int)(((byte)(182)))), ((int)(((byte)(182)))));
-            this.renameButton.Location = new System.Drawing.Point(101, 3);
-            this.renameButton.Name = "renameButton";
-            this.renameButton.Size = new System.Drawing.Size(42, 22);
-            this.renameButton.TabIndex = 3;
-            this.renameButton.Text = "Set";
-            this.renameButton.UseVisualStyleBackColor = false;
-            this.renameButton.Click += new System.EventHandler(this.renameButton_Click);
+            this.titleEditBox.TextChanged += new System.EventHandler(this.titleEditBox_TextChanged);
             // 
             // tableLayoutPanel1
             // 
-            this.tableLayoutPanel1.ColumnCount = 2;
+            this.tableLayoutPanel1.ColumnCount = 1;
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 48F));
             this.tableLayoutPanel1.Controls.Add(this.titleEditBox, 0, 0);
-            this.tableLayoutPanel1.Controls.Add(this.renameButton, 1, 0);
             this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Top;
             this.tableLayoutPanel1.Location = new System.Drawing.Point(6, 6);
             this.tableLayoutPanel1.Name = "tableLayoutPanel1";
@@ -152,7 +136,6 @@
         private System.Windows.Forms.Button runButton;
         private System.Windows.Forms.ImageList imageList1;
         private System.Windows.Forms.TextBox titleEditBox;
-        private System.Windows.Forms.Button renameButton;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
         private System.Windows.Forms.ListView winListView;
     }

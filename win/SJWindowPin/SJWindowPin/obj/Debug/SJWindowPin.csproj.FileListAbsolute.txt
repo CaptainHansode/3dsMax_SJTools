@@ -7,3 +7,17 @@ D:\sakai\SJTools\win\SJWindowPin\SJWindowPin\obj\Debug\SJWindowPin.Properties.Re
 D:\sakai\SJTools\win\SJWindowPin\SJWindowPin\obj\Debug\SJWindowPin.csproj.GenerateResource.cache
 D:\sakai\SJTools\win\SJWindowPin\SJWindowPin\obj\Debug\SJWindowPin.exe
 D:\sakai\SJTools\win\SJWindowPin\SJWindowPin\obj\Debug\SJWindowPin.pdb
+F:\Project_SJTools\SJTools\win\SJWindowPin\SJWindowPin\bin\Debug\SJWindowPin.exe.config
+F:\Project_SJTools\SJTools\win\SJWindowPin\SJWindowPin\bin\Debug\SJWindowPin.exe
+F:\Project_SJTools\SJTools\win\SJWindowPin\SJWindowPin\bin\Debug\SJWindowPin.pdb
+F:\Project_SJTools\SJTools\win\SJWindowPin\SJWindowPin\obj\Debug\SJWindowPin.csprojAssemblyReference.cache
+F:\Project_SJTools\SJTools\win\SJWindowPin\SJWindowPin\obj\Debug\SJWindowPin.MainForm.resources
+F:\Project_SJTools\SJTools\win\SJWindowPin\SJWindowPin\obj\Debug\SJWindowPin.Properties.Resources.resources
+F:\Project_SJTools\SJTools\win\SJWindowPin\SJWindowPin\obj\Debug\SJWindowPin.csproj.GenerateResource.cache
+F:\Project_SJTools\SJTools\win\SJWindowPin\SJWindowPin\obj\Debug\SJWindowPin.exe
+F:\Project_SJTools\SJTools\win\SJWindowPin\SJWindowPin\obj\Debug\SJWindowPin.pdb
+F:\Project_SJTools\SJTools\win\SJWindowPin\SJWindowPin\bin\Debug\SJWindowPin.exe.manifest
+F:\Project_SJTools\SJTools\win\SJWindowPin\SJWindowPin\bin\Debug\SJWindowPin.application
+F:\Project_SJTools\SJTools\win\SJWindowPin\SJWindowPin\obj\Debug\SJWindowPin.TrustInfo.xml
+F:\Project_SJTools\SJTools\win\SJWindowPin\SJWindowPin\obj\Debug\SJWindowPin.exe.manifest
+F:\Project_SJTools\SJTools\win\SJWindowPin\SJWindowPin\obj\Debug\SJWindowPin.application

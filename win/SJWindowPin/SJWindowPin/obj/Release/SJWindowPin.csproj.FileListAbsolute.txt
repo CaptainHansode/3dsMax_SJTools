@@ -6,3 +6,9 @@ F:\Project_SJTools\SJTools\win\SJWindowPin\SJWindowPin\obj\Release\SJWindowPin.P
 F:\Project_SJTools\SJTools\win\SJWindowPin\SJWindowPin\obj\Release\SJWindowPin.csproj.GenerateResource.cache
 F:\Project_SJTools\SJTools\win\SJWindowPin\SJWindowPin\obj\Release\SJWindowPin.exe
 F:\Project_SJTools\SJTools\win\SJWindowPin\SJWindowPin\obj\Release\SJWindowPin.pdb
+F:\Project_SJTools\SJTools\win\SJWindowPin\SJWindowPin\obj\Release\SJWindowPin.csprojAssemblyReference.cache
+F:\Project_SJTools\SJTools\win\SJWindowPin\SJWindowPin\bin\Release\SJWindowPin.exe.manifest
+F:\Project_SJTools\SJTools\win\SJWindowPin\SJWindowPin\bin\Release\SJWindowPin.application
+F:\Project_SJTools\SJTools\win\SJWindowPin\SJWindowPin\obj\Release\SJWindowPin.TrustInfo.xml
+F:\Project_SJTools\SJTools\win\SJWindowPin\SJWindowPin\obj\Release\SJWindowPin.exe.manifest
+F:\Project_SJTools\SJTools\win\SJWindowPin\SJWindowPin\obj\Release\SJWindowPin.application

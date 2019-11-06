@@ -250,6 +250,10 @@ namespace SJWindowPin
             {
                 return;
             }
+            if (this.titleEditBox.TextLength == 0)
+            {
+                return;
+            }
             ListViewItem itm = new ListViewItem();
             itm = this.winListView.SelectedItems[0];
             itm.Text = this.titleEditBox.Text;
@@ -295,6 +299,24 @@ namespace SJWindowPin
 
         private void winListView_DrawColumnHeader(object sender, DrawListViewColumnHeaderEventArgs e)
         {
+        }
+
+        private void titleEditBox_TextChanged(object sender, EventArgs e)
+        {
+            if (this.winListView.SelectedItems.Count == 0)
+            {
+                return;
+            }
+            if (this.titleEditBox.TextLength == 0)
+            {
+                return;
+            }
+            ListViewItem itm = new ListViewItem();
+            itm = this.winListView.SelectedItems[0];
+            itm.Text = this.titleEditBox.Text;
+            StringBuilder newName = new StringBuilder(this.titleEditBox.Text);
+            IntPtr hWnd = new IntPtr(int.Parse(itm.SubItems[1].Text));
+            SetWindowText(hWnd, newName);
         }
     }
 }
