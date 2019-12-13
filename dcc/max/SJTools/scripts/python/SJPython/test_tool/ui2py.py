@@ -9,6 +9,7 @@ from pyside2uic import compileUi
 
 def conpile_ui_file():
 	current_path = os.getcwd()
+	print(current_path)
 	input_file = os.path.join(current_path, "test_tools_ui.ui")
 	output_file = os.path.join(current_path, "test_tools_ui.py")
 
