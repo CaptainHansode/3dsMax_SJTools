@@ -77,7 +77,8 @@ class SJDeleteKeyframeFunction(bpy.types.Operator):
 
         # リストを作成しておく
         flist = []
-        for f in list(range(sjdk.start_frame, sjdk.end_frame, sjdk.interval)):
+        for f in list(range(
+                sjdk.start_frame, sjdk.end_frame, (sjdk.interval + 1))):
             flist.append(f)
 
         for f in range(sjdk.start_frame, sjdk.end_frame):
