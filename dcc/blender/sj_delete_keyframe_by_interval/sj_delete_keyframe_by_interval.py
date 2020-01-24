@@ -59,7 +59,7 @@ class SJDeleteKeyframeFunction(bpy.types.Operator):
     r"""Operatorで実行されるクラス、事前に登録しておく必要がある"""
     bl_idname = "object.sj_delete_keyframe_by_interval"
     bl_label = "Execute"
-    bl_description = "sj_delete_keyframe_by_interval"
+    bl_description = "Delete Keyframe by interval."
 
     @classmethod
     def poll(cls, context):
