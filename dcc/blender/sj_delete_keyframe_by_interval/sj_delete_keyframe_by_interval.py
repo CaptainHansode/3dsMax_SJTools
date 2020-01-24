@@ -21,7 +21,7 @@
 bl_info = {
     "name": "SJ Delete keyframe by interval",
     "author": "CaptainHansode",
-    "version": (1, 0),
+    "version": (1, 0, 1),
     "blender": (2, 80, 0),
     "location":  "View3D > Sidebar > Item Tab",
     "description": "Delete Keyframe by interval.",
@@ -106,12 +106,13 @@ class SJDeleteKeyframeFunction(bpy.types.Operator):
                     pbn.keyframe_delete(data_path="rotation_quaternion", frame=f)
                 if sjdk.scl is True:
                     pbn.keyframe_delete(data_path="scale", frame=f)
-
+        # 再描画
+        bpy.ops.wm.redraw_timer(type='DRAW_WIN_SWAP', iterations=1)
         return {'FINISHED'}
 
 
 class SJDeleteKeyframeByInterval(bpy.types.Panel):
-    r""" """
+    r"""UI"""
     # https://docs.blender.org/api/current/bpy.types.Panel.html ui関連のdemo
     bl_label = "SJ Delete Keyframe By Interval"
     bl_space_type = 'VIEW_3D'
@@ -175,4 +176,3 @@ def unregister():
 
 if __name__ == "__main__":
     register()
-
