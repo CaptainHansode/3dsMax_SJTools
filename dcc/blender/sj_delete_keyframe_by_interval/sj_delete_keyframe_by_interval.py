@@ -21,7 +21,7 @@
 bl_info = {
     "name": "SJ Delete keyframe by interval",
     "author": "CaptainHansode",
-    "version": (1, 0, 1),
+    "version": (1, 0, 2),
     "blender": (2, 80, 0),
     "location":  "View3D > Sidebar > Item Tab",
     "description": "Delete Keyframe by interval.",
@@ -39,20 +39,20 @@ class SJDelKeyProperties(bpy.types.PropertyGroup):
     r"""カスタムプロパティを定義する"""
     # 描き方は:コロンで宣言
     start_frame: bpy.props.IntProperty(
-        name="Start frame", default=0, min=0)
+        name="Start Frame", default=0, min=0)
 
     end_frame: bpy.props.IntProperty(
-        name="End frame", default=100, min=0)
+        name="End Frame", default=100, min=0)
 
     interval: bpy.props.IntProperty(
         name="Interval", default=1, min=1, max=100)
 
     pos: bpy.props.BoolProperty(
-        name="position", description="Pos CheckBox", default=True)
+        name="Position", description="Pos CheckBox", default=True)
     rot: bpy.props.BoolProperty(
-        name="rotate", description="Rot CheckBox", default=True)
+        name="Rotate", description="Rot CheckBox", default=True)
     scl: bpy.props.BoolProperty(
-        name="scale", description="Scale CheckBox", default=True)
+        name="Scale", description="Scale CheckBox", default=True)
 
 
 class SJDeleteKeyframeFunction(bpy.types.Operator):
@@ -176,3 +176,4 @@ def unregister():
 
 if __name__ == "__main__":
     register()
+register()
