@@ -37,7 +37,7 @@ import bpy
 
 class SJDelKeyProperties(bpy.types.PropertyGroup):
     r"""カスタムプロパティを定義する"""
-    # 描き方は:コロンで宣言
+    # 描き方は:コロンで宣言 
     start_frame: bpy.props.IntProperty(
         name="Start Frame", default=0, min=0)
 
