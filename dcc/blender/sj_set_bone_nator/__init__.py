@@ -24,11 +24,11 @@ bl_info = {
     "version": (0, 5, 0),
     "blender": (2, 80, 0),
     "location":  "View3D > Sidebar > Item Tab",
-    "description": "Change the settings of the selected bone.",
+    "description": "Set bone props.",
     "warning": "",
     "wiki_url": "",
     "tracker_url": "",
-    "category": "Animation",
+    "category": "Rigging",
 }
 
 
@@ -121,13 +121,53 @@ class SJSetBoneName(bpy.types.Operator):
             new_name = sjsb.b_name
             cnt_str = str(cnt)
             if sjsb.numbering is True:
-                while len(cnt_str) < sjsb.n_digit:  # 桁が足りなかったら足す
+                while len(cnt_str) < sjsb.n_digit:  # 0 fill
                     cnt_str = "0{}".format(cnt_str)
                 pbn.name = "{}{}".format(new_name, cnt_str)
             else:
                 pbn.name = new_name
-            print(pbn.name)
             cnt += 1
+
+        bpy.ops.wm.redraw_timer(type='DRAW_WIN_SWAP', iterations=1)  # 再描画
+        return {'FINISHED'}
+
+
+class SJSelBoneTree(bpy.types.Operator):
+    r""""""
+    bl_idname = "object.sj_sel_bone_tree"
+    bl_label = "Select Bone Tree"
+    bl_description = "Select Bone Tree."
+
+    @classmethod
+    def poll(cls, context):
+        r""""""
+        return context.active_object is not None
+
+    def _get_children(self, c_objs):
+        r"""ツリーを再帰回収"""
+        ret = []
+        for obj in c_objs:
+            ret.append(obj.name)
+            if len(obj.children) is not 0:
+                # 再帰
+                ret.extend(self._get_children(obj.children))
+        return ret
+
+    def execute(self, context):
+        r""""""
+        if len(bpy.context.selected_pose_bones) is 0:
+            return {'FINISHED'}
+        root_b = context.selected_pose_bones[0]
+
+        sel_list = []
+        sel_list.append(root_b.name)
+        if len(root_b.children) is not 0:
+            sel_list.extend(self._get_children(root_b.children))
+
+        bpy.ops.pose.select_all(action='DESELECT')  # 選択解除
+
+        for b_name in sel_list:  # 選択
+            context.active_object.pose.bones[b_name].bone.select = True
 
         bpy.ops.wm.redraw_timer(type='DRAW_WIN_SWAP', iterations=1)  # 再描画
         return {'FINISHED'}
@@ -171,6 +211,11 @@ class SJSetBoneNator(bpy.types.Panel):
         scene = context.scene
         sjsb = context.scene.sj_set_bone_nator_props
 
+        layout.label(text="Select Tree")
+        row = layout.row()
+        row.scale_y = 1.5
+        row.operator("object.sj_sel_bone_tree")
+        layout.separator(factor=2)
 
         layout.label(text="Set Bone Name")
         row = layout.row()
@@ -732,7 +777,7 @@ class SJSetBoneClearLayer(bpy.types.Operator):
 
 
 classes = (
-    SJSetBoneNatorProperties, SJSetBoneNator, 
+    SJSetBoneNatorProperties, SJSetBoneNator, SJSelBoneTree,
     SJSetBoneName, 
     SJSetBoneLy0, SJSetBoneLy1, SJSetBoneLy2, SJSetBoneLy3, SJSetBoneLy4,
     SJSetBoneLy5, SJSetBoneLy6, SJSetBoneLy7, SJSetBoneLy8, SJSetBoneLy9,

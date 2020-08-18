@@ -39,7 +39,7 @@ from bpy.app.handlers import persistent
 class SJSparkSelTree(bpy.types.Operator):
     r"""Ser Bone Name"""
     bl_idname = "object.sj_spark_nator_sel_tree"
-    bl_label = "Select"
+    bl_label = "Tree Select"
 
     @classmethod
     def poll(cls, context):
@@ -49,19 +49,21 @@ class SJSparkSelTree(bpy.types.Operator):
     def execute(self, context):
         r""""""
         sjsb = context.scene.sj_spark_nator_props
-        cnt = sjsb.s_num
+        obj = context.active_object
+        print(obj)
+        print(obj.children)
 
-        for pbn in bpy.context.selected_pose_bones:
-            new_name = sjsb.b_name
-            cnt_str = str(cnt)
-            if sjsb.numbering is True:
-                while len(cnt_str) < sjsb.n_digit:  # 桁が足りなかったら足す
-                    cnt_str = "0{}".format(cnt_str)
-                pbn.name = "{}{}".format(new_name, cnt_str)
-            else:
-                pbn.name = new_name
-            print(pbn.name)
-            cnt += 1
+        # for pbn in bpy.context.selected_pose_bones:
+        #     new_name = sjsb.b_name
+        #     cnt_str = str(cnt)
+        #     if sjsb.numbering is True:
+        #         while len(cnt_str) < sjsb.n_digit:  # 桁が足りなかったら足す
+        #             cnt_str = "0{}".format(cnt_str)
+        #         pbn.name = "{}{}".format(new_name, cnt_str)
+        #     else:
+        #         pbn.name = new_name
+        #     print(pbn.name)
+        #     cnt += 1
 
         bpy.ops.wm.redraw_timer(type='DRAW_WIN_SWAP', iterations=1)  # 再描画
         return {'FINISHED'}
@@ -74,7 +76,7 @@ class SJSparkNatorProperties(bpy.types.PropertyGroup):
 
 class SJSparkNator(bpy.types.Panel):
     r"""UI"""
-    bl_label = "SJ Set Bone Nator"
+    bl_label = "SJ SPARK Nator"
     bl_space_type = 'VIEW_3D'
     bl_region_type = 'UI'  # UIのタイプ
     # bl_context = "posemode"
@@ -168,7 +170,9 @@ class SJSparkClearLayer(bpy.types.Operator):
         return {'FINISHED'}
 
 
-classes = (SJSparkNatorProperties, SJSparkNator, SJSparkName, SJSparkClearLayer)
+classes = (
+    SJSparkNatorProperties, SJSparkNator,
+    SJSparkSelTree, SJSparkClearLayer)
 
 
 # Register all operators and panels
