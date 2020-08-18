@@ -173,6 +173,26 @@ class SJSelBoneTree(bpy.types.Operator):
         return {'FINISHED'}
 
 
+class SJSelBoneRotationMode(bpy.types.Operator):
+    r""""""
+    bl_idname = "object.sj_sel_bone_rot_mode"
+    bl_label = "Set Bone Rotation Mode"
+    bl_description = "Set Rotation Mode."
+
+    @classmethod
+    def poll(cls, context):
+        r""""""
+        return context.active_object is not None
+
+    def execute(self, context):
+        r""""""
+        for pbn in context.selected_pose_bones:  # 選択
+            context.active_object.pose.bones[pbn.name].rotation_mode = 'XYZ'
+
+        bpy.ops.wm.redraw_timer(type='DRAW_WIN_SWAP', iterations=1)  # 再描画
+        return {'FINISHED'}
+
+
 class SJSetBoneNatorProperties(bpy.types.PropertyGroup):
     r"""カスタムプロパティを定義する"""
     # name
@@ -288,6 +308,10 @@ class SJSetBoneNator(bpy.types.Panel):
         layout.prop(sjsb, "cs_scale")
         layout.prop(sjsb, "scl_b_size")
         layout.prop(sjsb, "is_w_frame")
+
+        layout.separator(factor=2)
+        layout.label(text="Set Bone Rotation Mode")
+        layout.operator("object.sj_sel_bone_rot_mode")
 
 
 class SJSetBoneLy(object):
@@ -749,6 +773,7 @@ class SJSetBoneClearLayer(bpy.types.Operator):
         return {'FINISHED'}
 
 
+
 # pose.bones["hair.066"].use_custom_shape_bone_size
 
 # class ToggledModalOperator(bpy.types.Operator):
@@ -778,7 +803,7 @@ class SJSetBoneClearLayer(bpy.types.Operator):
 
 classes = (
     SJSetBoneNatorProperties, SJSetBoneNator, SJSelBoneTree,
-    SJSetBoneName, 
+    SJSetBoneName, SJSelBoneRotationMode,
     SJSetBoneLy0, SJSetBoneLy1, SJSetBoneLy2, SJSetBoneLy3, SJSetBoneLy4,
     SJSetBoneLy5, SJSetBoneLy6, SJSetBoneLy7, SJSetBoneLy8, SJSetBoneLy9,
     SJSetBoneLy10, SJSetBoneLy11, SJSetBoneLy12, SJSetBoneLy13, SJSetBoneLy14,
