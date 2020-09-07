@@ -21,7 +21,7 @@
 bl_info = {
     "name": "SJ Set Bone Nator",
     "author": "CaptainHansode",
-    "version": (0, 5, 0),
+    "version": (1, 0, 0),
     "blender": (2, 80, 0),
     "location":  "View3D > Sidebar > Item Tab",
     "description": "Set bone props.",
@@ -155,14 +155,17 @@ class SJSelBoneTree(bpy.types.Operator):
 
     def execute(self, context):
         r""""""
+        # ポーズモードと編集モード2種類用意する
         if len(bpy.context.selected_pose_bones) is 0:
             return {'FINISHED'}
-        root_b = context.selected_pose_bones[0]
-
+        
         sel_list = []
-        sel_list.append(root_b.name)
-        if len(root_b.children) is not 0:
-            sel_list.extend(self._get_children(root_b.children))
+        
+        for root_b in context.selected_pose_bones:
+            sel_list.append(root_b.name)
+
+            if len(root_b.children) is not 0:
+                sel_list.extend(self._get_children(root_b.children))
 
         bpy.ops.pose.select_all(action='DESELECT')  # 選択解除
 
@@ -204,7 +207,7 @@ class SJSetBoneNatorProperties(bpy.types.PropertyGroup):
         name="Digit", min=1, max=8, default=3)
 
     b_grp: bpy.props.StringProperty(name="Bone Group", update=set_bone_group)
-    is_hide: bpy.props.BoolProperty(name="Hide", default=False, update=set_hide)
+    # is_hide: bpy.props.BoolProperty(name="Hide", default=False, update=set_hide)
     cs_obj: bpy.props.StringProperty(name="Custom Shape", update=set_cs)
     cs_scale: bpy.props.FloatProperty(
         name="Scale", default=1.0, min=0.0, max=1000.0, update=set_cs_scale)
