@@ -33,6 +33,7 @@ bl_info = {
 
 
 import bpy
+import math
 from bpy.app.handlers import persistent
 # from . import sj_phaser
 
@@ -65,11 +66,51 @@ def set_bone_group(self, context):
         pbn.bone_group = grp
 
 
-def set_hide(self, context):
-    r"""set bone hide"""
+def set_bone_parent(self, context):
+    r"""set bone group"""
     print("set bone group")
-    for pbn in context.selected_pose_bones:
-        context.object.data.bones[pbn.name].hide = self.is_hide
+    if self.p_grp is "":
+        p_bn = None
+    else:
+        p_bn = context.active_object.data.edit_bones[self.p_grp]
+    for bn in context.active_object.data.edit_bones:
+        if bn.select is True:
+            bn.parent = p_bn
+
+
+def set_bone_head(self, context):
+    r"""bone tm"""
+    for bn in context.active_object.data.edit_bones:
+        if bn.select is True:
+            bn.head = (self.head_x, self.head_y, self.head_z)
+
+
+def set_bone_tail(self, context):
+    r"""bone tm"""
+    for bn in context.active_object.data.edit_bones:
+        if bn.select is True:
+            bn.tail = (self.tail_x, self.tail_y, self.tail_z)
+
+
+def set_bone_roll(self, context):
+    r"""bone tm"""
+    for bn in context.active_object.data.edit_bones:
+        if bn.select is True:
+            bn.roll = math.radians(self.roll)
+
+
+def set_bone_length(self, context):
+    r"""bone tm"""
+    for bn in context.active_object.data.edit_bones:
+        if bn.select is True:
+            bn.length = self.length
+
+
+# def set_hide(self, context):
+#     r"""set bone hide"""
+#     print("set bone group")
+#     for pbn in context.selected_pose_bones:
+#         context.object.data.bones[pbn.name].hide = self.is_hide
 
 
 def set_cs(self, context):
@@ -207,6 +248,7 @@ class SJSetBoneNatorProperties(bpy.types.PropertyGroup):
         name="Digit", min=1, max=8, default=3)
 
     b_grp: bpy.props.StringProperty(name="Bone Group", update=set_bone_group)
+
     # is_hide: bpy.props.BoolProperty(name="Hide", default=False, update=set_hide)
     cs_obj: bpy.props.StringProperty(name="Custom Shape", update=set_cs)
     cs_scale: bpy.props.FloatProperty(
@@ -216,8 +258,79 @@ class SJSetBoneNatorProperties(bpy.types.PropertyGroup):
     is_w_frame: bpy.props.BoolProperty(
         name="Wireframe", default=False, update=set_show_wire)
 
+    # edit mode
+    p_grp: bpy.props.StringProperty(name="Parent", update=set_bone_parent)
 
-class SJSetBoneNator(bpy.types.Panel):
+    head_x: bpy.props.FloatProperty(
+        name="X", default=0.0, min=-10000.0, max=10000.0, update=set_bone_head)
+    head_y: bpy.props.FloatProperty(        
+        name="Y", default=0.0, min=-10000.0, max=10000.0, update=set_bone_head)
+    head_z: bpy.props.FloatProperty(
+        name="Z", default=0.0, min=-10000.0, max=10000.0, update=set_bone_head)
+
+    tail_x: bpy.props.FloatProperty(
+        name="X", default=0.0, min=-10000.0, max=10000.0, update=set_bone_tail)
+    tail_y: bpy.props.FloatProperty(        
+        name="Y", default=0.0, min=-10000.0, max=10000.0, update=set_bone_tail)
+    tail_z: bpy.props.FloatProperty(
+        name="Z", default=0.0, min=-10000.0, max=10000.0, update=set_bone_tail)
+
+    roll: bpy.props.FloatProperty(name="Roll", update=set_bone_roll)
+    length: bpy.props.FloatProperty(name="Length", update=set_bone_length)
+
+
+class SJSetBoneNatorEditBnPanel(bpy.types.Panel):
+    r"""UI"""
+    bl_label = "SJ Set Bone Nator"
+    bl_space_type = 'VIEW_3D'
+    bl_region_type = 'UI'  # UIのタイプ
+    bl_context = "armature_edit"  # ポーズモード以外は使えない
+
+    # カスタムタブは名前を指定するだけで問題ない 他のツールのタブにも追加できる
+    bl_category = 'Tool'
+    # bl_category = 'SJTools'
+    bl_options = {'DEFAULT_CLOSED'}  # デフォルトでは閉じている
+
+    def draw(self, context):
+        layout = self.layout
+        sjsb = context.scene.sj_set_bone_nator_props
+
+        layout.label(text="Transform")
+        col = layout.column(align=True)
+        col.prop(sjsb, "head_x")
+        col.prop(sjsb, "head_y")
+        col.prop(sjsb, "head_z")
+
+        col = layout.column(align=True)
+        col.prop(sjsb, "tail_x")
+        col.prop(sjsb, "tail_y")
+        col.prop(sjsb, "tail_z")
+
+        col = layout.column(align=True)
+        col.prop(sjsb, "roll")
+
+        col = layout.column(align=True)
+        col.prop(sjsb, "length")
+
+        # layout = self.layout
+        layout.label(text="Set Bone Parent")
+        row = layout.row()
+        row.prop_search(sjsb, "p_grp", context.active_object.data, "edit_bones")
+
+
+        # layout.prop(sjsb, "is_hide")
+    # amt = bpy.context.selected_objects[0]
+    # # print(amt.data.edit_bones["c_jacketSusoAll"])
+    # p = amt.data.edit_bones["c_jacketSusoAll"]
+    # for b in amt.data.edit_bones:
+    #     # b.layers[30] = False
+    #     if b.select is True:
+    #         # bpy.context.object.data.parent = bpy.data.armatures["rig"].(null)
+    #         # print(b.parent)
+    #         b.parent = p
+
+
+class SJSetBoneNatorPanel(bpy.types.Panel):
     r"""UI"""
     bl_label = "SJ Set Bone Nator"
     bl_space_type = 'VIEW_3D'
@@ -303,7 +416,7 @@ class SJSetBoneNator(bpy.types.Panel):
         layout.label(text="Set Bone Group")
         row = layout.row()
         row.prop_search(sjsb, "b_grp", context.active_object.pose, "bone_groups")
-        layout.prop(sjsb, "is_hide")
+        # layout.prop(sjsb, "is_hide")
 
         layout.label(text="Set Bone Custom Shape")
         row = layout.row()
@@ -805,7 +918,9 @@ class SJSetBoneClearLayer(bpy.types.Operator):
 
 
 classes = (
-    SJSetBoneNatorProperties, SJSetBoneNator, SJSelBoneTree,
+    SJSetBoneNatorProperties, SJSelBoneTree,
+    SJSetBoneNatorPanel,
+    SJSetBoneNatorEditBnPanel,
     SJSetBoneName, SJSelBoneRotationMode,
     SJSetBoneLy0, SJSetBoneLy1, SJSetBoneLy2, SJSetBoneLy3, SJSetBoneLy4,
     SJSetBoneLy5, SJSetBoneLy6, SJSetBoneLy7, SJSetBoneLy8, SJSetBoneLy9,
