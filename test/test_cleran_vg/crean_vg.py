@@ -1,8 +1,8 @@
 import bpy
 
 
-def exclusion_vg(n_list):
-    obj = bpy.context.active_object
+def exclusion_vg(obj, n_list):
+    # obj = bpy.context.active_object
     cnt = len(obj.vertex_groups) - 1
     while cnt >= 0:
         vg = obj.vertex_groups[cnt]
@@ -19,7 +19,7 @@ def crean_vg(obj):
     for v in verts:
         for g in v.groups:
             in_use_vg[obj.vertex_groups[g.group].name] = True
-    exclusion_vg(in_use_vg.keys())
+    exclusion_vg(obj, in_use_vg.keys())
     return None
 
 
