@@ -3,8 +3,7 @@
 # Author:半袖船長
 # Contact:
 r"""select - on
-自前ツールの転用です
-元はこちら http://www.sakaiden.com
+http://www.sakaiden.com
 """
 from __future__ import absolute_import
 from __future__ import division

@@ -3,8 +3,7 @@
 # Author:半袖船長
 # Contact:
 r"""select - on
-自前ツールの転用です
-元はこちら http://www.sakaiden.comf
+http://www.sakaiden.com
 """
 from __future__ import absolute_import
 from __future__ import division
@@ -239,7 +238,7 @@ class SJSelectonList(QMainWindow):
     def get_all_nodes(self):
         return self.descendants(MaxPlus.Core.GetRootNode())
 
-    def get_adrignodes_of_scene(self):
+    def get_selecton_nodes_of_scene(self):
         nodes = self.get_all_nodes()
         result = []
         dct = {}
@@ -260,7 +259,7 @@ class SJSelectonList(QMainWindow):
 
     def set_preset(self):
         self.selectorList.clear()
-        self.sel_helpers = self.get_adrignodes_of_scene()
+        self.sel_helpers = self.get_selecton_nodes_of_scene()
         for obj in self.sel_helpers:
             self.selectorList.addItem(obj.Name)
 

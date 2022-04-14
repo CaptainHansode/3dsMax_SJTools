@@ -1,6 +1,4 @@
-r"""selecton
-自前ツールの転用です
-
+r"""select - on
 """
 from __future__ import absolute_import
 from __future__ import division
